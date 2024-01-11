@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/25 23:43:10 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/09 17:18:19 by daeha            ###   ########.fr       */
+/*   Created: 2024/01/09 17:15:44 by daeha             #+#    #+#             */
+/*   Updated: 2024/01/09 19:27:10 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#define BUFFER_SIZE 42
 
-char	*get_next_line(int fd)
-{
-	
-}
+#include <stdlib.h>
+#include <unistd.h>
+
+char	*get_next_line(int fd);
