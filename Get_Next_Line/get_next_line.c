@@ -6,11 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/25 23:43:10 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/12 21:57:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/13 11:00:23 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+#include <stdio.h>
+
 //TODO 예외처리 컨셉
 // 1. read() 실패 -> 해당 노드만 free
 // 2. malloc() 실패 -> fd_list에 해당하는 모든 버퍼를 free
@@ -25,19 +28,26 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || !find_fd(fd, &fd_list))
 		return (NULL);
+
 	while (1)
 	{
 		read_bytes = read(fd, buf, BUFFER_SIZE);
+
 		if (read_bytes < 0)
 			return (free_node(fd_list));
-		if (is_in_newline_or_eof(buf, read_bytes, &buf_offset))
+
+		if (is_in_newline_or_eof(buf, read_bytes, &buf_offset));
 		{
+			printf("fd->buffer\n%s\n", fd_list->buffer);
+			printf("read_bytes\n%lu\n", read_bytes);
+			printf("buf_offset\n%lu\n", buf_offset);
+			
 			if (!put_result(fd_list, &result, buf, buf_offset) || \
-				!put_left_buf(fd_list, buf, read_bytes, buf_offset))
+				!put_buf(fd_list, buf, read_bytes, buf_offset))
 				return (free_node(fd_list));
 			break ;
 		}
-		if (!put_left_buf(fd_list, buf, read_bytes, buf_offset))
+		if (!put_buf(fd_list, buf, read_bytes, buf_offset))
 			return (free_node(fd_list));
 	}
 	return (result);
@@ -83,7 +93,7 @@ int	put_result(t_fd_list *file, char **res, char *buf, size_t offset)
 }
 
 //buffer에 남아있는 문자열을 fd 버퍼에 옮기는 함수
-int	put_left_buf(t_fd_list *file, char *buf, ssize_t read_bytes, size_t offset)
+int	put_buf(t_fd_list *file, char *buf, ssize_t read_bytes, size_t offset)
 {
 	char	*new_file;
 	size_t	len_left_buf;

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 17:15:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/12 21:38:14 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/13 10:50:18 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@
 size_t	is_in_newline_or_eof(char *buffer, ssize_t read_bytes, size_t *offset)
 {
 	*offset = 0;
-
-	while (*offset < BUFFER_SIZE)
+	while (*offset < read_bytes)
 	{
 		if (buffer[(*offset)++] == '\n')
 			return (1);	
