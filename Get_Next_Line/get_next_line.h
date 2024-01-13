@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 17:15:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/13 11:39:09 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/13 12:05:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+
+#ifndef BUFFER_SIZE
 #define BUFFER_SIZE 42
+#endif
 
 typedef struct	s_fd_list
 {

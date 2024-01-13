@@ -6,18 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/25 23:43:10 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/13 11:55:55 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/13 12:07:32 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 #include <stdio.h>
-
-//TODO 예외처리 컨셉
-// 1. read() 실패 -> 해당 노드만 free
-// 2. malloc() 실패 -> fd_list에 해당하는 모든 버퍼를 free
-
 char	*get_next_line(int fd)
 {
 	static t_fd_list	*fd_list;
@@ -28,11 +23,9 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || !find_fd(fd, &fd_list))
 		return (NULL);
-
 	while (1)
 	{
 		read_bytes = read(fd, buf, BUFFER_SIZE);
-
 		if (read_bytes < 0)
 			return (free_node(fd_list));
 
@@ -40,9 +33,6 @@ char	*get_next_line(int fd)
 		{
 			if (!put_buf(fd_list, buf, read_bytes, buf_offset) || !put_result(fd_list, &res))
 				return (free_node(fd_list));
-			printf("fd->buffer\n%s\n", fd_list->buffer);
-			printf("read_bytes\n%lu\n", read_bytes);
-			printf("buf_offset\n%lu\n\n", buf_offset);
 			break ;
 		}
 		if (!put_buf(fd_list, buf, read_bytes, buf_offset))
@@ -54,6 +44,7 @@ char	*get_next_line(int fd)
 //result의 경우에도 free 해야하는 경우가 있으므로 주의!
 char	*free_node(t_fd_list *fd_list)
 {
+	fd_list = NULL;
 	return (NULL);
 }
 
@@ -81,7 +72,7 @@ int	put_buf(t_fd_list *file, char *buf, ssize_t read_bytes, size_t offset)
 	char	*new_file;
 	size_t	len_left_buf;
 
-	printf("======put_buf=======\n");
+//	printf("======put_buf=======\n");
 
 
 	if (offset == 1)
@@ -97,7 +88,7 @@ int	put_buf(t_fd_list *file, char *buf, ssize_t read_bytes, size_t offset)
 	file->buffer = new_file;
 	file->len += len_left_buf;
 
-	printf("fd->buffer\n%s\n", file->buffer);
+//	printf("fd->buffer\n%s\n", file->buffer);
 	return (1);
 }
 
@@ -110,24 +101,24 @@ int	put_result(t_fd_list *file, char **res)
 	size_t	len;
 
 
-	printf("======put_result=======\n");
+//	printf("======put_result=======\n");
 
 	len = 0;
 	while (file->buffer[len] != '\0' && file->buffer[len] != '\n')
 		len++;
-	*res = (char *)malloc(sizeof(char) * (len + 1));
+	*res = (char *)malloc(sizeof(char) * (++len));
 	if (*res == NULL)
 		return (0);
-	gnl_memmove(*res, file->buffer, len + 1);
-	new_file = (char *)malloc(sizeof(char) * (file->len - len - 1));
+	gnl_memmove(*res, file->buffer, len);
+	new_file = (char *)malloc(sizeof(char) * (file->len - len));
 	if (new_file == NULL)
 	{
 		free (*res);
 		return (0);
 	}
-	gnl_memmove(new_file, file->buffer + len + 1, file->len - len - 1);
+	gnl_memmove(new_file, file->buffer + len, file->len - len);
 	file->buffer = new_file;
-	printf("fd->buffer\n%s\n", file->buffer);
-	printf("res\n%s\n", *res);
+//	printf("fd->buffer\n%s\n", file->buffer);
+//	printf("res\n%s\n", *res);
 	return (1);
 }
