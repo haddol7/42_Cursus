@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/25 23:43:10 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/13 11:00:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/13 11:55:55 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 char	*get_next_line(int fd)
 {
 	static t_fd_list	*fd_list;
-	char				*result;
+	char				*res;
 	char				buf[BUFFER_SIZE + 1];
 	size_t				buf_offset;
 	ssize_t				read_bytes;
@@ -36,21 +36,19 @@ char	*get_next_line(int fd)
 		if (read_bytes < 0)
 			return (free_node(fd_list));
 
-		if (is_in_newline_or_eof(buf, read_bytes, &buf_offset));
+		if (is_in_newline_or_eof(buf, read_bytes, &buf_offset))
 		{
+			if (!put_buf(fd_list, buf, read_bytes, buf_offset) || !put_result(fd_list, &res))
+				return (free_node(fd_list));
 			printf("fd->buffer\n%s\n", fd_list->buffer);
 			printf("read_bytes\n%lu\n", read_bytes);
-			printf("buf_offset\n%lu\n", buf_offset);
-			
-			if (!put_result(fd_list, &result, buf, buf_offset) || \
-				!put_buf(fd_list, buf, read_bytes, buf_offset))
-				return (free_node(fd_list));
+			printf("buf_offset\n%lu\n\n", buf_offset);
 			break ;
 		}
 		if (!put_buf(fd_list, buf, read_bytes, buf_offset))
 			return (free_node(fd_list));
 	}
-	return (result);
+	return (res);
 }
 
 //result의 경우에도 free 해야하는 경우가 있으므로 주의!
@@ -78,35 +76,58 @@ int	find_fd(int fd, t_fd_list **file)
 	return (1);
 }
 
-//버퍼에 저장된 문자열에서 \n 혹은 EOF까지의 문자열 + 기존 file에 있던 문자열을 result에 더해서 반환
-//EOF 일 때 -> \0
-//\n 일 때 -> 포함해서 저장
-int	put_result(t_fd_list *file, char **res, char *buf, size_t offset)
-{
-	*res = (char *)malloc(sizeof(char) * (file->len + offset));
-	if (*res == NULL)
-		return (0);
-	gnl_memmove(*res, file->buffer, file->len);
-	gnl_memmove(*(res + file->len), buf, offset);
-	file->len = 0;
-	return (1);
-}
-
-//buffer에 남아있는 문자열을 fd 버퍼에 옮기는 함수
 int	put_buf(t_fd_list *file, char *buf, ssize_t read_bytes, size_t offset)
 {
 	char	*new_file;
 	size_t	len_left_buf;
 
-	len_left_buf = read_bytes - offset;
+	printf("======put_buf=======\n");
+
+
+	if (offset == 1)
+		return (1);
+	len_left_buf = read_bytes;
 	new_file = (char *)malloc(sizeof(char) * (file->len + len_left_buf));
 	if (new_file == NULL)
 		return (0);
 	gnl_memmove(new_file, file->buffer, file->len);
-	gnl_memmove(new_file + file->len, buf + offset, len_left_buf);
+	gnl_memmove(new_file + file->len, buf, len_left_buf);
 	if (file->buffer != NULL)
 		free(file->buffer);
 	file->buffer = new_file;
-	file->len = file->len + len_left_buf;
+	file->len += len_left_buf;
+
+	printf("fd->buffer\n%s\n", file->buffer);
+	return (1);
+}
+
+//버퍼에 저장된 문자열에서 \n 혹은 EOF까지의 문자열 + 기존 file에 있던 문자열을 result에 더해서 반환
+//EOF 일 때 -> \0
+//\n 일 때 -> 포함해서 저장
+int	put_result(t_fd_list *file, char **res)
+{
+	char	*new_file;
+	size_t	len;
+
+
+	printf("======put_result=======\n");
+
+	len = 0;
+	while (file->buffer[len] != '\0' && file->buffer[len] != '\n')
+		len++;
+	*res = (char *)malloc(sizeof(char) * (len + 1));
+	if (*res == NULL)
+		return (0);
+	gnl_memmove(*res, file->buffer, len + 1);
+	new_file = (char *)malloc(sizeof(char) * (file->len - len - 1));
+	if (new_file == NULL)
+	{
+		free (*res);
+		return (0);
+	}
+	gnl_memmove(new_file, file->buffer + len + 1, file->len - len - 1);
+	file->buffer = new_file;
+	printf("fd->buffer\n%s\n", file->buffer);
+	printf("res\n%s\n", *res);
 	return (1);
 }
