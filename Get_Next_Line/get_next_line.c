@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 13:23:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/13 18:33:08 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/13 18:53:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*get_next_line(int fd)
 	while (!returnable(fd_list, &len_res))
 	{	
 		len_buf = read(fd, buf, BUFFER_SIZE);
-		if (len_buf < 0)
+		if (len_buf < 0 || len_buf + fd_list->len == 0)
 			return (free_node(&fd_list));
 		if (!put_fd_buf(buf, fd_list, len_buf))
 			return (free_node(&fd_list));
@@ -96,8 +96,6 @@ int	put_fd_buf(char *buf, t_fd_list *fd_list, ssize_t len_buf)
 
 	if (len_buf <= BUFFER_SIZE && buf[len_buf] != '\n')
 		buf[len_buf] = '\0';
-	if (fd_list->len + len_buf == 0)
-		return (0);
 	new_fd_buf = (char *)malloc(sizeof(char) * (fd_list->len + len_buf));
 	if (new_fd_buf == NULL)
 		return (0);

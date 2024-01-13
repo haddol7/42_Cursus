@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:48:51 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/13 18:32:14 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/13 18:49:10 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ char	*free_node(t_fd_list **fd_list)
 	while (temp->next != (*fd_list) && temp->next != NULL)
 		temp = temp->next;
 	temp->next = (*fd_list)->next;
-	free((*fd_list)->buffer);
+	if ((*fd_list)->buffer != NULL)
+		free((*fd_list)->buffer);
 	(*fd_list)->buffer = NULL;
 	free((*fd_list));
 	*fd_list = temp;
