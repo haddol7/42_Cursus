@@ -5,47 +5,27 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/09 17:15:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/13 12:06:37 by daeha            ###   ########.fr       */
+/*   Created: 2024/01/13 15:48:51 by daeha             #+#    #+#             */
+/*   Updated: 2024/01/13 18:32:14 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-
-#include <stdio.h>
-
-
-//read 함수 호출 이후 저장된 버퍼 안에 \n이 있는지, EOF에 도달했는지 확인하는 함수
-//offset은 \n 뒤에 있는 index를 가르킨다
-//EOF에 도달했을 때, buffer에 '\0'을 넣는다.
-size_t	is_in_newline_or_eof(char *buffer, ssize_t read_bytes, size_t *offset)
+char	*free_node(t_fd_list **fd_list)
 {
-	*offset = 0;
-	while (*offset < (size_t)read_bytes)
-	{
-		if (buffer[(*offset)++] == '\n')
-			return (1);	
-	}
-	if (read_bytes < BUFFER_SIZE)
-	{
-		*offset = read_bytes;
-		buffer[(*offset)++] = '\0';
-		return (1);
-	}
-	return (0);
-}
+	t_fd_list	*temp;
 
-size_t	gnl_strlen(char *buffer)
-{
-	size_t	cnt;
-
-	cnt = 0;
-	if (buffer == NULL)
-		return (0);
-	while (buffer[cnt] != '\0')
-		cnt++;
-	return (cnt);
+	temp = (*fd_list)->head;
+	while (temp->next != (*fd_list) && temp->next != NULL)
+		temp = temp->next;
+	temp->next = (*fd_list)->next;
+	free((*fd_list)->buffer);
+	(*fd_list)->buffer = NULL;
+	free((*fd_list));
+	*fd_list = temp;
+	(*fd_list)->next = temp->next;
+	return (NULL);
 }
 
 void	*gnl_memmove(char *dst, char *src, size_t len)

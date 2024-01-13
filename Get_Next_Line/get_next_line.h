@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/09 17:15:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/13 12:05:20 by daeha            ###   ########.fr       */
+/*   Created: 2024/01/13 13:27:16 by daeha             #+#    #+#             */
+/*   Updated: 2024/01/13 18:32:35 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <unistd.h>
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 42
+#define BUFFER_SIZE 1
 #endif
 
 typedef struct	s_fd_list
@@ -25,19 +25,17 @@ typedef struct	s_fd_list
 	int					fd;
 	char				*buffer;
 	size_t				len;
+	struct s_fd_list	*head;
 	struct s_fd_list	*next;
 } t_fd_list;
 
+
 char	*get_next_line(int fd);
-char	*free_node(t_fd_list *fd_list);
-int	find_fd(int fd, t_fd_list **file);
-int	put_result(t_fd_list *file, char **res);
-int	put_buf(t_fd_list *file, char *buf, ssize_t read_bytes, size_t offset);
-size_t	is_in_newline_or_eof(char *buffer, ssize_t read_bytes, size_t *offset);
-size_t	gnl_strlen(char *buffer);
+int		find_fd(int fd, t_fd_list **fd_list);
+int 	returnable(t_fd_list *fd_list, size_t *len_res);
+int		put_fd_buf(char *buf, t_fd_list *fd_list, ssize_t len_buf);
+int		put_result(char **res, t_fd_list *fd_list, size_t len_res);
 void	*gnl_memmove(char *dst, char *src, size_t len);
-
-
-
+char	*free_node(t_fd_list **fd_list);
 
 #endif

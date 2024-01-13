@@ -5,120 +5,140 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/25 23:43:10 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/13 12:07:32 by daeha            ###   ########.fr       */
+/*   Created: 2024/01/13 13:23:46 by daeha             #+#    #+#             */
+/*   Updated: 2024/01/13 18:33:08 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 #include <stdio.h>
+
 char	*get_next_line(int fd)
 {
 	static t_fd_list	*fd_list;
 	char				*res;
 	char				buf[BUFFER_SIZE + 1];
-	size_t				buf_offset;
-	ssize_t				read_bytes;
+	size_t				len_res;
+	ssize_t				len_buf;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || !find_fd(fd, &fd_list))
 		return (NULL);
-	while (1)
-	{
-		read_bytes = read(fd, buf, BUFFER_SIZE);
-		if (read_bytes < 0)
-			return (free_node(fd_list));
 
-		if (is_in_newline_or_eof(buf, read_bytes, &buf_offset))
-		{
-			if (!put_buf(fd_list, buf, read_bytes, buf_offset) || !put_result(fd_list, &res))
-				return (free_node(fd_list));
-			break ;
-		}
-		if (!put_buf(fd_list, buf, read_bytes, buf_offset))
-			return (free_node(fd_list));
+//	printf("%d %zu  %p %p %p %p\n", fd_list->fd, fd_list->len, fd_list->buffer, fd_list->next, fd_list, fd_list->head);
+	
+	while (!returnable(fd_list, &len_res))
+	{	
+		len_buf = read(fd, buf, BUFFER_SIZE);
+		if (len_buf < 0)
+			return (free_node(&fd_list));
+		if (!put_fd_buf(buf, fd_list, len_buf))
+			return (free_node(&fd_list));
 	}
+	if (!put_result(&res, fd_list, len_res))
+		return (free_node(&fd_list));
+
+//	printf("%d %zu  %p %p %p %p\n", fd_list->fd, fd_list->len, fd_list->buffer, fd_list->next, fd_list, fd_list->head);
 	return (res);
 }
 
-//result의 경우에도 free 해야하는 경우가 있으므로 주의!
-char	*free_node(t_fd_list *fd_list)
-{
-	fd_list = NULL;
-	return (NULL);
-}
-
-//링크드 리스트로 구성된 fd에 따른 저장된 buffer를 찾아주는 함수
-//file.buffer는 무조건 malloc
-int	find_fd(int fd, t_fd_list **file)
-{
-	while (*file != NULL && (*file)->fd != fd)
-		*file = (*file)->next;
-	if  (*file == NULL)
+int	find_fd(int fd, t_fd_list **fd_list)
+{	
+	if (*fd_list == NULL)
 	{
-		*file = (t_fd_list *)malloc(sizeof(t_fd_list));
-		if (*file == NULL)
+		*fd_list = (t_fd_list *)malloc(sizeof(t_fd_list));
+		if (*fd_list == NULL)
 			return (0);
-		(*file)->fd = fd;
-		(*file)->len = 0;
-		(*file)->buffer = NULL;
-		(*file)->next = NULL;
-	}
-	return (1);
-}
-
-int	put_buf(t_fd_list *file, char *buf, ssize_t read_bytes, size_t offset)
-{
-	char	*new_file;
-	size_t	len_left_buf;
-
-//	printf("======put_buf=======\n");
-
-
-	if (offset == 1)
+		(*fd_list)->fd = fd;
+		(*fd_list)->buffer = NULL;
+		(*fd_list)->len = 0;
+		(*fd_list)->head = *fd_list;
+		(*fd_list)->next = NULL;
 		return (1);
-	len_left_buf = read_bytes;
-	new_file = (char *)malloc(sizeof(char) * (file->len + len_left_buf));
-	if (new_file == NULL)
-		return (0);
-	gnl_memmove(new_file, file->buffer, file->len);
-	gnl_memmove(new_file + file->len, buf, len_left_buf);
-	if (file->buffer != NULL)
-		free(file->buffer);
-	file->buffer = new_file;
-	file->len += len_left_buf;
-
-//	printf("fd->buffer\n%s\n", file->buffer);
+	}
+	*fd_list = (*fd_list)->head; 
+	while (*fd_list != NULL && (*fd_list)->fd != fd)
+		*fd_list = (*fd_list)->next;
+	if  (*fd_list == NULL)
+	{
+		*fd_list = (t_fd_list *)malloc(sizeof(t_fd_list));
+		if (*fd_list == NULL)
+			return (0);
+		(*fd_list)->fd = fd;
+		(*fd_list)->buffer = NULL;
+		(*fd_list)->len = 0;
+		(*fd_list)->next = NULL;
+	}
 	return (1);
 }
 
-//버퍼에 저장된 문자열에서 \n 혹은 EOF까지의 문자열 + 기존 file에 있던 문자열을 result에 더해서 반환
-//EOF 일 때 -> \0
-//\n 일 때 -> 포함해서 저장
-int	put_result(t_fd_list *file, char **res)
+int returnable(t_fd_list *fd_list, size_t *len_res)
 {
-	char	*new_file;
-	size_t	len;
+	size_t	i;
 
-
-//	printf("======put_result=======\n");
-
-	len = 0;
-	while (file->buffer[len] != '\0' && file->buffer[len] != '\n')
-		len++;
-	*res = (char *)malloc(sizeof(char) * (++len));
-	if (*res == NULL)
-		return (0);
-	gnl_memmove(*res, file->buffer, len);
-	new_file = (char *)malloc(sizeof(char) * (file->len - len));
-	if (new_file == NULL)
+	i = 0;
+	while (i < fd_list->len)
 	{
-		free (*res);
+		if (fd_list->buffer[i] == '\n' || fd_list->buffer[i] == '\0')
+		{
+			*len_res = i + 1;
+			return (1);
+		}
+		i++;
+	}
+	*len_res = 0;
+	return (0);	
+}
+
+int	put_fd_buf(char *buf, t_fd_list *fd_list, ssize_t len_buf)
+{
+	char	*new_fd_buf;
+
+	if (len_buf <= BUFFER_SIZE && buf[len_buf] != '\n')
+		buf[len_buf] = '\0';
+	if (fd_list->len + len_buf == 0)
+		return (0);
+	new_fd_buf = (char *)malloc(sizeof(char) * (fd_list->len + len_buf));
+	if (new_fd_buf == NULL)
+		return (0);
+	gnl_memmove(new_fd_buf, fd_list->buffer, fd_list->len);
+	gnl_memmove(new_fd_buf + fd_list->len, buf, len_buf);
+	if (fd_list->buffer != NULL)
+		free(fd_list->buffer);	
+	fd_list->buffer = new_fd_buf;
+	fd_list->len += len_buf;
+	return (1);
+}
+
+int	put_result(char **res, t_fd_list *fd_list, size_t len_res)
+{
+	char	*new_fd_buf;
+	char	*new_res;
+
+	new_res = (char *)malloc(sizeof(char) * len_res);
+	if (new_res == NULL)
+		return (0);
+	gnl_memmove(new_res, fd_list->buffer, len_res);
+	*res = new_res;
+	if (fd_list->buffer[fd_list->len - 1] == '\0')
+	{
+		free_node(&fd_list);
+		return (1);
+	}
+	fd_list->len -= len_res;
+	if (fd_list->len == 0)
+	{
+		free(fd_list->buffer);
+		fd_list->buffer = NULL;
+	}
+	new_fd_buf = (char *)malloc(sizeof(char) * (fd_list->len));
+	if (new_fd_buf == NULL)
+	{
+		free(new_res);
 		return (0);
 	}
-	gnl_memmove(new_file, file->buffer + len, file->len - len);
-	file->buffer = new_file;
-//	printf("fd->buffer\n%s\n", file->buffer);
-//	printf("res\n%s\n", *res);
+	gnl_memmove(new_fd_buf, fd_list->buffer + len_res, fd_list->len);
+	free(fd_list->buffer);
+	fd_list->buffer = new_fd_buf;
 	return (1);
 }
