@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/13 13:23:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/17 22:46:39 by daeha            ###   ########.fr       */
+/*   Created: 2024/01/17 21:52:46 by daeha             #+#    #+#             */
+/*   Updated: 2024/01/17 22:46:12 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 //TODO: ADD fd_list init function
 //TODO: ADD result strcuture
 //TODO: MOD linked list structure and add head variable

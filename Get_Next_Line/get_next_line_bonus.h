@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/13 13:27:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/17 21:45:39 by daeha            ###   ########.fr       */
+/*   Created: 2024/01/17 21:48:15 by daeha             #+#    #+#             */
+/*   Updated: 2024/01/17 21:59:15 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 #include <stdlib.h>
 #include <unistd.h>
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 10
+#define BUFFER_SIZE 1
 #endif
 
 typedef struct	s_fd_list
