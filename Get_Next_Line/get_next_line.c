@@ -6,27 +6,26 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 13:23:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/13 18:53:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/17 21:41:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-#include <stdio.h>
+//TODO: ADD fd_list init function
+//TODO: ADD result strcuture
+//TODO: MOD linked list structure and add head variable
+//TODO: understand how to static variable work
 
 char	*get_next_line(int fd)
 {
 	static t_fd_list	*fd_list;
 	char				*res;
-	char				buf[BUFFER_SIZE + 1];
+	char				buf[BUFFER_SIZE];
 	size_t				len_res;
 	ssize_t				len_buf;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || !find_fd(fd, &fd_list))
 		return (NULL);
-
-//	printf("%d %zu  %p %p %p %p\n", fd_list->fd, fd_list->len, fd_list->buffer, fd_list->next, fd_list, fd_list->head);
-	
 	while (!returnable(fd_list, &len_res))
 	{	
 		len_buf = read(fd, buf, BUFFER_SIZE);
@@ -37,8 +36,6 @@ char	*get_next_line(int fd)
 	}
 	if (!put_result(&res, fd_list, len_res))
 		return (free_node(&fd_list));
-
-//	printf("%d %zu  %p %p %p %p\n", fd_list->fd, fd_list->len, fd_list->buffer, fd_list->next, fd_list, fd_list->head);
 	return (res);
 }
 
@@ -77,6 +74,7 @@ int returnable(t_fd_list *fd_list, size_t *len_res)
 	size_t	i;
 
 	i = 0;
+	*len_res = 0;
 	while (i < fd_list->len)
 	{
 		if (fd_list->buffer[i] == '\n' || fd_list->buffer[i] == '\0')
@@ -86,10 +84,10 @@ int returnable(t_fd_list *fd_list, size_t *len_res)
 		}
 		i++;
 	}
-	*len_res = 0;
 	return (0);	
 }
 
+/*
 int	put_fd_buf(char *buf, t_fd_list *fd_list, ssize_t len_buf)
 {
 	char	*new_fd_buf;
@@ -107,7 +105,65 @@ int	put_fd_buf(char *buf, t_fd_list *fd_list, ssize_t len_buf)
 	fd_list->len += len_buf;
 	return (1);
 }
+*/
 
+int put_fd_buf(char *buf, t_fd_list *fd_list, ssize_t len_buf)
+{
+	char	*new_fd_buf;
+
+	if (len_buf == 0)
+	{
+		if (fd_list->len > 0)
+			buf[len_buf++] = '\0';
+		else
+			return (0);
+	}
+	new_fd_buf = (char *)malloc(sizeof(char) * (fd_list->len + len_buf));
+	if (new_fd_buf == NULL)
+		return (0);
+	gnl_memmove(new_fd_buf, fd_list->buffer, fd_list->len);
+	gnl_memmove(new_fd_buf + fd_list->len, buf, len_buf);
+	if (fd_list->buffer != NULL)
+		free(fd_list->buffer);
+	fd_list->buffer = new_fd_buf;
+	fd_list->len += len_buf;
+	return (1);
+}
+
+//TODO: add condition that fd_list->buffer has only \0
+int put_result(char **res, t_fd_list *fd_list, size_t len_res)
+{
+	char	*new_fd_buf;
+	size_t	len_new_res;
+
+	len_new_res = len_res;
+	if (fd_list->buffer[len_res - 1] == '\n')
+		len_new_res++;
+	*res = (char *)malloc(sizeof(char) * (len_new_res));
+	if (*res == NULL)
+		return (0);
+	gnl_memmove(*res, fd_list->buffer, len_res);
+	(*res)[len_new_res - 1] = '\0';
+	fd_list->len -= len_res;
+	if (fd_list->len == 0)
+	{
+		free(fd_list->buffer);
+		fd_list->buffer = NULL;
+		return (1);
+	}
+	new_fd_buf = (char *)malloc(sizeof(char) * fd_list->len);
+	if (new_fd_buf == NULL)
+	{
+		free(*res);
+		return (0);
+	}
+	gnl_memmove(new_fd_buf, fd_list->buffer + len_res, fd_list->len);
+	free(fd_list->buffer);
+	fd_list->buffer = new_fd_buf;
+	return (1);
+}
+
+/*
 int	put_result(char **res, t_fd_list *fd_list, size_t len_res)
 {
 	char	*new_fd_buf;
@@ -140,3 +196,4 @@ int	put_result(char **res, t_fd_list *fd_list, size_t len_res)
 	fd_list->buffer = new_fd_buf;
 	return (1);
 }
+*/
