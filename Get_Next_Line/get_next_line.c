@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 13:23:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/18 18:10:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/19 02:04:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,55 +14,41 @@
 
 char	*get_next_line(int fd)
 {
-	static t_fd_list	*fd_list;
-	char				*res;
+	static t_fd_list	*head;
+	t_fd_list			*current;
+	t_result			result;
 	char				buf[BUFFER_SIZE];
-	size_t				len_res;
 	ssize_t				len_buf;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || !find_fd(fd, &fd_list))
+	if (fd < 0 || BUFFER_SIZE <= 0 || !find_fd(fd, &head, &current))
 		return (NULL);
-	while (!returnable(fd_list, &len_res))
+	while (!returnable(current, &(result.len)))
 	{	
 		len_buf = read(fd, buf, BUFFER_SIZE);
-		if (len_buf < 0 || len_buf + fd_list->len == 0)
-			return (free_node(&fd_list));
-		if (!put_fd_buf(buf, fd_list, len_buf))
-			return (free_node(&fd_list));
+		if (len_buf < 0 || len_buf + current->len == 0)
+			return (free_node(&head, &current));
+		if (!put_fd_buf(buf, current, len_buf))
+			return (free_node(&head, &current));
 	}
-	if (!put_result(&res, fd_list, len_res))
-		return (free_node(&fd_list));
-	return (res);
+	if (!put_result(&result, &head, &current))
+		return (free_node(&head, &current));
+	return (result.str);
 }
 
-int	find_fd(int fd, t_fd_list **fd_list)
+int	find_fd(int fd, t_fd_list **head, t_fd_list **cur)
 {	
 	t_fd_list	*new_list;
-	t_fd_list	*temp;
 
-	if (*fd_list == NULL)
+	if (*head == NULL)
+		return (init_gnl(fd, head, cur));
+	*cur = *head;
+	while (*cur != NULL)
 	{
-		*fd_list = (t_fd_list *)malloc(sizeof(t_fd_list));
-		if (*fd_list == NULL)
-			return (0);
-		(*fd_list)->fd = fd;
-		(*fd_list)->buffer = NULL;
-		(*fd_list)->len = 0;
-		(*fd_list)->head = *fd_list;
-		(*fd_list)->next = NULL;
-		return (1);
-	}
-	temp = (*fd_list)->head;
-	while (temp != NULL)
-	{
-		if (temp->fd == fd)
-		{
-			*fd_list = temp;
+		if ((*cur)->fd == fd)
 			return (1);
-		}
-		else if (temp->next == NULL)
-			break;
-		temp = temp->next;
+		else if ((*cur)->rear == NULL)
+			break ;
+		(*cur) = (*cur)->rear;
 	}
 	new_list = (t_fd_list *)malloc(sizeof(t_fd_list));
 	if (new_list == NULL)
@@ -70,83 +56,71 @@ int	find_fd(int fd, t_fd_list **fd_list)
 	new_list->fd = fd;
 	new_list->buffer = NULL;
 	new_list->len = 0;
-	new_list->head = (*fd_list)->head;
-	new_list->next = NULL;
-	temp->next = new_list;
-	*fd_list = new_list;
+	new_list->front = *cur;
+	new_list->rear = NULL;
+	(*cur)->rear = new_list;
+	*cur = (*cur)->rear;
 	return (1);
 }
 
-int returnable(t_fd_list *fd_list, size_t *len_res)
+int	returnable(t_fd_list *cur, size_t *len_res)
 {
 	size_t	i;
 
 	i = 0;
 	*len_res = 0;
-	while (i < fd_list->len)
+	while (i < cur->len)
 	{
-		if (fd_list->buffer[i] == '\n' || fd_list->buffer[i] == '\0')
+		if (cur->buffer[i] == '\n' || cur->buffer[i] == '\0')
 		{
 			*len_res = i + 1;
 			return (1);
 		}
 		i++;
 	}
-	return (0);	
+	return (0);
 }
 
-int put_fd_buf(char *buf, t_fd_list *fd_list, ssize_t len_buf)
+int	put_fd_buf(char *buf, t_fd_list *cur, ssize_t len_buf)
 {
 	char	*new_fd_buf;
 
 	if (len_buf == 0)
 	{
-		if (fd_list->len > 0)
+		if (cur->len > 0)
 			buf[len_buf++] = '\0';
 		else
 			return (0);
 	}
-	new_fd_buf = (char *)malloc(sizeof(char) * (fd_list->len + len_buf));
+	new_fd_buf = (char *)malloc(sizeof(char) * (cur->len + len_buf));
 	if (new_fd_buf == NULL)
 		return (0);
-	gnl_memmove(new_fd_buf, fd_list->buffer, fd_list->len);
-	gnl_memmove(new_fd_buf + fd_list->len, buf, len_buf);
-	if (fd_list->buffer != NULL)
-		free(fd_list->buffer);
-	fd_list->buffer = new_fd_buf;
-	fd_list->len += len_buf;
+	gnl_memmove(new_fd_buf, cur->buffer, cur->len);
+	gnl_memmove(new_fd_buf + cur->len, buf, len_buf);
+	if (cur->buffer != NULL)
+		free(cur->buffer);
+	cur->buffer = new_fd_buf;
+	cur->len += len_buf;
 	return (1);
 }
 
-//TODO: add condition that fd_list->buffer has only \0
-int put_result(char **res, t_fd_list *fd_list, size_t len_res)
+int	put_result(t_result *res, t_fd_list **head, t_fd_list **cur)
 {
-	char	*new_fd_buf;
 	size_t	len_new_res;
 
-	len_new_res = len_res;
-	if (fd_list->buffer[len_res - 1] == '\n')
+	len_new_res = res->len;
+	if ((*cur)->buffer[res->len - 1] == '\n')
 		len_new_res++;
-	*res = (char *)malloc(sizeof(char) * (len_new_res));
-	if (*res == NULL)
+	res->str = (char *)malloc(sizeof(char) * (len_new_res));
+	if (res->str == NULL)
 		return (0);
-	gnl_memmove(*res, fd_list->buffer, len_res);
-	(*res)[len_new_res - 1] = '\0';
-	fd_list->len -= len_res;
-	if (fd_list->len == 0)
+	gnl_memmove(res->str, (*cur)->buffer, res->len);
+	(res->str)[len_new_res - 1] = '\0';
+	(*cur)->len -= res->len;
+	if (res->len == len_new_res)
 	{
-		free(fd_list->buffer);
-		fd_list->buffer = NULL;
+		(free_node(head, cur));
 		return (1);
 	}
-	new_fd_buf = (char *)malloc(sizeof(char) * fd_list->len);
-	if (new_fd_buf == NULL)
-	{
-		free(*res);
-		return (0);
-	}
-	gnl_memmove(new_fd_buf, fd_list->buffer + len_res, fd_list->len);
-	free(fd_list->buffer);
-	fd_list->buffer = new_fd_buf;
-	return (1);
+	return (put_left_fd_buf(res, cur));
 }

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 21:52:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/19 01:55:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/19 01:59:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,6 @@ char	*get_next_line(int fd)
 	return (result.str);
 }
 
-int	init_gnl(int fd, t_fd_list **head, t_fd_list **cur)
-{	
-	*head = (t_fd_list *)malloc(sizeof(t_fd_list));
-	if (*head == NULL)
-		return (0);
-	(*head)->fd = fd;
-	(*head)->buffer = NULL;
-	(*head)->len = 0;
-	(*head)->front = NULL;
-	(*head)->rear = NULL;
-	*cur = *head;
-	return (1);
-}
-
 int	find_fd(int fd, t_fd_list **head, t_fd_list **cur)
 {	
 	t_fd_list	*new_list;
@@ -61,7 +47,7 @@ int	find_fd(int fd, t_fd_list **head, t_fd_list **cur)
 		if ((*cur)->fd == fd)
 			return (1);
 		else if ((*cur)->rear == NULL)
-			break;
+			break ;
 		(*cur) = (*cur)->rear;
 	}
 	new_list = (t_fd_list *)malloc(sizeof(t_fd_list));
@@ -70,14 +56,14 @@ int	find_fd(int fd, t_fd_list **head, t_fd_list **cur)
 	new_list->fd = fd;
 	new_list->buffer = NULL;
 	new_list->len = 0;
-	new_list->front = *cur; 
+	new_list->front = *cur;
 	new_list->rear = NULL;
 	(*cur)->rear = new_list;
 	*cur = (*cur)->rear;
 	return (1);
 }
 
-int returnable(t_fd_list *cur, size_t *len_res)
+int	returnable(t_fd_list *cur, size_t *len_res)
 {
 	size_t	i;
 
@@ -92,10 +78,10 @@ int returnable(t_fd_list *cur, size_t *len_res)
 		}
 		i++;
 	}
-	return (0);	
+	return (0);
 }
 
-int put_fd_buf(char *buf, t_fd_list *cur, ssize_t len_buf)
+int	put_fd_buf(char *buf, t_fd_list *cur, ssize_t len_buf)
 {
 	char	*new_fd_buf;
 
@@ -118,7 +104,7 @@ int put_fd_buf(char *buf, t_fd_list *cur, ssize_t len_buf)
 	return (1);
 }
 
-int put_result(t_result *res, t_fd_list **head, t_fd_list **cur)
+int	put_result(t_result *res, t_fd_list **head, t_fd_list **cur)
 {
 	size_t	len_new_res;
 
@@ -137,24 +123,4 @@ int put_result(t_result *res, t_fd_list **head, t_fd_list **cur)
 		return (1);
 	}
 	return (put_left_fd_buf(res, cur));
-}
-
-int	put_left_fd_buf(t_result *res, t_fd_list **cur)
-{
-	char	*new_fd_buf;
-	
-	new_fd_buf = NULL;
-	if ((*cur)->len != 0)
-	{
-		new_fd_buf = (char *)malloc(sizeof(char) * (*cur)->len);
-		if (new_fd_buf == NULL)
-		{
-			free(res->str);
-			return (0);
-		}
-		gnl_memmove(new_fd_buf, (*cur)->buffer + res->len, (*cur)->len);
-	}
-	free((*cur)->buffer);
-	(*cur)->buffer = new_fd_buf;
-	return (1);
 }
