@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 21:52:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/19 01:09:30 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/19 01:55:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*get_next_line(int fd)
 		if (!put_fd_buf(buf, current, len_buf))
 			return (free_node(&head, &current));
 	}
-	if (!put_result(&(result.str), &head, &current, result.len))
+	if (!put_result(&result, &head, &current))
 		return (free_node(&head, &current));
 	return (result.str);
 }
@@ -118,39 +118,42 @@ int put_fd_buf(char *buf, t_fd_list *cur, ssize_t len_buf)
 	return (1);
 }
 
-//TODO: add condition that fd_list->buffer has only \0
-int put_result(char **res, t_fd_list **head, t_fd_list **cur, size_t len_res)
+int put_result(t_result *res, t_fd_list **head, t_fd_list **cur)
 {
-	char	*new_fd_buf;
 	size_t	len_new_res;
 
-	len_new_res = len_res;
-	if ((*cur)->buffer[len_res - 1] == '\n')
+	len_new_res = res->len;
+	if ((*cur)->buffer[res->len - 1] == '\n')
 		len_new_res++;
-	*res = (char *)malloc(sizeof(char) * (len_new_res));
-	if (*res == NULL)
+	res->str = (char *)malloc(sizeof(char) * (len_new_res));
+	if (res->str == NULL)
 		return (0);
-	gnl_memmove(*res, (*cur)->buffer, len_res);
-	(*res)[len_new_res - 1] = '\0';
-	(*cur)->len -= len_res;
-	if (len_res == len_new_res)
+	gnl_memmove(res->str, (*cur)->buffer, res->len);
+	(res->str)[len_new_res - 1] = '\0';
+	(*cur)->len -= res->len;
+	if (res->len == len_new_res)
 	{
 		(free_node(head, cur));
 		return (1);
 	}
-	if ((*cur)->len == 0)
+	return (put_left_fd_buf(res, cur));
+}
+
+int	put_left_fd_buf(t_result *res, t_fd_list **cur)
+{
+	char	*new_fd_buf;
+	
+	new_fd_buf = NULL;
+	if ((*cur)->len != 0)
 	{
-		free((*cur)->buffer);
-		(*cur)->buffer = NULL;
-		return (1);
+		new_fd_buf = (char *)malloc(sizeof(char) * (*cur)->len);
+		if (new_fd_buf == NULL)
+		{
+			free(res->str);
+			return (0);
+		}
+		gnl_memmove(new_fd_buf, (*cur)->buffer + res->len, (*cur)->len);
 	}
-	new_fd_buf = (char *)malloc(sizeof(char) * (*cur)->len);
-	if (new_fd_buf == NULL)
-	{
-		free(*res);
-		return (0);
-	}
-	gnl_memmove(new_fd_buf, (*cur)->buffer + len_res, (*cur)->len);
 	free((*cur)->buffer);
 	(*cur)->buffer = new_fd_buf;
 	return (1);
