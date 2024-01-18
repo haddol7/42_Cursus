@@ -6,39 +6,47 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 21:48:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/17 22:46:51 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/18 23:26:12 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-char	*free_node(t_fd_list **fd_list)
+/*
+char	*free_node(t_fd_list **cur)
 {
 	t_fd_list	*temp;
 
-	if (*fd_list == (*fd_list)->head)
-	{
-		if((*fd_list)->buffer != NULL)
-			free((*fd_list)->buffer);
-		(*fd_list)->buffer = NULL;
-		(*fd_list)->head = NULL;
-		(*fd_list)->fd = -1;
-		(*fd_list)->len = 0;
-		(*fd_list)->next = NULL;
-		free(*fd_list);
-		*fd_list = NULL;
-		return (NULL);
-	}
-	temp = (*fd_list)->head;
-	while (temp->next != *fd_list && temp->next != NULL)
-		temp = temp->next;
-	temp->next = (*fd_list)->next;
-	if ((*fd_list)->buffer != NULL)
-		free((*fd_list)->buffer);
-	(*fd_list)->buffer = NULL;
-	free((*fd_list));
-	*fd_list = temp;
-	(*fd_list)->next = temp->next;
+	temp = *cur;
+	if (temp->front != NULL)
+		temp->front->rear = temp->rear;
+	if (temp->rear != NULL)
+		temp->rear->front = temp->front;
+	if (temp->buffer != NULL)
+		free(temp->buffer);
+	temp->buffer = NULL;
+	temp->fd = -1;
+	temp->len = 0;
+	free(temp);
+	temp = temp->rear;
+	*cur = NULL;
+	return (NULL);
+}
+*/
+
+char	*free_node(t_fd_list **cur)
+{
+	if ((*cur)->front != NULL)
+		((*cur)->front)->rear = (*cur)->rear;
+	if ((*cur)->rear != NULL)
+		((*cur)->rear)->front = (*cur)->front;
+	if ((*cur)->buffer != NULL)
+		free((*cur)->buffer);
+	(*cur)->buffer = NULL;
+	(*cur)->fd = -1;
+	(*cur)->len = 0;
+	free(*cur);
+	(*cur) = (*cur)->rear;
 	return (NULL);
 }
 

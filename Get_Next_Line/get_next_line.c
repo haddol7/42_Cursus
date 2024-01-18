@@ -6,15 +6,11 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 13:23:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/17 22:46:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/18 18:10:13 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-//TODO: ADD fd_list init function
-//TODO: ADD result strcuture
-//TODO: MOD linked list structure and add head variable
-//TODO: understand how to static variable work
 
 char	*get_next_line(int fd)
 {
@@ -42,6 +38,7 @@ char	*get_next_line(int fd)
 int	find_fd(int fd, t_fd_list **fd_list)
 {	
 	t_fd_list	*new_list;
+	t_fd_list	*temp;
 
 	if (*fd_list == NULL)
 	{
@@ -55,9 +52,18 @@ int	find_fd(int fd, t_fd_list **fd_list)
 		(*fd_list)->next = NULL;
 		return (1);
 	}
-	*fd_list = (*fd_list)->head; 
-	while ((*fd_list)->next != NULL && ((*fd_list)->next)->fd != fd)
-		*fd_list = (*fd_list)->next;
+	temp = (*fd_list)->head;
+	while (temp != NULL)
+	{
+		if (temp->fd == fd)
+		{
+			*fd_list = temp;
+			return (1);
+		}
+		else if (temp->next == NULL)
+			break;
+		temp = temp->next;
+	}
 	new_list = (t_fd_list *)malloc(sizeof(t_fd_list));
 	if (new_list == NULL)
 		return (0);
@@ -66,7 +72,7 @@ int	find_fd(int fd, t_fd_list **fd_list)
 	new_list->len = 0;
 	new_list->head = (*fd_list)->head;
 	new_list->next = NULL;
-	(*fd_list)->next = new_list;
+	temp->next = new_list;
 	*fd_list = new_list;
 	return (1);
 }

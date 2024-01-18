@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 13:27:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/17 21:45:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/18 18:10:46 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ typedef struct	s_fd_list
 {
 	int					fd;
 	char				*buffer;
-	size_t				buf_size;
 	size_t				len;
 	struct s_fd_list	*head;
 	struct s_fd_list	*next;
