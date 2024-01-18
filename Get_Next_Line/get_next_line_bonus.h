@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 21:48:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/18 22:59:35 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/19 00:40:08 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <unistd.h>
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 1
+#define BUFFER_SIZE 42
 #endif
 
 typedef struct	s_fd_list
@@ -35,14 +35,12 @@ typedef struct s_result
 	size_t	len;
 } t_result;
 
-
-
 char	*get_next_line(int fd);
 int		find_fd(int fd, t_fd_list **head, t_fd_list **cur);
-int 	returnable(t_fd_list *fd_list, size_t *len_res);
-int		put_fd_buf(char *buf, t_fd_list *fd_list, ssize_t len_buf);
-int		put_result(char **res, t_fd_list *fd_list, size_t len_res);
+int 	returnable(t_fd_list *cur, size_t *len_res);
+int		put_fd_buf(char *buf, t_fd_list *cur, ssize_t len_buf);
+int		put_result(char **res, t_fd_list **head, t_fd_list **cur, size_t len_res);
 void	*gnl_memmove(char *dst, char *src, size_t len);
-char	*free_node(t_fd_list **fd_list);
+char	*free_node(t_fd_list **head, t_fd_list **cur);
 
 #endif
