@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 21:52:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/19 01:59:51 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/19 09:50:58 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@ char	*get_next_line(int fd)
 	while (!returnable(current, &(result.len)))
 	{	
 		len_buf = read(fd, buf, BUFFER_SIZE);
-		if (len_buf < 0 || len_buf + current->len == 0)
-			return (free_node(&head, &current));
-		if (!put_fd_buf(buf, current, len_buf))
+		if (len_buf < 0 || !put_fd_buf(buf, current, len_buf))
 			return (free_node(&head, &current));
 	}
 	if (!put_result(&result, &head, &current))

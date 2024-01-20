@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/19 16:13:31 by daeha             #+#    #+#             */
-/*   Updated: 2023/11/22 18:50:13 by daeha            ###   ########.fr       */
+/*   Updated: 2023/11/20 17:17:34 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_list	*ft_lstnew(void *content)
 // 	str = ft_strdup("Hello linked list");
 // 	lst = ft_lstnew(str);
 // 	free(str);
-// 	printf("%s %d", lst->content, sizeof(t_list));
+// 	printf("%s", lst->content);
 // 	if (lst->next == NULL)
 // 		printf("\nNULL");
 // 	return (0);

@@ -6,11 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 13:29:01 by daeha             #+#    #+#             */
-/*   Updated: 2023/11/25 17:46:23 by daeha            ###   ########.fr       */
+/*   Updated: 2023/11/20 17:53:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 14:06:33 by daeha             #+#    #+#             */
-/*   Updated: 2023/11/22 15:46:49 by daeha            ###   ########.fr       */
+/*   Updated: 2023/11/20 17:41:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,10 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 // 	char	dst[30];
 // 	char	src[10];
 // 	size_t	dstsize;
+// 	dstsize = atoi(argv[1]);
 // 	strcpy(dst, "123456789");
 // 	strcpy(src, "abc");
-// 	ft_strlcat(0, src, 0);
+// 	strlcat(0, src, 0);
 // 	printf("%s", dst);
 // 	return (0);
 // }
