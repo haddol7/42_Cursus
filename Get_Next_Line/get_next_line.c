@@ -6,12 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 13:23:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/19 09:50:38 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/21 16:25:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+//TODO : buffer array must be allocated by malloc 
+//		 because when array is sized by BUFFER_SIZE as static array it overflows in stack
 char	*get_next_line(int fd)
 {
 	static t_fd_list	*head;
