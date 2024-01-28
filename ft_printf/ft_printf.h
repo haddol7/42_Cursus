@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:58:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/27 16:39:07 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/28 21:20:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include <unistd.h>
 # include <stdarg.h>
 # include <stdlib.h>
+
+#  define OK 1
+#  define ERROR 0
 
 typedef struct s_flag
 {
@@ -28,5 +31,14 @@ typedef struct s_flag
 	int	zero;
 }	t_flag;
 
-int	ft_printf(const char *format, ...);
+typedef struct s_specifier
+{
+	char	*spe;
+	char	type;
+}	t_spec;
+
+int		ft_printf(const char *format, ...);
+void	parse_flag(const char *format, t_flag *flag, int *i);
+int		make_speci(&spec, ap, format[(*i)++]);
+int 	make_field(char **str, t_spec spec, t_flag flag, int *size)
 #endif
