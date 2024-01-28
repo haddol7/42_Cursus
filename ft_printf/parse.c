@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:16:47 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/28 21:16:49 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/28 22:05:57 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,11 @@ void	parse_width(const char *format, t_flag *flag, int *i)
 void	parse_flag(const char *format, t_flag *flag, int *i)
 {
 	char	cur;
-	
+	int		init_i;
+
+	init_i = -1;
+	while (++init_i != sizeof(*flag))
+		((unsigned char *)flag)[init_i] = 0;
 	while (1)
 	{
 		cur = format[*i];

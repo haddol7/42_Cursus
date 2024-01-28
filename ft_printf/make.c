@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:18:27 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/28 21:18:36 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/28 23:58:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,8 @@ int make_speci(t_spec *spec, va_list *ap, char ch)
 		no_err = make_speci_s(spec, ap);
 	else if (ch == 'p')
 		no_err = make_speci_p(spec, ap);
-	else if (ch == 'd')
-		no_err = make_speci_d(spec, ap);
-	else if (ch == 'i')
-		no_err = make_speci_i(spec, ap);
+	else if (ch == 'd' || ch == 'i')
+		no_err = make_speci_d_i(spec, ap);
 	else if (ch == 'x')
 		no_err = make_speci_x(spec, ap);
 	else if (ch == 'X')
@@ -40,5 +38,28 @@ int make_speci(t_spec *spec, va_list *ap, char ch)
 
 int make_field(char **str, t_spec spec, t_flag flag, int *size)
 {
-	
+	int		no_err;
+	char	type;
+
+	no_err = OK;
+	type = spec.type;
+	if (type = 'c')
+		no_err = make_field_c(str, spec, flag, size);
+	else if (type = 's')
+		no_err = make_field_s(str, spec, flag, size);
+	else if (type = 'p')
+		no_err = make_field_p(str, spec, flag, size);
+	else if (type = 'd')
+		no_err = make_field_d(str, spec, flag, size);
+	else if (type = 'i')
+		no_err = make_field_i(str, spec, flag, size);
+	else if (type = 'x')
+		no_err = make_field_x(str, spec, flag, size);
+	else if (type = 'X')
+		no_err = make_field_X(str, spec, flag, size);
+	else if (type = 'u')
+		no_err = make_field_u(str, spec, flag, size);
+	else if (type = '%')
+		no_err = make_field_per(str, spec, flag, size);
+	return (no_err);
 }
