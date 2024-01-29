@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:36:33 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/29 03:14:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/29 12:06:43 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int make_speci_s(t_spec *spec, va_list *ap)
 	char	*arg;
 
 	arg = va_arg(*ap, char *);
-	str = ft_strdup(arg);
+	str = ft_strdup(aㅂrg);
 	if (str == NULL)
 		return (ERROR);
 	spec->str = str;
@@ -44,6 +44,12 @@ int make_speci_s(t_spec *spec, va_list *ap)
 
 int make_speci_p(t_spec *spec, va_list *ap)
 {
+	char				*str;
+	const char			*hex;
+	unsigned long long	arg;
+
+	hex = "0123456789abcdef";
+	arg = (unsigned long long)va_arg(*ap, void *);
 	
 }
 
