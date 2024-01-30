@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:36:33 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 15:23:27 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 15:28:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int make_speci_x_X(t_spec *spec, va_list *ap, char type)
 	else
 		hex = "0123456789ABCDEF";
 	arg = (unsigned long long)va_arg(*ap, unsigned int);
-	str = make_speci_xX_get_str(arg, &len);
+	str = make_speci_xX_p_get_str(arg, &len, type);
 	if (str == NULL)
 		return (ERROR);
 	str[len--] = '\0';

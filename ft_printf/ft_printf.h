@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:58:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/28 22:19:21 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 15:36:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ typedef struct s_specifier
 {
 	char	*str;
 	char	type;
+	int		size;
 }	t_spec;
 
 int		ft_printf(const char *format, ...);
 void	parse_flag(const char *format, t_flag *flag, int *i);
-int		make_speci(t_spec *spec, va_list *ap, char ch);
-int 	make_field(char **str, t_spec spec, t_flag flag, int *size);
+int		make_field(t_spec *spec, va_list *ap, char ch);
 #endif

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:57:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/29 12:02:41 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 15:36:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,34 +23,20 @@ int	write_literally(const char *format, int len, int *result)
 	return (1);
 }
 
-int	free_strs(char **str, t_spec *spec)
-{
-	if (*str != NULL)
-		free(*str);
-	*str = NULL;
-	if (spec->str != NULL)
-		free(spec->str);
-	spec->str = NULL;
-	return (ERROR);
-}
-
 int	write_conversion(const char *format, int *i, int *result, va_list *ap)
 {
-	char	*str;
-	int		size;
 	t_spec	spec;
 	t_flag	flag;
 
 	if (format[*i] == '\0')
 		return (OK);
 	parse_flag(format, &flag, i);
-	if (!make_speci(&spec, ap, format[(*i)++]) || \
-		!make_field(&str, spec, flag, &size) || \
-		!write_literally(str, size, *result))
-		return (free_strs(&str, &spec));
-	if (str != NULL)
-		free(str);
-	str = NULL;
+	if (!make_field(&spec, ap, format[(*i)++]) || \
+		!write_literally(spec.str, spec.size, *result))
+		return (ERROR);
+	if (spec.str != NULL)
+		free(spec.str);
+	spec.str = NULL;
 	return (1);
 }
 
