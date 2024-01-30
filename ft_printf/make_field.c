@@ -6,20 +6,11 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 15:56:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/31 01:35:56 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 01:46:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-
-void	swap(char *ch1, char *ch2)
-{
-	char temp;
-
-	temp = *ch1;
-	*ch1 = *ch2;
-	*ch2 = temp;
-}
 
 int	join_width(t_spec *spec, int width, int left, char zero)
 {

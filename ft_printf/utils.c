@@ -6,11 +6,20 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 23:45:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 23:05:16 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 01:45:40 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+void	swap(char *ch1, char *ch2)
+{
+	char temp;
+
+	temp = *ch1;
+	*ch1 = *ch2;
+	*ch2 = temp;
+}
 
 int		error_free(t_spec *spec)
 {

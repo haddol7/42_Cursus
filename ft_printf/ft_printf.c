@@ -6,11 +6,19 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:57:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 23:57:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 01:48:53 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+//TODO : refactoring
+//1. 구조체 부분 is_zero 부분 수정
+//2. 중복된 코드 부분 함수화 -> 필드 만들 때
+//3. norm 준수
+//4. 직관적인 파일명, 함수명
+//5. 그에 따른 헤더파일 수정
+//6. Makefile 정리
 
 static int	write_literally(const char *format, int len, int *result)
 {
