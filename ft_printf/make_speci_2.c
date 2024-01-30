@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 15:09:26 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 15:10:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 16:05:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*make_speci_d_i_get_str(long arg, int *len)
 	return (str);
 }
 
-int make_speci_d_i(t_spec *spec, va_list *ap)
+int make_speci_d_i(t_spec *spec, t_flag flag, va_list *ap)
 {
 	int		len;
 	char	*str;
@@ -48,6 +48,7 @@ int make_speci_d_i(t_spec *spec, va_list *ap)
 	str = make_speci_d_i_getstr(arg, &len);
 	if (str == NULL)
 		return (ERROR);
+	spec->size = len;
 	if (arg < 0)
 	{
 		arg *= -1;
@@ -61,7 +62,7 @@ int make_speci_d_i(t_spec *spec, va_list *ap)
 	}
 	spec->str = str;
 	spec->type = 'd';
-	return (OK);
+	return (make_field_d_i(spec, flag));
 }
 
 static char	*make_speci_u_getstr(long long arg, int *len)
@@ -85,7 +86,7 @@ static char	*make_speci_u_getstr(long long arg, int *len)
 	return (str);
 }
 
-int make_speci_u(t_spec *spec, va_list *ap)
+int make_speci_u(t_spec *spec, t_flag flag, va_list *ap)
 {
 	int				len;
 	char			*str;
@@ -95,6 +96,7 @@ int make_speci_u(t_spec *spec, va_list *ap)
 	str = make_speci_u_getstr(arg, &len);
 	if (str == NULL)
 		return (ERROR);
+	spec->size = len;
 	str[len--] = '\0';
 	while (arg != 0 && len >= 0)
 	{
@@ -102,17 +104,17 @@ int make_speci_u(t_spec *spec, va_list *ap)
 		arg /= 10;
 	}
 	spec->str = str;
-	spec->type = 'd';
-	return (OK);
+	spec->type = 'u';
+	return (make_field_u(spec, flag));
 }
-int make_speci_per(t_spec *spec)
+int make_speci_per(t_spec *spec, t_flag flag)
 {
 	char	*str;
 
-	str = ft_strdup("%");
+	str = ft_strdup("%", &spec->size);
 	if (str == NULL)
 		return (ERROR);
 	spec->str = str;
 	spec->type = '%';
-	return (OK);
+	return (make_field_per(spec, flag));
 }

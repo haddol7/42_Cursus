@@ -6,13 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:36:33 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 15:28:16 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 16:35:07 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int make_speci_c(t_spec *spec, va_list *ap)
+int make_speci_c(t_spec *spec, t_flag flag, va_list *ap)
 {
 	char	*str;
 	char	arg;
@@ -25,21 +25,25 @@ int make_speci_c(t_spec *spec, va_list *ap)
 	str[1] = '\0';
 	spec->str = str;
 	spec->type = 'c';
-	return (OK);
+	spec->size = 2;
+	return (make_field_c_p(spec, flag));
 }
 
-int make_speci_s(t_spec *spec, va_list *ap)
+int make_speci_s(t_spec *spec, t_flag flag, va_list *ap)
 {
 	char	*str;
 	char	*arg;
 
 	arg = va_arg(*ap, char *);
-	str = ft_strdup(arg);
+	if (arg == NULL)
+		str = ft_strdup("(null)", &spec->size);
+	else
+		str = ft_strdup(arg, &spec->size);
 	if (str == NULL)
 		return (ERROR);
 	spec->str = str;
 	spec->type = 's';
-	return (OK);
+	return (make_field_s(spec, flag));
 }
 
 static char	*make_speci_xX_p_getstr(long long arg, int *len, char type)
@@ -69,7 +73,7 @@ static char	*make_speci_xX_p_getstr(long long arg, int *len, char type)
 	return (str);
 }
 
-int make_speci_p(t_spec *spec, va_list *ap)
+int make_speci_p(t_spec *spec, t_flag flag, va_list *ap)
 {
 	int					len;
 	char				*str;
@@ -78,9 +82,10 @@ int make_speci_p(t_spec *spec, va_list *ap)
 
 	hex = "0123456789abcdef";
 	arg = (unsigned long long)va_arg(*ap, void *);
+	str = make_speci_xX_p_getstr(arg, &len, 'p');
 	if (str == NULL)
 		return (ERROR);
-	str = make_speci_xX_p_getstr(arg, &len, 'p');
+	spec->size = len;
 	str[0] = '0';
 	str[1] = 'x';
 	str[len--] = '\0';
@@ -91,9 +96,10 @@ int make_speci_p(t_spec *spec, va_list *ap)
 	}
 	spec->str = str;
 	spec->type = 'p';
+	return (make_field_c_p(spec, flag));
 }
 
-int make_speci_x_X(t_spec *spec, va_list *ap, char type)
+int make_speci_x_X(t_spec *spec, t_flag flag, va_list *ap, char type)
 {
 	int					len;
 	char				*str;
@@ -108,6 +114,7 @@ int make_speci_x_X(t_spec *spec, va_list *ap, char type)
 	str = make_speci_xX_p_get_str(arg, &len, type);
 	if (str == NULL)
 		return (ERROR);
+	spec->size = len;
 	str[len--] = '\0';
 	while (arg != 0 && len >= 0)
 	{
@@ -116,5 +123,5 @@ int make_speci_x_X(t_spec *spec, va_list *ap, char type)
 	}
 	spec->str = str;
 	spec->type = type;
-	return (OK);
+	return (make_field_x_X(spec, flag));
 }

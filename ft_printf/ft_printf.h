@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:58:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 15:36:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 19:06:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,23 @@ typedef struct s_specifier
 
 int		ft_printf(const char *format, ...);
 void	parse_flag(const char *format, t_flag *flag, int *i);
-int		make_field(t_spec *spec, va_list *ap, char ch);
+int		make_conversion(t_spec *spec, t_flag flag, va_list *ap, char ch);
+int		make_speci_c(t_spec *spec, t_flag flag, va_list *ap);
+int 	make_speci_s(t_spec *spec, t_flag flag, va_list *ap);
+int 	make_speci_p(t_spec *spec, t_flag flag, va_list *ap);
+int 	make_speci_x_X(t_spec *spec, t_flag flag, va_list *ap, char type);
+int		make_speci_d_i(t_spec *spec, t_flag flag, va_list *ap);
+int		make_speci_u(t_spec *spec, t_flag flag, va_list *ap);
+int		make_speci_per(t_spec *spec, t_flag flag);
+int		join_width(t_spec *spec, int width, int left, char zero);
+int		join_preci(t_spec *spec, int preci);
+int		join_alt(t_spec *spec, int alt);
+int		join_sign(t_spec *spec, int sign, int sign_p);
+int		make_field_c_p(t_spec *spec, t_flag flag);
+int		make_field_s(t_spec *spec, t_flag flag);
+int		make_field_per(t_spec *spec, t_flag flag);
+int		make_field_u(t_spec *spec, t_flag flag);
+int		make_field_x_X(t_spec *spec, t_flag flag);
+int		make_field_d_i(t_spec *spec, t_flag flag);
+
 #endif
