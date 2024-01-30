@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:18:27 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/28 23:58:16 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 15:13:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,8 @@ int make_speci(t_spec *spec, va_list *ap, char ch)
 		no_err = make_speci_p(spec, ap);
 	else if (ch == 'd' || ch == 'i')
 		no_err = make_speci_d_i(spec, ap);
-	else if (ch == 'x')
-		no_err = make_speci_x(spec, ap);
-	else if (ch == 'X')
-		no_err = make_speci_X(spec, ap);
+	else if (ch == 'x' || ch == 'X')
+		no_err = make_speci_x_X(spec, ap, ch);
 	else if (ch == 'u')
 		no_err = make_speci_u(spec, ap);
 	else if (ch == '%')
