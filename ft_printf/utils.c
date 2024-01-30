@@ -6,11 +6,20 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 23:45:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 16:27:07 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 23:05:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+int		error_free(t_spec *spec)
+{
+	if (spec->str != NULL)
+		free(spec->str);
+	spec->str = NULL;
+	spec->size = 0;
+	return (ERROR);
+}
 
 char	*ft_strdup(const char *str, int *size)
 {
@@ -25,9 +34,9 @@ char	*ft_strdup(const char *str, int *size)
 	res = (char *)malloc(sizeof(char) * (len + 1));
 	if (res == NULL)
 		return (NULL);
+	res[len] = '\0';
 	while (i++ < len)
 		res[i] = str[i];
-	res[i] = '\0';
 	*size = len;
 	return (res);
 }

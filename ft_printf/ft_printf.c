@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:57:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 19:44:51 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 23:57:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	ft_printf(const char *format, ...)
 				!write_conversion(format + offset, &i, &result, &ap))
 				return (-1);
 			offset += i;
-			i = 0;
+			i = -1;
 		}
 		i++;
 	}

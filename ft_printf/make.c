@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:18:27 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 19:09:32 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 01:09:56 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int make_conversion(t_spec *spec, t_flag flag, va_list *ap, char ch)
 	else if (ch == 'd' || ch == 'i')
 		no_err = make_speci_d_i(spec, flag, ap);
 	else if (ch == 'x' || ch == 'X')
-		no_err = make_speci_x_X(spec, flag, ap, ch);
+		no_err = make_speci_x_X(spec, &flag, ap, ch);
 	else if (ch == 'u')
 		no_err = make_speci_u(spec, flag, ap);
 	else if (ch == '%')

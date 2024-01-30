@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:16:47 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 19:37:52 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 00:10:07 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ void	parse_precison(const char *format, t_flag *flag, int *i)
 	int		preci;
 
 	preci = 0;
+	if (format[*i] != '.')
+		return ;
+	(*i)++;
 	while (1)
 	{
 		cur = format[*i];
@@ -57,6 +60,7 @@ void	parse_flag(const char *format, t_flag *flag, int *i)
 	init_i = -1;
 	while (++init_i != sizeof(*flag))
 		((unsigned char *)flag)[init_i] = 0;
+	flag->preci = -1;
 	while (1)
 	{
 		(*i)++;

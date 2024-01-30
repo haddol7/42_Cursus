@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:36:33 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 19:15:14 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 01:09:25 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int make_speci_c(t_spec *spec, t_flag flag, va_list *ap)
 	str[1] = '\0';
 	spec->str = str;
 	spec->type = 'c';
-	spec->size = 2;
+	spec->size = 1;
 	return (make_field_c_p(spec, flag));
 }
 
@@ -46,7 +46,7 @@ int make_speci_s(t_spec *spec, t_flag flag, va_list *ap)
 	return (make_field_s(spec, flag));
 }
 
-static char	*make_speci_xX_p_getstr(long long arg, int *len, char type)
+static char	*make_speci_xX_p_getstr(unsigned long long arg, int *len, char type)
 {
 	char	*str;
 
@@ -62,7 +62,7 @@ static char	*make_speci_xX_p_getstr(long long arg, int *len, char type)
 		else
 			return (ft_strdup("0", len));	
 	}
-	while (arg < 0)
+	while (arg != 0)
 	{
 		arg /= 16;
 		(*len)++;
@@ -99,7 +99,7 @@ int make_speci_p(t_spec *spec, t_flag flag, va_list *ap)
 	return (make_field_c_p(spec, flag));
 }
 
-int make_speci_x_X(t_spec *spec, t_flag flag, va_list *ap, char type)
+int make_speci_x_X(t_spec *spec, t_flag *flag, va_list *ap, char type)
 {
 	int					len;
 	char				*str;
@@ -111,6 +111,8 @@ int make_speci_x_X(t_spec *spec, t_flag flag, va_list *ap, char type)
 	else
 		hex = "0123456789ABCDEF";
 	arg = (unsigned long long)va_arg(*ap, unsigned int);
+	if (arg == 0)
+		flag->alt = 0;
 	str = make_speci_xX_p_getstr(arg, &len, type);
 	if (str == NULL)
 		return (ERROR);
@@ -123,5 +125,5 @@ int make_speci_x_X(t_spec *spec, t_flag flag, va_list *ap, char type)
 	}
 	spec->str = str;
 	spec->type = type;
-	return (make_field_x_X(spec, flag));
+	return (make_field_x_X(spec, *flag));
 }
