@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:16:47 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/28 22:05:57 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 19:37:52 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	parse_flag(const char *format, t_flag *flag, int *i)
 		((unsigned char *)flag)[init_i] = 0;
 	while (1)
 	{
+		(*i)++;
 		cur = format[*i];
 		if (cur == '#')
 			flag->alt = 1;
@@ -72,7 +73,6 @@ void	parse_flag(const char *format, t_flag *flag, int *i)
 			flag->zero = 1;
 		else
 			break;
-		(*i)++;
 	}
 	parse_width(format, flag, i);
 }

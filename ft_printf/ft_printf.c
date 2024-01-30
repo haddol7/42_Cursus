@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:57:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 19:02:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 19:44:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	write_conversion(const char *format, int *i, int *result, va_list *ap
 		return (OK);
 	parse_flag(format, &flag, i);
 	if (!make_conversion(&spec, flag, ap, format[(*i)++]) || \
-		!write_literally(spec.str, spec.size, *result))
+		!write_literally(spec.str, spec.size, result))
 		return (ERROR);
 	if (spec.str != NULL)
 		free(spec.str);
@@ -51,14 +51,14 @@ int	ft_printf(const char *format, ...)
 	offset = 0;
 	i = 0;
 	va_start(ap, format);
-	while (format[offset] == '\0')
+	while (format[offset] != '\0')
 	{
 		if (format[offset + i] == '\0' || format[offset + i] == '%')
 		{
 			if (!write_literally(format + offset, i, &result) || \
 				!write_conversion(format + offset, &i, &result, &ap))
 				return (-1);
-			offset = i;
+			offset += i;
 			i = 0;
 		}
 		i++;

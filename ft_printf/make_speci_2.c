@@ -6,28 +6,28 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 15:09:26 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 16:05:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 19:25:32 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static char	*make_speci_d_i_get_str(long arg, int *len)
+static char	*make_speci_d_i_getstr(long arg, int *len)
 {
 	char	*str;
 
 	*len = 0;
 	if (arg == 0)
 	{
-		(*len) == 1;
-		return (ft_strdup("0"));
+		(*len) = 1;
+		return (ft_strdup("0", len));
 	}
 	if (arg < 0)
 	{
 		(*len)++;
 		arg *= -1;
 	}
-	while (arg < 0)
+	while (arg != 0)
 	{
 		arg /= 10;
 		(*len)++;
@@ -72,8 +72,8 @@ static char	*make_speci_u_getstr(long long arg, int *len)
 	*len = 0;
 	if (arg == 0)
 	{
-		(*len) == 1;
-		return (ft_strdup("0"));
+		(*len) = 1;
+		return (ft_strdup("0", len));
 	}
 	while (arg < 0)
 	{

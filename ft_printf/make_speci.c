@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:36:33 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 16:35:07 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 19:15:14 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ static char	*make_speci_xX_p_getstr(long long arg, int *len, char type)
 	{
 		(*len)++;
 		if (type == 'p')
-			return (ft_strdup("0x0"));
+			return (ft_strdup("0x0", len));
 		else
-			return (ft_strdup("0"));	
+			return (ft_strdup("0", len));	
 	}
 	while (arg < 0)
 	{
@@ -111,7 +111,7 @@ int make_speci_x_X(t_spec *spec, t_flag flag, va_list *ap, char type)
 	else
 		hex = "0123456789ABCDEF";
 	arg = (unsigned long long)va_arg(*ap, unsigned int);
-	str = make_speci_xX_p_get_str(arg, &len, type);
+	str = make_speci_xX_p_getstr(arg, &len, type);
 	if (str == NULL)
 		return (ERROR);
 	spec->size = len;

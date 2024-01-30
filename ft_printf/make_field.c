@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 15:56:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 19:00:03 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 19:15:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ int	join_width(t_spec *spec, int width, int left, char zero)
 	str = (char *)malloc(sizeof(char) * (width + 1));
 	if (str == NULL)
 		return (ERROR);
-	str[width] == '\0';
+	str[width] = '\0';
 	if (left == 1)
 	{
 		ft_memmove(str, spec->str, spec->size);
-		ft_memmset(str + spec->size, ' ', space);
+		ft_memset(str + spec->size, ' ', space);
 	}
 	else
 	{
@@ -69,30 +69,31 @@ int	join_alt(t_spec *spec, int alt)
 	str = (char *)malloc(sizeof(char) * spec->size + 2);
 	ft_memmove(str + 2, spec->str, spec->size);
 	str[0] = '0';
-	if (spec->type = 'x')
+	if (spec->type == 'x')
 		str[1] = 'x';
 	else 
 		str[1] = 'X';
 	free(spec->str);
 	spec->str = str;
 	spec->size += 2;
+	return (OK);
 }
 
 int	join_sign(t_spec *spec, int sign, int sign_p)
 {
 	char	*str;
-	char	sign;
+	char	ch;
 	
 	if (spec->str[0] != '-' || (sign == 0 && sign_p == 0))
 		return (OK);
 	if (sign == 1)
-		sign = ' ';
+		ch = ' ';
 	else
-		sign = '+';
+		ch = '+';
 	str = (char *)malloc(sizeof(char) * spec->size + 2);
 	if (str == NULL)
 		return (ERROR);
-	str[0] = sign;
+	str[0] = ch;
 	str[spec->size + 1] = '\0';
 	ft_memmove(str + 1, spec->str, spec->size);
 	free(spec->str);

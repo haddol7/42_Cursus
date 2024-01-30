@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:58:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/30 19:06:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/30 19:10:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,8 @@ int		make_field_per(t_spec *spec, t_flag flag);
 int		make_field_u(t_spec *spec, t_flag flag);
 int		make_field_x_X(t_spec *spec, t_flag flag);
 int		make_field_d_i(t_spec *spec, t_flag flag);
+void	*ft_memmove(void *dst, const void *src, size_t len);
+char	*ft_strdup(const char *str, int *size);
+void	*ft_memset(void *b, int c, size_t len);
 
 #endif
