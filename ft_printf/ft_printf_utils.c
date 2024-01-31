@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 23:45:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/31 01:45:40 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 15:17:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	swap(char *ch1, char *ch2)
 	*ch2 = temp;
 }
 
-int		error_free(t_spec *spec)
+int		error_free(t_field *spec)
 {
 	if (spec->str != NULL)
 		free(spec->str);

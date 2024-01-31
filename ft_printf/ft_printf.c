@@ -6,15 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:57:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/31 01:48:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 15:44:48 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
 //TODO : refactoring
-//1. 구조체 부분 is_zero 부분 수정
-//2. 중복된 코드 부분 함수화 -> 필드 만들 때
+//1. 구조체 부분 is_zero 부분 수정 -> 헤더 변경
 //3. norm 준수
 //4. 직관적인 파일명, 함수명
 //5. 그에 따른 헤더파일 수정
@@ -33,18 +32,18 @@ static int	write_literally(const char *format, int len, int *result)
 
 static int	write_conversion(const char *format, int *i, int *result, va_list *ap)
 {
-	t_spec	spec;
+	t_field	field;
 	t_flag	flag;
 
 	if (format[*i] == '\0')
 		return (OK);
 	parse_flag(format, &flag, i);
-	if (!make_conversion(&spec, flag, ap, format[(*i)++]) || \
-		!write_literally(spec.str, spec.size, result))
+	if (!make_conversion(&field, flag, ap, format[(*i)++]) || \
+		!write_literally(field.str, field.size, result))
 		return (ERROR);
-	if (spec.str != NULL)
-		free(spec.str);
-	spec.str = NULL;
+	if (field.str != NULL)
+		free(field.str);
+	field.str = NULL;
 	return (1);
 }
 
