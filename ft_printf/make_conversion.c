@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:18:27 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/31 17:16:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 22:37:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	make_conversion(t_field *field, t_flag flag, va_list *ap, char speci)
 	int	no_err;
 
 	no_err = OK;
+	field->str = NULL;
+	field->size = 0;
 	if (speci == 'c')
 		no_err = make_speci_c(field, flag, ap);
 	else if (speci == 's')

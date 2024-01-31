@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 15:19:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/31 17:14:33 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 22:43:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	join_alt(t_field *field, int alt)
 
 	if (alt == 0)
 		return (OK);
-	str = (char *)malloc(sizeof(char) * field->size + 2);
+	str = (char *)malloc(sizeof(char) * field->size + 3);
 	if (str == NULL)
 		return (error_free(field));
 	ft_memmove(str + 2, field->str, field->size);
@@ -99,6 +99,7 @@ int	join_alt(t_field *field, int alt)
 		str[1] = 'x';
 	else
 		str[1] = 'X';
+	str[field->size + 2] = '\0';
 	free(field->str);
 	field->str = str;
 	field->size += 2;
