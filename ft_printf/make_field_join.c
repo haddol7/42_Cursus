@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 15:19:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/31 16:10:24 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 16:48:56 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,27 @@ void	flag_priority(t_flag *flag)
 		flag->zero = SPACE;
 }
 
-static void	join_width_2(char **str, t_field *field, t_flag flag, int space)
+static void	join_width_2(char *str, t_field *field, t_flag flag, int space)
 {
 	int		to_swap;
+	char	first;
 
-	if (field->str[0] == '-' || field->str[0] == '+' || field->str[0] == ' ')
+	to_swap = FALSE;
+	first = field->str[0];
+	if ((first == '-' || first == '+' || first == ' ') && \
+		flag.zero == ZERO)
 		to_swap = TRUE;
 	if (flag.left == TRUE)
 	{
-		ft_memmove(*str, field->str, field->size);
-		ft_memset(*str + field->size, SPACE, space);
+		ft_memmove(str, field->str, field->size);
+		ft_memset(str + field->size, SPACE, space);
 	}
 	else
 	{
-		ft_memset(*str, flag.zero, space);
-		ft_memmove(*str + space, field->str, field->size);
-		if (flag.zero == ZERO && to_swap)
-			swap(&str[0], &str[space]);
+		ft_memset(str, flag.zero, space);
+		ft_memmove(str + space, field->str, field->size);
+		if (to_swap)
+			swap(str, str + space);
 	}
 }
 
@@ -52,7 +56,7 @@ int join_width(t_field *field, t_flag flag)
 	if (str == NULL)
 		return (error_free(field));
 	str[flag.width] = '\0';
-	join_width_2(&str, field, flag, space);
+	join_width_2(str, field, flag, space);
 	free(field->str);
 	field->str = str;
 	field->size = flag.width;
@@ -81,10 +85,7 @@ int	join_preci(t_field *field, int preci)
 	ft_memset(str, '0', space);
 	ft_memmove(str + space, field->str, field->size);
 	if (is_minus)
-	{
-		str[0] = '-';
-		str[space] = '0';
-	}
+		swap(str, str + space);
 	free(field->str);
 	field->str = str;
 	field->size = preci;

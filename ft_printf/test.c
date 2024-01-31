@@ -50,11 +50,8 @@ int main(int argc, char **argv)
 
 	a = 2147483647;
 
-	char *str = "%p\n";
-	ft_printf("%p", &a);
-
-//	printf("\nprintf : %d\n", printf("%01.u" , 0));
-//	printf("\nft_printf : %d\n", ft_printf("%01.u" , 0));
+	printf("\nprintf : %d\n", printf(" %04d ", -14));
+	printf("\nft_printf : %d\n", ft_printf(" %04d ", -14));
 	// printf("%s\n", argv[1]);
 	// printf("\n%d", printf(argv[1], 10));
 }

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:16:47 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/31 15:30:10 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 16:56:34 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ static void	parse_width(const char *format, t_flag *flag, int *i)
 
 void	parse_flag(const char *format, t_flag *flag, int *i)
 {
-	char	cur;
 	int		init_i;
 
 	init_i = -1;
@@ -62,19 +61,26 @@ void	parse_flag(const char *format, t_flag *flag, int *i)
 	while (1)
 	{
 		(*i)++;
-		cur = format[*i];
-		if (cur == '#')
+		if (format[*i] == '#')
 			flag->alt = TRUE;
-		else if (cur == '-')
+		else if (format[*i] == '-')
 			flag->left = TRUE;
-		else if (cur == '+')
+		else if (format[*i] == '+')
 			flag->sign_p = TRUE;
-		else if (cur == ' ')
+		else if (format[*i] == ' ')
 			flag->sign = TRUE;
-		else if (cur == '0')
+		else if (format[*i] == '0')
 			flag->zero = ZERO;
 		else
 			break;
 	}
 	parse_width(format, flag, i);
+}
+
+void	flag_priority(t_flag *flag)
+{
+	if (flag->sign_p == TRUE)
+		flag->sign = FALSE;
+	if (flag->preci >= 0 || flag->left == TRUE)
+		flag->zero = SPACE;
 }

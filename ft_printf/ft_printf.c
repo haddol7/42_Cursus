@@ -6,18 +6,11 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/26 18:57:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/31 15:44:48 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 16:59:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-
-//TODO : refactoring
-//1. 구조체 부분 is_zero 부분 수정 -> 헤더 변경
-//3. norm 준수
-//4. 직관적인 파일명, 함수명
-//5. 그에 따른 헤더파일 수정
-//6. Makefile 정리
 
 static int	write_literally(const char *format, int len, int *result)
 {
@@ -25,7 +18,7 @@ static int	write_literally(const char *format, int len, int *result)
 
 	temp = write(1, format, len);
 	if (temp < 0)
-		return (0);
+		return (ERROR);
 	*result += temp;
 	return (1);
 }
