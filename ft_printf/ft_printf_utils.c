@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   ft_printf_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 23:45:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/31 15:17:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 17:14:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 void	swap(char *ch1, char *ch2)
 {
-	char temp;
+	char	temp;
 
 	temp = *ch1;
 	*ch1 = *ch2;
 	*ch2 = temp;
 }
 
-int		error_free(t_field *spec)
+int	error_free(t_field *field)
 {
-	if (spec->str != NULL)
-		free(spec->str);
-	spec->str = NULL;
-	spec->size = 0;
+	if (field->str != NULL)
+		free(field->str);
+	field->str = NULL;
+	field->size = 0;
 	return (ERROR);
 }
 
@@ -54,8 +54,8 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 {
 	size_t	i;
 
-	if (dst == 0 && src == 0)
-		return (0);
+	if (dst == NULL && src == NULL)
+		return (NULL);
 	if (src < dst && len != 0)
 	{
 		i = len;

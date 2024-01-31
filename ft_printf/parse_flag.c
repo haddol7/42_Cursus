@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:16:47 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/31 16:56:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 17:18:04 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	parse_precison(const char *format, t_flag *flag, int *i)
 		if (cur >= '0' && cur <= '9')
 			preci = preci * 10 + (cur - '0');
 		else
-			break;
+			break ;
 	}
 	flag->preci = preci;
 }
@@ -41,7 +41,7 @@ static void	parse_width(const char *format, t_flag *flag, int *i)
 		if (cur >= '0' && cur <= '9')
 			width = width * 10 + (cur - '0');
 		else
-			break;
+			break ;
 		(*i)++;
 	}
 	flag->width = width;
@@ -72,7 +72,7 @@ void	parse_flag(const char *format, t_flag *flag, int *i)
 		else if (format[*i] == '0')
 			flag->zero = ZERO;
 		else
-			break;
+			break ;
 	}
 	parse_width(format, flag, i);
 }

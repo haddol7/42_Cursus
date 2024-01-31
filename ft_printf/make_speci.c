@@ -6,13 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/28 21:36:33 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/31 15:39:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 17:17:50 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static char	*make_speci_xX_p_getstr(unsigned long long arg, int *len, char type)
+static char	*make_speci_x_p_getstr(unsigned long long arg, int *len, char type)
 {
 	char	*str;
 
@@ -22,7 +22,7 @@ static char	*make_speci_xX_p_getstr(unsigned long long arg, int *len, char type)
 		if (type == 'p')
 			return (ft_strdup("0x0", len));
 		else
-			return (ft_strdup("0", len));	
+			return (ft_strdup("0", len));
 	}
 	while (arg != 0)
 	{
@@ -37,7 +37,7 @@ static char	*make_speci_xX_p_getstr(unsigned long long arg, int *len, char type)
 	return (str);
 }
 
-int make_speci_c(t_field *field, t_flag flag, va_list *ap)
+int	make_speci_c(t_field *field, t_flag flag, va_list *ap)
 {
 	char	*str;
 	char	arg;
@@ -54,7 +54,7 @@ int make_speci_c(t_field *field, t_flag flag, va_list *ap)
 	return (make_field_c_p_per(field, flag));
 }
 
-int make_speci_s(t_field *field, t_flag flag, va_list *ap)
+int	make_speci_s(t_field *field, t_flag flag, va_list *ap)
 {
 	char	*str;
 	char	*arg;
@@ -71,7 +71,7 @@ int make_speci_s(t_field *field, t_flag flag, va_list *ap)
 	return (make_field_s(field, flag));
 }
 
-int make_speci_p(t_field *field, t_flag flag, va_list *ap)
+int	make_speci_p(t_field *field, t_flag flag, va_list *ap)
 {
 	char				*str;
 	unsigned long long	arg;
@@ -80,7 +80,7 @@ int make_speci_p(t_field *field, t_flag flag, va_list *ap)
 
 	hex = "0123456789abcdef";
 	arg = (unsigned long long)va_arg(*ap, void *);
-	str = make_speci_xX_p_getstr(arg, &len, 'p');
+	str = make_speci_x_p_getstr(arg, &len, 'p');
 	if (str == NULL)
 		return (ERROR);
 	field->size = len;
@@ -97,7 +97,7 @@ int make_speci_p(t_field *field, t_flag flag, va_list *ap)
 	return (make_field_c_p_per(field, flag));
 }
 
-int make_speci_x_X(t_field *field, t_flag *flag, va_list *ap, char type)
+int	make_speci_x(t_field *field, t_flag *flag, va_list *ap, char type)
 {
 	char				*str;
 	unsigned long long	arg;
@@ -111,7 +111,7 @@ int make_speci_x_X(t_field *field, t_flag *flag, va_list *ap, char type)
 	arg = (unsigned long long)va_arg(*ap, unsigned int);
 	if (arg == 0)
 		flag->alt = 0;
-	str = make_speci_xX_p_getstr(arg, &len, type);
+	str = make_speci_x_p_getstr(arg, &len, type);
 	if (str == NULL)
 		return (ERROR);
 	field->size = len;
@@ -123,5 +123,5 @@ int make_speci_x_X(t_field *field, t_flag *flag, va_list *ap, char type)
 	}
 	field->str = str;
 	field->type = type;
-	return (make_field_x_X(field, *flag));
+	return (make_field_x(field, *flag));
 }

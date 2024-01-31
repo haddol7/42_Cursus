@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/30 15:09:26 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/31 15:50:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 17:17:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static char	*make_speci_u_getstr(unsigned long long arg, int *len)
 	return (str);
 }
 
-int make_speci_d_i(t_field *field, t_flag flag, va_list *ap, char type)
+int	make_speci_d_i(t_field *field, t_flag flag, va_list *ap, char type)
 {
 	char		*str;
 	long long	arg;
@@ -83,7 +83,7 @@ int make_speci_d_i(t_field *field, t_flag flag, va_list *ap, char type)
 	return (make_field_d_i(field, flag));
 }
 
-int make_speci_u(t_field *field, t_flag flag, va_list *ap)
+int	make_speci_u(t_field *field, t_flag flag, va_list *ap)
 {
 	char				*str;
 	unsigned long long	arg;
@@ -105,7 +105,7 @@ int make_speci_u(t_field *field, t_flag flag, va_list *ap)
 	return (make_field_u(field, flag));
 }
 
-int make_speci_per(t_field *field, t_flag flag)
+int	make_speci_per(t_field *field, t_flag flag)
 {
 	char	*str;
 

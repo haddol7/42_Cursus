@@ -6,19 +6,11 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 15:19:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/01/31 16:48:56 by daeha            ###   ########.fr       */
+/*   Updated: 2024/01/31 17:14:33 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-
-void	flag_priority(t_flag *flag)
-{
-	if (flag->sign_p == TRUE)
-		flag->sign = FALSE;
-	if (flag->preci >= 0 || flag->left == TRUE)
-		flag->zero = SPACE;
-}
 
 static void	join_width_2(char *str, t_field *field, t_flag flag, int space)
 {
@@ -44,7 +36,7 @@ static void	join_width_2(char *str, t_field *field, t_flag flag, int space)
 	}
 }
 
-int join_width(t_field *field, t_flag flag)
+int	join_width(t_field *field, t_flag flag)
 {
 	char	*str;
 	int		space;
@@ -69,10 +61,10 @@ int	join_preci(t_field *field, int preci)
 	int		space;
 	int		is_minus;
 
-	is_minus = 0;
+	is_minus = FALSE;
 	if (field->str[0] == '-')
 	{
-		is_minus = 1;
+		is_minus = TRUE;
 		preci++;
 	}
 	space = preci - field->size;
@@ -105,7 +97,7 @@ int	join_alt(t_field *field, int alt)
 	str[0] = '0';
 	if (field->type == 'x')
 		str[1] = 'x';
-	else 
+	else
 		str[1] = 'X';
 	free(field->str);
 	field->str = str;
@@ -117,7 +109,7 @@ int	join_sign(t_field *field, int sign, int sign_p)
 {
 	char	*str;
 	char	ch;
-	
+
 	if (field->str[0] == '-' || (sign == 0 && sign_p == 0))
 		return (OK);
 	if (sign == 1)
