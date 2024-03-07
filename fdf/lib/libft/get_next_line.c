@@ -6,14 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 13:23:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/07 17:36:09 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/07 20:26:10 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 //TODO : buffer array must be allocated by malloc 
-//		 because when array is sized by BUFFER_SIZE as static array it overflows in stack
+//when array is sized by BUFFER_SIZE as static array it overflows in stack
 char	*get_next_line(int fd)
 {
 	static t_fd_list	*head;

@@ -1,6 +1,6 @@
-#include "../lib/ft_printf/ft_printf.h"
-#include "../lib/libft/libft.h"
-#include "../lib/minilibx/mlx.h"
+#include "ft_printf.h"
+#include "libft.h"
+#include "mlx.h"
 #include <fcntl.h>
 
 #include <stdio.h>
@@ -56,9 +56,9 @@ int main(void)
 	param_init(&param);
 	mlx = mlx_init();
 	win = mlx_new_window(mlx, 500, 500, "test");
-	printf("---------------\n");
-	printf("W key: Add 1 to x.\n");
-	printf("S key: Sub 1 to from x.\n");
+	ft_printf("---------------\n");
+	ft_printf("W key: Add 1 to x.\n");
+	ft_printf("S key: Sub 1 to from x.\n");
 	mlx_hook(win, X_EVENT_KEY_PRESS, 0, &key_press, &param);
 	mlx_loop(mlx);
 }
