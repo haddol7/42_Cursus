@@ -1,64 +1,39 @@
-#include "ft_printf.h"
-#include "libft.h"
-#include "mlx.h"
-#include <fcntl.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
+/*   Updated: 2024/03/07 21:04:17 by daeha            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <mlx.h>
+/* 
+1. File read
+	call read_map function to read .fdf files.
+	
+	when a file is given below,
+	1	2	3
+	4	5	6
+	7	8	9
+	
+	map.data is initialized like
+	map.data[0].x = 0 | map.data[0].y = 0 | map.data[0].z = 1
+	map.data[1].x = 1 | map.data[1].y = 0 | map.data[1].z = 2
+	map.data[2].x = 2 | map.data[2].y = 0 | map.data[2].z = 3
+	...
 
-#define X_EVENT_KEY_PRESS	2
-#define X_EVENT_KEY_release	3
-#define X_EVENT_KEY_EXIT	17
+	and map.x_size and map.y_size are initialized by 3.
+*/
 
-#define KEY_ESC	53
-#define KEY_Q	12
-#define KEY_W	13
-#define KEY_E	14
-#define KEY_R	15
-#define KEY_A	0
-#define KEY_S	1
-#define KEY_D	2
+#include "fdf.h" 
 
-typedef struct s_param{
-	int	x;
-	int	y;
-	char	str[3];
-}	t_param;
-
-void	param_init(t_param *param)
+int main(int argc, char **argv)
 {
-	param->x = 3;
-	param->y = 4;
-	param->str[0] = 'a';
-	param->str[1] = 'b';
-	param->str[2] = '\0';
-}
+	t_map map;
 
-int	key_press(int keycode, t_param *param)
-{
-	if (keycode == KEY_W)
-		param->x++;
-	else if (keycode == KEY_S)
-		param->x--;
-	else if (keycode == KEY_ESC)
-		exit(0);
-	printf("x: %d\n", param->x);
-	return (0);
-}
-
-int main(void)
-{
-	void	*mlx;
-	void	*win;
-	t_param	param;
-
-	param_init(&param);
-	mlx = mlx_init();
-	win = mlx_new_window(mlx, 500, 500, "test");
-	ft_printf("---------------\n");
-	ft_printf("W key: Add 1 to x.\n");
-	ft_printf("S key: Sub 1 to from x.\n");
-	mlx_hook(win, X_EVENT_KEY_PRESS, 0, &key_press, &param);
-	mlx_loop(mlx);
+	read_map(argv[1], &map);
+	return 0;
 }

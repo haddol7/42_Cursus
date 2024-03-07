@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/05 20:34:26 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/07 20:50:27 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 #include <unistd.h>
 #include <fcntl.h>
+#include "mlx.h"
+#include "ft_printf.h"
+#include "libft.h"
 
 typedef struct	s_point
 {
@@ -30,11 +33,5 @@ typedef struct	s_map
 	size_t	x_size;
 	size_t	y_size;
 }	t_map;
-
-typedef struct	s_file
-{
-	char	*data;
-	t_file	*next;
-}	t_file;
 
 #endif
