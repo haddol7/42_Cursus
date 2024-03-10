@@ -18,7 +18,7 @@ MLXFLAGS := -Imlx -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
 
 HEADER  := -I$(PRINTF_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
-SRC_FILES =	main
+SRC_FILES =	read_map
 
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
 DEPS = $(addprefix $(OBJ_DIR), $(addsuffix .d, $(SRC_FILES)))

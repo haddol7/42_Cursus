@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/07 20:50:27 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/10 19:39:50 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,17 @@
 # define FDF_H
 
 #include <unistd.h>
-#include <fcntl.h>
 #include "mlx.h"
 #include "ft_printf.h"
 #include "libft.h"
 
+#define FDF_BUFFER_SIZE	(1024)
 typedef struct	s_point
 {
 	int	x;
 	int y;
 	int z;
+	int	color;
 }	t_point;
 
 typedef struct	s_map
