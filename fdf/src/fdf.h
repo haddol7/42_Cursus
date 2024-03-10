@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/10 19:39:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/10 21:41:06 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "ft_printf.h"
 #include "libft.h"
 
-#define FDF_BUFFER_SIZE	(1024)
+#define FDF_BUFFER_SIZE	(500000)
 typedef struct	s_point
 {
 	int	x;

@@ -6,18 +6,21 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/10 20:05:30 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/10 21:45:58 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include "fdf.h"
 
-// void	check_leaks(void)
-// {
-// 	system("leaks fdf");
-// }
+void	check_leaks(void)
+{
+	system("leaks fdf");
+}
 
+static char	*read_map_as_one_line(int fd);
+static void	check_map_size(char *content, t_map *map);
+//static void	transform_map(char *content, t_map *map);
 /* 
 load_map(char *str, t_map *map)
 
@@ -42,21 +45,21 @@ errors
 1. system-call function error
 2. map file format error
 */
-void	load_map(char *dir, t_map *map)
-{
-	int		fd;
-	char	*content;
+// void	load_map(char *dir, t_map *map)
+// {
+// 	int		fd;
+// 	char	*content;
 
-	fd = open(dir, O_RDONLY);
-	content = read_map_all(fd);
-	check_map(content, map);
-	transform_map(content, map); 
+// 	fd = open(dir, O_RDONLY);
+// 	content = read_map_as_one_line(fd);
+// 	check_map_size(content, map);
+// 	transform_map(content, map); 
 	
-	free(content);
-	close(fd);
-}
+// 	free(content);
+// 	close(fd);
+// }
 
-static char	*read_map_all(int fd)
+static char	*read_map_as_one_line(int fd)
 {
 	int		read_size;
 	char	buffer[FDF_BUFFER_SIZE];
@@ -76,23 +79,55 @@ static char	*read_map_all(int fd)
 	return (res);
 }
 
-static void	check_map(char *content, t_map *map)
+static void	check_map_size(char *str, t_map *map)
 {
-	return ;
+	size_t	x;
+	size_t	y;
+
+	x = 0;
+	y = 0;
+	map->x_size = 0;
+	while (*str != '\0')
+	{
+		if (*str != ' ' && *str != '\n' && (*(str + 1) == ' ' || \
+											*(str + 1) == '\n' || \
+											*(str + 1) == '\0'))
+			x++;
+		if (*str == '\n')
+		{
+			if (x != map->x_size && map->x_size != 0)
+				ft_printf("format_error\n");
+			if (map->x_size == 0)
+				map->x_size = x;
+			x = 0;
+			y++;
+		}
+		str++;
+	}
+	map->y_size = y;
 }
 
-static void	transform_map(char *content, t_map *map)
-{
-	return ;
-}
+// static void	transform_map(char *content, t_map *map)
+// {
+// 	return ;
+// }
 
-int main()
+int main(int argc, char **argv)
 {
 	int	fd;
+	t_map	map;
 	char	*test;
-	fd = open("test.txt", O_RDONLY);
-
-	test = read_map_all(fd);
-	ft_printf("%s", test);
+	
+	if (argc != 2)
+		return 0;
+	
+	fd = open(argv[1], O_RDONLY);
+	test = read_map_as_one_line(fd);
+	ft_printf("read_done!\n", test);
+	
+	check_map_size(test, &map);
+	ft_printf("%u %u\n", map.x_size, map.y_size);
+	
 	free(test);
+	atexit(check_leaks);
 }
