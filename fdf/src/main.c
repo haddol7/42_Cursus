@@ -6,16 +6,8 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/10 19:48:26 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/11 19:08:06 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h" 
-
-int main(int argc, char **argv)
-{
-	t_map map;
-
-	load_map(argv[1], &map);
-	return 0;
-}

@@ -72,15 +72,15 @@ all : $(NAME)
 
 clean :
 	@rm -f $(OBJS)
-	@echo "$(BLUE)📚 libft : clean done!"
+	@echo "$(BLUE)📚 libft : clean done!$(WHITE)"
 fclean : clean
 	@rm -f $(NAME)
-	@echo "$(BLUE)📚 libft : fclean done!"
+	@echo "$(BLUE)📚 libft : fclean done!$(WHITE)"
 re : fclean all
 
 $(NAME) : $(OBJS)
 	@$(AR) $(ARFLAGS) $@ $?
-	@echo "$(GREEN)📚 libft : make done!"
+	@echo "$(GREEN)📚 libft : make done!$(WHITE)"
 
 %.o : %.c
 	@$(CC) $(CFLAGS) -c $<

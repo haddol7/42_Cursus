@@ -36,15 +36,15 @@ bonus : $(NAME)
 
 clean :
 	@rm -f $(OBJS)
-	@echo "$(BLUE)📝 printf : clean done!"
+	@echo "$(BLUE)📝 printf : clean done!$(WHITE)"
 fclean : clean
 	@rm -f $(NAME)
-	@echo "$(BLUE)📝 printf : fclean done!"
+	@echo "$(BLUE)📝 printf : fclean done!$(WHITE)"
 re : fclean all
 
 $(NAME) : $(OBJS)
 	@$(AR) $(ARFLAGS) $@ $?
-	@echo "$(GREEN)📝 printf : make done!"
+	@echo "$(GREEN)📝 printf : make done!$(WHITE)"
 
 %.o : %.c
 	@$(CC) $(CFLAGS) -c $<

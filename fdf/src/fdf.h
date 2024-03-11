@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/10 21:41:06 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/11 20:19:21 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,21 @@
 # define FDF_H
 
 #include <unistd.h>
+#include <stdlib.h>
 #include "mlx.h"
 #include "ft_printf.h"
 #include "libft.h"
 
-#define FDF_BUFFER_SIZE	(500000)
+#define FDF_BUFFER_SIZE	(50000)
+
+#define ERR_MLC "❌ System call error - malloc() ❌"
+#define ERR_OPN "❌ System call error - open() ❌"
+#define ERR_RD "❌ System call error - read() ❌"
+
+#define ERR_M_SIZE "❌ Input error - format is not rectangular ❌"
+#define ERR_M_VAL "❌ Input error - file has invalid value ❌"
+#define ERR_M_EMP "❌ Input error - file is empty ❌"
+
 typedef struct	s_point
 {
 	int	x;
@@ -34,5 +44,8 @@ typedef struct	s_map
 	size_t	x_size;
 	size_t	y_size;
 }	t_map;
+
+void	fdf_error(char *s);
+int		fdf_isspace(char ch);
 
 #endif

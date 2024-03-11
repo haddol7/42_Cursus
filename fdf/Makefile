@@ -12,13 +12,13 @@ PRINTF := $(PRINTF_DIR)libftprintf.a
 LIBFT_DIR := $(LIB)libft/
 LIBFT := $(LIBFT_DIR)libft.a
 
-MLX_DIR := $(LIB)minilibx/
-MLX := $(MLX_DIR)libmlx.a
-MLXFLAGS := -Imlx -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
+MLX_DIR := $(LIB)mlx/
+MLX := $(MLX_DIR)libmlx.dylib
+MLXFLAGS := -L$(MLX_DIR) -framework OpenGL -framework AppKit
 
 HEADER  := -I$(PRINTF_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
-SRC_FILES =	read_map
+SRC_FILES =	load_map utils
 
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
 DEPS = $(addprefix $(OBJ_DIR), $(addsuffix .d, $(SRC_FILES)))
@@ -39,16 +39,18 @@ CYAN = \033[0;96m
 WHITE = \033[0;97m
 
 all: makelibs
-	@$(MAKE) -s $(NAME)
+	@$(MAKE) $(NAME)
 
 makelibs:
 	@$(MAKE) -sC $(MLX_DIR)
+	@install_name_tool -id lib/mlx/libmlx.dylib lib/mlx/libmlx.dylib
+	@echo "$(GREEN)🖥 MLX : make done! $(WHITE)"
 	@$(MAKE) -sC $(PRINTF_DIR)
 	@$(MAKE) -sC $(LIBFT_DIR)
 
 $(NAME): $(OBJ)		
-	@$(CC) $(CFLAGS) $^ $(PRINTF) $(LIBFT) $(MLX) $(MLXFLAGS) -o $@
-	@echo "$(GREEN)📺 fdf : make done!"	
+	$(CC) $(CFLAGS) $^ $(PRINTF) $(LIBFT) $(MLX) $(MLXFLAGS) -o $@
+	@echo "$(GREEN)📺 fdf : make done!$(WHITE)"	
 
 bonus:
 	@$(MAKE) all
@@ -57,28 +59,28 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@$(CC) $(CFLAGS) -MMD -c $< -o $@ $(HEADER)
 
 $(PRINTF):
-	@make -C $(PRINTF_DIR)
+	make -C $(PRINTF_DIR)
 
 $(LIBFT):
-	@make -C $(LIBFT_DIR)
+	make -C $(LIBFT_DIR)
 
 $(MLX):
-	@make -C $(MLX_DIR)
+	make -C $(MLX_DIR)
 
 clean:
-	@make clean -C $(MLX_DIR)
-	@make clean -C $(LIBFT_DIR) 
-	@make clean -C $(PRINTF_DIR)
+	@make clean -sC $(MLX_DIR)
+	@make clean -sC $(LIBFT_DIR) 
+	@make clean -sC $(PRINTF_DIR)
 	@rm -f $(OBJ) $(DEPS)
-	@echo "$(BLUE)📺 fdf : clean done!"
+	@echo "$(BLUE)📺 fdf : clean done!$(WHITE)"
 
 fclean:
-	@make clean -C $(MLX_DIR)
-	@make fclean -C $(LIBFT_DIR)
-	@make fclean -C $(PRINTF_DIR)
+	@make clean -sC $(MLX_DIR)
+	@make fclean -sC $(LIBFT_DIR)
+	@make fclean -sC $(PRINTF_DIR)
 	@rm -f $(OBJ) $(DEPS)
-	@echo "$(BLUE)📺 fdf : clean done!"
-	@echo "$(BLUE)📺 fdf : fclean done!"
+	@echo "$(BLUE)📺 fdf : clean done!$(WHITE)"
+	@echo "$(BLUE)📺 fdf : fclean done!$(WHITE)"
 
 re: fclean
 	@$(MAKE)	
