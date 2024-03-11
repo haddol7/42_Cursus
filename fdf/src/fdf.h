@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/11 20:19:21 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/11 20:49:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 
 #define ERR_M_SIZE "❌ Input error - format is not rectangular ❌"
 #define ERR_M_VAL "❌ Input error - file has invalid value ❌"
-#define ERR_M_EMP "❌ Input error - file is empty ❌"
 
 typedef struct	s_point
 {

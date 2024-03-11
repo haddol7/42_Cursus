@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/11 20:32:35 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/11 20:55:49 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,6 @@ static void	check_map_size(char *s, t_map *map)
 		}
 		s++;
 	}
-	if (y == 0)
-		fdf_error(ERR_M_EMP);
 	map->y_size = y;
 }
 
@@ -123,9 +121,10 @@ static int	check_map_value(char **s, int *color)
 	i = 0;
 	res = 0;
 	sign = 1;
-	if (**s == '-')
+	if (**s == '-' || **s == ' ')
 	{
-		sign = -1;
+		if (**s == '-')
+			sign = -1;
 		(*s)++;
 	}
 	while (ft_isdigit(**s))
@@ -137,6 +136,8 @@ static int	check_map_value(char **s, int *color)
 	*color = 0xffffff;
 	if (!ft_strncmp(*s, ",0x", 3) || !ft_strncmp(*s, ",0X", 3))
 		*color = check_map_color(s);
+	else if (!fdf_isspace(**s))
+		fdf_error(ERR_M_VAL);
 	return (res * sign);
 }
 
@@ -182,7 +183,7 @@ static void	transform_map(char *s, t_map *map)
 	{
 		while (!ft_isdigit(*s) && *s != '-')
 		{
-			if (fdf_isspace(*s))
+			if (!fdf_isspace(*s))
 				fdf_error(ERR_M_VAL);
 			s++;
 		}
@@ -192,7 +193,6 @@ static void	transform_map(char *s, t_map *map)
 		i++;
 	}
 }
-
 /*
 int main(int argc, char **argv)
 {
@@ -209,7 +209,7 @@ int main(int argc, char **argv)
 	{
 		for (size_t x = 0; x < map.x_size; x++)
 		{
-			ft_printf("%d,%#-10x", map.data[i].z, map.data[i].color);
+			ft_printf("%d ", map.data[i].z);
 			i++;
 		}
 		ft_printf("\n");
