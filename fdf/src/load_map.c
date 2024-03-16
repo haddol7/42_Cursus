@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 15:02:42 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 15:08:14 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,10 @@ static void	allocate_map(char *s, t_map *map)
 		map->point[i].x = i % map->row;
 		map->point[i].y = i / map->row;
 		map->point[i].z = check_map_value(&s, &map->point[i].color);
+		//test line for parallel proj
+		map->point[i].x_proj = map->point[i].x * 50;
+		map->point[i].y_proj = map->point[i].y * 50;
+		//test line
 		i++;
 	}
 }
