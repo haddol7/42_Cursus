@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 20:13:25 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 20:28:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 		fdf_error(ERR_ARGC);
 	init(&data);
 	load_map(argv[1], &data.map);
-	scale(data.map.point, 50, data.map.row * data.map.col);
+	scale(data.map.point, 2, data.map.row * data.map.col);
 
 	mlx_hook(data.win, 2, 0, rotate, &data);
 	mlx_loop(data.mlx);

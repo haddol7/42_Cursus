@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:28:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 20:14:36 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 20:23:25 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,9 @@ static void pixel_put_to_image(t_img *img, int x_proj, int y_proj, int color)
 {
 	void	*img_addr;
 	
-	if (x_proj < 0 || y_proj < 0 || x_proj > WINDOW_X_SIZE || y_proj > WINDOW_Y_SIZE)
+	if (x_proj < 0 || y_proj < 0 || x_proj + 1 > WINDOW_X_SIZE || y_proj + 1 > WINDOW_Y_SIZE)
 		return ;
+
 	img_addr = img->addr + img->bits_per_pixel / 8 * x_proj + img->line_size * y_proj;
 	*(unsigned int *)img_addr = color;
 }
@@ -184,8 +185,8 @@ void draw(t_map map, t_img *img, void *mlx, void *win)
 	row = 0;
 	size = map.row * map.col;
 
-//	rotate_pitch(map.point, map.copy, 180, size);
-	rotate_yaw(map.point, map.copy, map.translate.z, size);
+	rotate_pitch(map.point, map.copy, map.translate.z, size);
+//	rotate_yaw(map.point, map.copy, map.translate.z, size);
 //	rotate_roll(map.point, map.copy, 180, size);
 	isometric_proj(map.copy, size);
 	
