@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 20:28:44 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 21:18:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,28 @@ void	clean_img(t_img *img)
 		img_addr[i] = 0;
 }
 
-int rotate(int keycode, t_client *data)
+int key_hook(int keycode, t_client *data)
 {
-	static float i = 0;
-
-	size_t size;
-	size = data->map.row * data->map.col;
-	keycode = 1;
-
-	data->map.translate.z += 10;
+	if (keycode == KEY_A)
+		data->map.angular.z += 10;
+	else if (keycode == KEY_D)
+		data->map.angular.z -= 10;
+	else if (keycode == KEY_W)
+		data->map.angular.x += 10;
+	else if (keycode == KEY_S)
+		data->map.angular.x -= 10;
+	else if (keycode == KEY_Q)
+		data->map.angular.y += 10;
+	else if (keycode == KEY_E)
+		data->map.angular.y -= 10;
+	else if (keycode == KEY_C)
+	{
+		data->map.angular.x = 0;
+		data->map.angular.y = 0;
+		data->map.angular.z = 0;
+	}
 	clean_img(&data->img);
 	draw(data->map, &data->img, data->mlx, data->win);
-	
 	return (0);
 }
 
@@ -58,9 +68,17 @@ int main(int argc, char **argv)
 		fdf_error(ERR_ARGC);
 	init(&data);
 	load_map(argv[1], &data.map);
-	scale(data.map.point, 2, data.map.row * data.map.col);
 
-	mlx_hook(data.win, 2, 0, rotate, &data);
+
+	scale(data.map.point, 50, data.map.row * data.map.col);
+	data.map.angular.x = 0;
+	data.map.angular.y = 0;
+	data.map.angular.z = 0;
+
+
+//	mlx_mouse_hook(data.win, mouse_hook, &data);
+	mlx_hook(data.win, 2, 0, key_hook, &data);
+//	mlx_hook(data.win, key_hook, &data);
 	mlx_loop(data.mlx);
 	return (0);
 }

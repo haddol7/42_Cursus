@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:28:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 20:23:25 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 21:43:14 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,50 +108,59 @@ void scale(t_point *point, int scale, size_t size)
 	}
 }
 
-void rotate_yaw(t_point *point, t_point *copy, int z, size_t size)
+void rotate_yaw(t_point *copy, int deg, size_t size)
 {
 	size_t	i;
 	double	rad;
+	int		temp_x;
+	int		temp_y;
 
-	rad = z * 3.141592 / 180;
+	rad = deg * 3.141592 / 180;
 	i = 0;
 	while (i < size)
 	{
-		copy[i].x = point[i].x * cos(rad) + point[i].y * sin(rad);
-		copy[i].y = -point[i].x * sin(rad) + point[i].y * cos(rad);
-		copy[i].z = point[i].z;
+		temp_x = copy[i].x;
+		temp_y = copy[i].y;
+		copy[i].x = temp_x * cos(rad) + temp_y * sin(rad);
+		copy[i].y = -temp_x * sin(rad) + temp_y * cos(rad);
 		i++;
 	}
 }
 
-void rotate_pitch(t_point *point, t_point *copy, int x, size_t size)
+void rotate_pitch(t_point *copy, int deg, size_t size)
 {
 	size_t	i;
 	double	rad;
+	int		temp_y;
+	int		temp_z;
 
-	rad = x * (3.141592) / 180;
+	rad = deg * (3.141592) / 180;
 	i = 0;
 	while (i < size)
-	{
-		copy[i].x = point[i].x;
-		copy[i].y = point[i].y * cos(rad) + point[i].z * sin(rad);
-		copy[i].z = -point[i].y * sin(rad) + point[i].z * cos(rad);
+	{	
+		temp_y = copy[i].y;
+		temp_z = copy[i].z;
+		copy[i].y = temp_y * cos(rad) + temp_z * sin(rad);
+		copy[i].z = -temp_y * sin(rad) + temp_z * cos(rad);
 		i++;
 	}
 }
 
-void rotate_roll(t_point *point, t_point *copy, int y, size_t size)
+void rotate_roll(t_point *copy, int deg, size_t size)
 {
 	size_t	i;
 	double	rad;
+	int		temp_x;
+	int		temp_z;
 
-	rad = y * (3.141592) / 180;
+	rad = deg * (3.141592) / 180;
 	i = 0;
 	while (i < size)
 	{
-		copy[i].x = point[i].x * cos(rad) - point[i].z * sin(rad);
-		copy[i].y = point[i].y;
-		copy[i].z = point[i].x * sin(rad) + point[i].z * cos(rad);
+		temp_x = copy[i].x;
+		temp_z = copy[i].z;
+		copy[i].x = temp_x * cos(rad) - temp_z * sin(rad);
+		copy[i].z = temp_x * sin(rad) + temp_z * cos(rad);
 		i++;
 	}
 }
@@ -174,6 +183,27 @@ void isometric_proj(t_point *copy, size_t size)
 }
 
 
+void rotate(t_map *map, size_t size)
+{
+	rotate_roll(map->copy, map->angular.y, size);
+	rotate_pitch(map->copy, map->angular.x, size);
+	rotate_yaw(map->copy, map->angular.z, size);
+}
+
+void map_copy(t_point *point, t_point *copy, size_t size)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < size)
+	{
+		copy[i].x = point[i].x;
+		copy[i].y = point[i].y;
+		copy[i].z = point[i].z;
+		i++;
+	}
+}
+
 void draw(t_map map, t_img *img, void *mlx, void *win)
 {
 	size_t	size;
@@ -185,9 +215,8 @@ void draw(t_map map, t_img *img, void *mlx, void *win)
 	row = 0;
 	size = map.row * map.col;
 
-	rotate_pitch(map.point, map.copy, map.translate.z, size);
-//	rotate_yaw(map.point, map.copy, map.translate.z, size);
-//	rotate_roll(map.point, map.copy, 180, size);
+	map_copy(map.point, map.copy, size);
+	rotate(&map, size);
 	isometric_proj(map.copy, size);
 	
 	while (row < map.row)
