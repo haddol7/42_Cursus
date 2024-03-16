@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 14:50:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 14:59:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,10 @@ typedef struct	s_point
 	int	x;
 	int y;
 	int z;
+	int	x_proj;
+	int y_proj;
 	int	color;
 }	t_point;
-
-typedef struct s_plain
-{
-	int x;
-	int y;
-	int color;
-}	t_plain;
 
 typedef struct s_img
 {
@@ -78,7 +73,6 @@ typedef struct	s_map
 	t_point	*data;
 	t_point	translate;
 	t_point angular;
-	t_plain *data_proj;
 	size_t	col;
 	size_t	row;
 }	t_map;
