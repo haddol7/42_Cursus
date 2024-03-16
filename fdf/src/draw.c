@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:28:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 16:00:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 16:22:58 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ static void pixel_put_to_image(t_img *img, int x_proj, int y_proj, int color)
 {
 	void	*img_addr;
 
+	if (x_proj < 0 || y_proj < 0)
+		return ;
 	img_addr = img->addr + img->bits_per_pixel / 8 * x_proj + img->line_size * y_proj;
 	*(unsigned int *)img_addr = color;
 }

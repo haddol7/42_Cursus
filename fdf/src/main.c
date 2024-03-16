@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 16:02:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 16:23:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,16 @@ int main(int argc, char **argv)
 	load_map(argv[1], &data.map);
 
 	size_t i;
-	i = 0;
+	i = 0;	
+	for (size_t y = 0; y < data.map.row; y++)
+	{
+		for (size_t x = 0; x < data.map.col; x++)
+		{
+			ft_printf("%d,%d ", data.map.point[i].x_proj, data.map.point[i].y_proj);
+			i++;
+		}
+		ft_printf("\n");
+	}
 //	mlx_hook(data.win, 2, 0, key_press_for_test, &data);
 	draw(data.map, &data.img, data.mlx, data.win);
 	mlx_loop(data.mlx);
