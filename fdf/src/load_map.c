@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/15 20:35:26 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 14:48:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ load_map(char *content, t_map *map)
 	map.data[2].x = 2 | map.data[2].y = 0 | map.data[2].z = 3
 	...
 
-	and map.x_size and map.y_size are initialized by 3.
+	and map.col and map.row are initialized by 3.
 
 Subject consider all given map files as well formatted. But function should handle
 errors
@@ -94,23 +94,23 @@ static void	check_map_size(char *s, t_map *map)
 
 	x = 0;
 	y = 0;
-	map->x_size = 0;
+	map->col = 0;
 	while (*s != '\0')
 	{
 		if (*s != ' ' && *s != '\n' && fdf_isspace(*(s + 1)))
 			x++;
 		if (*s == '\n')
 		{
-			if ((x != map->x_size && map->x_size != 0) || x == 0)
+			if ((x != map->col && map->col != 0) || x == 0)
 				fdf_error(ERR_M_SIZE);
-			if (map->x_size == 0)
-				map->x_size = x;
+			if (map->col == 0)
+				map->col = x;
 			x = 0;
 			y++;
 		}
 		s++;
 	}
-	map->y_size = y;
+	map->row = y;
 }
 
 static int	check_map_value(char **s, int *color)
@@ -176,7 +176,7 @@ static void	transform_map(char *s, t_map *map)
 	unsigned long	i;
 
 	i = 0;
-	size = map->x_size * map->y_size;
+	size = map->col * map->row;
 	map->data = malloc(sizeof(t_point) * (size));
 	if (map->data == NULL)
 		fdf_error(ERR_MLC);
@@ -188,8 +188,8 @@ static void	transform_map(char *s, t_map *map)
 				fdf_error(ERR_M_VAL);
 			s++;
 		}
-		map->data[i].x = i % map->y_size;
-		map->data[i].y = i / map->y_size;
+		map->data[i].x = i % map->row;
+		map->data[i].y = i / map->row;
 		map->data[i].z = check_map_value(&s, &map->data[i].color);
 		i++;
 	}
@@ -206,9 +206,9 @@ int main(int argc, char **argv)
 	load_map(argv[1], &map);
 	i = 0;
 	
-	for (size_t y = 0; y < map.y_size; y++)
+	for (size_t y = 0; y < map.row; y++)
 	{
-		for (size_t x = 0; x < map.x_size; x++)
+		for (size_t x = 0; x < map.col; x++)
 		{
 			ft_printf("%d ", map.data[i].z);
 			i++;
