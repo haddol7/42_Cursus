@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 15:44:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 20:00:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,10 @@ typedef struct s_img
 typedef struct	s_map
 {
 	t_point	*point;
+	t_point *copy;
 	t_point	translate;
 	t_point angular;
+	size_t	scale;
 	size_t	col;
 	size_t	row;
 }	t_map;
@@ -85,10 +87,14 @@ typedef struct s_client
 	t_img	img;
 }	t_client;
 
+void rotate_yaw(t_point *point, t_point *copy, int z, size_t size);
+void rotate_pitch(t_point *point, t_point *copy, int x, size_t size);
+void rotate_roll(t_point *point, t_point *copy, int y, size_t size);
+void scale(t_point *point, int scale, size_t size);
+
 void	fdf_swap(int *a, int *b);
 void	fdf_error(char *s);
 int		fdf_isspace(char ch);
 void	load_map(char *dir, t_map *map);
-void	put_line_to_image(t_img *img, t_point first, t_point last);
-
+void	draw(t_map map, t_img *img, void *mlx, void *win);
 #endif

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 16:25:06 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 20:12:40 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,9 @@ static void	allocate_map(char *s, t_map *map)
 	map->point = malloc(sizeof(t_point) * size);
 	if (!map->point)
 		fdf_error(ERR_MLC);
+	map->copy = malloc(sizeof(t_point) * size);
+	if (!map->copy)
+		fdf_error(ERR_MLC);
 	while (i < size)
 	{
 		while (!ft_isdigit(*s) && *s != '-')
@@ -188,17 +191,9 @@ static void	allocate_map(char *s, t_map *map)
 				fdf_error(ERR_M_VAL);
 			s++;
 		}
-		map->point[i].x = (i % map->col) * 50;
-		map->point[i].y = (i / map->col) * 50;
-		map->point[i].z = check_map_value(&s, &map->point[i].color) * 50;
-		//test line for parallel proj
-
-
-		double rad = 30 * 3.141592 / 180;
-		map->point[i].x_proj = 400 + map->point[i].x * cos(rad) - map->point[i].y * cos(rad);
-		map->point[i].y_proj = 400 + map->point[i].x * cos(rad) + map->point[i].y * sin(rad) - map->point[i].z;
-
-		//test line
+		map->point[i].x = i % map->col - map->col / 2;
+		map->point[i].y = i / map->col - map->row / 2;
+		map->point[i].z = check_map_value(&s, &map->point[i].color);
 		i++;
 	}
 }

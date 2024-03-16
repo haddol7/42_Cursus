@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 16:23:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 20:13:25 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,29 +26,28 @@ void	init(t_client *data)
 	data->img.addr = mlx_get_data_addr(data->img.id, &data->img.bits_per_pixel, &data->img.line_size, &data->img.endian);
 }
 
-void draw(t_map map, t_img *img, void *mlx, void *win)
+void	clean_img(t_img *img)
 {
-	size_t	col;
-	size_t	row;
-	size_t	i;
+	int *img_addr;
 
-	i = 0;
-	row = 0;
-	while (row < map.row)
-	{
-		col = 0;
-		while (col < map.col)
-		{
-			if (col + 1 < map.col)
-				put_line_to_image(img, map.point[i], map.point[i + 1]);
-			if (row + 1 < map.row)
-				put_line_to_image(img, map.point[i], map.point[i + map.col]);
-			i++;
-			col++;
-		}
-		row++;
-	}
-	mlx_put_image_to_window(mlx, win, img->id, 0, 0);
+	img_addr = (int *)img->addr;
+	for (int i = 0; i < WINDOW_X_SIZE * WINDOW_Y_SIZE; i++)
+		img_addr[i] = 0;
+}
+
+int rotate(int keycode, t_client *data)
+{
+	static float i = 0;
+
+	size_t size;
+	size = data->map.row * data->map.col;
+	keycode = 1;
+
+	data->map.translate.z += 10;
+	clean_img(&data->img);
+	draw(data->map, &data->img, data->mlx, data->win);
+	
+	return (0);
 }
 
 int main(int argc, char **argv)
@@ -59,20 +58,9 @@ int main(int argc, char **argv)
 		fdf_error(ERR_ARGC);
 	init(&data);
 	load_map(argv[1], &data.map);
+	scale(data.map.point, 50, data.map.row * data.map.col);
 
-	size_t i;
-	i = 0;	
-	for (size_t y = 0; y < data.map.row; y++)
-	{
-		for (size_t x = 0; x < data.map.col; x++)
-		{
-			ft_printf("%d,%d ", data.map.point[i].x_proj, data.map.point[i].y_proj);
-			i++;
-		}
-		ft_printf("\n");
-	}
-//	mlx_hook(data.win, 2, 0, key_press_for_test, &data);
-	draw(data.map, &data.img, data.mlx, data.win);
+	mlx_hook(data.win, 2, 0, rotate, &data);
 	mlx_loop(data.mlx);
 	return (0);
 }
