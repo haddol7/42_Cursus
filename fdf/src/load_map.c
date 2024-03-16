@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/11 20:55:49 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/15 20:35:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void	check_map_size(char *content, t_map *map);
 static int	check_map_value(char **content, int *color);
 static void	transform_map(char *content, t_map *map);
 static int	check_map_color(char **s);
+
 /*
 load_map(char *content, t_map *map)
 
