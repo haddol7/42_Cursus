@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 15:28:55 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 16:02:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,20 @@ void draw(t_map map, t_img *img, void *mlx, void *win)
 {
 	size_t	col;
 	size_t	row;
+	size_t	i;
 
+	i = 0;
 	row = 0;
 	while (row < map.row)
 	{
 		col = 0;
-		while (col + 1 < map.col)
+		while (col < map.col)
 		{
-			put_line_to_image(img->addr, map.point[col * (row + 1)], map.point[(col + 1) * (row + 1)]);
+			if (col + 1 < map.col)
+				put_line_to_image(img, map.point[i], map.point[i + 1]);
+			if (row + 1 < map.row)
+				put_line_to_image(img, map.point[i], map.point[i + map.col]);
+			i++;
 			col++;
 		}
 		row++;
@@ -53,6 +59,9 @@ int main(int argc, char **argv)
 		fdf_error(ERR_ARGC);
 	init(&data);
 	load_map(argv[1], &data.map);
+
+	size_t i;
+	i = 0;
 //	mlx_hook(data.win, 2, 0, key_press_for_test, &data);
 	draw(data.map, &data.img, data.mlx, data.win);
 	mlx_loop(data.mlx);

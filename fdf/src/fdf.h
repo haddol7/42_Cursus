@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 15:02:42 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 15:44:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,6 @@ void	fdf_swap(int *a, int *b);
 void	fdf_error(char *s);
 int		fdf_isspace(char ch);
 void	load_map(char *dir, t_map *map);
-void	put_line_to_image(t_img *img, t_point first, t_point last, int color);
+void	put_line_to_image(t_img *img, t_point first, t_point last);
 
 #endif
