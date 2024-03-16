@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 14:59:09 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 15:02:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ typedef struct s_img
 
 typedef struct	s_map
 {
-	t_point	*data;
+	t_point	*point;
 	t_point	translate;
 	t_point angular;
 	size_t	col;

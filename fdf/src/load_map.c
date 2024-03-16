@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 14:58:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 15:02:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ load_map(char *content, t_map *map)
 	4	5	6
 	7	8	9
 	
-	map.data is initialized like
-	map.data[0].x = 0 | map.data[0].y = 0 | map.data[0].z = 1
-	map.data[1].x = 1 | map.data[1].y = 0 | map.data[1].z = 2
-	map.data[2].x = 2 | map.data[2].y = 0 | map.data[2].z = 3
+	map.point is initialized like
+	map.point[0].x = 0 | map.point[0].y = 0 | map.point[0].z = 1
+	map.point[1].x = 1 | map.point[1].y = 0 | map.point[1].z = 2
+	map.point[2].x = 2 | map.point[2].y = 0 | map.point[2].z = 3
 	...
 
 	and map.col and map.row are initialized by 3.
@@ -177,8 +177,8 @@ static void	allocate_map(char *s, t_map *map)
 
 	i = 0;
 	size = map->col * map->row;
-	map->data = malloc(sizeof(t_point) * size);
-	if (!map->data)
+	map->point = malloc(sizeof(t_point) * size);
+	if (!map->point)
 		fdf_error(ERR_MLC);
 	while (i < size)
 	{
@@ -188,9 +188,9 @@ static void	allocate_map(char *s, t_map *map)
 				fdf_error(ERR_M_VAL);
 			s++;
 		}
-		map->data[i].x = i % map->row;
-		map->data[i].y = i / map->row;
-		map->data[i].z = check_map_value(&s, &map->data[i].color);
+		map->point[i].x = i % map->row;
+		map->point[i].y = i / map->row;
+		map->point[i].z = check_map_value(&s, &map->point[i].color);
 		i++;
 	}
 }
@@ -210,11 +210,11 @@ int main(int argc, char **argv)
 	{
 		for (size_t x = 0; x < map.col; x++)
 		{
-			ft_printf("%d ", map.data[i].z);
+			ft_printf("%d ", map.point[i].z);
 			i++;
 		}
 		ft_printf("\n");
 	}
-	free(map.data);
+	free(map.point);
 }
 */
