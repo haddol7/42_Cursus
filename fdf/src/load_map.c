@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 14:48:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 14:55:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static char	*read_map_as_one_line(int fd);
 static void	check_map_size(char *content, t_map *map);
 static int	check_map_value(char **content, int *color);
-static void	transform_map(char *content, t_map *map);
+static void	allocate_map(char *content, t_map *map);
 static int	check_map_color(char **s);
 
 /*
@@ -54,7 +54,7 @@ void	load_map(char *dir, t_map *map)
 		fdf_error(ERR_OPN);
 	content = read_map_as_one_line(fd);
 	check_map_size(content, map);
-	transform_map(content, map);
+	allocate_map(content, map);
 	free(content);
 	close(fd);
 }
@@ -170,15 +170,18 @@ static int	check_map_color(char **s)
 	return (color);
 }
 
-static void	transform_map(char *s, t_map *map)
+static void	allocate_map(char *s, t_map *map)
 {
 	size_t			size;
 	unsigned long	i;
 
 	i = 0;
 	size = map->col * map->row;
-	map->data = malloc(sizeof(t_point) * (size));
-	if (map->data == NULL)
+	map->data = malloc(sizeof(t_point) * size);
+	if (!map->data)
+		fdf_error(ERR_MLC);
+	map->data_proj = malloc(sizeof(t_plain) * size);
+	if (!map->data_proj)
 		fdf_error(ERR_MLC);
 	while (i < size)
 	{

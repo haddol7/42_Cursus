@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 14:48:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/16 14:50:46 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ typedef struct s_img
 typedef struct	s_map
 {
 	t_point	*data;
-	t_plain *data_proj;
 	t_point	translate;
 	t_point angular;
+	t_plain *data_proj;
 	size_t	col;
 	size_t	row;
 }	t_map;
@@ -87,8 +87,8 @@ typedef struct s_client
 {
 	void	*mlx;
 	void	*win;
-	t_img	img;
 	t_map	map;
+	t_img	img;
 }	t_client;
 
 void	fdf_swap(int *a, int *b);
