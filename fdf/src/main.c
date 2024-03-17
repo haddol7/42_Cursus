@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/17 15:19:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/17 16:00:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,6 @@ void	init(t_client *data)
 	if (data->img.id == NULL)
 		fdf_error(ERR_MLX);
 	data->img.addr = mlx_get_data_addr(data->img.id, &data->img.bits_per_pixel, &data->img.line_size, &data->img.endian);
-}
-
-void	clean_img(t_img *img)
-{
-	int *img_addr;
-
-	img_addr = (int *)img->addr;
-	for (int i = 0; i < WINDOW_X_SIZE * WINDOW_Y_SIZE; i++)
-		img_addr[i] = 0;
 }
 
 int key_hook(int keycode, t_client *data)
@@ -55,20 +46,20 @@ int key_hook(int keycode, t_client *data)
 		data->map.angular.y = 0;
 		data->map.angular.z = 0;
 	}
-	clean_img(&data->img);
 	draw(data->map, &data->img, data->mlx, data->win);
 	return (0);
 }
 
 int mouse_hook(int keycode, int x, int y, t_client *data)
 {
-	if (keycode == MOUSE_LEFT)
-	{
-		data->map.translate.x += x;
-		data->map.translate.y += y;
-	}
-	else if (keycode == MOUSE_RIGHT)
-	else if (keycode == MOUSE_)
+	if (keycode == MOUSE_UP)
+		data->map.scale += 0.5;
+	else if (keycode == MOUSE_DOWN)
+		data->map.scale -= 0.5;
+	// else if (keycode == MOUSE_RIGHT)
+	// else if (keycode == MOUSE_)
+	draw(data->map, &data->img, data->mlx, data->win);
+	return (0);
 }
 
 int main(int argc, char **argv)
@@ -81,16 +72,16 @@ int main(int argc, char **argv)
 	load_map(argv[1], &data.map);
 
 
-	scale(data.map.point, 3, data.map.row * data.map.col);
+	scale(data.map.point, 30, data.map.row * data.map.col);
 	data.map.angular.x = 0;
 	data.map.angular.y = 0;
 	data.map.angular.z = 0;
+	data.map.translate.x = 0;
+	data.map.translate.y = 0;
 
 	mlx_hook(data.win, 2, 0, key_hook, &data);
 //	mlx_hook(data.win, 4, 0, mouse_hook, &data);
 	
-
-//	mlx_hook(data.win, key_hook, &data);
 	mlx_loop(data.mlx);
 	return (0);
 }

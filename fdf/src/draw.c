@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:28:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/17 15:18:36 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/17 15:57:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,25 +170,6 @@ void rotate_roll(t_point *copy, int deg, size_t size)
 	}
 }
 
-void isometric_proj(t_point *copy, size_t size)
-{
-	size_t	i;
-	double	cosine;
-	double	sine;
-
-	i = 0;
-	cosine = cos(30 * (3.141592) / 180);
-	sine = sin(30 * (3.141592) / 180);
-	while (i < size)
-	{
-		copy[i].x_proj = copy[i].x * cosine - copy[i].y * cosine;
-		copy[i].y_proj = copy[i].x * sine + copy[i].y * sine - copy[i].z;
-		copy[i].x_proj += WINDOW_X_SIZE / 2;
-		copy[i].y_proj += WINDOW_Y_SIZE / 2;
-		i++;
-	}
-}
-
 /*
 void rotate(t_map *map, size_t size)
 {
@@ -230,7 +211,7 @@ void rotate(t_map *map, size_t size)
 	rotate_yaw(map->copy, map->angular.z, size);
 }
 
-void map_copy(t_point *point, t_point *copy, size_t size)
+static void map_copy(t_point *point, t_point *copy, size_t size)
 {
 	size_t	i;
 
@@ -244,21 +225,42 @@ void map_copy(t_point *point, t_point *copy, size_t size)
 	}
 }
 
-void draw(t_map map, t_img *img, void *mlx, void *win)
+static void	clean_img(t_img *img)
 {
-	size_t	size;
-	size_t	col;
-	size_t	row;
+	int *img_addr;
+
+	img_addr = (int *)img->addr;
+	for (int i = 0; i < WINDOW_X_SIZE * WINDOW_Y_SIZE; i++)
+		img_addr[i] = 0x00;
+}
+
+static void isometric_projection(t_point *copy, size_t size)
+{
 	size_t	i;
+	double	cosine;
+	double	sine;
 
 	i = 0;
-	row = 0;
-	size = map.row * map.col;
+	cosine = cos(30 * (3.141592) / 180);
+	sine = sin(30 * (3.141592) / 180);
+	while (i < size)
+	{
+		copy[i].x_proj = copy[i].x * cosine - copy[i].y * cosine;
+		copy[i].y_proj = copy[i].x * sine + copy[i].y * sine - copy[i].z;
+		copy[i].x_proj += WINDOW_X_SIZE / 2;
+		copy[i].y_proj += WINDOW_Y_SIZE / 2;
+		i++;
+	}
+}
 
-	map_copy(map.point, map.copy, size);
-	rotate(&map, size);
-	isometric_proj(map.copy, size);
-	
+static void draw_wireframe(t_map map, t_img *img)
+{
+	size_t	i;
+	size_t	row;
+	size_t	col;
+
+	i = 0;
+	row = 0;	
 	while (row < map.row)
 	{
 		col = 0;
@@ -273,5 +275,17 @@ void draw(t_map map, t_img *img, void *mlx, void *win)
 		}
 		row++;
 	}
-	mlx_put_image_to_window(mlx, win, img->id, 0, 0);
+}
+
+void draw(t_map map, t_img *img, void *mlx, void *win)
+{
+	size_t	size;
+	
+	size = map.row * map.col;
+	clean_img(img);
+	map_copy(map.point, map.copy, size);
+	rotate(&map, size);
+	isometric_projection(map.copy, size);
+	draw_wireframe(map, img);
+	mlx_put_image_to_window(mlx, win, img->id, map.translate.x, map.translate.y);
 }
