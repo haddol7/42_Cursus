@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 21:19:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/17 14:54:52 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,20 @@
 # define KEY_S			1
 # define KEY_D			2
 # define KEY_C			8
+
+# define MOUSE_LEFT		1
+# define MOUSE_RIGHT	2
+# define MOUSE_MID		3
+# define MOUSE_UP		4
+# define MOUSE_DOWN		5
+
+# define A		0
+# define B		1
+# define G		2
+
+# define X		0
+# define Y		1
+# define Z		2
 
 typedef struct	s_point
 {

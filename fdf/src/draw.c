@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:28:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 21:43:14 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/17 15:11:24 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ void scale(t_point *point, int scale, size_t size)
 	{
 		point[i].x *= scale;
 		point[i].y *= scale;
-		point[i].z *= scale;
 		i++;
 	}
 }
@@ -182,6 +181,39 @@ void isometric_proj(t_point *copy, size_t size)
 	}
 }
 
+/*
+void rotate(t_map *map, size_t size)
+{
+	size_t	i;
+	double	rad[3];
+	int		temp[3];
+
+	i = 0;
+	rad[G] = map->angular.x * (3.141592) / 180;
+	rad[B] = map->angular.y * (3.141592) / 180;
+	rad[A] = map->angular.z * (3.141592) / 180;
+
+	ft_printf("%d %d %d\n", map->angular.x, map->angular.y, map->angular.z);
+	while (i < size)
+	{
+		temp[X] = map->copy[i].x;
+		temp[Y] = map->copy[i].y;
+		temp[Z] = map->copy[i].z;
+		map->copy[i].x = temp[X] * (cos(rad[A]) * cos(rad[B])) + \
+					temp[Y] * (sin(rad[A]) * cos(rad[B])) - \
+					temp[Z] * (sin(rad[B]));
+		
+		map->copy[i].y = temp[X] * (cos(rad[A]) * sin(rad[B]) * sin(rad[G]) - sin(A) * cos(G)) + \
+					temp[Y] * (sin(rad[A]) * sin(rad[B]) * sin(rad[G]) + cos(A) * cos(G)) + \
+					temp[Z] * (cos(rad[B]) * sin(rad[G]));
+
+		map->copy[i].z = temp[X] * (cos(rad[A]) * sin(rad[B]) * cos(rad[G]) + sin(A) * sin(G)) + \
+					temp[Y] * (cos(rad[A]) * sin(rad[B]) * sin(rad[G]) - sin(A) * cos(G)) + \
+					temp[Z] * (cos(rad[A]) * sin(rad[B])); 
+		i++;
+	}
+}
+*/
 
 void rotate(t_map *map, size_t size)
 {
