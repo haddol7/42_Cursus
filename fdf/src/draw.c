@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:28:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/17 15:11:24 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/17 15:18:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,18 +110,20 @@ void scale(t_point *point, int scale, size_t size)
 void rotate_yaw(t_point *copy, int deg, size_t size)
 {
 	size_t	i;
-	double	rad;
+	double	cosine;
+	double	sine;
 	int		temp_x;
 	int		temp_y;
 
-	rad = deg * 3.141592 / 180;
 	i = 0;
+	cosine = cos(deg * (3.141592) / 180);
+	sine = sin(deg * (3.141592) / 180);
 	while (i < size)
 	{
 		temp_x = copy[i].x;
 		temp_y = copy[i].y;
-		copy[i].x = temp_x * cos(rad) + temp_y * sin(rad);
-		copy[i].y = -temp_x * sin(rad) + temp_y * cos(rad);
+		copy[i].x = temp_x * cosine + temp_y * sine;
+		copy[i].y = -temp_x * sine + temp_y * cosine;
 		i++;
 	}
 }
@@ -129,18 +131,20 @@ void rotate_yaw(t_point *copy, int deg, size_t size)
 void rotate_pitch(t_point *copy, int deg, size_t size)
 {
 	size_t	i;
-	double	rad;
+	double	cosine;
+	double	sine;
 	int		temp_y;
 	int		temp_z;
 
-	rad = deg * (3.141592) / 180;
 	i = 0;
+	cosine = cos(deg * (3.141592) / 180);
+	sine = sin(deg * (3.141592) / 180);
 	while (i < size)
 	{	
 		temp_y = copy[i].y;
 		temp_z = copy[i].z;
-		copy[i].y = temp_y * cos(rad) + temp_z * sin(rad);
-		copy[i].z = -temp_y * sin(rad) + temp_z * cos(rad);
+		copy[i].y = temp_y * cosine + temp_z * sine;
+		copy[i].z = -temp_y * sine + temp_z * cosine;
 		i++;
 	}
 }
@@ -148,18 +152,20 @@ void rotate_pitch(t_point *copy, int deg, size_t size)
 void rotate_roll(t_point *copy, int deg, size_t size)
 {
 	size_t	i;
-	double	rad;
+	double	cosine;
+	double	sine;
 	int		temp_x;
 	int		temp_z;
 
-	rad = deg * (3.141592) / 180;
 	i = 0;
+	cosine = cos(deg * (3.141592) / 180);
+	sine = sin(deg * (3.141592) / 180);
 	while (i < size)
 	{
 		temp_x = copy[i].x;
 		temp_z = copy[i].z;
-		copy[i].x = temp_x * cos(rad) - temp_z * sin(rad);
-		copy[i].z = temp_x * sin(rad) + temp_z * cos(rad);
+		copy[i].x = temp_x * cosine - temp_z * sine;
+		copy[i].z = temp_x * sine + temp_z * cosine;
 		i++;
 	}
 }
@@ -167,14 +173,16 @@ void rotate_roll(t_point *copy, int deg, size_t size)
 void isometric_proj(t_point *copy, size_t size)
 {
 	size_t	i;
-	double	rad;
+	double	cosine;
+	double	sine;
 
 	i = 0;
-	rad = 30 * (3.141592) / 180;
+	cosine = cos(30 * (3.141592) / 180);
+	sine = sin(30 * (3.141592) / 180);
 	while (i < size)
 	{
-		copy[i].x_proj = copy[i].x * cos(rad) - copy[i].y * cos(rad);
-		copy[i].y_proj = copy[i].x * sin(rad) + copy[i].y * sin(rad) - copy[i].z;
+		copy[i].x_proj = copy[i].x * cosine - copy[i].y * cosine;
+		copy[i].y_proj = copy[i].x * sine + copy[i].y * sine - copy[i].z;
 		copy[i].x_proj += WINDOW_X_SIZE / 2;
 		copy[i].y_proj += WINDOW_Y_SIZE / 2;
 		i++;

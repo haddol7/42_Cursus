@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/17 15:10:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/17 15:19:50 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,16 @@ int key_hook(int keycode, t_client *data)
 	return (0);
 }
 
-// int mouse_hook(int keycode, int x, int y, t_client *data)
-// {
-// 	if (keycode == MOUSE_LEFT)
-// 	{
-// 		data->map.translate.x += x;
-// 		data->map.translate.y += y;
-// 	}
-// 	else if (keycode == MOUSE_RIGHT)
-// 	else if (keycode == MOUSE_)
-// }
+int mouse_hook(int keycode, int x, int y, t_client *data)
+{
+	if (keycode == MOUSE_LEFT)
+	{
+		data->map.translate.x += x;
+		data->map.translate.y += y;
+	}
+	else if (keycode == MOUSE_RIGHT)
+	else if (keycode == MOUSE_)
+}
 
 int main(int argc, char **argv)
 {
