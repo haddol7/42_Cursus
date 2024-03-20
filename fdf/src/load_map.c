@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/20 22:59:30 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 23:19:50 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,11 @@ static void	set_scale(t_map *map)
 	z_max = -2147483648;
 	size = map->col * map->row;
 	if (map->col > map->row)
-		map->scale = WINDOW_X_SIZE / map->col;
+		map->scale = WINDOW_X_SIZE / (double)map->col;
 	else
-		map->scale = WINDOW_Y_SIZE / map->row;
+		map->scale = WINDOW_Y_SIZE / (double)map->row;
+	if (map->scale < 0)
+		map->scale = 0.1;
 	while (i < size)
 	{	
 		if (z_max < map->point[i].z)
@@ -67,7 +69,6 @@ static void	set_scale(t_map *map)
 	while (i < size)
 	{
 		map->point[i].z *= map->scale;
-		map->point[i].z /= z_max;
 		i++;
 	}
 }

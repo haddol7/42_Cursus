@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/20 22:24:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 23:15:13 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ typedef struct	s_map
 	t_point_proj	*copy;
 	t_point			translate;
 	t_point 		angular;
-	size_t			scale;
+	double			scale;
 	size_t			col;
 	size_t			row;
 }	t_map;

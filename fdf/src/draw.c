@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:28:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/20 23:05:38 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 23:56:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,20 @@ static void pixel_put_to_image(t_img *img, int x_proj, int y_proj, int color)
 		return ;
 
 	img_addr = img->addr + img->bits_per_pixel / 8 * x_proj + img->line_size * y_proj;
+	*(unsigned int *)img_addr = color;
+}
+
+static void pixel_mix_to_image(t_img *img, int x, int y, int color)
+{
+	int		pre_color;
+	void	*img_addr;
+	
+	img_addr = img->addr + img->bits_per_pixel / 8 * x + img->line_size * y;
+	pre_color = *(int *)img_addr;
+
+	color = ((get_red(color) + get_red(pre_color)) << 16 | \
+			 (get_green(color) + get_green(pre_color)) << 8 | \
+			  get_blue(color) + get_blue(pre_color));
 	*(unsigned int *)img_addr = color;
 }
 
@@ -290,10 +304,26 @@ static void isometric_projection(t_point_proj *copy, size_t size)
 	}
 }
 
-// static void	draw_gui(t_map map, t_img *img)
-// {
-	
-// }
+static void	draw_gui(void *mlx, void *win, t_map map, t_img *img)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (i < WINDOW_X_SIZE / 5)
+	{
+		j = 0;
+		while (j < WINDOW_Y_SIZE)
+		{
+			pixel_mix_to_image(img, i, j, 0x00111111);
+			j++;
+		}	
+		i++;
+	}
+	map.angular.x = 1;
+	if (mlx || win)
+		ft_printf("1");
+}
 
 
 void draw(t_map map, t_img *img, void *mlx, void *win)
@@ -308,8 +338,8 @@ void draw(t_map map, t_img *img, void *mlx, void *win)
 	isometric_projection(map.copy, size);
 	translate(map.copy, map.translate, size);
 	draw_wireframe(map, img);
+//	draw_gui(mlx, win, map, img);
 	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, img->id);
 	mlx_put_image_to_window(mlx, win, img->id, 0, 0);
 	mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, win);
-//	draw_gui(map, img, win);
 }
