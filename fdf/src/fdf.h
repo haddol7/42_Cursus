@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/20 20:46:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 22:24:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,6 @@ void scale(t_point_proj *point, int scale, size_t size);
 void	fdf_swap(int *a, int *b);
 void	fdf_error(char *s);
 int		fdf_isspace(char ch);
-void	load_map(char *dir, t_map *map);
+void	load_map(char *dir, t_client *map);
 void	draw(t_map map, t_img *img, void *mlx, void *win);
 #endif

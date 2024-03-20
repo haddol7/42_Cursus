@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:28:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/20 21:56:32 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 23:05:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,30 +54,6 @@ static void pixel_put_to_image(t_img *img, int x_proj, int y_proj, int color)
 
 	img_addr = img->addr + img->bits_per_pixel / 8 * x_proj + img->line_size * y_proj;
 	*(unsigned int *)img_addr = color;
-}
-
-static int is_slope_bigger_than_one(t_point_proj *first, t_point_proj *last, int *minus)
-{
-	int	dx;
-	int	dy;
-
-	dx = first->x_proj - last->x_proj;
-	dy = first->y_proj - last->y_proj;
-	*minus = 1;
-	if (dx * dy < 0)
-		*minus = -1;
-	if (abs(dy) > abs(dx))
-	{
-		fdf_swap(&first->x_proj, &first->y_proj);
-		fdf_swap(&last->x_proj, &last->y_proj);
-		if (*minus == -1)
-		{
-			fdf_swap(&first->x_proj, &last->x_proj);
-			fdf_swap(&first->y_proj, &last->y_proj);
-		}
-		return (1);
-	}
-	return (0);
 }
 
 static int set_color(double *color, t_point_proj first, t_point_proj last)
@@ -173,16 +149,15 @@ static void draw_wireframe(t_map map, t_img *img)
 	}
 }
 
-void translate(t_point_proj *point, int trans, size_t size)
+void translate(t_point_proj *point, t_point trans, size_t size)
 {
 	size_t	i;
 
 	i = 0;
 	while (i < size)
 	{
-		point[i].x += trans;
-		point[i].y += trans;
-		point[i].z += trans;
+		point[i].x_proj += trans.x;
+		point[i].y_proj += trans.y;
 		i++;
 	}
 }
@@ -331,6 +306,7 @@ void draw(t_map map, t_img *img, void *mlx, void *win)
 	scale(map.copy, map.scale, size);
 	rotate(&map, size);
 	isometric_projection(map.copy, size);
+	translate(map.copy, map.translate, size);
 	draw_wireframe(map, img);
 	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, img->id);
 	mlx_put_image_to_window(mlx, win, img->id, 0, 0);

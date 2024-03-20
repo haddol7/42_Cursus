@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/20 21:59:12 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 22:59:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,35 @@ errors
 2. map file format error
 */
 
-void	load_map(char *dir, t_map *map)
+static void	set_scale(t_map *map)
+{
+	size_t	i;
+	size_t	size;
+	int		z_max;
+	
+	i = 0;
+	z_max = -2147483648;
+	size = map->col * map->row;
+	if (map->col > map->row)
+		map->scale = WINDOW_X_SIZE / map->col;
+	else
+		map->scale = WINDOW_Y_SIZE / map->row;
+	while (i < size)
+	{	
+		if (z_max < map->point[i].z)
+			z_max = map->point[i].z;
+		i++;
+	}
+	i = 0;
+	while (i < size)
+	{
+		map->point[i].z *= map->scale;
+		map->point[i].z /= z_max;
+		i++;
+	}
+}
+
+void	load_map(char *dir, t_client *data)
 {
 	int		fd;
 	char	*content;
@@ -53,10 +81,12 @@ void	load_map(char *dir, t_map *map)
 	if (fd == -1)
 		fdf_error(ERR_OPN);
 	content = read_map_as_one_line(fd);
-	check_map_size(content, map);
-	allocate_map(content, map);
+	check_map_size(content, &data->map);
+	allocate_map(content, &data->map);
 	free(content);
 	close(fd);
+	set_scale(&data->map);
+	draw(data->map, &data->img, data->mlx, data->win);
 }
 
 //WARNING : FDF_BUFFER_SIZE must not exceed size of stack of memory

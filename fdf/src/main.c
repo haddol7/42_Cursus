@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/20 22:04:48 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 22:30:12 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int key_hook(int keycode, t_client *data)
 		data->map.angular.x = 0;
 		data->map.angular.y = 0;
 		data->map.angular.z = 0;
-		data->map.scale = 30;
 	}
 	draw(data->map, &data->img, data->mlx, data->win);
 	return (0);
@@ -53,15 +52,22 @@ int key_hook(int keycode, t_client *data)
 
 int mouse_press_hook(int keycode, int x, int y, t_client *data)
 {
-	data->mouse.is_pressed = 1;
-	data->mouse.x = x;
-	data->mouse.y = y;
-
-	if (keycode == MOUSE_UP)
+	if (keycode == MOUSE_LEFT)
+	{
+		data->mouse.is_pressed = 1;
+		data->mouse.x = x;
+		data->mouse.y = y;
+	}
+	else if (keycode == MOUSE_RIGHT)
+	{
+		data->mouse.is_pressed = 2;
+		data->mouse.x = x;
+		data->mouse.y = y;
+	}
+	else if (keycode == MOUSE_UP)
 		data->map.scale += 1;
-	else if (keycode == MOUSE_DOWN)
+	else if (keycode == MOUSE_DOWN && data->map.scale > 0)
 		data->map.scale -= 1;
-
 	draw(data->map, &data->img, data->mlx, data->win);
 	return (0);
 }
@@ -69,15 +75,22 @@ int mouse_press_hook(int keycode, int x, int y, t_client *data)
 int mouse_release_hook(int keycode, int x, int y, t_client *data)
 {
 	data->mouse.is_pressed = 0;
+	data->mouse.x = x;
+	data->mouse.y = y;
 	return (0);
 }
 
 int mouse_drag_hook(int x, int y, t_client *data)
 {
-	if (data->mouse.is_pressed)
+	if (data->mouse.is_pressed == 1)
 	{
-		data->map.angular.x = data->mouse.x - x;
-		data->map.angular.y = data->mouse.y - y;
+		data->map.angular.x = x - data->mouse.x;
+		data->map.angular.y = y - data->mouse.y;
+	}
+	else if (data->mouse.is_pressed == 2)
+	{
+		data->map.translate.x = x - data->mouse.x;
+		data->map.translate.y = y - data->mouse.y;
 	}
 	draw(data->map, &data->img, data->mlx, data->win);
 	return (0);
@@ -101,7 +114,7 @@ int main(int argc, char **argv)
 		fdf_error(ERR_ARGC);
 	init(&data);
 	init_map(&data.map);
-	load_map(argv[1], &data.map);
+	load_map(argv[1], &data);
 	mlx_hook(data.win, 2, 0, key_hook, &data);
 	mlx_hook(data.win, 4, 0, mouse_press_hook, &data);
 	mlx_hook(data.win, 5, 0, mouse_release_hook, &data);
