@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:28:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/20 17:15:26 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 20:00:37 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void pixel_put_to_image(t_img *img, int x_proj, int y_proj, int color)
 	*(unsigned int *)img_addr = color;
 }
 
-static int is_slope_bigger_than_one(t_point *first, t_point *last, int *minus)
+static int is_slope_bigger_than_one(t_point_proj *first, t_point_proj *last, int *minus)
 {
 	int	dx;
 	int	dy;
@@ -80,7 +80,7 @@ static int is_slope_bigger_than_one(t_point *first, t_point *last, int *minus)
 	return (0);
 }
 
-static int set_color(double *color, t_point first, t_point last)
+static int set_color(double *color, t_point_proj first, t_point_proj last)
 {
 	double step;
 
@@ -94,13 +94,13 @@ static int set_color(double *color, t_point first, t_point last)
 	return (first.color);
 }
 
-static void swap_point(t_point *first, t_point *last)
+static void swap_point(t_point_proj *first, t_point_proj *last)
 {
 	fdf_swap(&first->x_proj, &last->x_proj);
 	fdf_swap(&first->y_proj, &last->y_proj);
 	fdf_swap(&first->color, &last->color);
 }
-static void	init_line_info(t_point *first, t_point *last, t_line *l, double *color)
+static void	init_line_info(t_point_proj *first, t_point_proj *last, t_line *l, double *color)
 {
 	l->step = 0;
 	l->slope = 0;
@@ -120,7 +120,7 @@ static void	init_line_info(t_point *first, t_point *last, t_line *l, double *col
 	first->color = set_color(color, *first, *last);
 }
 
-static void	put_line_to_image(t_img *img, t_point first, t_point last)
+static void	put_line_to_image(t_img *img, t_point_proj first, t_point_proj last)
 {
 	t_line	l;
 	double	color[3];
@@ -173,7 +173,7 @@ static void draw_wireframe(t_map map, t_img *img)
 	}
 }
 
-void translate(t_point *point, int trans, size_t size)
+void translate(t_point_proj *point, int trans, size_t size)
 {
 	size_t	i;
 
@@ -187,7 +187,7 @@ void translate(t_point *point, int trans, size_t size)
 	}
 }
 
-void scale(t_point *point, int scale, size_t size)
+void scale(t_point_proj *point, int scale, size_t size)
 {
 	size_t	i;
 
@@ -201,7 +201,7 @@ void scale(t_point *point, int scale, size_t size)
 	}
 }
 
-static void rotate_yaw(t_point *copy, int deg, size_t size)
+static void rotate_yaw(t_point_proj *copy, int deg, size_t size)
 {
 	size_t	i;
 	double	cosine;
@@ -222,7 +222,7 @@ static void rotate_yaw(t_point *copy, int deg, size_t size)
 	}
 }
 
-static void rotate_pitch(t_point *copy, int deg, size_t size)
+static void rotate_pitch(t_point_proj *copy, int deg, size_t size)
 {
 	size_t	i;
 	double	cosine;
@@ -243,7 +243,7 @@ static void rotate_pitch(t_point *copy, int deg, size_t size)
 	}
 }
 
-static void rotate_roll(t_point *copy, int deg, size_t size)
+static void rotate_roll(t_point_proj *copy, int deg, size_t size)
 {
 	size_t	i;
 	double	cosine;
@@ -272,7 +272,7 @@ void rotate(t_map *map, size_t size)
 }
 
 
-static void map_copy(t_point *point, t_point *copy, size_t size)
+static void map_copy(t_point *point, t_point_proj *copy, size_t size)
 {
 	size_t	i;
 
@@ -296,7 +296,7 @@ static void	clean_img(t_img *img)
 		img_addr[i] = 0x00;
 }
 
-static void isometric_projection(t_point *copy, size_t size)
+static void isometric_projection(t_point_proj *copy, size_t size)
 {
 	size_t	i;
 	double	cosine;
@@ -315,6 +315,12 @@ static void isometric_projection(t_point *copy, size_t size)
 	}
 }
 
+static void	draw_gui(t_map map, t_img *img)
+{
+	
+}
+
+
 void draw(t_map map, t_img *img, void *mlx, void *win)
 {
 	size_t	size;
@@ -327,4 +333,5 @@ void draw(t_map map, t_img *img, void *mlx, void *win)
 	isometric_projection(map.copy, size);
 	draw_wireframe(map, img);
 	mlx_put_image_to_window(mlx, win, img->id, 0, 0);
+	draw_gui(map, img, win);
 }

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/20 17:08:44 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 19:09:24 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ static void	allocate_map(char *s, t_map *map)
 	map->point = malloc(sizeof(t_point) * size);
 	if (!map->point)
 		fdf_error(ERR_MLC);
-	map->copy = malloc(sizeof(t_point) * size);
+	map->copy = malloc(sizeof(t_point_proj) * size);
 	if (!map->copy)
 		fdf_error(ERR_MLC);
 	while (i < size)

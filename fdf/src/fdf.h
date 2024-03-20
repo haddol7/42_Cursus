@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/17 14:54:52 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 19:08:07 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,18 @@ typedef struct	s_point
 	int	x;
 	int y;
 	int z;
+	int	color;
+}	t_point;
+
+typedef struct	s_point_proj
+{
+	int	x;
+	int y;
+	int z;
 	int	x_proj;
 	int y_proj;
 	int	color;
-}	t_point;
+}	t_point_proj;
 
 typedef struct s_img
 {
@@ -85,13 +93,13 @@ typedef struct s_img
 
 typedef struct	s_map
 {
-	t_point	*point;
-	t_point *copy;
-	t_point	translate;
-	t_point angular;
-	size_t	scale;
-	size_t	col;
-	size_t	row;
+	t_point			*point;
+	t_point_proj	*copy;
+	t_point			translate;
+	t_point 		angular;
+	size_t			scale;
+	size_t			col;
+	size_t			row;
 }	t_map;
 
 typedef struct s_client
@@ -102,7 +110,7 @@ typedef struct s_client
 	t_img	img;
 }	t_client;
 
-void scale(t_point *point, int scale, size_t size);
+void scale(t_point_proj *point, int scale, size_t size);
 
 void	fdf_swap(int *a, int *b);
 void	fdf_error(char *s);

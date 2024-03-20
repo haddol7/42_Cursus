@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/20 17:06:45 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 18:45:56 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,9 @@ int main(int argc, char **argv)
 		fdf_error(ERR_ARGC);
 	init(&data);
 	load_map(argv[1], &data.map);
-	
+
+
+//	scale(data.map.point, 30, data.map.row * data.map.col);
 	data.map.scale = 1;
 	data.map.angular.x = 0;
 	data.map.angular.y = 0;
