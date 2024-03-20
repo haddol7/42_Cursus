@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/20 19:08:07 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 20:46:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,20 @@ typedef struct	s_map
 	size_t			row;
 }	t_map;
 
+typedef struct s_mouse
+{
+	int	is_pressed;
+	int	x;
+	int	y;
+}	t_mouse;
+
 typedef struct s_client
 {
 	void	*mlx;
 	void	*win;
 	t_map	map;
 	t_img	img;
+	t_mouse	mouse;
 }	t_client;
 
 void scale(t_point_proj *point, int scale, size_t size);
