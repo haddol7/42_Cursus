@@ -6,11 +6,44 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:28:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/17 15:57:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 17:15:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+typedef struct s_line
+{
+	int	slope;
+	int	sign;
+	int	step;
+}	 t_line;
+
+int get_red(int color)
+{
+	return ((color & 0xff0000) >> 16);
+}
+int get_green(int color)
+{
+	return ((color & 0x00ff00) >> 8);
+}
+int get_blue(int color)
+{
+	return (color & 0x0000ff);
+}
+
+int	get_color(double *color, int s_color, int i)
+{
+	int r;
+	int g;
+	int b;
+
+	r = get_red(s_color);
+	g = get_green(s_color);
+	b = get_blue(s_color);
+	s_color = ((int)(r + i * color[0]) << 16) | ((int)(g + i * color[1]) << 8) | (int)(b + i * color[2]);
+	return (s_color);
+}
 
 static void pixel_put_to_image(t_img *img, int x_proj, int y_proj, int color)
 {
@@ -47,36 +80,96 @@ static int is_slope_bigger_than_one(t_point *first, t_point *last, int *minus)
 	return (0);
 }
 
+static int set_color(double *color, t_point first, t_point last)
+{
+	double step;
+
+	if (abs(last.x_proj - first.x_proj) > abs(last.y_proj - first.y_proj))
+		step = abs(last.x_proj - first.x_proj);
+	else
+		step = abs(last.y_proj - first.y_proj);
+	color[0] = (get_red(last.color) - get_red(first.color)) / step;
+	color[1] = (get_green(last.color) - get_green(first.color)) / step;
+	color[2] = (get_blue(last.color) - get_blue(first.color)) / step;
+	return (first.color);
+}
+
+static void swap_point(t_point *first, t_point *last)
+{
+	fdf_swap(&first->x_proj, &last->x_proj);
+	fdf_swap(&first->y_proj, &last->y_proj);
+	fdf_swap(&first->color, &last->color);
+}
+static void	init_line_info(t_point *first, t_point *last, t_line *l, double *color)
+{
+	l->step = 0;
+	l->slope = 0;
+	l->sign = 1;
+	if (first->x_proj > last->x_proj)
+		swap_point(first, last);
+	if (first->y_proj > last->y_proj)
+		l->sign = -1;
+	if (abs(last->y_proj - first->y_proj) > last->x_proj - first->x_proj)
+	{
+		l->slope = 1;
+		fdf_swap(&first->x_proj, &first->y_proj);
+		fdf_swap(&last->x_proj, &last->y_proj);
+		if (first->x_proj > last->x_proj)
+			swap_point(first, last);
+	}
+	first->color = set_color(color, *first, *last);
+}
+
 static void	put_line_to_image(t_img *img, t_point first, t_point last)
 {
+	t_line	l;
+	double	color[3];
 	int	dx;
 	int	dy;
-	int	is_swap;
 	int	p;
-	int	minus;
 
-	is_swap = is_slope_bigger_than_one(&first, &last, &minus);
-	dx = abs(first.x_proj - last.x_proj);
-	dy = abs(first.y_proj - last.y_proj);
-	p = (2 * dy - dx) * minus;
-	if (first.x_proj >= last.x_proj)
+	init_line_info(&first, &last, &l, color);
+	dx = last.x_proj - first.x_proj;
+	dy = (last.y_proj - first.y_proj) * l.sign;
+	p = 2 * dy - dx;
+	while (first.x_proj <= last.x_proj)
 	{
-		fdf_swap(&first.x_proj, &last.x_proj);
-		fdf_swap(&first.y_proj, &last.y_proj);
-	}
-	while (first.x_proj++ < last.x_proj)
-	{
-		if (is_swap)
-			pixel_put_to_image(img, first.y_proj, first.x_proj, 0xffffff);
+		if (l.slope == 0)
+			pixel_put_to_image(img, first.x_proj, first.y_proj, get_color(color, first.color, ++l.step));
 		else
-			pixel_put_to_image(img, first.x_proj, first.y_proj, 0xffffff);
-		if (p * minus >= 0)
+			pixel_put_to_image(img, first.y_proj, first.x_proj, get_color(color, first.color, ++l.step));
+		if (p >= 0)
 		{
-			p += (2 * dy - 2 * dx) * minus;
-			first.y_proj += 1 * minus;
+			p += 2 * (dy - dx);
+			first.y_proj += 1 * l.sign;
 		}
 		else
-			p += 2 * dy * minus;
+			p += 2 * dy;
+		first.x_proj++;
+	}
+}
+
+static void draw_wireframe(t_map map, t_img *img)
+{
+	size_t	i;
+	size_t	row;
+	size_t	col;
+
+	i = 0;
+	row = 0;	
+	while (row < map.row)
+	{
+		col = 0;
+		while (col < map.col)
+		{
+			if (col + 1 < map.col)
+				put_line_to_image(img, map.copy[i], map.copy[i + 1]);
+			if (row + 1 < map.row)
+				put_line_to_image(img, map.copy[i], map.copy[i + map.col]);
+			i++;
+			col++;
+		}
+		row++;
 	}
 }
 
@@ -103,11 +196,12 @@ void scale(t_point *point, int scale, size_t size)
 	{
 		point[i].x *= scale;
 		point[i].y *= scale;
+		point[i].z *= scale;
 		i++;
 	}
 }
 
-void rotate_yaw(t_point *copy, int deg, size_t size)
+static void rotate_yaw(t_point *copy, int deg, size_t size)
 {
 	size_t	i;
 	double	cosine;
@@ -128,7 +222,7 @@ void rotate_yaw(t_point *copy, int deg, size_t size)
 	}
 }
 
-void rotate_pitch(t_point *copy, int deg, size_t size)
+static void rotate_pitch(t_point *copy, int deg, size_t size)
 {
 	size_t	i;
 	double	cosine;
@@ -149,7 +243,7 @@ void rotate_pitch(t_point *copy, int deg, size_t size)
 	}
 }
 
-void rotate_roll(t_point *copy, int deg, size_t size)
+static void rotate_roll(t_point *copy, int deg, size_t size)
 {
 	size_t	i;
 	double	cosine;
@@ -170,46 +264,13 @@ void rotate_roll(t_point *copy, int deg, size_t size)
 	}
 }
 
-/*
-void rotate(t_map *map, size_t size)
-{
-	size_t	i;
-	double	rad[3];
-	int		temp[3];
-
-	i = 0;
-	rad[G] = map->angular.x * (3.141592) / 180;
-	rad[B] = map->angular.y * (3.141592) / 180;
-	rad[A] = map->angular.z * (3.141592) / 180;
-
-	ft_printf("%d %d %d\n", map->angular.x, map->angular.y, map->angular.z);
-	while (i < size)
-	{
-		temp[X] = map->copy[i].x;
-		temp[Y] = map->copy[i].y;
-		temp[Z] = map->copy[i].z;
-		map->copy[i].x = temp[X] * (cos(rad[A]) * cos(rad[B])) + \
-					temp[Y] * (sin(rad[A]) * cos(rad[B])) - \
-					temp[Z] * (sin(rad[B]));
-		
-		map->copy[i].y = temp[X] * (cos(rad[A]) * sin(rad[B]) * sin(rad[G]) - sin(A) * cos(G)) + \
-					temp[Y] * (sin(rad[A]) * sin(rad[B]) * sin(rad[G]) + cos(A) * cos(G)) + \
-					temp[Z] * (cos(rad[B]) * sin(rad[G]));
-
-		map->copy[i].z = temp[X] * (cos(rad[A]) * sin(rad[B]) * cos(rad[G]) + sin(A) * sin(G)) + \
-					temp[Y] * (cos(rad[A]) * sin(rad[B]) * sin(rad[G]) - sin(A) * cos(G)) + \
-					temp[Z] * (cos(rad[A]) * sin(rad[B])); 
-		i++;
-	}
-}
-*/
-
 void rotate(t_map *map, size_t size)
 {
 	rotate_roll(map->copy, map->angular.y, size);
 	rotate_pitch(map->copy, map->angular.x, size);
 	rotate_yaw(map->copy, map->angular.z, size);
 }
+
 
 static void map_copy(t_point *point, t_point *copy, size_t size)
 {
@@ -221,6 +282,7 @@ static void map_copy(t_point *point, t_point *copy, size_t size)
 		copy[i].x = point[i].x;
 		copy[i].y = point[i].y;
 		copy[i].z = point[i].z;
+		copy[i].color = point[i].color;		
 		i++;
 	}
 }
@@ -253,30 +315,6 @@ static void isometric_projection(t_point *copy, size_t size)
 	}
 }
 
-static void draw_wireframe(t_map map, t_img *img)
-{
-	size_t	i;
-	size_t	row;
-	size_t	col;
-
-	i = 0;
-	row = 0;	
-	while (row < map.row)
-	{
-		col = 0;
-		while (col < map.col)
-		{
-			if (col + 1 < map.col)
-				put_line_to_image(img, map.copy[i], map.copy[i + 1]);
-			if (row + 1 < map.row)
-				put_line_to_image(img, map.copy[i], map.copy[i + map.col]);
-			i++;
-			col++;
-		}
-		row++;
-	}
-}
-
 void draw(t_map map, t_img *img, void *mlx, void *win)
 {
 	size_t	size;
@@ -284,8 +322,9 @@ void draw(t_map map, t_img *img, void *mlx, void *win)
 	size = map.row * map.col;
 	clean_img(img);
 	map_copy(map.point, map.copy, size);
+	scale(map.copy, map.scale, size);
 	rotate(&map, size);
 	isometric_projection(map.copy, size);
 	draw_wireframe(map, img);
-	mlx_put_image_to_window(mlx, win, img->id, map.translate.x, map.translate.y);
+	mlx_put_image_to_window(mlx, win, img->id, 0, 0);
 }

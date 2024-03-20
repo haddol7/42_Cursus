@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/17 16:00:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 17:06:45 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int key_hook(int keycode, t_client *data)
 		data->map.angular.x = 0;
 		data->map.angular.y = 0;
 		data->map.angular.z = 0;
+		data->map.scale = 30;
 	}
 	draw(data->map, &data->img, data->mlx, data->win);
 	return (0);
@@ -53,9 +54,9 @@ int key_hook(int keycode, t_client *data)
 int mouse_hook(int keycode, int x, int y, t_client *data)
 {
 	if (keycode == MOUSE_UP)
-		data->map.scale += 0.5;
+		data->map.scale += 1;
 	else if (keycode == MOUSE_DOWN)
-		data->map.scale -= 0.5;
+		data->map.scale -= 1;
 	// else if (keycode == MOUSE_RIGHT)
 	// else if (keycode == MOUSE_)
 	draw(data->map, &data->img, data->mlx, data->win);
@@ -70,9 +71,8 @@ int main(int argc, char **argv)
 		fdf_error(ERR_ARGC);
 	init(&data);
 	load_map(argv[1], &data.map);
-
-
-	scale(data.map.point, 30, data.map.row * data.map.col);
+	
+	data.map.scale = 1;
 	data.map.angular.x = 0;
 	data.map.angular.y = 0;
 	data.map.angular.z = 0;
@@ -80,7 +80,7 @@ int main(int argc, char **argv)
 	data.map.translate.y = 0;
 
 	mlx_hook(data.win, 2, 0, key_hook, &data);
-//	mlx_hook(data.win, 4, 0, mouse_hook, &data);
+	mlx_hook(data.win, 4, 0, mouse_hook, &data);
 	
 	mlx_loop(data.mlx);
 	return (0);

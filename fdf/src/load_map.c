@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/16 21:22:57 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/20 17:08:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,27 +197,3 @@ static void	allocate_map(char *s, t_map *map)
 		i++;
 	}
 }
-/*
-int main(int argc, char **argv)
-{
-	t_map	map;
-	size_t		i;
-	
-	if (argc != 2)
-		return (0);
-	
-	load_map(argv[1], &map);
-	i = 0;
-	
-	for (size_t y = 0; y < map.row; y++)
-	{
-		for (size_t x = 0; x < map.col; x++)
-		{
-			ft_printf("%d ", map.point[i].z);
-			i++;
-		}
-		ft_printf("\n");
-	}
-	free(map.point);
-}
-*/
