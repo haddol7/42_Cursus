@@ -18,7 +18,7 @@ MLXFLAGS := -L$(MLX_DIR) -framework OpenGL -framework AppKit
 
 HEADER  := -I$(PRINTF_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
-SRC_FILES =	load_map utils
+SRC_FILES =	color line_draw main map_conv map_draw map_load_utils map_load utils key_control
 
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
 DEPS = $(addprefix $(OBJ_DIR), $(addsuffix .d, $(SRC_FILES)))
