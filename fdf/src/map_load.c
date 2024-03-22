@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 15:54:27 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/22 16:40:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,8 @@ void	load_map(char *dir, t_client *data)
 	content = read_map_as_one_line(fd);
 	check_map_size(content, &data->map);
 	allocate_map(content, &data->map);
-	set_scale(&data->map);
 	free(content);
-	close(fd);
+	set_scale(&data->map);
 	draw(data->map, &data->img, data->mlx, data->win);
 }
 
@@ -75,6 +74,7 @@ static char	*read_map_as_one_line(int fd)
 		temp = res;
 		read_size = read(fd, buffer, FDF_BUFFER_SIZE);
 	}
+	close(fd);
 	return (res);
 }
 
@@ -102,6 +102,8 @@ static void	check_map_size(char *s, t_map *map)
 		s++;
 	}
 	map->row = y;
+	if (map->row * map->col == 0)
+		fdf_error(ERR_M_EMPT);
 }
 
 static void	allocate_map(char *s, t_map *map)

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 15:51:08 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/22 18:48:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,29 @@
 # define WINDOW_X_SIZE (1920)
 # define WINDOW_Y_SIZE (1080)
 # define FDF_BUFFER_SIZE	(50000)
-# define ERR_MLX "❌ MLX error ❌"
-# define ERR_ARGC "❌ Input error - argument size is not one ❌"
-# define ERR_MLC "❌ System call error - malloc() ❌"
-# define ERR_OPN "❌ System call error - open() ❌"
-# define ERR_RD "❌ System call error - read() ❌"
-# define ERR_M_SIZE "❌ Input error - format is not rectangular ❌"
-# define ERR_M_VAL "❌ Input error - file has invalid value ❌"
+
+# define ERR_MLX	"❌ MLX error ❌"
+# define ERR_ARGC 	"❌ Input error - argument size is not one ❌"
+# define ERR_MLC 	"❌ System call error - malloc() ❌"
+# define ERR_OPN 	"❌ System call error - open() ❌"
+# define ERR_RD 	"❌ System call error - read() ❌"
+# define ERR_M_SIZE	"❌ Input error - format is not rectangular ❌"
+# define ERR_M_EMPT	"❌ Input error - file is empty ❌"
+# define ERR_M_VAL	"❌ Input error - file has invalid value ❌"
+
 # define X_EVENT_KEY_PRESS		2
 # define X_EVENT_KEY_RELEASE	3
 # define X_EVENT_KEY_EXIT		17
 
-# define KEY_ESC			53
-# define KEY_Q			12
-# define KEY_W			13
-# define KEY_E			14
-# define KEY_R			15
-# define KEY_A			0
-# define KEY_S			1
-# define KEY_D			2
-# define KEY_C			8
+# define KEY_ESC	53
+# define KEY_Q		12
+# define KEY_W		13
+# define KEY_E		14
+# define KEY_R		15
+# define KEY_A		0
+# define KEY_S		1
+# define KEY_D		2
+# define KEY_C		8
 
 # define MOUSE_LEFT		1
 # define MOUSE_RIGHT	2
@@ -94,6 +97,9 @@ typedef struct s_map
 	double			scale;
 	size_t			col;
 	size_t			row;
+	int				mouse_x;
+	int				mouse_y;
+	int				mouse_info;
 }	t_map;
 
 typedef struct s_line
@@ -131,22 +137,23 @@ void	put_line_to_image(t_img *img, t_proj first, t_proj last);
 void	load_map(char *dir, t_client *data);
 
 //map_load_utils.c
+void	init_map(t_map *map);
 int		check_map_value(char **s, int *color);
 int		check_map_color(char **s);
 
 //map_conv.c
-void	translate(t_proj *point, t_point trans, size_t size);
+void	translate(t_map *map, size_t size);
 void	rotate(t_map *map, size_t size);
 
 //map_draw.c
 void	draw(t_map map, t_img *img, void *mlx, void *win);
 
 //utils.c
-void	fdf_swap(int *a, int *b);
+int		terminate(void *data_addr);
 void	swap_point(t_proj *first, t_proj *last);
+void	fdf_swap(int *a, int *b);
 void	fdf_error(char *msg);
 int		fdf_isspace(char ch);
-void	init_map(t_map *map);
 
 //key_control.c
 int		key_hook(int keycode, t_client *data);

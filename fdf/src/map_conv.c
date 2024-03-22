@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:47:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 15:52:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/22 18:55:40 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,45 @@ static void	rotate_roll(t_proj *copy, int deg, size_t size);
 
 void	rotate(t_map *map, size_t size)
 {
-	rotate_roll(map->copy, map->angular.y, size);
-	rotate_pitch(map->copy, map->angular.x, size);
+	int	angle_x;
+	int	angle_y;
+
+	if (map->mouse_info == 1)
+	{
+		angle_x = map->angular.x + map->mouse_x;
+		angle_y = map->angular.y + map->mouse_y;
+	}
+	else
+	{
+		angle_x = map->angular.x;
+		angle_y = map->angular.y;
+	}
+	rotate_pitch(map->copy, angle_x, size);
+	rotate_roll(map->copy, angle_y, size);
 	rotate_yaw(map->copy, map->angular.z, size);
 }
 
-void	translate(t_proj *point, t_point trans, size_t size)
+void	translate(t_map *map, size_t size)
 {
 	size_t	i;
+	int		translate_x;
+	int		translate_y;
 
 	i = 0;
+	if (map->mouse_info == 2)
+	{
+		translate_x = map->translate.x + map->mouse_x;
+		translate_y = map->translate.y + map->mouse_y;
+	}
+	else
+	{
+		translate_x = map->translate.x;
+		translate_y = map->translate.y;
+	}
 	while (i < size)
 	{
-		point[i].x_proj += trans.x;
-		point[i].y_proj += trans.y;
+		map->copy[i].x_proj += translate_x;
+		map->copy[i].y_proj += translate_y;
 		i++;
 	}
 }

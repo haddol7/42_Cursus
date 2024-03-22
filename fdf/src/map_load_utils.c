@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:31:32 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 15:49:03 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/22 18:32:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	init_map(t_map *map)
 	map->angular.x = 0;
 	map->angular.y = 0;
 	map->angular.z = 0;
+	map->mouse_x = 0;
+	map->mouse_y = 0;
 }
 
 int	check_map_value(char **s, int *color)

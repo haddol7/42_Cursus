@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:28:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 15:53:36 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/22 18:43:33 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	draw(t_map map, t_img *img, void *mlx, void *win)
 	copy_scale(map.point, map.copy, map.scale, size);
 	rotate(&map, size);
 	isometric_projection(map.copy, size);
-	translate(map.copy, map.translate, size);
+	translate(&map, size);
 	draw_wireframe(map, img);
 	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, img->id);
 	mlx_put_image_to_window(mlx, win, img->id, 0, 0);
