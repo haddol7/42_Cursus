@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/20 23:15:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/22 15:21:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,13 @@ typedef struct	s_map
 	size_t			row;
 }	t_map;
 
+typedef struct s_line
+{
+	int	slope;
+	int	sign;
+	int	step;
+}	 t_line;
+
 typedef struct s_mouse
 {
 	int	is_pressed;
@@ -118,11 +125,32 @@ typedef struct s_client
 	t_mouse	mouse;
 }	t_client;
 
-void scale(t_point_proj *point, int scale, size_t size);
+//color.c
+int 	get_red(int color);
+int 	get_green(int color);
+int 	get_blue(int color);
 
-void	fdf_swap(int *a, int *b);
-void	fdf_error(char *s);
+//line_draw.c
+void	put_line_to_image(t_img *img, t_point_proj first, t_point_proj last);
+
+//map_load.c
+void	load_map(char *dir, t_client *data);
+
+//map_load_utils.c
+int		check_map_value(char **s, int *color);
+int		check_map_color(char **s);
+
+//map_conv.c
+void 	translate(t_point_proj *point, t_point trans, size_t size);
+void 	rotate(t_map *map, size_t size);
+
+//map_draw.c
+void 	draw(t_map map, t_img *img, void *mlx, void *win);
+
+//utils.c
+void 	fdf_swap(int *a, int *b);
+void 	swap_point(t_point_proj *first, t_point_proj *last);
+void	fdf_error(char *msg);
 int		fdf_isspace(char ch);
-void	load_map(char *dir, t_client *map);
-void	draw(t_map map, t_img *img, void *mlx, void *win);
+
 #endif

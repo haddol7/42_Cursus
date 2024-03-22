@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   load_map.c                                         :+:      :+:    :+:   */
+/*   map_load.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/20 23:19:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/22 14:52:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 
 static char	*read_map_as_one_line(int fd);
 static void	check_map_size(char *content, t_map *map);
-static int	check_map_value(char **content, int *color);
 static void	allocate_map(char *content, t_map *map);
-static int	check_map_color(char **s);
+static void	set_scale(t_map *map);
 
 /*
 load_map(char *content, t_map *map)
@@ -44,35 +43,6 @@ errors
 2. map file format error
 */
 
-static void	set_scale(t_map *map)
-{
-	size_t	i;
-	size_t	size;
-	int		z_max;
-	
-	i = 0;
-	z_max = -2147483648;
-	size = map->col * map->row;
-	if (map->col > map->row)
-		map->scale = WINDOW_X_SIZE / (double)map->col;
-	else
-		map->scale = WINDOW_Y_SIZE / (double)map->row;
-	if (map->scale < 0)
-		map->scale = 0.1;
-	while (i < size)
-	{	
-		if (z_max < map->point[i].z)
-			z_max = map->point[i].z;
-		i++;
-	}
-	i = 0;
-	while (i < size)
-	{
-		map->point[i].z *= map->scale;
-		i++;
-	}
-}
-
 void	load_map(char *dir, t_client *data)
 {
 	int		fd;
@@ -84,13 +54,12 @@ void	load_map(char *dir, t_client *data)
 	content = read_map_as_one_line(fd);
 	check_map_size(content, &data->map);
 	allocate_map(content, &data->map);
+	set_scale(&data->map);
 	free(content);
 	close(fd);
-	set_scale(&data->map);
 	draw(data->map, &data->img, data->mlx, data->win);
 }
 
-//WARNING : FDF_BUFFER_SIZE must not exceed size of stack of memory
 static char	*read_map_as_one_line(int fd)
 {
 	int		read_size;
@@ -144,63 +113,6 @@ static void	check_map_size(char *s, t_map *map)
 	map->row = y;
 }
 
-static int	check_map_value(char **s, int *color)
-{
-	int				sign;
-	long			res;
-	int				i;
-
-	i = 0;
-	res = 0;
-	sign = 1;
-	if (**s == '-' || **s == ' ')
-	{
-		if (**s == '-')
-			sign = -1;
-		(*s)++;
-	}
-	while (ft_isdigit(**s))
-	{
-		res *= 10;
-		res += (**s) - '0';
-		(*s)++;
-	}
-	*color = 0xffffff;
-	if (!ft_strncmp(*s, ",0x", 3) || !ft_strncmp(*s, ",0X", 3))
-		*color = check_map_color(s);
-	else if (!fdf_isspace(**s))
-		fdf_error(ERR_M_VAL);
-	return (res * sign);
-}
-
-static int	check_map_color(char **s)
-{
-	size_t	i;
-	int		color;
-
-	color = 0x0;
-	*s += 3;
-	while (ft_isdigit(**s) || \
-	(**s >= 'A' && **s <= 'F') || (**s >= 'a' && **s <= 'f'))
-	{
-		i = 0;
-		if (**s >= 'a' && **s <= 'f')
-			i = 10 + **s - 'a';
-		else if (**s >= 'A' && **s <= 'F')
-			i = 10 + **s - 'A';
-		else
-			i = **s - '0';
-		color *= 16;
-		color += i;
-		(*s)++;
-	}
-	if (!fdf_isspace(**s))
-		fdf_error(ERR_M_VAL);
-	if (color == 0x0)
-		return (0xffffff);
-	return (color);
-}
-
 static void	allocate_map(char *s, t_map *map)
 {
 	size_t			size;
@@ -225,6 +137,35 @@ static void	allocate_map(char *s, t_map *map)
 		map->point[i].x = i % map->col - map->col / 2;
 		map->point[i].y = i / map->col - map->row / 2;
 		map->point[i].z = check_map_value(&s, &map->point[i].color);
+		i++;
+	}
+}
+
+static void	set_scale(t_map *map)
+{
+	size_t	i;
+	size_t	size;
+	int		z_max;
+	
+	i = 0;
+	z_max = -2147483648;
+	size = map->col * map->row;
+	if (map->col > map->row)
+		map->scale = WINDOW_X_SIZE / (double)map->col;
+	else
+		map->scale = WINDOW_Y_SIZE / (double)map->row;
+	if (map->scale < 0)
+		map->scale = 0.1;
+	while (i < size)
+	{	
+		if (z_max < map->point[i].z)
+			z_max = map->point[i].z;
+		i++;
+	}
+	i = 0;
+	while (i < size)
+	{
+		map->point[i].z *= map->scale * 10 / z_max;
 		i++;
 	}
 }

@@ -6,11 +6,35 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/20 23:23:32 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/22 15:21:32 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+void	init(t_client *data);
+int 	key_hook(int keycode, t_client *data);
+int 	mouse_press_hook(int keycode, int x, int y, t_client *data);
+int		mouse_release_hook(int keycode, int x, int y, t_client *data);
+int 	mouse_drag_hook(int x, int y, t_client *data);
+void	init_map(t_map *map);
+
+int main(int argc, char **argv)
+{
+	t_client	data;
+
+	if (argc != 2)
+		fdf_error(ERR_ARGC);
+	init(&data);
+	init_map(&data.map);
+	load_map(argv[1], &data);
+	mlx_hook(data.win, 2, 0, key_hook, &data);
+	mlx_hook(data.win, 4, 0, mouse_press_hook, &data);
+	mlx_hook(data.win, 5, 0, mouse_release_hook, &data);
+	mlx_hook(data.win, 6, 0, mouse_drag_hook, &data);
+	mlx_loop(data.mlx);
+	return (0);
+}
 
 void	init(t_client *data)
 {
@@ -110,21 +134,4 @@ void	init_map(t_map *map)
 	map->angular.x = 0;
 	map->angular.y = 0;
 	map->angular.z = 0;
-}
-
-int main(int argc, char **argv)
-{
-	t_client	data;
-
-	if (argc != 2)
-		fdf_error(ERR_ARGC);
-	init(&data);
-	init_map(&data.map);
-	load_map(argv[1], &data);
-	mlx_hook(data.win, 2, 0, key_hook, &data);
-	mlx_hook(data.win, 4, 0, mouse_press_hook, &data);
-	mlx_hook(data.win, 5, 0, mouse_release_hook, &data);
-	mlx_hook(data.win, 6, 0, mouse_drag_hook, &data);
-	mlx_loop(data.mlx);
-	return (0);
 }
