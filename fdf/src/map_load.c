@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 16:40:51 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/23 00:14:08 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ void	load_map(char *dir, t_client *data)
 	content = read_map_as_one_line(fd);
 	check_map_size(content, &data->map);
 	allocate_map(content, &data->map);
-	free(content);
 	set_scale(&data->map);
 	draw(data->map, &data->img, data->mlx, data->win);
+	free(content);
 }
 
 static char	*read_map_as_one_line(int fd)
@@ -134,14 +134,27 @@ static void	allocate_map(char *s, t_map *map)
 	}
 }
 
+void	set_default_color(int *z_color, int z)
+{
+	double	color[3];
+
+	color[0] = (get_red(Z_MAX_COLOR) - get_red(Z_MIN_COLOR)) / Z_MAX_VAL - Z_MIN_VAL;
+	color[1] = (get_green(Z_MAX_COLOR) - get_green(Z_MIN_COLOR)) / Z_MAX_VAL - Z_MIN_VAL;
+	color[2] = (get_blue(Z_MAX_COLOR) - get_blue(Z_MIN_COLOR)) / Z_MAX_VAL - Z_MIN_VAL;
+	z += 5;
+	*z_color = ((int)(Z_MIN_COLOR + z * color[0]) << 16 | (int)(Z_MIN_COLOR + z * color[1]) << 8 | (int)(Z_MIN_COLOR + z * color[2]));
+}
+
 static void	set_scale(t_map *map)
 {
 	size_t	i;
 	size_t	size;
+	int		z_min;
 	int		z_max;
 
 	i = 0;
-	z_max = -2147483648;
+	z_max = 1;
+	z_min = -1;
 	size = map->col * map->row;
 	if (map->col > map->row)
 		map->scale = WINDOW_X_SIZE / (double)map->col;
@@ -153,12 +166,19 @@ static void	set_scale(t_map *map)
 	{	
 		if (z_max < map->point[i].z)
 			z_max = map->point[i].z;
+		else if (z_min > map->point[i].z)
+			z_min = map->point[i].z;
 		i++;
 	}
 	i = 0;
 	while (i < size)
 	{
-		map->point[i].z *= map->scale * 10 / z_max;
+		if (map->point[i].z >= 0)
+			map->point[i].z *= Z_MAX_VAL / (double)z_max;
+		else
+			map->point[i].z *= Z_MIN_VAL / (double)z_min;
+		if (map->point[i].color == NONE)
+			set_default_color(&map->point[i].color, map->point[i].z);
 		i++;
 	}
 }

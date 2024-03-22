@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 18:48:42 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/23 00:14:17 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@
 # include "mlx.h"
 # include "ft_printf.h"
 # include "libft.h"
+
+# define NONE (-1)
+
+# define Z_MAX_VAL (30)
+# define Z_MIN_VAL (-30)
+# define Z_MAX_COLOR (0xC2294E)
+# define Z_MIN_COLOR (0xF3AF3D)
 
 # define WINDOW_X_SIZE (1920)
 # define WINDOW_Y_SIZE (1080)

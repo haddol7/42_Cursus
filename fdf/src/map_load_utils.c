@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:31:32 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 18:32:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/22 23:51:40 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	check_map_value(char **s, int *color)
 		res += (**s) - '0';
 		(*s)++;
 	}
-	*color = 0xffffff;
+	*color = NONE;
 	if (!ft_strncmp(*s, ",0x", 3) || !ft_strncmp(*s, ",0X", 3))
 		*color = check_map_color(s);
 	else if (!fdf_isspace(**s))
@@ -77,6 +77,6 @@ int	check_map_color(char **s)
 	if (!fdf_isspace(**s))
 		fdf_error(ERR_M_VAL);
 	if (color == 0x0)
-		return (0xffffff);
+		return (NONE);
 	return (color);
 }

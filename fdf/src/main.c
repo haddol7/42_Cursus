@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 17:54:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/22 20:45:58 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(int argc, char **argv)
 {
 	t_client	data;
 
-//	atexit(leak);
+	atexit(leak);
 	if (argc != 2)
 		fdf_error(ERR_ARGC);
 	init(&data);
