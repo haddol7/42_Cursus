@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 14:52:09 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/22 15:54:27 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,21 @@ static void	check_map_size(char *content, t_map *map);
 static void	allocate_map(char *content, t_map *map);
 static void	set_scale(t_map *map);
 
-/*
-load_map(char *content, t_map *map)
-
-	call read_map function to read .fdf files.
-	
-	when a file is given below,
-	1	2	3
-	4	5	6
-	7	8	9
-	
-	map.point is initialized like
-	map.point[0].x = 0 | map.point[0].y = 0 | map.point[0].z = 1
-	map.point[1].x = 1 | map.point[1].y = 0 | map.point[1].z = 2
-	map.point[2].x = 2 | map.point[2].y = 0 | map.point[2].z = 3
-	...
-
-	and map.col and map.row are initialized by 3.
-
-Subject consider all given map files as well formatted. But function should handle
-errors
-
-1. system-call function error
-2. map file format error
-*/
+// load_map(char *content, t_map *map)
+//
+// 	call read_map function to read .fdf files.
+// 	when a file is given below,
+// 	1	2	3
+// 	4	5	6
+// 	7	8	9
+// 	map.point is initialized like
+// 	map.point[0].x = 0 | map.point[0].y = 0 | map.point[0].z = 1
+// 	map.point[1].x = 1 | map.point[1].y = 0 | map.point[1].z = 2
+// 	map.point[2].x = 2 | map.point[2].y = 0 | map.point[2].z = 3
+// 	
+// 	and map.col and map.row are initialized by 3.
+// 1. system-call function error
+// 2. map file format error
 
 void	load_map(char *dir, t_client *data)
 {
@@ -123,7 +114,7 @@ static void	allocate_map(char *s, t_map *map)
 	map->point = malloc(sizeof(t_point) * size);
 	if (!map->point)
 		fdf_error(ERR_MLC);
-	map->copy = malloc(sizeof(t_point_proj) * size);
+	map->copy = malloc(sizeof(t_proj) * size);
 	if (!map->copy)
 		fdf_error(ERR_MLC);
 	while (i < size)
@@ -146,7 +137,7 @@ static void	set_scale(t_map *map)
 	size_t	i;
 	size_t	size;
 	int		z_max;
-	
+
 	i = 0;
 	z_max = -2147483648;
 	size = map->col * map->row;

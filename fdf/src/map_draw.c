@@ -6,21 +6,21 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:28:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 15:23:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/22 15:53:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
 static void	clean_img(t_img *img);
-static void draw_wireframe(t_map map, t_img *img);
-static void copy_scale(t_point *point, t_point_proj *copy, double scale, size_t size);
-static void isometric_projection(t_point_proj *copy, size_t size);
+static void	draw_wireframe(t_map map, t_img *img);
+static void	copy_scale(t_point *point, t_proj *copy, double scale, size_t size);
+static void	isometric_projection(t_proj *copy, size_t size);
 
-void draw(t_map map, t_img *img, void *mlx, void *win)
+void	draw(t_map map, t_img *img, void *mlx, void *win)
 {
 	size_t	size;
-	
+
 	size = map.row * map.col;
 	clean_img(img);
 	copy_scale(map.point, map.copy, map.scale, size);
@@ -35,21 +35,26 @@ void draw(t_map map, t_img *img, void *mlx, void *win)
 
 static void	clean_img(t_img *img)
 {
-	int *img_addr;
+	size_t	i;
+	int		*img_addr;
 
+	i = 0;
 	img_addr = (int *)img->addr;
-	for (int i = 0; i < WINDOW_X_SIZE * WINDOW_Y_SIZE; i++)
+	while (i < WINDOW_X_SIZE * WINDOW_Y_SIZE)
+	{
 		img_addr[i] = 0x00;
+		i++;
+	}
 }
 
-static void draw_wireframe(t_map map, t_img *img)
+static void	draw_wireframe(t_map map, t_img *img)
 {
 	size_t	i;
 	size_t	row;
 	size_t	col;
 
 	i = 0;
-	row = 0;	
+	row = 0;
 	while (row < map.row)
 	{
 		col = 0;
@@ -66,7 +71,7 @@ static void draw_wireframe(t_map map, t_img *img)
 	}
 }
 
-static void copy_scale(t_point *point, t_point_proj *copy, double scale, size_t size)
+static void	copy_scale(t_point *point, t_proj *copy, double scale, size_t size)
 {
 	size_t	i;
 
@@ -76,12 +81,12 @@ static void copy_scale(t_point *point, t_point_proj *copy, double scale, size_t 
 		copy[i].x = point[i].x * scale;
 		copy[i].y = point[i].y * scale;
 		copy[i].z = point[i].z * scale;
-		copy[i].color = point[i].color;	
+		copy[i].color = point[i].color;
 		i++;
 	}
 }
 
-static void isometric_projection(t_point_proj *copy, size_t size)
+static void	isometric_projection(t_proj *copy, size_t size)
 {
 	size_t	i;
 	double	cosine;

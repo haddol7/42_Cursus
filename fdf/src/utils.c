@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 14:26:24 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 14:52:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/22 15:55:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 #include <stdio.h>
 #include "fdf.h"
 
-void fdf_swap(int *a, int *b)
+void	fdf_swap(int *a, int *b)
 {
-	int tmp;
+	int	tmp;
 
 	tmp = *a;
 	*a = *b;
 	*b = tmp;
 }
 
-void swap_point(t_point_proj *first, t_point_proj *last)
+void	swap_point(t_proj *first, t_proj *last)
 {
 	fdf_swap(&first->x_proj, &last->x_proj);
 	fdf_swap(&first->y_proj, &last->y_proj);
@@ -39,12 +39,9 @@ void	fdf_error(char *msg)
 	exit(1);
 }
 
-int		fdf_isspace(char ch)
+int	fdf_isspace(char ch)
 {
 	if (ch == ' ' || ch == '\n' || ch == '\0')
 		return (TRUE);
 	return (FALSE);
 }
-
-
-
