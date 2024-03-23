@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/23 00:14:17 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/23 22:01:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,14 @@
 
 # define NONE (-1)
 
-# define Z_MAX_VAL (30)
-# define Z_MIN_VAL (-30)
-# define Z_MAX_COLOR (0xC2294E)
-# define Z_MIN_COLOR (0xF3AF3D)
+# define Z_MAX_VAL (20)
+# define Z_MIN_VAL (-20)
 
-# define WINDOW_X_SIZE (1920)
+# define GROUND (0xD9823C)
+# define MOUNTAIN (0x4B774E)
+# define OCEAN (0x0077BE)
+
+# define WINDOW_X_SIZE (1980)
 # define WINDOW_Y_SIZE (1080)
 # define FDF_BUFFER_SIZE	(50000)
 
@@ -53,6 +55,9 @@
 # define KEY_S		1
 # define KEY_D		2
 # define KEY_C		8
+
+# define KEY_P		35
+# define KEY_I		34
 
 # define MOUSE_LEFT		1
 # define MOUSE_RIGHT	2
@@ -106,7 +111,7 @@ typedef struct s_map
 	size_t			row;
 	int				mouse_x;
 	int				mouse_y;
-	int				mouse_info;
+	int				input;
 }	t_map;
 
 typedef struct s_line

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 20:28:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 20:42:43 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/23 21:24:40 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	clean_img(t_img *img);
 static void	draw_wireframe(t_map map, t_img *img);
 static void	copy_scale(t_point *point, t_proj *copy, double scale, size_t size);
-static void	isometric_projection(t_proj *copy, size_t size);
+static void	ortho_projection(t_proj *copy, size_t size, int input);
 
 void	draw(t_map map, t_img *img, void *mlx, void *win)
 {
@@ -25,7 +25,7 @@ void	draw(t_map map, t_img *img, void *mlx, void *win)
 	clean_img(img);
 	copy_scale(map.point, map.copy, map.scale, size);
 	rotate(&map, size);
-	isometric_projection(map.copy, size);
+	ortho_projection(map.copy, size, map.input);
 	translate(&map, size);
 	draw_wireframe(map, img);
 	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, img->id);
@@ -86,7 +86,7 @@ static void	copy_scale(t_point *point, t_proj *copy, double scale, size_t size)
 	}
 }
 
-static void	isometric_projection(t_proj *copy, size_t size)
+static void	ortho_projection(t_proj *copy, size_t size, int input)
 {
 	size_t	i;
 	double	cosine;
@@ -97,8 +97,16 @@ static void	isometric_projection(t_proj *copy, size_t size)
 	sine = sin(30 * (3.141592) / 180);
 	while (i < size)
 	{
-		copy[i].x_proj = copy[i].x * cosine - copy[i].y * cosine;
-		copy[i].y_proj = copy[i].x * sine + copy[i].y * sine - copy[i].z;
+		if (input == KEY_P)
+		{
+			copy[i].x_proj = copy[i].x;
+			copy[i].y_proj = copy[i].y;
+		}
+		else
+		{
+			copy[i].x_proj = copy[i].x * cosine - copy[i].y * cosine;
+			copy[i].y_proj = copy[i].x * sine + copy[i].y * sine - copy[i].z;
+		}
 		copy[i].x_proj += WINDOW_X_SIZE / 2;
 		copy[i].y_proj += WINDOW_Y_SIZE / 2;
 		i++;

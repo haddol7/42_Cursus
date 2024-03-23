@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:47:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 18:55:40 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/23 21:14:08 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	rotate(t_map *map, size_t size)
 	int	angle_x;
 	int	angle_y;
 
-	if (map->mouse_info == 1)
+	if (map->input == 1)
 	{
 		angle_x = map->angular.x + map->mouse_x;
 		angle_y = map->angular.y + map->mouse_y;
@@ -43,7 +43,7 @@ void	translate(t_map *map, size_t size)
 	int		translate_y;
 
 	i = 0;
-	if (map->mouse_info == 2)
+	if (map->input == 2)
 	{
 		translate_x = map->translate.x + map->mouse_x;
 		translate_y = map->translate.y + map->mouse_y;

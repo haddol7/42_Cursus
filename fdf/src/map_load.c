@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/23 00:14:08 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/23 22:01:18 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,6 @@ static char	*read_map_as_one_line(int fd);
 static void	check_map_size(char *content, t_map *map);
 static void	allocate_map(char *content, t_map *map);
 static void	set_scale(t_map *map);
-
-// load_map(char *content, t_map *map)
-//
-// 	call read_map function to read .fdf files.
-// 	when a file is given below,
-// 	1	2	3
-// 	4	5	6
-// 	7	8	9
-// 	map.point is initialized like
-// 	map.point[0].x = 0 | map.point[0].y = 0 | map.point[0].z = 1
-// 	map.point[1].x = 1 | map.point[1].y = 0 | map.point[1].z = 2
-// 	map.point[2].x = 2 | map.point[2].y = 0 | map.point[2].z = 3
-// 	
-// 	and map.col and map.row are initialized by 3.
-// 1. system-call function error
-// 2. map file format error
 
 void	load_map(char *dir, t_client *data)
 {
@@ -138,11 +122,21 @@ void	set_default_color(int *z_color, int z)
 {
 	double	color[3];
 
-	color[0] = (get_red(Z_MAX_COLOR) - get_red(Z_MIN_COLOR)) / Z_MAX_VAL - Z_MIN_VAL;
-	color[1] = (get_green(Z_MAX_COLOR) - get_green(Z_MIN_COLOR)) / Z_MAX_VAL - Z_MIN_VAL;
-	color[2] = (get_blue(Z_MAX_COLOR) - get_blue(Z_MIN_COLOR)) / Z_MAX_VAL - Z_MIN_VAL;
-	z += 5;
-	*z_color = ((int)(Z_MIN_COLOR + z * color[0]) << 16 | (int)(Z_MIN_COLOR + z * color[1]) << 8 | (int)(Z_MIN_COLOR + z * color[2]));
+	if (z > 0)
+	{
+		color[0] = (get_red(MOUNTAIN) - get_red(GROUND)) / Z_MAX_VAL;
+		color[1] = (get_green(MOUNTAIN) - get_green(GROUND)) / Z_MAX_VAL;
+		color[2] = (get_blue(MOUNTAIN) - get_blue(GROUND)) / Z_MAX_VAL;
+		*z_color = ((int)(get_red(GROUND) + z * color[0]) << 16 | (int)(get_green(GROUND) + z * color[1]) << 8 | (int)(get_blue(GROUND) + z * color[2]));
+	}
+	else
+	{
+		color[0] = (get_red(GROUND) - get_red(OCEAN)) / Z_MIN_VAL * -1;
+		color[1] = (get_green(GROUND) - get_green(OCEAN)) / Z_MIN_VAL * -1;
+		color[2] = (get_blue(GROUND) - get_blue(OCEAN)) / Z_MIN_VAL * -1;
+		z -= Z_MIN_VAL;
+		*z_color = ((int)(get_red(OCEAN) + z * color[0]) << 16 | (int)(get_green(OCEAN) + z * color[1]) << 8 | (int)(get_blue(OCEAN) + z * color[2]));
+	}
 }
 
 static void	set_scale(t_map *map)
@@ -177,7 +171,7 @@ static void	set_scale(t_map *map)
 			map->point[i].z *= Z_MAX_VAL / (double)z_max;
 		else
 			map->point[i].z *= Z_MIN_VAL / (double)z_min;
-		if (map->point[i].color == NONE)
+		if (map->point[i].color == COLOR_NONE)
 			set_default_color(&map->point[i].color, map->point[i].z);
 		i++;
 	}

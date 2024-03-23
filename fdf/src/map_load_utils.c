@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:31:32 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 23:51:40 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/23 22:01:18 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	init_map(t_map *map)
 {
+	map->input = KEY_P;
 	map->translate.x = 0;
 	map->translate.y = 0;
 	map->translate.z = 0;
@@ -45,7 +46,7 @@ int	check_map_value(char **s, int *color)
 		res += (**s) - '0';
 		(*s)++;
 	}
-	*color = NONE;
+	*color = COLOR_NONE;
 	if (!ft_strncmp(*s, ",0x", 3) || !ft_strncmp(*s, ",0X", 3))
 		*color = check_map_color(s);
 	else if (!fdf_isspace(**s))
@@ -77,6 +78,6 @@ int	check_map_color(char **s)
 	if (!fdf_isspace(**s))
 		fdf_error(ERR_M_VAL);
 	if (color == 0x0)
-		return (NONE);
+		return (COLOR_NONE);
 	return (color);
 }

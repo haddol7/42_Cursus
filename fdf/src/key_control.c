@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 15:49:53 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 20:43:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/23 21:24:18 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int	key_hook(int keycode, t_client *data)
 		center_map(data);
 	else if (keycode == KEY_ESC)
 		terminate((void *)data);
+	else if (keycode == KEY_P || keycode == KEY_I)
+		data->map.input = keycode;
 	draw(data->map, &data->img, data->mlx, data->win);
 	return (0);
 }
@@ -54,14 +56,14 @@ int	mouse_press_hook(int keycode, int x, int y, t_client *data)
 		return (0);
 	if (keycode == MOUSE_LEFT)
 	{
-		data->map.mouse_info = 1;
+		data->map.input = 1;
 		data->mouse.is_pressed = 1;
 		data->mouse.x = x;
 		data->mouse.y = y;
 	}
 	else if (keycode == MOUSE_RIGHT)
 	{
-		data->map.mouse_info = 2;
+		data->map.input = 2;
 		data->mouse.is_pressed = 2;
 		data->mouse.x = x;
 		data->mouse.y = y;
@@ -78,13 +80,13 @@ int	mouse_drag_hook(int x, int y, t_client *data)
 {
 	if (data->mouse.is_pressed == 1)
 	{
-		data->map.mouse_info = 1;
+		data->map.input = 1;
 		data->map.mouse_x = x - data->mouse.x;
 		data->map.mouse_y = y - data->mouse.y;
 	}
 	else if (data->mouse.is_pressed == 2)
 	{
-		data->map.mouse_info = 2;
+		data->map.input = 2;
 		data->map.mouse_x = x - data->mouse.x;
 		data->map.mouse_y = y - data->mouse.y;
 	}
@@ -99,7 +101,7 @@ int	mouse_release_hook(int keycode, int x, int y, t_client *data)
 	if (keycode == MOUSE_LEFT || keycode == MOUSE_RIGHT)
 	{
 		data->mouse.is_pressed = 0;
-		data->map.mouse_info = 0;
+		data->map.input = 0;
 		if (keycode == MOUSE_LEFT)
 		{
 			data->map.angular.x += data->map.mouse_x;
