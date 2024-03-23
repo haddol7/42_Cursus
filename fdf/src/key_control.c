@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 15:49:53 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/23 21:24:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/23 22:27:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,23 @@ static void	center_map(t_client *data)
 int	key_hook(int keycode, t_client *data)
 {
 	if (keycode == KEY_A)
-		data->map.angular.z += 5;
-	else if (keycode == KEY_D)
 		data->map.angular.z -= 5;
+	else if (keycode == KEY_D)
+		data->map.angular.z += 5;
 	else if (keycode == KEY_W)
-		data->map.angular.x += 5;
-	else if (keycode == KEY_S)
 		data->map.angular.x -= 5;
+	else if (keycode == KEY_S)
+		data->map.angular.x += 5;
 	else if (keycode == KEY_Q)
-		data->map.angular.y += 5;
-	else if (keycode == KEY_E)
 		data->map.angular.y -= 5;
+	else if (keycode == KEY_E)
+		data->map.angular.y += 5;
 	else if (keycode == KEY_C)
 		center_map(data);
 	else if (keycode == KEY_ESC)
 		terminate((void *)data);
 	else if (keycode == KEY_P || keycode == KEY_I)
-		data->map.input = keycode;
+		data->map.key = keycode;
 	draw(data->map, &data->img, data->mlx, data->win);
 	return (0);
 }
@@ -56,14 +56,14 @@ int	mouse_press_hook(int keycode, int x, int y, t_client *data)
 		return (0);
 	if (keycode == MOUSE_LEFT)
 	{
-		data->map.input = 1;
+		data->map.mouse.is_pressed = 1;
 		data->mouse.is_pressed = 1;
 		data->mouse.x = x;
 		data->mouse.y = y;
 	}
 	else if (keycode == MOUSE_RIGHT)
 	{
-		data->map.input = 2;
+		data->map.mouse.is_pressed = 2;
 		data->mouse.is_pressed = 2;
 		data->mouse.x = x;
 		data->mouse.y = y;
@@ -80,15 +80,15 @@ int	mouse_drag_hook(int x, int y, t_client *data)
 {
 	if (data->mouse.is_pressed == 1)
 	{
-		data->map.input = 1;
-		data->map.mouse_x = x - data->mouse.x;
-		data->map.mouse_y = y - data->mouse.y;
+		data->map.mouse.is_pressed = 1;
+		data->map.mouse.x = x - data->mouse.x;
+		data->map.mouse.y = y - data->mouse.y;
 	}
 	else if (data->mouse.is_pressed == 2)
 	{
-		data->map.input = 2;
-		data->map.mouse_x = x - data->mouse.x;
-		data->map.mouse_y = y - data->mouse.y;
+		data->map.mouse.is_pressed = 2;
+		data->map.mouse.x = x - data->mouse.x;
+		data->map.mouse.y = y - data->mouse.y;
 	}
 	draw(data->map, &data->img, data->mlx, data->win);
 	return (0);
@@ -101,19 +101,19 @@ int	mouse_release_hook(int keycode, int x, int y, t_client *data)
 	if (keycode == MOUSE_LEFT || keycode == MOUSE_RIGHT)
 	{
 		data->mouse.is_pressed = 0;
-		data->map.input = 0;
+		data->map.mouse.is_pressed = 0;
 		if (keycode == MOUSE_LEFT)
 		{
-			data->map.angular.x += data->map.mouse_x;
-			data->map.angular.y += data->map.mouse_y;
+			data->map.angular.x += data->map.mouse.x;
+			data->map.angular.y += data->map.mouse.y;
 		}
 		else
 		{
-			data->map.translate.x += data->map.mouse_x;
-			data->map.translate.y += data->map.mouse_y;
+			data->map.translate.x += data->map.mouse.x;
+			data->map.translate.y += data->map.mouse.y;
 		}
-		data->map.mouse_x = 0;
-		data->map.mouse_y = 0;
+		data->map.mouse.x = 0;
+		data->map.mouse.y = 0;
 	}
 	if (x * y == 42)
 		ft_printf("\r🥚\r");

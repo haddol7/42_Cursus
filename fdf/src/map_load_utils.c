@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:31:32 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/23 22:01:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/23 22:27:15 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,19 @@
 
 void	init_map(t_map *map)
 {
-	map->input = KEY_P;
-	map->translate.x = 0;
-	map->translate.y = 0;
-	map->translate.z = 0;
-	map->angular.x = 0;
-	map->angular.y = 0;
-	map->angular.z = 0;
-	map->mouse_x = 0;
-	map->mouse_y = 0;
+	map->key = KEY_P;
+	ft_memset(&map->translate, 0, sizeof(t_point));
+	ft_memset(&map->angular, 0, sizeof(t_point));
+	ft_memset(&map->mouse, 0, sizeof(t_mouse));
+	// map->translate.x = 0;
+	// map->translate.y = 0;
+	// map->translate.z = 0;
+	// map->angular.x = 0;
+	// map->angular.y = 0;
+	// map->angular.z = 0;
+	// map->mouse.is_pressed = 0;
+	// map->mouse.x = 0;
+	// map->mouse.y = 0;
 }
 
 int	check_map_value(char **s, int *color)

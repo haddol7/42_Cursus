@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/23 22:01:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/23 22:23:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include "ft_printf.h"
 # include "libft.h"
 
-# define NONE (-1)
+# define COLOR_NONE (-1)
 
 # define Z_MAX_VAL (20)
 # define Z_MIN_VAL (-20)
@@ -73,6 +73,20 @@
 # define Y		1
 # define Z		2
 
+typedef struct s_line
+{
+	int	slope;
+	int	sign;
+	int	step;
+}	t_line;
+
+typedef struct s_mouse
+{
+	int	is_pressed;
+	int	x;
+	int	y;
+}	t_mouse;
+
 typedef struct s_point
 {
 	int	x;
@@ -109,24 +123,9 @@ typedef struct s_map
 	double			scale;
 	size_t			col;
 	size_t			row;
-	int				mouse_x;
-	int				mouse_y;
-	int				input;
+	t_mouse			mouse;
+	int				key;
 }	t_map;
-
-typedef struct s_line
-{
-	int	slope;
-	int	sign;
-	int	step;
-}	t_line;
-
-typedef struct s_mouse
-{
-	int	is_pressed;
-	int	x;
-	int	y;
-}	t_mouse;
 
 typedef struct s_client
 {
