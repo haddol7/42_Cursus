@@ -35,18 +35,18 @@ all : $(NAME)
 bonus : $(NAME)
 
 clean :
-	@rm -f $(OBJS)
+	rm -f $(OBJS)
 	@echo "$(BLUE)📝 printf : clean done!$(WHITE)"
 fclean : clean
-	@rm -f $(NAME)
+	rm -f $(NAME)
 	@echo "$(BLUE)📝 printf : fclean done!$(WHITE)"
 re : fclean all
 
 $(NAME) : $(OBJS)
-	@$(AR) $(ARFLAGS) $@ $?
+	$(AR) $(ARFLAGS) $@ $?
 	@echo "$(GREEN)📝 printf : make done!$(WHITE)"
 
 %.o : %.c
-	@$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c $<
 
 .PHONY : all bonus clean fclean re

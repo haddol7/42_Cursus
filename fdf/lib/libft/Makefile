@@ -71,18 +71,18 @@ WHITE = \033[0;97m
 all : $(NAME)
 
 clean :
-	@rm -f $(OBJS)
+	rm -f $(OBJS)
 	@echo "$(BLUE)📚 libft : clean done!$(WHITE)"
 fclean : clean
-	@rm -f $(NAME)
+	rm -f $(NAME)
 	@echo "$(BLUE)📚 libft : fclean done!$(WHITE)"
 re : fclean all
 
 $(NAME) : $(OBJS)
-	@$(AR) $(ARFLAGS) $@ $?
+	$(AR) $(ARFLAGS) $@ $?
 	@echo "$(GREEN)📚 libft : make done!$(WHITE)"
 
 %.o : %.c
-	@$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -c $<
 
 .PHONY : all clean fclean re

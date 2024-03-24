@@ -42,11 +42,10 @@ all: makelibs
 	@$(MAKE) $(NAME)
 
 makelibs:
-	@$(MAKE) -sC $(MLX_DIR)
+	@$(MAKE) -C $(MLX_DIR)
 	@install_name_tool -id lib/mlx/libmlx.dylib lib/mlx/libmlx.dylib
-	@echo "$(GREEN)🖥 MLX : make done! $(WHITE)"
-	@$(MAKE) -sC $(PRINTF_DIR)
-	@$(MAKE) -sC $(LIBFT_DIR)
+	@$(MAKE) -C $(PRINTF_DIR)
+	@$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJ)		
 	$(CC) $(CFLAGS) $^ $(PRINTF) $(LIBFT) $(MLX) $(MLXFLAGS) -o $@
@@ -56,29 +55,30 @@ bonus:
 	@$(MAKE) all
 			
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
-	@$(CC) $(CFLAGS) -MMD -c $< -o $@ $(HEADER)
+	$(CC) $(CFLAGS) -MMD -c $< -o $@ $(HEADER)
 
 $(PRINTF):
-	make -C $(PRINTF_DIR)
+	@make -C $(PRINTF_DIR)
 
 $(LIBFT):
-	make -C $(LIBFT_DIR)
+	@make -C $(LIBFT_DIR)
 
 $(MLX):
-	make -C $(MLX_DIR)
+	@make -C $(MLX_DIR)
 
 clean:
-	@make clean -sC $(MLX_DIR)
-	@make clean -sC $(LIBFT_DIR) 
-	@make clean -sC $(PRINTF_DIR)
-	@rm -f $(OBJ) $(DEPS)
+	@make clean -C $(MLX_DIR)
+	@make clean -C $(LIBFT_DIR) 
+	@make clean -C $(PRINTF_DIR)
+	rm -f $(OBJ) $(DEPS)
 	@echo "$(BLUE)📺 fdf : clean done!$(WHITE)"
 
 fclean:
-	@make clean -sC $(MLX_DIR)
-	@make fclean -sC $(LIBFT_DIR)
-	@make fclean -sC $(PRINTF_DIR)
-	@rm -f $(OBJ) $(DEPS)
+	@make clean -C $(MLX_DIR)
+	@make fclean -C $(LIBFT_DIR)
+	@make fclean -C $(PRINTF_DIR)
+	rm -f $(OBJ) $(DEPS)
+	rm -f $(NAME)
 	@echo "$(BLUE)📺 fdf : clean done!$(WHITE)"
 	@echo "$(BLUE)📺 fdf : fclean done!$(WHITE)"
 

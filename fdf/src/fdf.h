@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/24 18:47:31 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/24 19:09:58 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 # define FDF_BUFFER_SIZE	(50000)
 
 # define ERR_MLX	"❌ MLX error ❌"
-# define ERR_ARGC 	"❌ Input error - argument size is not one ❌"
+# define ERR_ARGC 	"❌ Input error - argument size is not valid ❌"
 # define ERR_MLC 	"❌ System call error - malloc() ❌"
 # define ERR_OPN 	"❌ System call error - open() ❌"
 # define ERR_RD 	"❌ System call error - read() ❌"
@@ -64,14 +64,6 @@
 # define MOUSE_MID		3
 # define MOUSE_UP		4
 # define MOUSE_DOWN		5
-
-# define A		0
-# define B		1
-# define G		2
-
-# define X		0
-# define Y		1
-# define Z		2
 
 typedef struct s_line
 {
