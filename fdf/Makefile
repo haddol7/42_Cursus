@@ -28,6 +28,7 @@ BLUE = \033[0;94m
 WHITE = \033[0;97m
 
 all: makelibs
+	@mkdir -p obj
 	@$(MAKE) $(NAME)
 
 makelibs:
@@ -36,13 +37,13 @@ makelibs:
 	@$(MAKE) -C $(PRINTF_DIR)
 	@$(MAKE) -C $(LIBFT_DIR)
 
-$(NAME): $(OBJ)		
+$(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $^ $(PRINTF) $(LIBFT) $(MLX) $(MLXFLAGS) -o $@
 	@echo "$(GREEN)📺 fdf : make done!$(WHITE)"	
 
 bonus:
 	@$(MAKE) all
-			
+
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	$(CC) $(CFLAGS) -MMD -c $< -o $@ $(HEADER)
 
@@ -59,14 +60,14 @@ clean:
 	@make clean -C $(MLX_DIR)
 	@make clean -C $(LIBFT_DIR) 
 	@make clean -C $(PRINTF_DIR)
-	rm -f $(OBJ) $(DEPS)
+	rm -rf $(OBJ_DIR)
 	@echo "$(BLUE)📺 fdf : clean done!$(WHITE)"
 
 fclean:
 	@make clean -C $(MLX_DIR)
 	@make fclean -C $(LIBFT_DIR)
 	@make fclean -C $(PRINTF_DIR)
-	rm -f $(OBJ) $(DEPS)
+	rm -rf $(OBJ_DIR)
 	rm -f $(NAME)
 	@echo "$(BLUE)📺 fdf : clean done!$(WHITE)"
 	@echo "$(BLUE)📺 fdf : fclean done!$(WHITE)"
