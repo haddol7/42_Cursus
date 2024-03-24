@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 19:08:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/24 18:53:33 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/24 19:51:17 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,10 +121,10 @@ static void	allocate_map(char *s, t_map *map)
 
 static void	limit_z_value(t_map *map)
 {
-	unsigned long	i;
-	size_t			size;
-	double			z_min;
-	double			z_max;
+	long long	i;
+	long long	size;
+	double		z_min;
+	double		z_max;
 
 	i = -1;
 	size = map->col * map->row;
@@ -137,7 +137,7 @@ static void	limit_z_value(t_map *map)
 		else if (z_min > map->point[i].z)
 			z_min = map->point[i].z;
 	}
-	while (--i)
+	while (--i >= 0)
 	{
 		if (map->point[i].z >= 0 && z_max > Z_MAX_VAL)
 			map->point[i].z *= Z_MAX_VAL / z_max;
