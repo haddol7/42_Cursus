@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 18:03:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/23 22:23:38 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/24 18:47:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # define COLOR_NONE (-1)
 
 # define Z_MAX_VAL (20)
-# define Z_MIN_VAL (-20)
+# define Z_MIN_VAL (-10)
 
 # define GROUND (0xD9823C)
 # define MOUNTAIN (0x4B774E)
@@ -151,6 +151,8 @@ void	load_map(char *dir, t_client *data);
 void	init_map(t_map *map);
 int		check_map_value(char **s, int *color);
 int		check_map_color(char **s);
+void	set_default_color(int *z_color, int z);
+void	set_default_scale(t_map *map);
 
 //map_conv.c
 void	translate(t_map *map, size_t size);

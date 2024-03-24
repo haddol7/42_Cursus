@@ -6,16 +6,11 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 20:54:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/22 20:45:58 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/24 18:55:15 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-void	leak(void)
-{
-	system("leaks fdf");
-}
 
 static void	init(t_client *data);
 
@@ -23,7 +18,6 @@ int	main(int argc, char **argv)
 {
 	t_client	data;
 
-	atexit(leak);
 	if (argc != 2)
 		fdf_error(ERR_ARGC);
 	init(&data);

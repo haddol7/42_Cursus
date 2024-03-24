@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/21 16:31:32 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/23 22:27:15 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/24 18:47:22 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,6 @@ void	init_map(t_map *map)
 	ft_memset(&map->translate, 0, sizeof(t_point));
 	ft_memset(&map->angular, 0, sizeof(t_point));
 	ft_memset(&map->mouse, 0, sizeof(t_mouse));
-	// map->translate.x = 0;
-	// map->translate.y = 0;
-	// map->translate.z = 0;
-	// map->angular.x = 0;
-	// map->angular.y = 0;
-	// map->angular.z = 0;
-	// map->mouse.is_pressed = 0;
-	// map->mouse.x = 0;
-	// map->mouse.y = 0;
 }
 
 int	check_map_value(char **s, int *color)
@@ -84,4 +75,39 @@ int	check_map_color(char **s)
 	if (color == 0x0)
 		return (COLOR_NONE);
 	return (color);
+}
+
+void	set_default_color(int *z_color, int z)
+{
+	double	color[3];
+
+	if (z > 0)
+	{
+		color[0] = (get_red(MOUNTAIN) - get_red(GROUND)) / Z_MAX_VAL;
+		color[1] = (get_green(MOUNTAIN) - get_green(GROUND)) / Z_MAX_VAL;
+		color[2] = (get_blue(MOUNTAIN) - get_blue(GROUND)) / Z_MAX_VAL;
+		*z_color = ((int)(get_red(GROUND) + z * color[0]) << 16 | \
+					(int)(get_green(GROUND) + z * color[1]) << 8 | \
+					(int)(get_blue(GROUND) + z * color[2]));
+	}
+	else
+	{
+		color[0] = (get_red(GROUND) - get_red(OCEAN)) / Z_MIN_VAL * -1;
+		color[1] = (get_green(GROUND) - get_green(OCEAN)) / Z_MIN_VAL * -1;
+		color[2] = (get_blue(GROUND) - get_blue(OCEAN)) / Z_MIN_VAL * -1;
+		z -= Z_MIN_VAL;
+		*z_color = ((int)(get_red(OCEAN) + z * color[0]) << 16 | \
+					(int)(get_green(OCEAN) + z * color[1]) << 8 | \
+					(int)(get_blue(OCEAN) + z * color[2]));
+	}
+}
+
+void	set_default_scale(t_map *map)
+{
+	if (map->col > map->row)
+		map->scale = WINDOW_X_SIZE / (double)map->col;
+	else
+		map->scale = WINDOW_Y_SIZE / (double)map->row;
+	if (map->scale < 0.1)
+		map->scale = 0.1;
 }

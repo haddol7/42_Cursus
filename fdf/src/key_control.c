@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/22 15:49:53 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/23 22:27:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/24 18:48:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,9 @@
 
 static void	center_map(t_client *data)
 {
-	data->map.angular.x = 0;
-	data->map.angular.y = 0;
-	data->map.angular.z = 0;
-	data->map.translate.x = 0;
-	data->map.translate.y = 0;
-	data->map.translate.z = 0;
-	if (data->map.col > data->map.row)
-		data->map.scale = WINDOW_X_SIZE / (double)data->map.col;
-	else
-		data->map.scale = WINDOW_Y_SIZE / (double)data->map.row;
+	ft_memset(&data->map.angular, 0, sizeof(t_point));
+	ft_memset(&data->map.translate, 0, sizeof(t_point));
+	set_default_scale(&data->map);
 }
 
 int	key_hook(int keycode, t_client *data)
@@ -58,8 +51,8 @@ int	mouse_press_hook(int keycode, int x, int y, t_client *data)
 	{
 		data->map.mouse.is_pressed = 1;
 		data->mouse.is_pressed = 1;
-		data->mouse.x = x;
-		data->mouse.y = y;
+		data->mouse.x = y;
+		data->mouse.y = x;
 	}
 	else if (keycode == MOUSE_RIGHT)
 	{
@@ -68,9 +61,9 @@ int	mouse_press_hook(int keycode, int x, int y, t_client *data)
 		data->mouse.x = x;
 		data->mouse.y = y;
 	}
-	else if (keycode == MOUSE_UP)
+	else if (keycode == MOUSE_UP && data->map.scale < 600)
 		data->map.scale *= 1.2;
-	else if (keycode == MOUSE_DOWN)
+	else if (keycode == MOUSE_DOWN && data->map.scale > 0.1)
 		data->map.scale *= 0.5;
 	draw(data->map, &data->img, data->mlx, data->win);
 	return (0);
@@ -81,8 +74,8 @@ int	mouse_drag_hook(int x, int y, t_client *data)
 	if (data->mouse.is_pressed == 1)
 	{
 		data->map.mouse.is_pressed = 1;
-		data->map.mouse.x = x - data->mouse.x;
-		data->map.mouse.y = y - data->mouse.y;
+		data->map.mouse.x = y - data->mouse.x;
+		data->map.mouse.y = data->mouse.y - x;
 	}
 	else if (data->mouse.is_pressed == 2)
 	{
