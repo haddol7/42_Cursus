@@ -46,16 +46,7 @@ bonus:
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	$(CC) $(CFLAGS) -MMD -c $< -o $@ $(HEADER)
-
-$(PRINTF):
-	@make -C $(PRINTF_DIR)
-
-$(LIBFT):
-	@make -C $(LIBFT_DIR)
-
-$(MLX):
-	@make -C $(MLX_DIR)
-
+	
 clean:
 	@make clean -C $(MLX_DIR)
 	@make clean -C $(LIBFT_DIR) 
