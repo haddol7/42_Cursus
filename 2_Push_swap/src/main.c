@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 21:55:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/30 23:14:54 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/30 23:38:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,24 @@ int main(int argc, char **argv)
 	node3.val = 3;
 	node4.val = 4;
 
-	push(&a, &node1, TOP);
-	push(&a, &node2, TOP);
-	push(&a, &node3, TOP);
-	push(&a, &node4, TOP);
+	push(&a, &node1, BOT);
+	push(&a, &node2, BOT);
+	push(&a, &node3, BOT);
+	push(&a, &node4, BOT);
 	
 	print_top(a);
-	
+
 	push(&b, pop(&a, TOP), TOP);
 	push(&b, pop(&a, TOP), TOP);
 	push(&b, pop(&a, TOP), TOP);
-	print_top(a);
+	push(&b, pop(&a, TOP), TOP);
+
 	print_top(b);
+
+	push(&b, pop(&a, TOP), TOP);
+
+	print_top(b);
+	print_top(a);
 
 	ft_printf("test");
 

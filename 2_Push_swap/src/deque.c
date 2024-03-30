@@ -6,23 +6,25 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 13:40:25 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/30 23:08:48 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/30 23:38:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/deque.h"
 
-//sa 1 = pop(a, TOP) 1 = pop(a, TOP)
-//sb
-//ss
-//pa push(a, pop(b, TOP), TOP)
-//pb push(b, pop(a, TOP), TOP)
-//ra 
-//rb
-//rr
-//rra
-//rrb
-//rrr
+/*
+sa	|	node_swap(&a);
+sb 	|	node_swap(&b);
+ss 	|	node_swap(&a) && node_swap(&b)
+pa 	|	push(&a, pop(&b, TOP), TOP);
+pb 	|	push(&b, pop(&a, TOP), TOP);
+ra 	|	push(&a, pop(&a, TOP), BOT);
+rb 	|	push(&b, pop(&b, TOP), BOT);
+rr 	|	ra && rb
+rra |	push(&a, pop(&a, BOT), TOP);
+rrb |	push(&b, pop(&b, BOT), TOP);
+rrr |	rra && rrb
+*/
 
 void	push(t_stack *stack, t_node *node, e_pos pos)
 {
@@ -46,6 +48,7 @@ void	push(t_stack *stack, t_node *node, e_pos pos)
 	}
 	stack->size++;
 }
+
 t_node	*pop(t_stack *stack, e_pos pos)
 {
 	t_node *node;
@@ -69,5 +72,16 @@ t_node	*pop(t_stack *stack, e_pos pos)
 	}
 	stack->size--;
 	return (node);
+}
+
+void top_swap(t_stack *stack)
+{
+	t_node *temp;
+	t_node *temp2;
+
+	temp = pop(stack, TOP);
+	temp2 = pop(stack, TOP);
+	push(stack, temp, TOP);
+	push(stack, temp2, TOP);
 }
 
