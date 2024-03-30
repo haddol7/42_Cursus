@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": ["8", "7", "1", "6", "10", "5", "9", "2", "3", "4"],
+      "cwd": "/Users/daeha/push_swap",
+      "program": "/Users/daeha/push_swap/a.out"
+    }
+  ]
+}
