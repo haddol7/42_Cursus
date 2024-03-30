@@ -1,43 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   deque.h                                            :+:      :+:    :+:   */
+/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 13:35:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/30 23:12:37 by daeha            ###   ########.fr       */
+/*   Created: 2023/11/19 21:57:04 by daeha             #+#    #+#             */
+/*   Updated: 2023/11/20 17:12:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
+#include "libft.h"
 
-typedef enum position
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-	TOP = 0,
-	BOT = 1
-} e_pos;
+	t_list	*temp;
 
-typedef struct s_node
-{
-	int		val;
-	struct s_node *prev;
-	struct s_node *next;
-}	t_node;
-
-typedef struct s_stack
-{
-	size_t size;
-	t_node *top;
-	t_node *bot;
-}	t_stack;
-
-typedef struct s_total
-{
-	size_t	size;
-	t_stack	a;
-	t_stack b;
-}	t_total;
-
-void	push(t_stack *stack, t_node *node, e_pos pos);
-t_node	*pop(t_stack *stack, e_pos pos);
+	if (lst == NULL || del == NULL)
+		return ;
+	while (*lst != NULL)
+	{
+		temp = (*lst)->next;
+		ft_lstdelone(*lst, del);
+		*lst = temp;
+	}
+}

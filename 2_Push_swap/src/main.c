@@ -6,11 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 21:55:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/30 22:54:21 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/30 23:14:54 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include "libft.h"
+#include "ft_printf.h"
 #include "../inc/deque.h"
 
 void print_top(t_stack a)
@@ -55,5 +57,7 @@ int main(int argc, char **argv)
 	push(&b, pop(&a, TOP), TOP);
 	print_top(a);
 	print_top(b);
+
+	ft_printf("test");
 
 }

@@ -1,43 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   deque.h                                            :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/30 13:35:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/30 23:12:37 by daeha            ###   ########.fr       */
+/*   Created: 2023/11/15 21:41:15 by daeha             #+#    #+#             */
+/*   Updated: 2023/11/18 20:40:50 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
+#include "libft.h"
 
-typedef enum position
+void	ft_putnbr_fd(int n, int fd)
 {
-	TOP = 0,
-	BOT = 1
-} e_pos;
+	char	number;
 
-typedef struct s_node
-{
-	int		val;
-	struct s_node *prev;
-	struct s_node *next;
-}	t_node;
+	if (n == -2147483648)
+	{
+		write(fd, "-2147483648", 11);
+		return ;
+	}
+	if (n < 0)
+	{
+		write(fd, "-", 1);
+		n *= -1;
+	}
+	if (n / 10 != 0)
+		ft_putnbr_fd(n / 10, fd);
+	number = n % 10 + '0';
+	write(fd, &number, 1);
+}
 
-typedef struct s_stack
-{
-	size_t size;
-	t_node *top;
-	t_node *bot;
-}	t_stack;
-
-typedef struct s_total
-{
-	size_t	size;
-	t_stack	a;
-	t_stack b;
-}	t_total;
-
-void	push(t_stack *stack, t_node *node, e_pos pos);
-t_node	*pop(t_stack *stack, e_pos pos);
+// int	main(int argc, char **argv)
+// {
+// 	ft_putnbr_fd(atoi(argv[1]), atoi(argv[2]));
+// 	return (0);
+// }
