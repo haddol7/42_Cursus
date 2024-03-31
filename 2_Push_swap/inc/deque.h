@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 13:35:56 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/30 23:12:37 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/30 23:34:23 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,3 +41,4 @@ typedef struct s_total
 
 void	push(t_stack *stack, t_node *node, e_pos pos);
 t_node	*pop(t_stack *stack, e_pos pos);
+void 	top_swap(t_stack *stack);

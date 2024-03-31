@@ -6,14 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 21:55:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/30 23:38:47 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/31 16:11:24 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "libft.h"
 #include "ft_printf.h"
-#include "../inc/deque.h"
+#include "deque.h"
 
 void print_top(t_stack a)
 {
@@ -50,20 +50,19 @@ int main(int argc, char **argv)
 	push(&a, &node3, BOT);
 	push(&a, &node4, BOT);
 	
-	print_top(a);
+//	print_top(a);
 
 	push(&b, pop(&a, TOP), TOP);
 	push(&b, pop(&a, TOP), TOP);
 	push(&b, pop(&a, TOP), TOP);
 	push(&b, pop(&a, TOP), TOP);
 
-	print_top(b);
+	// print_top(b);
 
 	push(&b, pop(&a, TOP), TOP);
 
-	print_top(b);
-	print_top(a);
+	// print_top(b);
+	// print_top(a);
 
-	ft_printf("test");
-
+	ft_printf("%d1111asdasd", ft_atoi(argv[1]));
 }
