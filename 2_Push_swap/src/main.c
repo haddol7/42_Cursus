@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 21:55:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/31 16:11:24 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/31 16:47:25 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,5 @@ int main(int argc, char **argv)
 	// print_top(b);
 	// print_top(a);
 
-	ft_printf("%d1111asdasd", ft_atoi(argv[1]));
+	ft_printf("%d\n\n\n\n\nasd", ft_atoi(argv[1]));
 }
