@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 13:02:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/31 21:59:21 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/31 22:32:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int	atoi_fit(char **str, int *nothing)
 // 	atexit(leaks);
 // 	is_eof = 0;
 // 	stack.size = put_value_in_stack_a(argc, argv, &stack.a);
+//	validate_overlap();
 // 	while (!is_eof)
 // 	{
 // 		command = get_next_line(0);
@@ -104,6 +105,87 @@ int	atoi_fit(char **str, int *nothing)
 // 	check_stack_sorted(stack);
 // 	return (0);
 // }
+
+void	check_stack_sorted(t_total *stack)
+{
+	t_node	*temp;
+	t_node 	*cur;
+	int		is_sorted;
+	int 	val;
+
+	val = -2147483648;
+	is_sorted = 1;
+	if (stack->b.size != 0)
+	{
+		while (stack->b.size > 0)
+		{
+			cur = pop(&stack->b, BOT);
+			temp = cur;
+			cur = cur->prev;
+			free(temp);
+		}
+		is_sorted = 0;
+	}
+	if (stack->a.size != 0)
+	{
+		while (stack->a.size > 0)
+		{
+			cur = pop(&stack->a, TOP);
+			
+			if (val <= cur->val)
+				val = cur->val;
+			else
+				is_sorted = 0;
+			temp = cur;
+			cur = cur->prev;
+			free(temp);
+		}
+	}
+	if (is_sorted == 0)
+		ft_printf("KO");
+	else
+		ft_printf("OK");
+}
+
+int		command_to_stack(t_total *stack, char *command)
+{
+	if (command == NULL)
+		return (1);
+	if (!ft_strncmp("sa\n", command, 3))
+		node_swap(&stack->a);
+	else if (!ft_strncmp("sb\n", command, 3))
+		node_swap(&stack->b);
+	else if (!ft_strncmp("ss\n", command, 3))
+	{
+		node_swap(&stack->a);
+		node_swap(&stack->b);
+	}
+	else if (!ft_strncmp("pa\n", command, 3))
+		push(&stack->a, pop(&stack->b, TOP), TOP);
+	else if (!ft_strncmp("pb\n", command, 3))
+		push(&stack->b, pop(&stack->a, TOP), TOP);
+	else if (!ft_strncmp("ra\n", command, 3))
+		push(&stack->a, pop(&stack->a, TOP), BOT);
+	else if (!ft_strncmp("rb\n", command, 3))
+		push(&stack->b, pop(&stack->b, TOP), BOT);
+	else if (!ft_strncmp("rr\n", command, 3))
+	{
+		push(&stack->a, pop(&stack->a, TOP), BOT);
+		push(&stack->b, pop(&stack->b, TOP), BOT);
+	}
+	else if (!ft_strncmp("rra\n", command, 3))
+		push(&stack->a, pop(&stack->a, BOT), TOP);
+	else if (!ft_strncmp("rrb\n", command, 3))
+		push(&stack->b, pop(&stack->b, BOT), TOP);
+	else if (!ft_strncmp("rrr\n", command, 3))
+	{
+		push(&stack->a, pop(&stack->a, BOT), TOP);
+		push(&stack->b, pop(&stack->b, BOT), TOP);
+	}
+	else
+		terminate();
+	return (0);
+}
 
 size_t	put_value_in_stack_a(int argc, char **argv, t_stack *a)
 {
@@ -135,33 +217,32 @@ size_t	put_value_in_stack_a(int argc, char **argv, t_stack *a)
 }
 
 // test code
-/*
+
 int main(int argc, char **argv)
 {
 	t_total	stack;
 	t_node	*temp;
+	char	*command;
+	int		is_eof;
 
-	atexit(leaks);
-	
+//	atexit(leaks);
 	ft_memset(&stack, 0, sizeof(t_total));
-
 	stack.size = put_value_in_stack_a(argc, argv, &stack.a);
-	temp = stack.a.top;
-	for (size_t i = 0; i < stack.a.size; i++)
+
+	is_eof = 0;
+	while (!is_eof)
 	{
-		ft_printf("%dth node : %d\n", i, temp->val);
-		temp = temp->next;
+		command = get_next_line(0);
+		is_eof = command_to_stack(&stack, command);
+		if (command != NULL)
+			free(command);
 	}
-	int size = stack.a.size;
-	for (int i = 0; i < size; i++)
-	{
-		temp = pop(&stack.a, BOT);
-		free(temp);
-	}
+
+	check_stack_sorted(&stack);
 
 	return (0);
 }
-*/
+
 
 
 

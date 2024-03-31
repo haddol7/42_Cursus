@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 13:40:25 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/31 16:10:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/03/31 22:15:43 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_node	*pop(t_stack *stack, e_pos pos)
 	return (node);
 }
 
-void top_swap(t_stack *stack)
+void node_swap(t_stack *stack)
 {
 	t_node *temp;
 	t_node *temp2;
