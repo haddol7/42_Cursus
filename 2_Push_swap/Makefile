@@ -13,7 +13,7 @@ HEADER := -I$(PRINTF_DIR) -I$(LIBFT_DIR) -Iinc/
 
 SRC_COMMON = deque
 SRC_MAN	= main
-SRC_BONUS = test_bonus
+SRC_BONUS = main_bonus
 
 ifdef WITH_BONUS
 	SRC_FIN = $(SRC_COMMON) $(SRC_BONUS)
@@ -51,7 +51,6 @@ else
 endif
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.c
-	@echo $@ $<
 	$(CC) $(CFLAGS) -MMD -c $< -o $@ $(HEADER)
 	
 clean:
@@ -64,7 +63,6 @@ fclean:
 	@make fclean -sC $(LIBFT_DIR) 
 	@make fclean -sC $(PRINTF_DIR)
 	rm -rf $(OBJ_DIR)
-	@echo "$(BLUE)🥞 push_swap : clean done!$(WHITE)"
 	rm -f push_swap
 	rm -f checker
 	@echo "$(BLUE)🥞 push_swap : fclean done!$(WHITE)"
@@ -72,7 +70,7 @@ fclean:
 re: fclean
 	@make	
 
--include $(DEPS)
+-include $(DEP)
 
 .PHONY: all clean fclean re bonus
 

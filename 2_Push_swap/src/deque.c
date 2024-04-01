@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 13:40:25 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/31 22:15:43 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/01 18:12:49 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_node	*pop(t_stack *stack, e_pos pos)
 	if (stack->size == 0)
 		return (NULL);
 	else
-	{
+	{	
 		if (pos == TOP)
 		{
 			node = stack->top;
@@ -67,8 +67,11 @@ t_node	*pop(t_stack *stack, e_pos pos)
 			node = stack->bot;
 			stack->bot = node->prev;
 		}
-		stack->bot->next = stack->top;
-		stack->top->prev = stack->bot;
+		if (stack->size > 1)
+		{
+			stack->bot->next = stack->top;
+			stack->top->prev = stack->bot;
+		}
 	}
 	stack->size--;
 	return (node);
