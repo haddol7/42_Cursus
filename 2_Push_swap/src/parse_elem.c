@@ -6,11 +6,15 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:17:10 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/01 18:21:32 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/01 18:36:12 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "deque.h"
+#include "utils.h"
+
+static char	*move_to_num(char *str, int *sign, int *is_digit_exists);
+static int	atoi_fit(char **str, int *is_digit_exists);
 
 size_t	put_value_in_stack_a(int argc, char **argv, t_stack *a)
 {
@@ -35,46 +39,6 @@ size_t	put_value_in_stack_a(int argc, char **argv, t_stack *a)
 			cnt++;
 	}
 	return (a->size);
-}
-
-static char	*move_to_num(char *str, int *sign, int *is_digit_exists)
-{
-	*is_digit_exists = 0;
-	if (*str == ' ')
-		str++;
-	if (*str == '-')
-	{
-		*sign = -1;
-		str++;
-	}
-	else if (*str == '+')
-		str++;
-	if (ft_isdigit(*str))
-		*is_digit_exists = 1;
-	else
-		terminate();
-	return (str);
-}
-
-static int	atoi_fit(char **str, int *is_digit_exists)
-{
-	long	result;
-	int		temp;
-	int		sign;
-
-	sign = 1;
-	result = 0;
-	*str = move_to_num(*str, &sign, is_digit_exists);
-	while (**str >= '0' && **str <= '9')
-	{
-		result *= 10;
-		result += **str - '0';
-		temp = (int)result;
-		if (temp != result)
-			terminate();
-		(*str)++;
-	}
-	return ((int)(sign * result));
 }
 
 void check_elem_dup(t_stack a)
@@ -102,49 +66,42 @@ void check_elem_dup(t_stack a)
 	}
 }
 
-static int		command_to_stack_sub(t_total *stack, char *command)
+static int	atoi_fit(char **str, int *is_digit_exists)
 {
-	if (!ft_strncmp("rr\n", command, 3))
+	long	result;
+	int		temp;
+	int		sign;
+
+	sign = 1;
+	result = 0;
+	*str = move_to_num(*str, &sign, is_digit_exists);
+	while (**str >= '0' && **str <= '9')
 	{
-		push(&stack->a, pop(&stack->a, TOP), BOT);
-		push(&stack->b, pop(&stack->b, TOP), BOT);
+		result *= 10;
+		result += **str - '0';
+		temp = (int)result;
+		if (temp != result)
+			terminate();
+		(*str)++;
 	}
-	else if (!ft_strncmp("rra\n", command, 3))
-		push(&stack->a, pop(&stack->a, BOT), TOP);
-	else if (!ft_strncmp("rrb\n", command, 3))
-		push(&stack->b, pop(&stack->b, BOT), TOP);
-	else if (!ft_strncmp("rrr\n", command, 3))
-	{
-		push(&stack->a, pop(&stack->a, BOT), TOP);
-		push(&stack->b, pop(&stack->b, BOT), TOP);
-	}
-	else
-		terminate();
-	return (0);
+	return ((int)(sign * result));
 }
 
-int		command_to_stack(t_total *stack, char *command)
+static char	*move_to_num(char *str, int *sign, int *is_digit_exists)
 {
-	if (command == NULL)
-		return (1);
-	if (!ft_strncmp("sa\n", command, 3))
-		node_swap(&stack->a);
-	else if (!ft_strncmp("sb\n", command, 3))
-		node_swap(&stack->b);
-	else if (!ft_strncmp("ss\n", command, 3))
+	*is_digit_exists = 0;
+	if (*str == ' ')
+		str++;
+	if (*str == '-')
 	{
-		node_swap(&stack->a);
-		node_swap(&stack->b);
+		*sign = -1;
+		str++;
 	}
-	else if (!ft_strncmp("pa\n", command, 3))
-		push(&stack->a, pop(&stack->b, TOP), TOP);
-	else if (!ft_strncmp("pb\n", command, 3))
-		push(&stack->b, pop(&stack->a, TOP), TOP);
-	else if (!ft_strncmp("ra\n", command, 3))
-		push(&stack->a, pop(&stack->a, TOP), BOT);
-	else if (!ft_strncmp("rb\n", command, 3))
-		push(&stack->b, pop(&stack->b, TOP), BOT);
-	else	
-		return (command_to_stack_sub(stack, command));
-	return (0);
+	else if (*str == '+')
+		str++;
+	if (ft_isdigit(*str))
+		*is_digit_exists = 1;
+	else
+		terminate();
+	return (str);
 }

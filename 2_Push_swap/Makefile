@@ -11,7 +11,7 @@ LIBFT_DIR := $(LIB)libft/
 LIBFT := $(LIBFT_DIR)libft.a
 HEADER := -I$(PRINTF_DIR) -I$(LIBFT_DIR) -Iinc/
 
-SRC_COMMON = deque
+SRC_COMMON = deque command parse_elem utils
 SRC_MAN	= main
 SRC_BONUS = main_bonus
 

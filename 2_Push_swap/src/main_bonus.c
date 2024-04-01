@@ -6,44 +6,17 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 13:02:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/01 18:20:16 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/01 18:31:07 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "deque.h"
+#include "control_elem.h"
+
+static void	check_stack_sorted_free(t_total *stack);
 
 void	leaks(void)
 {
 	system("leaks checker");
-}
-
-void	terminate(void)
-{
-	ft_printf("Error\n");
-	exit(1);
-}
-
-void	check_stack_sorted_free(t_total *stack)
-{
-	int		is_sorted;
-
-	is_sorted = 1;
-	if (stack->b.size != 0)
-	{
-		while (stack->b.size > 0)
-			free(pop(&stack->b, BOT));
-		is_sorted = 0;
-	}
-	while (stack->a.size > 0)
-	{
-		if (stack->a.size > 1 && stack->a.top->val > stack->a.top->next->val)
-			is_sorted = 0;
-		free(pop(&stack->a, TOP));
-	}
-	if (is_sorted == 0)
-		ft_printf("KO");
-	else
-		ft_printf("OK");
 }
 
 int main(int argc, char **argv)
@@ -69,6 +42,29 @@ int main(int argc, char **argv)
 	}
 	check_stack_sorted_free(&stack);
 	return (0);
+}
+
+static void	check_stack_sorted_free(t_total *stack)
+{
+	int		is_sorted;
+
+	is_sorted = 1;
+	if (stack->b.size != 0)
+	{
+		while (stack->b.size > 0)
+			free(pop(&stack->b, BOT));
+		is_sorted = 0;
+	}
+	while (stack->a.size > 0)
+	{
+		if (stack->a.size > 1 && stack->a.top->val > stack->a.top->next->val)
+			is_sorted = 0;
+		free(pop(&stack->a, TOP));
+	}
+	if (is_sorted == 0)
+		ft_printf("KO");
+	else
+		ft_printf("OK");
 }
 
 
