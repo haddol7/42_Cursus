@@ -10,6 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef DEQUE_H
+# define DEQUE_H
+
 #include "ft_printf.h"
 #include "libft.h"
 #include <stddef.h>
@@ -58,3 +61,5 @@ typedef struct s_total
 void	push(t_stack *stack, t_node *node, e_pos pos);
 t_node	*pop(t_stack *stack, e_pos pos);
 void 	node_swap(t_stack *stack);
+
+#endif

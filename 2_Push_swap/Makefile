@@ -2,8 +2,7 @@ SRC_DIR := src/
 OBJ_DIR := obj/
 CC := cc
 CFLAGS := -Wall -Werror -Wextra -fsanitize=address
-CFLAGS := 
-
+CFLAGS :=
 LIB := lib/
 PRINTF_DIR := $(LIB)ft_printf/
 PRINTF := $(PRINTF_DIR)libftprintf.a
@@ -11,9 +10,9 @@ LIBFT_DIR := $(LIB)libft/
 LIBFT := $(LIBFT_DIR)libft.a
 HEADER := -I$(PRINTF_DIR) -I$(LIBFT_DIR) -Iinc/
 
-SRC_COMMON = deque command parse_elem utils
-SRC_MAN	= main
-SRC_BONUS = main_bonus
+SRC_COMMON = deque parse_elem utils
+SRC_MAN	= main command command_2 command_3
+SRC_BONUS = main_bonus command_bonus
 
 ifdef WITH_BONUS
 	SRC_FIN = $(SRC_COMMON) $(SRC_BONUS)

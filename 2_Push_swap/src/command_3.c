@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   control_elem.h                                     :+:      :+:    :+:   */
+/*   command_3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/01 18:27:50 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/12 19:29:29 by daeha            ###   ########.fr       */
+/*   Created: 2024/04/12 17:57:09 by daeha             #+#    #+#             */
+/*   Updated: 2024/04/12 19:23:35 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CONTROL_ELEM_H
-# define CONTROL_ELEM_H
+#include "command.h"
 
-#include "deque.h"
-
-int		command_to_stack(t_total *stack, char *command);
-
-//parse_elem.c
-size_t	parse_value(int argc, char **argv, t_stack *a);
-void 	check_elem_dup(t_stack a);
-
-#endif
+void rrr(t_total *stack)
+{
+	push(&stack->a, pop(&stack->a, BOT), TOP);
+	push(&stack->b, pop(&stack->b, BOT), TOP);
+	ft_printf("rrr\n");
+}

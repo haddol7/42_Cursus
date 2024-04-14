@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:17:10 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/01 18:36:12 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/06 18:26:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include "utils.h"
 
 static char	*move_to_num(char *str, int *sign, int *is_digit_exists);
-static int	atoi_fit(char **str, int *is_digit_exists);
+static int	atoi_fit(char **str, int *digit_in_argv);
 
-size_t	put_value_in_stack_a(int argc, char **argv, t_stack *a)
+size_t	parse_value(int argc, char **argv, t_stack *a)
 {
 	t_node	*node;
 	int		cnt;
@@ -27,16 +27,16 @@ size_t	put_value_in_stack_a(int argc, char **argv, t_stack *a)
 	while (cnt < argc)
 	{
 		result = atoi_fit(&argv[cnt], &is_digit_exists);
-		if (is_digit_exists == 1)
-		{
-			node = (t_node *)malloc(sizeof(t_node));
+		node = (t_node *)malloc(sizeof(t_node));
 			if (node == NULL)
 				exit(1);
-			node->val = result;
-			push(a, node, BOT);
-		}
+		node->val = result;
+		push(a, node, BOT);
 		if (argv[cnt][0] == '\0')
+		{
+			is_digit_exists = 0;
 			cnt++;
+		}
 	}
 	return (a->size);
 }
@@ -89,8 +89,7 @@ static int	atoi_fit(char **str, int *is_digit_exists)
 
 static char	*move_to_num(char *str, int *sign, int *is_digit_exists)
 {
-	*is_digit_exists = 0;
-	if (*str == ' ')
+	while (*str == ' ')
 		str++;
 	if (*str == '-')
 	{
@@ -99,9 +98,7 @@ static char	*move_to_num(char *str, int *sign, int *is_digit_exists)
 	}
 	else if (*str == '+')
 		str++;
-	if (ft_isdigit(*str))
-		*is_digit_exists = 1;
-	else
+	if (!*is_digit_exists && *str == '\0')
 		terminate();
 	return (str);
 }

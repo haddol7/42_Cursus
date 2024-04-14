@@ -6,18 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 13:02:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/01 18:31:07 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/06 17:45:53 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "control_elem.h"
 
 static void	check_stack_sorted_free(t_total *stack);
-
-void	leaks(void)
-{
-	system("leaks checker");
-}
 
 int main(int argc, char **argv)
 {
@@ -26,11 +21,10 @@ int main(int argc, char **argv)
 	char	*command;
 	int		is_eof;
 
-	atexit(leaks);
 	if (argc <= 1)
 		return (1);
 	ft_memset(&stack, 0, sizeof(t_total));
-	stack.size = put_value_in_stack_a(argc, argv, &stack.a);
+	stack.size = parse_value(argc, argv, &stack.a);
 	check_elem_dup(stack.a);
 	is_eof = 0;
 	while (!is_eof)
@@ -62,9 +56,9 @@ static void	check_stack_sorted_free(t_total *stack)
 		free(pop(&stack->a, TOP));
 	}
 	if (is_sorted == 0)
-		ft_printf("KO");
+		ft_printf("KO\n");
 	else
-		ft_printf("OK");
+		ft_printf("OK\n");
 }
 
 
