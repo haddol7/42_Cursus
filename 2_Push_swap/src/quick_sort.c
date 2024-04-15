@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:56:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/15 20:42:08 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/15 20:52:14 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	set_pivot(t_stack stack, int size, int *pivot_1, int *pivot_2)
 
 	*pivot_2 = ary[(size / 3) - 1];
 	*pivot_1 = ary[size - (size / 3)];
-	ft_printf("pivot_1 : %d \npivot_2 : %d\n", *pivot_1, *pivot_2);
+//	ft_printf("pivot_1 : %d \npivot_2 : %d\n", *pivot_1, *pivot_2);
 	free(ary);
 //	sleep(5);
 }
@@ -100,27 +100,36 @@ void A_to_B(t_total *stack, int size)
 	}
 	
 	//the size of chunk 1 and chunk 3 is equivalant
-	for (int i = 0; i < cnt_rb; i++)
-		rrr(stack);
+	int j = 0;
+	while (j < cnt_rb || j < cnt_ra)
+	{
+		if (j < cnt_rb && j < cnt_ra)
+			rrr(stack);
+		else if (j < cnt_rb)
+			rrb(stack);
+		else
+			rra(stack);
+		j++;
+	}
 
 	
-	t_node *temp;
+	//t_node *temp;
 
-	ft_printf("stack A : ");
-	temp = stack->a.top;
-	for (int i = 0; i < stack->a.size; i++)
-	{
-		ft_printf("%d ", temp->val);
-		temp = temp->next;
-	}
-	ft_printf("\nstack B : ");
-	temp = stack->b.top;
-	for (int i = 0; i < stack->b.size; i++)
-	{
-		ft_printf("%d ", temp->val);
-		temp = temp->next;
-	}
-	ft_printf("\n");
+	// ft_printf("stack A : ");
+	// temp = stack->a.top;
+	// for (int i = 0; i < stack->a.size; i++)
+	// {
+	// 	ft_printf("%d ", temp->val);
+	// 	temp = temp->next;
+	// }
+	// ft_printf("\nstack B : ");
+	// temp = stack->b.top;
+	// for (int i = 0; i < stack->b.size; i++)
+	// {
+	// 	ft_printf("%d ", temp->val);
+	// 	temp = temp->next;
+	// }
+	// ft_printf("\n");
 
 	A_to_B(stack, cnt_ra);
 	B_to_A(stack, cnt_rb);
@@ -171,32 +180,40 @@ void B_to_A(t_total *stack, int size)
 		}
 	}
 
-	t_node *temp;
+	// t_node *temp;
 
-	ft_printf("stack A : ");
-	temp = stack->a.top;
-	for (int i = 0; i < stack->a.size; i++)
-	{
-		ft_printf("%d ", temp->val);
-		temp = temp->next;
-	}
-	ft_printf("\nstack B : ");
-	temp = stack->b.top;
-	for (int i = 0; i < stack->b.size; i++)
-	{
-		ft_printf("%d ", temp->val);
-		temp = temp->next;
-	}
-	ft_printf("\n");
+	// ft_printf("stack A : ");
+	// temp = stack->a.top;
+	// for (int i = 0; i < stack->a.size; i++)
+	// {
+	// 	ft_printf("%d ", temp->val);
+	// 	temp = temp->next;
+	// }
+	// ft_printf("\nstack B : ");
+	// temp = stack->b.top;
+	// for (int i = 0; i < stack->b.size; i++)
+	// {
+	// 	ft_printf("%d ", temp->val);
+	// 	temp = temp->next;
+	// }
+	// ft_printf("\n");
 
 
 	//chunk 1 must be sorted before reverse
 	A_to_B(stack, cnt_ra);
 	
 	//the size of chunk 1 and chunk 3 is equivalant
-	for (int i = 0; i < cnt_rb; i++)
-		rrr(stack);
-	
+	int j = 0;
+	while (j < cnt_rb || j < cnt_ra)
+	{
+		if (j < cnt_rb && j < cnt_ra)
+			rrr(stack);
+		else if (j < cnt_rb)
+			rrb(stack);
+		else
+			rra(stack);
+		j++;
+	}
 	A_to_B(stack, cnt_pa - cnt_ra);
 	B_to_A(stack, cnt_rb);
 }
