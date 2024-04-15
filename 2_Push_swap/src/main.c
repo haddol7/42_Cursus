@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 21:55:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/15 18:15:10 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/15 18:19:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,13 +167,13 @@ int main(int argc, char **argv)
 	stack.size = parse_value(argc, argv, &stack.a);
 	check_elem_dup(stack.a);
 	
-	for (int i = 0; i < stack.size ; i++)
-	{
-		pb(&stack);
-		rb(&stack);
-	}
+	// for (int i = 0; i < stack.size ; i++)
+	// {
+	// 	pb(&stack);
+	// 	rb(&stack);
+	// }
 	print_stack(&stack);
-	sort_small_sort(&stack, stack.size, DESCEND);
+	sort_small_sort(&stack, stack.size, ASCEND);
 //	A_to_B(&stack, stack.size);
 	print_stack(&stack);
 }

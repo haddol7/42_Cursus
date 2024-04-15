@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:05:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/15 18:14:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/15 18:42:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int	find_min(t_total *stack, int size, e_order order)
 }
 
 static void	sort_3_to_5(t_total *stack, int size, e_order order);
-static void sort_3(t_total *stack, int size, e_order order);
-static void sort_4(t_total *stack, int size, e_order order);
-static void sort_5(t_total *stack, int size, e_order order);
+static void sort_3(t_total *stack, e_order order);
+static void sort_4(t_total *stack, e_order order);
+static void sort_5(t_total *stack, e_order order);
 
 void sort_small_sort(t_total *stack, int size, e_order order)
 {
@@ -73,7 +73,7 @@ void sort_small_sort(t_total *stack, int size, e_order order)
 				stack->b.top->val < stack->b.top->next->val)
 			sb(stack);
 	}
-	else if (size >= 3)
+	else
 		sort_3_to_5(stack, size, order);
 	if (order == DESCEND)
 	{
@@ -91,20 +91,20 @@ static void	sort_3_to_5(t_total *stack, int size, e_order order)
 	t_node	*node;
 
 	if (size == 3)
-		sort_3(stack, size, order);
+		sort_3(stack, order);
 	else if (size == 4)
-		sort_4(stack, size, order);
+		sort_4(stack, order);
 	else
-		sort_5(stack, size, order);
+		sort_5(stack, order);
 }
 
-static void sort_3(t_total *stack, int size, e_order order)
+static void sort_3(t_total *stack, e_order order)
 {
 	int	max;
 	int min;
 	
-	max = find_max(stack, size, order);
-	min = find_min(stack, size, order);
+	max = find_max(stack, 3, order);
+	min = find_min(stack, 3, order);
 	if (order == ASCEND)
 	{
 		if (max == stack->a.top->val)
@@ -125,14 +125,14 @@ static void sort_3(t_total *stack, int size, e_order order)
 	}
 } 
 
-static void sort_4(t_total *stack, int size, e_order order)
+static void sort_4(t_total *stack, e_order order)
 {
 	int	cnt;
 	int max;
 	int min;
 
-	max = find_max(stack, size, order);
-	min = find_min(stack, size, order);
+	max = find_max(stack, 4, order);
+	min = find_min(stack, 4, order);
 	cnt = 0;
 	if (order == ASCEND)
 	{
@@ -142,7 +142,7 @@ static void sort_4(t_total *stack, int size, e_order order)
 			cnt++;
 		}
 		pb(stack);
-		sort_3(stack, 3, order);
+		sort_3(stack, order);
 		pa(stack);
 		ra(stack);
 	}
@@ -150,17 +150,47 @@ static void sort_4(t_total *stack, int size, e_order order)
 	{
 		while (stack->b.top->val != min)
 		{
-			ra(stack);
+			rrb(stack);
 			cnt++;
 		}
 		pa(stack);
-		sort_3(stack, 3, order);
+		sort_3(stack, order);
 		pb(stack);
 		rb(stack);
 	}
 } 
  
-static void sort_5(t_total *stack, int size, e_order order)
+static void sort_5(t_total *stack, e_order order)
 {
-	
+	int	cnt;
+	int max;
+	int min;
+
+	max = find_max(stack, 5, order);
+	min = find_min(stack, 5, order);
+	cnt = 0;
+	if (order == ASCEND)
+	{
+		while (stack->a.top->val != max)
+		{
+			rra(stack);
+			cnt++;
+		}
+		pb(stack);
+		sort_4(stack, order);
+		pa(stack);
+		ra(stack);
+	}
+	else
+	{
+		while (stack->b.top->val != min)
+		{
+			rrb(stack);
+			cnt++;
+		}
+		pa(stack);
+		sort_3(stack, order);
+		pb(stack);
+		rb(stack);
+	}
 }
