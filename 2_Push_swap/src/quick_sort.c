@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:56:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/15 20:52:14 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/15 21:46:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void A_to_B(t_total *stack, int size)
 	for (int i = 0; i < size ; i++)
 	{
 		val = stack->a.top->val;
+//		ft_printf("val -> %d | ", val);
 		if (val >= pivot_1)
 		{
 			ra(stack);
@@ -113,7 +114,7 @@ void A_to_B(t_total *stack, int size)
 	}
 
 	
-	//t_node *temp;
+	// t_node *temp;
 
 	// ft_printf("stack A : ");
 	// temp = stack->a.top;
@@ -163,6 +164,7 @@ void B_to_A(t_total *stack, int size)
 	for (int i = 0; i < size ; i++)
 	{
 		val = stack->b.top->val;
+//		ft_printf("val -> %d | ", val);
 		if (val <= pivot_2)
 		{
 			rb(stack);
@@ -200,7 +202,7 @@ void B_to_A(t_total *stack, int size)
 
 
 	//chunk 1 must be sorted before reverse
-	A_to_B(stack, cnt_ra);
+	A_to_B(stack, cnt_pa - cnt_ra);
 	
 	//the size of chunk 1 and chunk 3 is equivalant
 	int j = 0;
@@ -214,6 +216,6 @@ void B_to_A(t_total *stack, int size)
 			rra(stack);
 		j++;
 	}
-	A_to_B(stack, cnt_pa - cnt_ra);
+	A_to_B(stack, cnt_ra);
 	B_to_A(stack, cnt_rb);
 }
