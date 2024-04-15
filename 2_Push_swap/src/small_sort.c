@@ -6,12 +6,11 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:05:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/15 18:42:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/15 20:17:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "control_elem.h"
-#include "deque.h"
 #include "command.h"
 
 int	find_max(t_total *stack, int size, e_order order)
