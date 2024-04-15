@@ -61,6 +61,26 @@
 	"__string": "c",
 	"ios": "c",
 	"control_elem.h": "c",
-	"command.h": "c"
+	"command.h": "c",
+	"__bit_reference": "c",
+	"__functional_base": "c",
+	"__node_handle": "c",
+	"algorithm": "c",
+	"atomic": "c",
+	"bitset": "c",
+	"chrono": "c",
+	"deque": "c",
+	"__memory": "c",
+	"functional": "c",
+	"iterator": "c",
+	"limits": "c",
+	"locale": "c",
+	"memory": "c",
+	"optional": "c",
+	"ratio": "c",
+	"system_error": "c",
+	"tuple": "c",
+	"type_traits": "c",
+	"vector": "c"
 }
 }
