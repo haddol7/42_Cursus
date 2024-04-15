@@ -37,6 +37,12 @@ typedef enum position
 	BOT = 1
 } e_pos;
 
+typedef enum order
+{
+	ASCEND = 0,
+	DESCEND = 1
+} e_order;
+
 typedef struct s_node
 {
 	int		val;

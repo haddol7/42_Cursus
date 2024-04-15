@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:56:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/15 16:03:28 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/15 16:17:13 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void A_to_B(t_total *stack, int size)
 	
 	if (size <= 5)
 	{
-		sort_small_case(stack, size, 1);
+		sort_small_case(stack, size, ASCEND);
 		return ;	
 	}
 	set_pivot(stack, size, &pivot_1, &pivot_2);
@@ -72,7 +72,7 @@ void B_to_A(t_total *stack, int size)
 	
 	if (size <= 5)
 	{
-		sort_small_case(stack, size, 0);
+		sort_small_case(stack, size, DESCEND);
 		for (int i = 0; i < size; i++)
 			pa(stack);
 		return ;	
