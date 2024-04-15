@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 21:55:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/14 20:49:48 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/15 16:04:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@
 
 #include <unistd.h>
 
-void B_to_A(t_total *stack, int size);
-void A_to_B(t_total *stack, int size);
-
 void swap_int(int *a, int *b)
 {
 	int temp;
@@ -26,27 +23,6 @@ void swap_int(int *a, int *b)
 	temp = *a;
 	*a = *b;
 	*b = temp;
-}
-
-void print_stack(t_total *stack)
-{
-	t_node *temp;
-
-	ft_printf("stack A : ");
-	temp = stack->a.top;
-	for (int i = 0; i < stack->a.size; i++)
-	{
-		ft_printf("%d ", temp->val);
-		temp = temp->next;
-	}
-	ft_printf("\nstack B : ");
-	temp = stack->b.top;
-	for (int i = 0; i < stack->b.size; i++)
-	{
-		ft_printf("%d ", temp->val);
-		temp = temp->next;
-	}
-	ft_printf("\n");
 }
 
 int find_pivot(t_stack stack, int size)
@@ -86,6 +62,31 @@ int find_pivot(t_stack stack, int size)
 //	sleep(5);
 	return (pivot);
 }
+
+void print_stack(t_total *stack)
+{
+	t_node *temp;
+
+	ft_printf("stack A : ");
+	temp = stack->a.top;
+	for (int i = 0; i < stack->a.size; i++)
+	{
+		ft_printf("%d ", temp->val);
+		temp = temp->next;
+	}
+	ft_printf("\nstack B : ");
+	temp = stack->b.top;
+	for (int i = 0; i < stack->b.size; i++)
+	{
+		ft_printf("%d ", temp->val);
+		temp = temp->next;
+	}
+	ft_printf("\n");
+}
+
+/*
+void B_to_A(t_total *stack, int size);
+void A_to_B(t_total *stack, int size);
 
 void A_to_B(t_total *stack, int size)
 {
@@ -154,7 +155,7 @@ void B_to_A(t_total *stack, int size)
 	A_to_B(stack, pa_cnt);
 	B_to_A(stack, rb_cnt);
 }
-
+*/
 
 int main(int argc, char **argv)
 {
