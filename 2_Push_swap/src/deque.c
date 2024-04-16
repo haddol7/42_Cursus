@@ -6,25 +6,11 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 13:40:25 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/01 18:12:49 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/16 13:02:43 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "deque.h"
-
-/*
-sa	|	node_swap(&a);
-sb 	|	node_swap(&b);
-ss 	|	node_swap(&a) && node_swap(&b)
-pa 	|	push(&a, pop(&b, TOP), TOP);
-pb 	|	push(&b, pop(&a, TOP), TOP);
-ra 	|	push(&a, pop(&a, TOP), BOT);
-rb 	|	push(&b, pop(&b, TOP), BOT);
-rr 	|	ra && rb
-rra |	push(&a, pop(&a, BOT), TOP);
-rrb |	push(&b, pop(&b, BOT), TOP);
-rrr |	rra && rrb
-*/
 
 void	push(t_stack *stack, t_node *node, e_pos pos)
 {

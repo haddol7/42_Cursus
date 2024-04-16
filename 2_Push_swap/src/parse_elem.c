@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:17:10 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/06 18:26:47 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/15 22:12:50 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ static char	*move_to_num(char *str, int *sign, int *is_digit_exists)
 	else if (*str == '+')
 		str++;
 	if (!*is_digit_exists && *str == '\0')
+		terminate();
+	if (ft_isdigit(*str) == 0)
 		terminate();
 	return (str);
 }

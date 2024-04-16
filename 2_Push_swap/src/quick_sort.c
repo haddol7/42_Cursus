@@ -6,13 +6,82 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:56:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/15 21:46:29 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/16 16:25:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "control_elem.h"
 #include "command.h"
 #include "deque.h"
+
+static int	find_max(t_total *stack, int size, e_order order)
+{
+	t_node 	*node;
+	int		result;
+
+	if (order == ASCEND)
+		node = stack->a.top;
+	else
+		node = stack->b.top;
+	result = node->val;
+	while (size--)
+	{
+		if (node->val > result)
+			result = node->val;
+		node = node->next;
+	}
+	return (result);
+}
+
+static int	find_min(t_total *stack, int size, e_order order)
+{
+	t_node 	*node;
+	int		result;
+
+	if (order == ASCEND)
+		node = stack->a.top;
+	else
+		node = stack->b.top;
+	result = node->val;
+	while (size--)
+	{
+		if (node->val < result)
+			result = node->val;
+		node = node->next;
+	}
+	return (result);
+}
+
+int	is_sorted(t_total *stack, int size, e_order sort)
+{
+	int		i;
+	t_node	*node;
+
+	if (sort == ASCEND)
+		node = stack->a.top;
+	else
+		node = stack->b.top;
+	i = 1;
+	while (i < size)
+	{	
+		if (sort == ASCEND && node->val > node->next->val)
+			return (0);
+		else if (sort == DESCEND && node->val < node->next->val)
+			return (0);
+		node = node->next;
+		i++;
+	}
+	if (sort == DESCEND)
+	{
+		i = 0;
+		while (i < size)
+		{
+			pa(stack);
+			i++;
+		}
+	}
+	return (1);
+}
 
 void swap_int(int *a, int *b)
 {
@@ -23,8 +92,7 @@ void swap_int(int *a, int *b)
 	*b = temp;
 }
 
-
-void	set_pivot(t_stack stack, int size, int *pivot_1, int *pivot_2)
+void	set_pivot(t_stack stack, int size, int *pivot_1, int *pivot_2, e_order order)
 {
 	int		*ary;
 	int		pivot;
@@ -48,11 +116,9 @@ void	set_pivot(t_stack stack, int size, int *pivot_1, int *pivot_2)
 		}
 	}
 
-	*pivot_2 = ary[(size / 3) - 1];
-	*pivot_1 = ary[size - (size / 3)];
-//	ft_printf("pivot_1 : %d \npivot_2 : %d\n", *pivot_1, *pivot_2);
+	*pivot_2 = ary[(size / 3)];
+	*pivot_1 = ary[(size / 3) * 2];
 	free(ary);
-//	sleep(5);
 }
 
 static void B_to_A(t_total *stack, int size);
@@ -64,7 +130,6 @@ void A_to_B(t_total *stack, int size)
 	int cnt_ra;
 	int cnt_pb;
 	int cnt_rb;
-	
 	int val;
 	
 	cnt_ra = 0;
@@ -77,12 +142,60 @@ void A_to_B(t_total *stack, int size)
 		if (stack->a.top->val > stack->a.top->next->val)
 			sa(stack);
 		return ;
-	}	
-	set_pivot(stack->a, size, &pivot_1, &pivot_2);
+	}
+	if (is_sorted(stack, size, ASCEND))
+		return ;
+	if (size == 3)
+	{
+		int max = find_max(stack, 3, ASCEND);
+		int min = find_min(stack, 3, ASCEND);
+
+		int one = stack->a.top->val;
+		int two = stack->a.top->next->val;
+		int three = stack->a.top->next->next->val;
+
+		if (min == one && max == two)
+		{
+			pb(stack);
+			sa(stack);
+			pa(stack);
+		}
+		else if (min == two && max == three)
+		{
+			sa(stack);
+		}
+		else if (min == two && max == one)
+		{
+			sa(stack);
+			pb(stack);
+			sa(stack);
+			pa(stack);
+		}
+		else if (min == three && max == one)
+		{
+			sa(stack);
+			ra(stack);
+			ra(stack);
+			pb(stack);
+			rra(stack);
+			rra(stack);
+			pa(stack);
+		}
+		else if (min == three && max == two)
+		{
+			ra(stack);
+			ra(stack);
+			pb(stack);
+			rra(stack);
+			rra(stack);
+			pa(stack);
+		}
+		return;
+	}
+	set_pivot(stack->a, size, &pivot_1, &pivot_2, ASCEND);
 	for (int i = 0; i < size ; i++)
 	{
 		val = stack->a.top->val;
-//		ft_printf("val -> %d | ", val);
 		if (val >= pivot_1)
 		{
 			ra(stack);
@@ -99,8 +212,6 @@ void A_to_B(t_total *stack, int size)
 			}
 		}
 	}
-	
-	//the size of chunk 1 and chunk 3 is equivalant
 	int j = 0;
 	while (j < cnt_rb || j < cnt_ra)
 	{
@@ -112,26 +223,6 @@ void A_to_B(t_total *stack, int size)
 			rra(stack);
 		j++;
 	}
-
-	
-	// t_node *temp;
-
-	// ft_printf("stack A : ");
-	// temp = stack->a.top;
-	// for (int i = 0; i < stack->a.size; i++)
-	// {
-	// 	ft_printf("%d ", temp->val);
-	// 	temp = temp->next;
-	// }
-	// ft_printf("\nstack B : ");
-	// temp = stack->b.top;
-	// for (int i = 0; i < stack->b.size; i++)
-	// {
-	// 	ft_printf("%d ", temp->val);
-	// 	temp = temp->next;
-	// }
-	// ft_printf("\n");
-
 	A_to_B(stack, cnt_ra);
 	B_to_A(stack, cnt_rb);
 	B_to_A(stack, cnt_pb - cnt_rb);
@@ -159,12 +250,72 @@ void B_to_A(t_total *stack, int size)
 		pa(stack);
 		return ;
 	}
-		
-	set_pivot(stack->b, size, &pivot_1, &pivot_2);
+	if (size == 3)
+	{
+		int max = find_max(stack, 3, DESCEND);
+		int min = find_min(stack, 3, DESCEND);
+
+		int one = stack->b.top->val;
+		int two = stack->b.top->next->val;
+		int three = stack->b.top->next->next->val;
+
+		if (min == one && max == three)
+		{
+			sb(stack);
+			rb(stack);
+			rb(stack);
+			pa(stack);
+			rrb(stack);
+			rrb(stack);
+			pa(stack);
+			pa(stack);
+		}
+		else if (min == one && max == two)
+		{
+			rb(stack);
+			pa(stack);
+			pa(stack);
+			rrb(stack);
+			pa(stack);
+		}		
+		else if (min == two && max == three)
+		{
+			rb(stack);
+			rb(stack);
+			pa(stack);
+			rrb(stack);
+			rrb(stack);
+			pa(stack);
+			pa(stack);
+		}		
+		else if (min == three && max == two)
+		{
+			sb(stack);
+			pa(stack);
+			pa(stack);
+			pa(stack);
+		}
+		else if (min == two && max == one)
+		{
+			pa(stack);
+			sb(stack);
+			pa(stack);
+			pa(stack);
+		}
+		else
+		{
+			pa(stack);
+			pa(stack);
+			pa(stack);
+		}
+		return;
+	}
+	if (is_sorted(stack, size, DESCEND))
+		return ;	
+	set_pivot(stack->b, size, &pivot_1, &pivot_2, DESCEND);
 	for (int i = 0; i < size ; i++)
 	{
 		val = stack->b.top->val;
-//		ft_printf("val -> %d | ", val);
 		if (val <= pivot_2)
 		{
 			rb(stack);
@@ -181,30 +332,8 @@ void B_to_A(t_total *stack, int size)
 			}
 		}
 	}
-
-	// t_node *temp;
-
-	// ft_printf("stack A : ");
-	// temp = stack->a.top;
-	// for (int i = 0; i < stack->a.size; i++)
-	// {
-	// 	ft_printf("%d ", temp->val);
-	// 	temp = temp->next;
-	// }
-	// ft_printf("\nstack B : ");
-	// temp = stack->b.top;
-	// for (int i = 0; i < stack->b.size; i++)
-	// {
-	// 	ft_printf("%d ", temp->val);
-	// 	temp = temp->next;
-	// }
-	// ft_printf("\n");
-
-
-	//chunk 1 must be sorted before reverse
 	A_to_B(stack, cnt_pa - cnt_ra);
-	
-	//the size of chunk 1 and chunk 3 is equivalant
+
 	int j = 0;
 	while (j < cnt_rb || j < cnt_ra)
 	{
