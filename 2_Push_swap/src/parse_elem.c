@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:17:10 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/15 22:12:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/16 22:07:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static char	*move_to_num(char *str, int *sign, int *is_digit_exists);
 static int	atoi_fit(char **str, int *digit_in_argv);
 
-size_t	parse_value(int argc, char **argv, t_stack *a)
+void	parse_value(int argc, char **argv, t_total *stack)
 {
 	t_node	*node;
 	int		cnt;
@@ -31,17 +31,17 @@ size_t	parse_value(int argc, char **argv, t_stack *a)
 			if (node == NULL)
 				exit(1);
 		node->val = result;
-		push(a, node, BOT);
+		push(&stack->a, node, BOT);
 		if (argv[cnt][0] == '\0')
 		{
 			is_digit_exists = 0;
 			cnt++;
 		}
 	}
-	return (a->size);
+	stack->size = stack->a.size;
 }
 
-void check_elem_dup(t_stack a)
+void check_elem_dup(t_stack *a)
 {
 	size_t	i;
 	size_t	j;
@@ -49,12 +49,12 @@ void check_elem_dup(t_stack a)
 	t_node	*temp_j;
 	
 	i = 0;
-	temp = a.top;
-	while (i < a.size && a.size > 1)
+	temp = a->top;
+	while (i < a->size && a->size > 1)
 	{
 		j = 1;
 		temp_j = temp->next;
-		while (j < a.size)
+		while (j < a->size)
 		{
 			if (temp->val == temp_j->val)
 				terminate();

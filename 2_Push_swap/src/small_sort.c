@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:05:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/16 19:44:29 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/16 20:42:35 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void sort_3(t_total *stack);
 static void sort_4(t_total *stack);
 static void sort_5(t_total *stack);
 
-void sort_small_sort(t_total *stack, int size)
+void small_sort(t_total *stack, int size)
 {
 	if (size == 1)
 		return ;
@@ -155,17 +155,15 @@ void test(t_stack stack, int *min_1, int *min_2)
 static void sort_5(t_total *stack)
 {
 	int	cnt;
-	int max;
-	int idx;
-	int idx_2;
 	
 	int min1;
 	int min2;
 	
+	cnt = 0;
 	test(stack->a, &min1, &min2);
 	while (cnt < 2)
 	{
-		if (stack->a.top->val == 1 || stack->a.top->val == 2)
+		if (stack->a.top->val == min1 || stack->a.top->val == min2)
 		{
 			pb(stack);
 			cnt++;

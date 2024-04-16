@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:56:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/16 19:56:32 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/16 20:41:41 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ static void swap_int(int *a, int *b)
 void	set_pivot(t_stack stack, int size, int *pivot_1, int *pivot_2, e_order order)
 {
 	int		*ary;
-	int		pivot;
 	t_node	*temp;
 
 	ary = malloc(sizeof(int) * size);
@@ -129,7 +128,7 @@ void	set_pivot(t_stack stack, int size, int *pivot_1, int *pivot_2, e_order orde
 void A_to_B(t_total *stack, int size);
 static void B_to_A(t_total *stack, int size);
 
-void initial(t_total *stack, int size)
+void quick_sort(t_total *stack, int size)
 {
 	int pivot_1;
 	int pivot_2;
