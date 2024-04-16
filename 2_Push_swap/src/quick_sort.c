@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:56:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/16 16:25:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/16 16:38:14 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,10 +115,18 @@ void	set_pivot(t_stack stack, int size, int *pivot_1, int *pivot_2, e_order orde
 				swap_int(ary + j, ary + j + 1);
 		}
 	}
-
-	*pivot_2 = ary[(size / 3)];
-	*pivot_1 = ary[(size / 3) * 2];
+	if (order == ASCEND)
+	{
+		*pivot_2 = ary[(size - 1) - (size / 3) * 2];
+		*pivot_1 = ary[(size - 1) - (size / 3 - 1)];
+	}
+	else
+	{
+		*pivot_2 = ary[size / 3 - 1];
+		*pivot_1 = ary[(size / 3) * 2];
+	}
 	free(ary);
+
 }
 
 static void B_to_A(t_total *stack, int size);
