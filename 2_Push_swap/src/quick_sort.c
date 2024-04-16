@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:56:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/16 16:54:52 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/16 19:56:32 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	is_sorted(t_total *stack, int size, e_order sort)
 	return (1);
 }
 
-void swap_int(int *a, int *b)
+static void swap_int(int *a, int *b)
 {
 	int temp;
 	
@@ -125,7 +125,6 @@ void	set_pivot(t_stack stack, int size, int *pivot_1, int *pivot_2, e_order orde
 		*pivot_1 = ary[(size / 3) * 2];
 	}
 	free(ary);
-
 }
 void A_to_B(t_total *stack, int size);
 static void B_to_A(t_total *stack, int size);

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 21:55:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/16 16:51:15 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/16 19:46:24 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ int main(int argc, char **argv)
 	ft_memset(&stack, 0, sizeof(t_total));
 	stack.size = parse_value(argc, argv, &stack.a);
 	check_elem_dup(stack.a);
-	if (stack.size <= 1)
-		sort_small_sort(&stack, stack.size, ASCEND);
+	if (stack.size <= 5)
+		sort_small_sort(&stack, stack.size);
 	else
 		initial(&stack, stack.size);
 //	print_stack(&stack);
