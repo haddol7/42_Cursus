@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:56:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/16 16:38:14 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/16 16:54:52 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ void	set_pivot(t_stack stack, int size, int *pivot_1, int *pivot_2, e_order orde
 		ary[i] = temp->val;
 		temp = temp->next;
 	}
-
 	for (int i = 0; i < size; i++)
 	{
 		for (int j = 0; j < size - i - 1; j++)
@@ -128,8 +127,103 @@ void	set_pivot(t_stack stack, int size, int *pivot_1, int *pivot_2, e_order orde
 	free(ary);
 
 }
-
+void A_to_B(t_total *stack, int size);
 static void B_to_A(t_total *stack, int size);
+
+void initial(t_total *stack, int size)
+{
+	int pivot_1;
+	int pivot_2;
+	int cnt_ra;
+	int cnt_pb;
+	int cnt_rb;
+	int val;
+	
+	cnt_ra = 0;
+	cnt_pb = 0;
+	cnt_rb = 0;
+	if (size == 1)
+		return;
+	if (size == 2)
+	{
+		if (stack->a.top->val > stack->a.top->next->val)
+			sa(stack);
+		return ;
+	}
+	if (is_sorted(stack, size, ASCEND))
+		return ;
+	if (size == 3)
+	{
+		int max = find_max(stack, 3, ASCEND);
+		int min = find_min(stack, 3, ASCEND);
+
+		int one = stack->a.top->val;
+		int two = stack->a.top->next->val;
+		int three = stack->a.top->next->next->val;
+
+		if (min == one && max == two)
+		{
+			pb(stack);
+			sa(stack);
+			pa(stack);
+		}
+		else if (min == two && max == three)
+		{
+			sa(stack);
+		}
+		else if (min == two && max == one)
+		{
+			sa(stack);
+			pb(stack);
+			sa(stack);
+			pa(stack);
+		}
+		else if (min == three && max == one)
+		{
+			sa(stack);
+			ra(stack);
+			ra(stack);
+			pb(stack);
+			rra(stack);
+			rra(stack);
+			pa(stack);
+		}
+		else if (min == three && max == two)
+		{
+			ra(stack);
+			ra(stack);
+			pb(stack);
+			rra(stack);
+			rra(stack);
+			pa(stack);
+		}
+		return;
+	}
+	set_pivot(stack->a, size, &pivot_1, &pivot_2, ASCEND);
+	for (int i = 0; i < size ; i++)
+	{
+		val = stack->a.top->val;
+		if (val >= pivot_1)
+		{
+			ra(stack);
+			cnt_ra++;
+		}
+		else
+		{
+			pb(stack);
+			cnt_pb++;
+			if (val <= pivot_2)
+			{
+				rb(stack);
+				cnt_rb++;
+			}
+		}
+	}
+
+	A_to_B(stack, cnt_ra);
+	B_to_A(stack, cnt_pb - cnt_rb);
+	B_to_A(stack, cnt_rb);
+}
 
 void A_to_B(t_total *stack, int size)
 {

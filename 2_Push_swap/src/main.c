@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 21:55:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/16 16:14:47 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/16 16:51:15 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 	if (stack.size <= 1)
 		sort_small_sort(&stack, stack.size, ASCEND);
 	else
-		A_to_B(&stack, stack.size);
+		initial(&stack, stack.size);
 //	print_stack(&stack);
 //	check_stack_sorted_free(&stack);
 }
