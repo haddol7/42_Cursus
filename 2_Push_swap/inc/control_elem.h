@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:27:50 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/17 23:43:51 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 00:19:50 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,11 @@ void	command_to_stack(t_total *stack, char *command);
 size_t	parse_value(int argc, char **argv, t_total *stack);
 void 	check_elem_dup(t_stack *a);
 
-void quick_sort(t_total *stack, int size);
+void 	quick_sort(t_total *stack, int size);
 void	base_case_a(t_total *stack, int size);
-void small_sort(t_total *stack, int size);
+void	 small_sort(t_total *stack, int size);
+
+void	base_case_b_231(t_total *stack);
+void	base_case_b_312(t_total *stack);
+void	base_case_b_321(t_total *stack);
 #endif
