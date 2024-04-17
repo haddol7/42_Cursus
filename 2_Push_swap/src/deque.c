@@ -6,13 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 13:40:25 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/17 20:34:51 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 00:36:46 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "deque.h"
 
-void	push(t_stack *stack, t_node *node, e_pos pos)
+void	push(t_stack *stack, t_node *node, t_pos pos)
 {
 	if (node == NULL)
 		return ;
@@ -35,7 +35,7 @@ void	push(t_stack *stack, t_node *node, e_pos pos)
 	stack->size++;
 }
 
-t_node	*pop(t_stack *stack, e_pos pos)
+t_node	*pop(t_stack *stack, t_pos pos)
 {
 	t_node	*node;
 

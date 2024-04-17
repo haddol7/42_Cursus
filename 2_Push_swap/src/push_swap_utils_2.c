@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 21:15:43 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/17 22:51:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 00:36:52 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ps_count_command(t_total *stack, void (*command)(t_total *), int *cnt)
 	(*cnt)++;
 }
 
-int	ps_find_max(t_total *stack, int size, e_order order)
+int	ps_find_max(t_total *stack, int size, t_order order)
 {
 	t_node	*node;
 	int		result;
@@ -39,7 +39,7 @@ int	ps_find_max(t_total *stack, int size, e_order order)
 	return (result);
 }
 
-int	ps_find_min(t_total *stack, int size, e_order order)
+int	ps_find_min(t_total *stack, int size, t_order order)
 {
 	t_node	*node;
 	int		result;
@@ -58,7 +58,7 @@ int	ps_find_min(t_total *stack, int size, e_order order)
 	return (result);
 }
 
-int	ps_is_stack_sorted(t_total *stack, int size, e_order sort)
+int	ps_is_stack_sorted(t_total *stack, int size, t_order sort)
 {
 	int		i;
 	t_node	*node;
