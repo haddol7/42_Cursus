@@ -6,67 +6,24 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:56:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/17 21:21:26 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/17 22:15:04 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "deque.h"
 #include "control_elem.h"
 #include "command.h"
 #include "ps_utils.h"
-#include "deque.h"
-
-int	is_sorted(t_total *stack, int size, e_order sort)
-{
-	int		i;
-	t_node	*node;
-
-	if (sort == ASCEND)
-		node = stack->a.top;
-	else
-		node = stack->b.top;
-	i = 1;
-	while (i < size)
-	{	
-		if (sort == ASCEND && node->val > node->next->val)
-			return (0);
-		else if (sort == DESCEND && node->val < node->next->val)
-			return (0);
-		node = node->next;
-		i++;
-	}
-	if (sort == DESCEND)
-	{
-		i = 0;
-		while (i < size)
-		{
-			pa(stack);
-			i++;
-		}
-	}
-	return (1);
-}
 
 void	set_pivot(t_stack stack, int size, int *pivot_1, int *pivot_2, e_order order)
 {
 	int		*ary;
-	t_node	*temp;
 
 	ary = malloc(sizeof(int) * size);
-	temp = stack.top;
-
-	for (int i = 0; i < size; i++)
-	{
-		ary[i] = temp->val;
-		temp = temp->next;
-	}
-	for (int i = 0; i < size; i++)
-	{
-		for (int j = 0; j < size - i - 1; j++)
-		{
-			if (ary[j] > ary[j + 1])
-				ps_swap(ary + j, ary + j + 1);
-		}
-	}
+	if (ary == NULL)
+		exit(1);
+	ps_copy_array(ary, stack.top, size);
+	ps_quick_sort(ary, 0, size - 1);
 	if (order == ASCEND)
 	{
 		*pivot_2 = ary[(size - 1) - (size / 3) * 2];
@@ -79,40 +36,130 @@ void	set_pivot(t_stack stack, int size, int *pivot_1, int *pivot_2, e_order orde
 	}
 	free(ary);
 }
-void A_to_B(t_total *stack, int size);
+static void A_to_B(t_total *stack, int size);
 static void B_to_A(t_total *stack, int size);
+
+
+// void quick_sort(t_total *stack, int size)
+// {
+// 	int i;
+// 	int pivot_1;
+// 	int pivot_2;
+// 	int cnt_ra;
+// 	int cnt_pb;
+// 	int cnt_rb;
+// 	int val;
+
+// 	cnt_ra = 0;
+// 	cnt_pb = 0;
+// 	cnt_rb = 0;
+// 	if (ps_is_stack_sorted(stack, size, ASCEND))
+// 		return ;
+// 	if (size <= 2)
+// 	{
+// 		if (size == 2 && stack->a.top->val > stack->a.top->next->val)
+// 			sa(stack);
+// 		return ;
+// 	}
+// 	if (size == 3)
+// 	{
+// 		int max = ps_find_max(stack, 3, ASCEND);
+// 		int min = ps_find_min(stack, 3, ASCEND);
+// 		int one = stack->a.top->val;
+// 		int two = stack->a.top->next->val;
+// 		int three = stack->a.top->next->next->val;
+// 		if (min == one && max == two)
+// 		{
+// 			pb(stack);
+// 			sa(stack);
+// 			pa(stack);
+// 		}
+// 		else if (min == two && max == three)
+// 		{
+// 			sa(stack);
+// 		}
+// 		else if (min == two && max == one)
+// 		{
+// 			sa(stack);
+// 			pb(stack);
+// 			sa(stack);
+// 			pa(stack);
+// 		}
+// 		else if (min == three && max == one)
+// 		{
+// 			sa(stack);
+// 			ra(stack);
+// 			ra(stack);
+// 			pb(stack);
+// 			rra(stack);
+// 			rra(stack);
+// 			pa(stack);
+// 		}
+// 		else if (min == three && max == two)
+// 		{
+// 			ra(stack);
+// 			ra(stack);
+// 			pb(stack);
+// 			rra(stack);
+// 			rra(stack);
+// 			pa(stack);
+// 		}
+// 		return;
+// 	}
+// 	i = -1;
+// 	set_pivot(stack->a, size, &pivot_1, &pivot_2, ASCEND);
+// 	while (++i < size)
+// 	{
+// 		val = stack->a.top->val;
+// 		if (val >= pivot_1)
+// 		{
+// 			ra(stack);
+// 			cnt_ra++;
+// 		}
+// 		else
+// 		{
+// 			pb(stack);
+// 			cnt_pb++;
+// 			if (val <= pivot_2)
+// 			{
+// 				rb(stack);
+// 				cnt_rb++;
+// 			}
+// 		}
+// 	}
+// 	A_to_B(stack, cnt_ra);
+// 	B_to_A(stack, cnt_pb - cnt_rb);
+// 	B_to_A(stack, cnt_rb);
+// }
 
 void quick_sort(t_total *stack, int size)
 {
+	int i;
 	int pivot_1;
 	int pivot_2;
 	int cnt_ra;
 	int cnt_pb;
 	int cnt_rb;
 	int val;
-	
+
 	cnt_ra = 0;
 	cnt_pb = 0;
 	cnt_rb = 0;
-	if (size == 1)
-		return;
-	if (size == 2)
+	if (ps_is_stack_sorted(stack, size, ASCEND))
+		return ;
+	if (size <= 2)
 	{
-		if (stack->a.top->val > stack->a.top->next->val)
+		if (size == 2 && stack->a.top->val > stack->a.top->next->val)
 			sa(stack);
 		return ;
 	}
-	if (is_sorted(stack, size, ASCEND))
-		return ;
 	if (size == 3)
 	{
 		int max = ps_find_max(stack, 3, ASCEND);
 		int min = ps_find_min(stack, 3, ASCEND);
-
 		int one = stack->a.top->val;
 		int two = stack->a.top->next->val;
 		int three = stack->a.top->next->next->val;
-
 		if (min == one && max == two)
 		{
 			pb(stack);
@@ -151,8 +198,9 @@ void quick_sort(t_total *stack, int size)
 		}
 		return;
 	}
+	i = -1;
 	set_pivot(stack->a, size, &pivot_1, &pivot_2, ASCEND);
-	for (int i = 0; i < size ; i++)
+	while (++i < size)
 	{
 		val = stack->a.top->val;
 		if (val >= pivot_1)
@@ -171,13 +219,12 @@ void quick_sort(t_total *stack, int size)
 			}
 		}
 	}
-
 	A_to_B(stack, cnt_ra);
 	B_to_A(stack, cnt_pb - cnt_rb);
 	B_to_A(stack, cnt_rb);
 }
 
-void A_to_B(t_total *stack, int size)
+static void A_to_B(t_total *stack, int size)
 {
 	int pivot_1;
 	int pivot_2;
@@ -197,7 +244,7 @@ void A_to_B(t_total *stack, int size)
 			sa(stack);
 		return ;
 	}
-	if (is_sorted(stack, size, ASCEND))
+	if (ps_is_stack_sorted(stack, size, ASCEND))
 		return ;
 	if (size == 3)
 	{
@@ -364,7 +411,7 @@ void B_to_A(t_total *stack, int size)
 		}
 		return;
 	}
-	if (is_sorted(stack, size, DESCEND))
+	if (ps_is_stack_sorted(stack, size, DESCEND))
 		return ;	
 	set_pivot(stack->b, size, &pivot_1, &pivot_2, DESCEND);
 	for (int i = 0; i < size ; i++)

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 21:15:43 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/17 21:18:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/17 21:52:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,31 @@ int	ps_find_min(t_total *stack, int size, e_order order)
 		node = node->next;
 	}
 	return (result);
+}
+
+int	ps_is_stack_sorted(t_total *stack, int size, e_order sort)
+{
+	int		i;
+	t_node	*node;
+
+	i = 0;
+	if (sort == ASCEND)
+		node = stack->a.top;
+	else
+		node = stack->b.top;
+	while (++i < size)
+	{	
+		if (sort == ASCEND && node->val > node->next->val)
+			return (0);
+		else if (sort == DESCEND && node->val < node->next->val)
+			return (0);
+		node = node->next;
+	}
+	if (sort == DESCEND)
+	{
+		i = -1;
+		while (++i < size)
+			pa(stack);
+	}
+	return (1);
 }
