@@ -2,7 +2,6 @@ SRC_DIR := src/
 OBJ_DIR := obj/
 CC := cc
 CFLAGS := -Wall -Werror -Wextra -fsanitize=address
-CFLAGS :=
 LIB := lib/
 PRINTF_DIR := $(LIB)ft_printf/
 PRINTF := $(PRINTF_DIR)libftprintf.a

@@ -6,10 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 23:39:32 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 00:02:58 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 00:52:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ps_utils.h"
+#include "command.h"
 #include "control_elem.h"
 #include "deque.h"
 

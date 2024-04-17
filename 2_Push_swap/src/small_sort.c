@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:05:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/17 21:20:32 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 02:18:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ static void	sort_3(t_total *stack)
 
 static void	sort_4(t_total *stack)
 {
-	int	cnt;
 	int	max;
 
 	max = ps_find_max(stack, 4, ASCEND);
@@ -90,7 +89,6 @@ static void	sort_5(t_total *stack)
 static void	get_min_values(t_stack stack, int *min_1, int *min_2)
 {
 	int		ary[5];
-	t_node	*temp;
 
 	ps_copy_array(ary, stack.top, 5);
 	ps_quick_sort(ary, 0, 4);

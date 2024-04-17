@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:32:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 00:32:21 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 02:10:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "command.h"
 #include "ps_utils.h"
 
-void	split_a_to_b(t_total *stack, int size, int *pivot, t_count *cnt)
+void	split_init(t_total *stack, int size, int *pivot, t_count *cnt)
 {
 	int	i;
 	int	val;
@@ -36,20 +36,24 @@ void	split_a_to_b(t_total *stack, int size, int *pivot, t_count *cnt)
 	}
 }
 
-void	rewind_a_to_b(t_total *stack, t_count cnt)
+void	split_a_to_b(t_total *stack, int size, int *pivot, t_count *cnt)
 {
-	int	j;
+	int	i;
+	int	val;
 
-	j = 0;
-	while (j < cnt.rb || j < cnt.ra)
+	i = 0;
+	while (i < size)
 	{
-		if (j < cnt.rb && j < cnt.ra)
-			rrr(stack);
-		else if (j < cnt.rb)
-			rrb(stack);
+		val = stack->a.top->val;
+		if (val >= pivot[SECOND])
+			ps_count_command(stack, ra, &cnt->ra);
 		else
-			rra(stack);
-		j++;
+		{
+			ps_count_command(stack, pb, &cnt->p);
+			if (val > pivot[FIRST])
+				ps_count_command(stack, rb, &cnt->rb);
+		}
+		i++;
 	}
 }
 
@@ -71,6 +75,23 @@ void	split_b_to_a(t_total *stack, int size, int *pivot, t_count *cnt)
 				ps_count_command(stack, ra, &cnt->ra);
 		}
 		i++;
+	}
+}
+
+void	rewind_a_to_b(t_total *stack, t_count cnt)
+{
+	int	j;
+
+	j = 0;
+	while (j < cnt.rb || j < cnt.ra)
+	{
+		if (j < cnt.rb && j < cnt.ra)
+			rrr(stack);
+		else if (j < cnt.rb)
+			rrb(stack);
+		else
+			rra(stack);
+		j++;
 	}
 }
 

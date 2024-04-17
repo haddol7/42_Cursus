@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:56:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 00:45:10 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 02:17:15 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	quick_sort(t_total *stack, int size)
 	if (size <= 3)
 		return (base_case_a(stack, size));
 	set_pivot(stack->a, size, pivot, ASCEND);
-	split_a_to_b(stack, size, pivot, &cnt);
+	split_init(stack, size, pivot, &cnt);
 	a_to_b(stack, cnt.ra);
 	b_to_a(stack, cnt.p - cnt.rb);
 	b_to_a(stack, cnt.rb);

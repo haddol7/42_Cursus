@@ -6,12 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:34:45 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 00:38:37 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 00:53:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PS_UTILS_H
 # define PS_UTILS_H
+
+# include "deque.h"
 
 //push_swap_utils_1.c
 void	ps_terminate(void);

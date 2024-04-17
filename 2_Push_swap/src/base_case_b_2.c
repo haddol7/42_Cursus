@@ -6,10 +6,11 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:14:32 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 00:20:49 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 01:49:49 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "command.h"
 #include "control_elem.h"
 #include "deque.h"
 

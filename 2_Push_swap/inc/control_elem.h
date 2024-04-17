@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:27:50 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 00:51:12 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 02:10:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,10 @@ void	check_elem_dup(t_stack *a);
 void	quick_sort(t_total *stack, int size);
 
 //quick_sort_split.c
+void	split_init(t_total *stack, int size, int *pivot, t_count *cnt);
 void	split_a_to_b(t_total *stack, int size, int *pivot, t_count *cnt);
-void	rewind_a_to_b(t_total *stack, t_count cnt);
 void	split_b_to_a(t_total *stack, int size, int *pivot, t_count *cnt);
+void	rewind_a_to_b(t_total *stack, t_count cnt);
 void	rewind_b_to_a(t_total *stack, t_count cnt);
 
 //base_case_a.c
