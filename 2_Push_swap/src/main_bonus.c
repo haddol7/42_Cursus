@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 13:02:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/16 13:26:56 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/17 20:35:21 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	check_stack_sorted_free(t_total *stack);
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_total	stack;
 	t_node	*temp;
@@ -24,8 +24,8 @@ int main(int argc, char **argv)
 	if (argc <= 1)
 		return (1);
 	ft_memset(&stack, 0, sizeof(t_total));
-	stack.size = parse_value(argc, argv, &stack.a);
-	check_elem_dup(stack.a);
+	parse_value(argc, argv, &stack);
+	check_elem_dup(&stack.a);
 	is_eof = 0;
 	while (!is_eof)
 	{
@@ -60,7 +60,3 @@ static void	check_stack_sorted_free(t_total *stack)
 	else
 		ft_printf("OK\n");
 }
-
-
-
-

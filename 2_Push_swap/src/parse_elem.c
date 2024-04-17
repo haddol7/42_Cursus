@@ -6,12 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:17:10 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/16 22:07:29 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/17 20:42:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "deque.h"
-#include "utils.h"
+#include "ps_utils.h"
 
 static char	*move_to_num(char *str, int *sign, int *is_digit_exists);
 static int	atoi_fit(char **str, int *digit_in_argv);
@@ -28,8 +28,8 @@ void	parse_value(int argc, char **argv, t_total *stack)
 	{
 		result = atoi_fit(&argv[cnt], &is_digit_exists);
 		node = (t_node *)malloc(sizeof(t_node));
-			if (node == NULL)
-				exit(1);
+		if (node == NULL)
+			exit(1);
 		node->val = result;
 		push(&stack->a, node, BOT);
 		if (argv[cnt][0] == '\0')
@@ -41,13 +41,13 @@ void	parse_value(int argc, char **argv, t_total *stack)
 	stack->size = stack->a.size;
 }
 
-void check_elem_dup(t_stack *a)
+void	check_elem_dup(t_stack *a)
 {
 	size_t	i;
 	size_t	j;
 	t_node	*temp;
 	t_node	*temp_j;
-	
+
 	i = 0;
 	temp = a->top;
 	while (i < a->size && a->size > 1)
@@ -57,7 +57,7 @@ void check_elem_dup(t_stack *a)
 		while (j < a->size)
 		{
 			if (temp->val == temp_j->val)
-				terminate();
+				ps_terminate();
 			temp_j = temp_j->next;
 			j++;
 		}
@@ -81,7 +81,7 @@ static int	atoi_fit(char **str, int *is_digit_exists)
 		result += **str - '0';
 		temp = (int)result;
 		if (temp != result)
-			terminate();
+			ps_terminate();
 		(*str)++;
 	}
 	return ((int)(sign * result));
@@ -99,8 +99,8 @@ static char	*move_to_num(char *str, int *sign, int *is_digit_exists)
 	else if (*str == '+')
 		str++;
 	if (!*is_digit_exists && *str == '\0')
-		terminate();
+		ps_terminate();
 	if (ft_isdigit(*str) == 0)
-		terminate();
+		ps_terminate();
 	return (str);
 }

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 13:40:25 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/16 13:02:43 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/17 20:34:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ void	push(t_stack *stack, t_node *node, e_pos pos)
 
 t_node	*pop(t_stack *stack, e_pos pos)
 {
-	t_node *node;
-	
+	t_node	*node;
+
 	if (stack->size == 0)
 		return (NULL);
 	else
@@ -63,14 +63,13 @@ t_node	*pop(t_stack *stack, e_pos pos)
 	return (node);
 }
 
-void node_swap(t_stack *stack)
+void	node_swap(t_stack *stack)
 {
-	t_node *temp;
-	t_node *temp2;
+	t_node	*temp;
+	t_node	*temp2;
 
 	temp = pop(stack, TOP);
 	temp2 = pop(stack, TOP);
 	push(stack, temp, TOP);
 	push(stack, temp2, TOP);
 }
-

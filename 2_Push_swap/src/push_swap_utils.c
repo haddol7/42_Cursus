@@ -1,21 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   push_swap_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/01 18:34:45 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/12 19:30:43 by daeha            ###   ########.fr       */
+/*   Created: 2024/04/01 18:23:00 by daeha             #+#    #+#             */
+/*   Updated: 2024/04/17 20:44:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include "ps_utils.h"
 
-#include <unistd.h>
-#include <stdlib.h>
+void	ps_terminate(void)
+{
+	write(2, "Error\n", 6);
+	exit(1);
+}
 
-void	terminate(void);
+void	ps_swap_int(int *a, int *b)
+{
+	int	temp;
 
-#endif
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}

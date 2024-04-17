@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 17:54:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/12 19:22:47 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/17 20:33:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ void	ss(t_total *stack)
 	ft_printf("ss\n");
 }
 
-void pa(t_total *stack)
+void	pa(t_total *stack)
 {
 	push(&stack->a, pop(&stack->b, TOP), TOP);
 	ft_printf("pa\n");
 }
 
-void pb(t_total *stack)
+void	pb(t_total *stack)
 {
 	push(&stack->b, pop(&stack->a, TOP), TOP);
 	ft_printf("pb\n");

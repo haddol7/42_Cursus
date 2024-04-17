@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command.c                                          :+:      :+:    :+:   */
+/*   command_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:25:51 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/01 18:35:52 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/17 20:37:57 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 static int		command_to_stack_sub(t_total *stack, char *command);
 
-int		command_to_stack(t_total *stack, char *command)
+int	command_to_stack(t_total *stack, char *command)
 {
 	if (command == NULL)
 		return (1);
@@ -36,12 +36,12 @@ int		command_to_stack(t_total *stack, char *command)
 		push(&stack->a, pop(&stack->a, TOP), BOT);
 	else if (!ft_strncmp("rb\n", command, 3))
 		push(&stack->b, pop(&stack->b, TOP), BOT);
-	else	
+	else
 		return (command_to_stack_sub(stack, command));
 	return (0);
 }
 
-static int		command_to_stack_sub(t_total *stack, char *command)
+static int	command_to_stack_sub(t_total *stack, char *command)
 {
 	if (!ft_strncmp("rr\n", command, 3))
 	{
@@ -58,6 +58,6 @@ static int		command_to_stack_sub(t_total *stack, char *command)
 		push(&stack->b, pop(&stack->b, BOT), TOP);
 	}
 	else
-		terminate();
+		ps_terminate();
 	return (0);
 }
