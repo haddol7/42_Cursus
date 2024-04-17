@@ -11,7 +11,7 @@ LIBFT := $(LIBFT_DIR)libft.a
 HEADER := -I$(PRINTF_DIR) -I$(LIBFT_DIR) -Iinc/
 
 SRC_COMMON = deque parse_elem push_swap_utils push_swap_utils_2
-SRC_MAN	= main command command_2 command_3 quick_sort small_sort
+SRC_MAN	= main command command_2 command_3 quick_sort small_sort base_case_a
 SRC_BONUS = main_bonus command_bonus
 
 ifdef WITH_BONUS

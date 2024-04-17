@@ -6,12 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:25:51 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/17 20:37:57 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/17 23:44:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "deque.h"
-#include "utils.h"
+#include "ps_utils.h"
 
 static int		command_to_stack_sub(t_total *stack, char *command);
 

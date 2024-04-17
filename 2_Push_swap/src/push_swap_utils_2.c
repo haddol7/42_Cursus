@@ -6,13 +6,19 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 21:15:43 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/17 21:52:30 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/17 22:51:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "control_elem.h"
 #include "command.h"
 #include "deque.h"
+
+void	ps_count_command(t_total *stack, void (*command)(t_total *), int *cnt)
+{
+	command(stack);
+	(*cnt)++;
+}
 
 int	ps_find_max(t_total *stack, int size, e_order order)
 {
