@@ -10,7 +10,7 @@ LIBFT_DIR := $(LIB)libft/
 LIBFT := $(LIBFT_DIR)libft.a
 HEADER := -I$(PRINTF_DIR) -I$(LIBFT_DIR) -Iinc/
 
-SRC_COMMON = deque parse_elem push_swap_utils
+SRC_COMMON = deque parse_elem push_swap_utils push_swap_utils_2
 SRC_MAN	= main command command_2 command_3 quick_sort small_sort
 SRC_BONUS = main_bonus command_bonus
 

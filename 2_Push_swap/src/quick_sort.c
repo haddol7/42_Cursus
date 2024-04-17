@@ -6,51 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:56:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/17 21:05:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/17 21:21:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "control_elem.h"
 #include "command.h"
+#include "ps_utils.h"
 #include "deque.h"
-
-static int	find_max(t_total *stack, int size, e_order order)
-{
-	t_node 	*node;
-	int		result;
-
-	if (order == ASCEND)
-		node = stack->a.top;
-	else
-		node = stack->b.top;
-	result = node->val;
-	while (size--)
-	{
-		if (node->val > result)
-			result = node->val;
-		node = node->next;
-	}
-	return (result);
-}
-
-static int	find_min(t_total *stack, int size, e_order order)
-{
-	t_node 	*node;
-	int		result;
-
-	if (order == ASCEND)
-		node = stack->a.top;
-	else
-		node = stack->b.top;
-	result = node->val;
-	while (size--)
-	{
-		if (node->val < result)
-			result = node->val;
-		node = node->next;
-	}
-	return (result);
-}
 
 int	is_sorted(t_total *stack, int size, e_order sort)
 {
@@ -81,15 +44,6 @@ int	is_sorted(t_total *stack, int size, e_order sort)
 		}
 	}
 	return (1);
-}
-
-static void ps_swap(int *a, int *b)
-{
-	int temp;
-	
-	temp = *a;
-	*a = *b;
-	*b = temp;
 }
 
 void	set_pivot(t_stack stack, int size, int *pivot_1, int *pivot_2, e_order order)
@@ -152,8 +106,8 @@ void quick_sort(t_total *stack, int size)
 		return ;
 	if (size == 3)
 	{
-		int max = find_max(stack, 3, ASCEND);
-		int min = find_min(stack, 3, ASCEND);
+		int max = ps_find_max(stack, 3, ASCEND);
+		int min = ps_find_min(stack, 3, ASCEND);
 
 		int one = stack->a.top->val;
 		int two = stack->a.top->next->val;
@@ -247,8 +201,8 @@ void A_to_B(t_total *stack, int size)
 		return ;
 	if (size == 3)
 	{
-		int max = find_max(stack, 3, ASCEND);
-		int min = find_min(stack, 3, ASCEND);
+		int max = ps_find_max(stack, 3, ASCEND);
+		int min = ps_find_min(stack, 3, ASCEND);
 
 		int one = stack->a.top->val;
 		int two = stack->a.top->next->val;
@@ -352,8 +306,8 @@ void B_to_A(t_total *stack, int size)
 	}
 	if (size == 3)
 	{
-		int max = find_max(stack, 3, DESCEND);
-		int min = find_min(stack, 3, DESCEND);
+		int max = ps_find_max(stack, 3, DESCEND);
+		int min = ps_find_min(stack, 3, DESCEND);
 
 		int one = stack->b.top->val;
 		int two = stack->b.top->next->val;
