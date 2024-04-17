@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:05:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/17 20:42:10 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/17 21:13:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,41 +14,11 @@
 #include "command.h"
 #include "ps_utils.h"
 
-int	find_max(t_total *stack, int size)
-{
-	t_node 	*node;
-	int		result;
-
-	node = stack->a.top;
-	result = node->val;
-	while (size--)
-	{
-		if (node->val > result)
-			result = node->val;
-		node = node->next;
-	}
-	return (result);
-}
-
-int	find_min(t_total *stack, int size)
-{
-	t_node 	*node;
-	int		result;
-
-	node = stack->a.top;
-	result = node->val;
-	while (size--)
-	{
-		if (node->val < result)
-			result = node->val;
-		node = node->next;
-	}
-	return (result);
-}
-
 static void	sort_3(t_total *stack);
 static void	sort_4(t_total *stack);
 static void	sort_5(t_total *stack);
+static void	get_min_values(t_stack stack, int *min_1, int *min_2);
+
 
 void	small_sort(t_total *stack, int size)
 {
@@ -80,74 +50,28 @@ static void	sort_3(t_total *stack)
 		sa(stack);
 }
 
-int	find_idx(t_total *stack, int value)
-{
-	int		idx;
-	t_node	*node;
-
-	idx = 0;
-	node = stack->a.top;
-	while (node->val != value)
-	{
-		node = node->next;
-		idx++;
-	}
-	return (idx);
-}
-
 static void	sort_4(t_total *stack)
 {
 	int	cnt;
 	int	max;
-	int idx;
 
 	max = find_max(stack, 4);
-	idx = find_idx(stack, max);
 	while (stack->a.top->val != max)
-	{	
-		// if (idx < 2)
-		// 	ra(stack);
-		// else
-		// 	rra(stack);
-		ra(stack);
-	}
-	sort_3(stack);
+		rra(stack);
 	pb(stack);
+	sort_3(stack);
 	pa(stack);
 	ra(stack);
 }
 
-void test(t_stack stack, int *min_1, int *min_2)
+static void	sort_5(t_total *stack)
 {
-	int		ary[5];
-	t_node	*temp;
-
-	temp = stack.top;
-	for (int i = 0; i < 5; i++)
-	{
-		ary[i] = temp->val;
-		temp = temp->next;
-	}
-	for (int i = 0; i < 5; i++)
-	{
-		for (int j = 0; j < 5 - i - 1; j++)
-		{
-			if (ary[j] > ary[j + 1])
-				ps_swap_int(ary + j, ary + j + 1);
-		}
-	}
-	*min_1 = ary[0];
-	*min_2 = ary[1];
-}
-
-static void sort_5(t_total *stack)
-{
+	int	cnt;
 	int	min1;
 	int	min2;
-	int	cnt;
 
 	cnt = 0;
-	test(stack->a, &min1, &min2);
+	get_min_values(stack->a, &min1, &min2);
 	while (cnt < 2)
 	{
 		if (stack->a.top->val == min1 || stack->a.top->val == min2)
@@ -162,4 +86,15 @@ static void sort_5(t_total *stack)
 		sb(stack);
 	pa(stack);
 	pa(stack);
+}
+
+static void	get_min_values(t_stack stack, int *min_1, int *min_2)
+{
+	int		ary[5];
+	t_node	*temp;
+
+	ps_copy_array(ary, stack.top, 5);
+	ps_quick_sort(ary, 0, 4);
+	*min_1 = ary[0];
+	*min_2 = ary[1];
 }
