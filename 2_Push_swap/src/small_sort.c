@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 16:05:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 02:18:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 16:30:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ static void	get_min_values(t_stack stack, int *min_1, int *min_2);
 
 void	small_sort(t_total *stack, int size)
 {
+	if (ps_is_stack_sorted(stack, size, ASCEND))
+		return ;
 	if (size == 1)
 		return ;
 	else if (size == 2)

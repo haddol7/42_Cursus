@@ -6,11 +6,15 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 13:02:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/17 20:35:21 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 16:39:06 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
+#include "deque.h"
+#include "command.h"
 #include "control_elem.h"
+#include "ps_utils.h"
 
 static void	check_stack_sorted_free(t_total *stack);
 

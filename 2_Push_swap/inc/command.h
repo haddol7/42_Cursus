@@ -6,13 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 19:21:29 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 00:35:48 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 16:04:22 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COMMAND_H
 # define COMMAND_H
 
+# include "ft_printf.h"
 # include "deque.h"
 
 //command_1.c

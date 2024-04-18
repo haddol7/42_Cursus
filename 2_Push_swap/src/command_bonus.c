@@ -6,10 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:25:51 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/17 23:44:44 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 16:04:41 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
+#include "libft.h"
 #include "deque.h"
 #include "ps_utils.h"
 

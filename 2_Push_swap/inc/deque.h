@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 00:45:43 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 00:45:44 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 16:06:10 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define DEQUE_H
 
 # include <stddef.h>
-# include "ft_printf.h"
 # include "libft.h"
 
 typedef enum e_position

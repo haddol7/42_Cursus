@@ -1,7 +1,8 @@
 SRC_DIR := src/
 OBJ_DIR := obj/
 CC := cc
-CFLAGS := -Wall -Werror -Wextra -fsanitize=address
+CFLAGS := -Wall -Werror -Wextra
+CFLAGS :=
 LIB := lib/
 PRINTF_DIR := $(LIB)ft_printf/
 PRINTF := $(PRINTF_DIR)libftprintf.a
@@ -9,8 +10,8 @@ LIBFT_DIR := $(LIB)libft/
 LIBFT := $(LIBFT_DIR)libft.a
 HEADER := -I$(PRINTF_DIR) -I$(LIBFT_DIR) -Iinc/
 
-SRC_COMMON = deque parse_elem push_swap_utils_1 push_swap_utils_2
-SRC_MAN	= main command_1 command_2 command_3 \
+SRC_COMMON = deque parse_elem command_1 command_2 command_3 push_swap_utils_1 push_swap_utils_2
+SRC_MAN	= main \
 		quick_sort quick_sort_split \
 		base_case_a base_case_b_1 base_case_b_2 \
 		small_sort

@@ -6,18 +6,17 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/30 21:55:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/17 20:29:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 16:06:40 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "control_elem.h"
 #include "deque.h"
-#include "command.h"
 
-void	leak(void)
-{
-	system("leaks push_swap");
-}
+// void	leak(void)
+// {
+// 	system("leaks --list -- push_swap");
+// }
 
 int	main(int argc, char **argv)
 {

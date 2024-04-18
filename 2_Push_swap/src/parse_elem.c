@@ -6,10 +6,11 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:17:10 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/17 20:42:47 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 16:47:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stddef.h>
 #include "deque.h"
 #include "ps_utils.h"
 
@@ -78,18 +79,20 @@ static int	atoi_fit(char **str, int *is_digit_exists)
 	while (**str >= '0' && **str <= '9')
 	{
 		result *= 10;
-		result += **str - '0';
+		result = result + (sign) * (**str - '0');
 		temp = (int)result;
 		if (temp != result)
 			ps_terminate();
 		(*str)++;
 	}
-	return ((int)(sign * result));
+	if (**str != ' ' && **str != '\0')
+		ps_terminate();
+	return ((int)(result));
 }
 
 static char	*move_to_num(char *str, int *sign, int *is_digit_exists)
 {
-	while (*str == ' ')
+	if (*str == ' ')
 		str++;
 	if (*str == '-')
 	{
@@ -100,7 +103,7 @@ static char	*move_to_num(char *str, int *sign, int *is_digit_exists)
 		str++;
 	if (!*is_digit_exists && *str == '\0')
 		ps_terminate();
-	if (ft_isdigit(*str) == 0)
+	if (!ft_isdigit(*str))
 		ps_terminate();
 	return (str);
 }
