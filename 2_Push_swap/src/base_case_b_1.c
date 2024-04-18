@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 23:58:22 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 01:14:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 21:32:53 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,12 @@ static void	base_case_b_under_two(t_total *stack, int size)
 
 static void	base_case_b_123(t_total *stack)
 {
-	sb(stack);
-	rb(stack);
-	rb(stack);
 	pa(stack);
-	rrb(stack);
-	rrb(stack);
+	ra(stack);
 	pa(stack);
 	pa(stack);
+	sa(stack);
+	rra(stack);
 }
 
 static void	base_case_b_132(t_total *stack)
@@ -83,11 +81,9 @@ static void	base_case_b_132(t_total *stack)
 
 static void	base_case_b_213(t_total *stack)
 {
-	rb(stack);
-	rb(stack);
 	pa(stack);
-	rrb(stack);
-	rrb(stack);
+	sb(stack);
 	pa(stack);
+	sa(stack);
 	pa(stack);
 }
