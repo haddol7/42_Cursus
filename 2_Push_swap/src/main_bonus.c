@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 13:02:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 17:01:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 17:03:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "deque.h"
 #include "command.h"
 #include "control_elem.h"
-#include "ps_utils.h"
 
 // void	leak(void)
 // {
