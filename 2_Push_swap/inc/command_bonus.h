@@ -1,34 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command.h                                          :+:      :+:    :+:   */
+/*   command_bonus.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/12 19:21:29 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 17:32:50 by daeha            ###   ########.fr       */
+/*   Created: 2024/04/18 17:32:10 by daeha             #+#    #+#             */
+/*   Updated: 2024/04/18 17:32:45 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMAND_H
-# define COMMAND_H
+#ifndef COMMAND_BONUS_H
+# define COMMAND_BONUS_H
 
 # include "ft_printf.h"
 # include "deque.h"
 
-//command_1.c
-//command_2.c
-//command_3.c
-void	sa(t_total *stack);
-void	sb(t_total *stack);
-void	ss(t_total *stack);
-void	pa(t_total *stack);
-void	pb(t_total *stack);
-void	ra(t_total *stack);
-void	rb(t_total *stack);
-void	rr(t_total *stack);
-void	rra(t_total *stack);
-void	rrb(t_total *stack);
-void	rrr(t_total *stack);
+int		command_to_stack(t_total *stack, char *command);
 
 #endif
