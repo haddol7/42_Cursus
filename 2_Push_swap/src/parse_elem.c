@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:17:10 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 16:47:30 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/20 23:18:52 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,60 +14,52 @@
 #include "deque.h"
 #include "ps_utils.h"
 
-static char	*move_to_num(char *str, int *sign, int *is_digit_exists);
-static int	atoi_fit(char **str, int *digit_in_argv);
+static char	*move_to_num(char *str, int *sign);
+static int	atoi_fit(char **str);
 
 void	parse_value(int argc, char **argv, t_total *stack)
 {
 	t_node	*node;
 	int		cnt;
 	int		result;
-	int		is_digit_exists;
 
 	cnt = 1;
 	while (cnt < argc)
 	{
-		result = atoi_fit(&argv[cnt], &is_digit_exists);
+		result = atoi_fit(&argv[cnt]);
 		node = (t_node *)malloc(sizeof(t_node));
 		if (node == NULL)
 			exit(1);
 		node->val = result;
 		push(&stack->a, node, BOT);
 		if (argv[cnt][0] == '\0')
-		{
-			is_digit_exists = 0;
 			cnt++;
-		}
 	}
 	stack->size = stack->a.size;
 }
 
 void	check_elem_dup(t_stack *a)
 {
-	size_t	i;
-	size_t	j;
 	t_node	*temp;
 	t_node	*temp_j;
-
-	i = 0;
+	
 	temp = a->top;
-	while (i < a->size && a->size > 1)
+	while (temp != a->bot && a->size > 1)
 	{
-		j = 1;
 		temp_j = temp->next;
-		while (j < a->size)
+		while (1)
 		{
 			if (temp->val == temp_j->val)
 				ps_terminate();
+			if (temp_j == a->bot)
+				break;
 			temp_j = temp_j->next;
-			j++;
 		}
 		temp = temp->next;
-		i++;
 	}
 }
 
-static int	atoi_fit(char **str, int *is_digit_exists)
+static int	atoi_fit(char **str)
 {
 	long	result;
 	int		temp;
@@ -75,7 +67,7 @@ static int	atoi_fit(char **str, int *is_digit_exists)
 
 	sign = 1;
 	result = 0;
-	*str = move_to_num(*str, &sign, is_digit_exists);
+	*str = move_to_num(*str, &sign);
 	while (**str >= '0' && **str <= '9')
 	{
 		result *= 10;
@@ -90,7 +82,7 @@ static int	atoi_fit(char **str, int *is_digit_exists)
 	return ((int)(result));
 }
 
-static char	*move_to_num(char *str, int *sign, int *is_digit_exists)
+static char	*move_to_num(char *str, int *sign)
 {
 	if (*str == ' ')
 		str++;
@@ -101,8 +93,6 @@ static char	*move_to_num(char *str, int *sign, int *is_digit_exists)
 	}
 	else if (*str == '+')
 		str++;
-	if (!*is_digit_exists && *str == '\0')
-		ps_terminate();
 	if (!ft_isdigit(*str))
 		ps_terminate();
 	return (str);
