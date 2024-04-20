@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/01 18:25:51 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 16:04:41 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/21 00:49:53 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ static int	command_to_stack_sub(t_total *stack, char *command)
 		push(&stack->a, pop(&stack->a, TOP), BOT);
 		push(&stack->b, pop(&stack->b, TOP), BOT);
 	}
-	else if (!ft_strncmp("rra\n", command, 3))
+	else if (!ft_strncmp("rra\n", command, 4))
 		push(&stack->a, pop(&stack->a, BOT), TOP);
-	else if (!ft_strncmp("rrb\n", command, 3))
+	else if (!ft_strncmp("rrb\n", command, 4))
 		push(&stack->b, pop(&stack->b, BOT), TOP);
-	else if (!ft_strncmp("rrr\n", command, 3))
+	else if (!ft_strncmp("rrr\n", command, 4))
 	{
 		push(&stack->a, pop(&stack->a, BOT), TOP);
 		push(&stack->b, pop(&stack->b, BOT), TOP);
