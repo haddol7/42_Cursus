@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/31 13:02:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/18 17:33:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/18 21:56:24 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ static void	check_stack_sorted_free(t_total *stack);
 int	main(int argc, char **argv)
 {
 	t_total	stack;
-	t_node	*temp;
 	char	*command;
 	int		is_eof;
 
