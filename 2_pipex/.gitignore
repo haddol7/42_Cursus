@@ -1,5 +1,9 @@
 .DS_store
-.vs_code
+.vscode/*
+
+input.txt
+output.txt
+pipex
 
 # Prerequisites
 *.d

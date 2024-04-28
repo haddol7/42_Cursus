@@ -1,7 +1,9 @@
+NAME := pipex
 SRC_DIR := src/
 OBJ_DIR := obj/
 CC := cc
 CFLAGS := -Wall -Werror -Wextra
+CFLAGS :=
 LIB := lib/
 PRINTF_DIR := $(LIB)ft_printf/
 PRINTF := $(PRINTF_DIR)libftprintf.a
@@ -9,16 +11,13 @@ LIBFT_DIR := $(LIB)libft/
 LIBFT := $(LIBFT_DIR)libft.a
 HEADER := -I$(PRINTF_DIR) -I$(LIBFT_DIR) -Iinc/
 
-SRC_COMMON =
-SRC_MAN	= 
-SRC_BONUS =
+SRC_MAN	= test
+SRC_BONUS = 
 
 ifdef WITH_BONUS
-	SRC_FIN = $(SRC_COMMON) $(SRC_BONUS)
-	NAME = checker
+	SRC_FIN = $(SRC_BONUS)
 else
-	SRC_FIN = $(SRC_COMMON) $(SRC_MAN)
-	NAME = push_swap
+	SRC_FIN = $(SRC_MAN)
 endif
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FIN)))
@@ -43,9 +42,9 @@ $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $^ $(PRINTF) $(LIBFT) -o $@
 
 ifdef WITH_BONUS
-	@echo "$(PURPLE)🥞 push_swap : make bonus done!$(WHITE)"
+	@echo "$(PURPLE) 🍴 pipex : make bonus done!$(WHITE)"
 else
-	@echo "$(GREEN)🥞 push_swap : make done!$(WHITE)"
+	@echo "$(GREEN)🍴 pipex : make done!$(WHITE)"
 endif
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.c
@@ -55,15 +54,14 @@ clean:
 	@make clean -sC $(LIBFT_DIR) 
 	@make clean -sC $(PRINTF_DIR)
 	rm -rf $(OBJ_DIR)
-	@echo "$(BLUE)🥞 push_swap : clean done!$(WHITE)"
+	@echo "$(BLUE)🍴 pipex : clean done!$(WHITE)"
 
 fclean:
 	@make fclean -sC $(LIBFT_DIR) 
 	@make fclean -sC $(PRINTF_DIR)
 	rm -rf $(OBJ_DIR)
-	rm -f push_swap
-	rm -f checker
-	@echo "$(BLUE)🥞 push_swap : fclean done!$(WHITE)"
+	rm -f pipex
+	@echo "$(BLUE)🍴 pipex : fclean done!$(WHITE)"
 
 re: fclean
 	@make	
