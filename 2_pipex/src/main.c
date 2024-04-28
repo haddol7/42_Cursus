@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:12:06 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/28 19:50:02 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/28 22:09:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,26 @@
 // cmdn == argv[argc - 2]
 // 0 1 2 3 4
 // $> ./pipex file1 cmd1 cmd2 file2
+// $> ./pipex input.txt "ls -a" "cat" output.txt
+
+void	wait_proc(t_pipe fds, int argc)
+{
+	int i;
+
+	i = 3;
+	close(3);
+	close(4);
+
+	while (i < argc)
+	{
+		wait(NULL);
+		i++;
+	}
+	// close(fds.a[0]);
+	// close(fds.a[1]);
+	// close(fds.b[0]);
+	// close(fds.b[1]);
+}
 
 int main(int argc, char *argv[], char *envp[])
 {
@@ -32,6 +52,6 @@ int main(int argc, char *argv[], char *envp[])
 	// 	here_doc();
 	init_param(&fds, &param);
 	execute_procs(&fds, param);
-//	wait_proc(&fds, argc);
+	wait_proc(fds, argc);
 	return (0);
 }

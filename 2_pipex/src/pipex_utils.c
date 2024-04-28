@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:28:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/28 18:57:16 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/28 21:10:04 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ static char	**parse_envp_path(char *envp[]);
 
 void	init_param(t_pipe *fds, t_param *param)
 {
-	if (pipe(fds->a) == -1)
-		terminate("pipe error");
+	// if (pipe(fds->a) == -1)
+	// 	terminate("pipe error");
 	if (pipe(fds->b) == -1)
 		terminate("pipe error");
 	param->path = parse_envp_path(param->envp);

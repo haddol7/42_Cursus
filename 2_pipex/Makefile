@@ -35,8 +35,8 @@ all:
 	@mkdir -p obj
 	@make $(NAME)
 
-bonus:
-	@make WITH_BONUS=1
+# bonus:
+# 	@make WITH_BONUS=1
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $^ $(PRINTF) $(LIBFT) -o $@

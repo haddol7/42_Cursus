@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 18:04:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/28 19:29:30 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/28 21:38:52 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include "ft_printf.h"
 
 # define READ 0
-# define WRITE 0
+# define WRITE 1
 
 typedef struct s_pipe
 {
@@ -46,6 +46,5 @@ void	terminate(char *msg);
 
 //exec_proc.c
 void	execute_procs(t_pipe *fds, t_param param);
-void	wait_proc(int argc);
 
 #endif
