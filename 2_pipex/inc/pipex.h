@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 18:04:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/28 16:10:43 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/28 18:52:34 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,14 @@ typedef struct s_pipe
 
 typedef struct s_param
 {
-	int	argc;
+	int		argc;
 	char	**argv;
 	char	**envp;
-	t_list	*path;
+	char	**path;
 } t_param;
 
 //pipex_utils.c
 void	init_param(t_pipe *fds, t_param *param);
-void	parse_envp_path(char *envp[], t_list *path);
 void	terminate(char *msg);
 
 //exec_proc.c

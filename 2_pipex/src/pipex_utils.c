@@ -6,11 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:28:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/28 16:11:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/28 18:57:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+static char	**parse_envp_path(char *envp[]);
 
 void	init_param(t_pipe *fds, t_param *param)
 {
@@ -18,12 +20,22 @@ void	init_param(t_pipe *fds, t_param *param)
 		terminate("pipe error");
 	if (pipe(fds->b) == -1)
 		terminate("pipe error");
-	parse_envp_path(param->envp, param->path);
+	param->path = parse_envp_path(param->envp);
 }
 
-void	parse_envp_path(char *envp[], t_list *path)
+static char	**parse_envp_path(char *envp[])
 {
+	int		i;
+	char	*str_path;
 	
+	i = 0;
+	while (envp[i])
+	{	
+		if (!ft_strncmp(envp[i], "PATH=", 5))
+			str_path = envp[i] + 5;
+		i++;
+	}
+	return (ft_split(str_path, ':'));
 }
 
 void	terminate(char *msg)
