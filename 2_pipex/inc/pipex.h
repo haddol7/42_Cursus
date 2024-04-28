@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 18:04:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/28 18:52:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/28 19:29:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 
 # include "libft.h"
 # include "ft_printf.h"
+
+# define READ 0
+# define WRITE 0
 
 typedef struct s_pipe
 {
@@ -42,7 +45,7 @@ void	init_param(t_pipe *fds, t_param *param);
 void	terminate(char *msg);
 
 //exec_proc.c
-void	execute_proc(t_param param, t_list *path, t_pipe fds);
+void	execute_procs(t_pipe *fds, t_param param);
 void	wait_proc(int argc);
 
 #endif
