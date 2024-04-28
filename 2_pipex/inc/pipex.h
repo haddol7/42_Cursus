@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 18:04:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/28 15:21:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/28 15:49:57 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ typedef struct s_pipe
 
 typedef struct s_param
 {
-	const int	argc;
-	const char	**argv;
-	const char	**envp;
+	int	argc;
+	char	**argv;
+	char	**envp;
+	t_list	*path;
 } t_param;
