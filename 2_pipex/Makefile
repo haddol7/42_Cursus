@@ -11,7 +11,7 @@ LIBFT_DIR := $(LIB)libft/
 LIBFT := $(LIBFT_DIR)libft.a
 HEADER := -I$(PRINTF_DIR) -I$(LIBFT_DIR) -Iinc/
 
-SRC_MAN	= test
+SRC_MAN	= main pipex_utils exec_proc
 SRC_BONUS = 
 
 ifdef WITH_BONUS
