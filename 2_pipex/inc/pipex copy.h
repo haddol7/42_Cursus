@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 18:04:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/29 16:15:28 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/28 21:38:52 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ typedef struct s_param
 } t_param;
 
 //pipex_utils.c
-void	init_param(int fd[2], t_param *param);
+void	init_param(t_pipe *fds, t_param *param);
 void	terminate(char *msg);
 
 //exec_proc.c
-void	execute_procs(int fd[2], t_param param);
+void	execute_procs(t_pipe *fds, t_param param);
 
 #endif

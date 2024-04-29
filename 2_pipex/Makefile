@@ -20,9 +20,9 @@ else
 	SRC_FIN = $(SRC_MAN)
 endif
 
-SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FIN)))
-OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FIN)))
-DEP = $(addprefix $(OBJ_DIR), $(addsuffix .d, $(SRC_FIN)))
+SRC = $(addprefix $(SRC_DIR), $(addsuffix _t.c, $(SRC_FIN)))
+OBJ = $(addprefix $(OBJ_DIR), $(addsuffix _t.o, $(SRC_FIN)))
+DEP = $(addprefix $(OBJ_DIR), $(addsuffix _t.d, $(SRC_FIN)))
 
 GREEN = \033[0;92m
 BLUE = \033[0;94m

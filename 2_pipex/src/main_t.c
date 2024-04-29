@@ -1,22 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_t.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:12:06 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/29 15:54:31 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/29 16:20:07 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-// cmd1 == argv[2]
-// cmdn == argv[argc - 2]
-// 0 1 2 3 4
-// $> ./pipex file1 cmd1 cmd2 file2
-// $> ./pipex input.txt "ls -a" "cat" output.txt
 
 int	wait_proc(t_pipe fds, int argc)
 {
@@ -39,7 +33,7 @@ int	wait_proc(t_pipe fds, int argc)
 
 int main(int argc, char *argv[], char *envp[])
 {
-	t_pipe fds;
+	int fd[2];
 	t_param	param;
 	
 	param.argc = argc;
@@ -48,9 +42,10 @@ int main(int argc, char *argv[], char *envp[])
 	param.path = NULL;
 	if (argc < 5)
 		terminate("test");
-	// if (!ft_strncmp(argv[1], "here_doc", 9))
-	// 	here_doc();
-	init_param(&fds, &param);
-	execute_procs(&fds, param);
-	return (wait_proc(fds, argc));
+	init_param(fd, &param);
+	execute_procs(fd, param);
+	close(fd[0]);
+	close(fd[1]);
+	wait(NULL);
+	wait(NULL);
 }
