@@ -1,0 +1,10 @@
+{
+	"files.associations": {
+		"locale": "c",
+		"errno.h": "c",
+		"string.h": "c",
+		"stdio.h": "c",
+		"pipex.h": "c",
+		"pipex_bonus.h": "c"
+	}
+}

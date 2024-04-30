@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:00:50 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 23:13:42 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/30 23:51:54 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*here_doc(char *limiter)
 		str = get_next_line(STDIN_FILENO);
 		if (str != NULL && !ft_strncmp(limiter, str, (int)ft_strlen(str) - 1))
 		{
-			if (ft_strncmp(limiter, str, (int)ft_strlen(str) - 1))
+			if (!ft_strncmp(limiter, str, (int)ft_strlen(str) - 1))
 			{
 				free(str);
 				break ;
