@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:28:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 16:01:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/30 17:35:12 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,18 @@ void	terminate(char *msg)
 	exit(1);
 }
 
-int	wait_proc(void)
+int	wait_proc(t_param arg)
 {
 	int	i;
+	int	n;
 	int	status;
 
 	i = -1;
-	while (++i < 2)
+	if (arg.here_doc)
+		n = arg.argc - 4;
+	else
+		n = arg.argc - 3;
+	while (++i < n)
 		wait(&status);
 	return (WEXITSTATUS(status));
 }

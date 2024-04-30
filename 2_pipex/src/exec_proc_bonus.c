@@ -6,84 +6,109 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:33:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 16:03:03 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/30 17:49:40 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-static void	command_proc(int fd[2], char *argv[], char *envp[], int n);
-static void	redirect_io(int fd[2], char *argv[], int n);
+static void	command_proc(int read[2], int write[2], t_param arg, int n);
+static void	redirect_io(int read[2], int write[2], t_param arg, int n);
+static void	redirect_file_io(int read[2], int write[2], t_param arg, int n);
 static char	*find_path(char *cmd, char **pathv);
 static char	**parse_envp_path(char *envp[]);
 
-void	execute_procs(char *argv[], char *envp[])
+void	execute_procs(t_param arg, int argc)
 {
-	int		fd[2];
+	int		fd_a[2];
+	int		fd_b[2];
 	int		pid;
 	int		n;
 
-	if (pipe(fd) == -1)
-		terminate("pipex: pipe:");
-	n = -1;
-	while (++n < 2)
+	n = 1;
+	if (arg.here_doc == 1)
+		argc--;
+	while (++n < argc - 1)
 	{
+		control_fildes(fd_a, fd_b, arg, n);
 		pid = fork();
 		if (pid == -1)
-			terminate("pipex: fork:");
+			terminate("pipex: fork");
 		else if (pid == 0)
 		{
 			if (n % 2 == 0)
-				command_proc(fd, argv, envp, n);
+				command_proc(fd_b, fd_a, arg, n);
 			else
-				command_proc(fd, argv, envp, n);
+				command_proc(fd_a, fd_b, arg, n);
 		}
 	}
-	close(fd[0]);
-	close(fd[1]);
+	close(fd_a[0]);
+	close(fd_a[1]);
+	close(fd_b[0]);
+	close(fd_b[1]);
 }
 
-static void	command_proc(int fd[2], char *argv[], char *envp[], int n)
+static void	command_proc(int read[2], int write[2], t_param arg, int n)
 {
 	char	*cmd_path;
 	char	**cmd_argv;
 	char	**path;
 
-	redirect_io(fd, argv, n);
-	path = parse_envp_path(envp);
-	cmd_path = find_path(argv[n + 2], path);
-	cmd_argv = ft_split(argv[n + 2], ' ');
-	if (execve(cmd_path, cmd_argv, envp) == -1)
-		terminate("pipex: execve:");
+	redirect_io(read, write, arg, n);
+	path = parse_envp_path(arg.envp);
+	if (arg.here_doc == 1)
+		n++;
+	cmd_path = find_path(arg.argv[n], path);
+	cmd_argv = ft_split(arg.argv[n], ' ');
+	if (execve(cmd_path, cmd_argv, arg.envp) == -1)
+		terminate("pipex: execve");
 }
 
-static void	redirect_io(int fd[2], char *argv[], int n)
+static void	redirect_io(int read[2], int write[2], t_param arg, int n)
 {	
-	int	file;
+	if (n == 2 || n + arg.here_doc == arg.argc - 1)
+		return (redirect_file_io(read, write, arg, n));
+	close(read[WRITE]);
+	dup2(read[READ], STDIN_FILENO);
+	close(read[READ]);
+	close(write[READ]);
+	dup2(write[WRITE], STDOUT_FILENO);
+	close(write[WRITE]);
+}
 
-	if (n == 0)
+
+static void	redirect_file_io(int read[2], int write[2], t_param arg, int n)
+{
+	int fd;
+
+	fd = -1;
+	if (n == 2)
 	{
-		close(fd[READ]);
-		file = open(argv[1], O_RDONLY, 0666);
-		if (file == -1)
-			terminate("pipex: input:");
-		dup2(file, STDIN_FILENO);
-		close(file);
-		dup2(fd[WRITE], STDOUT_FILENO);
-		close(fd[WRITE]);
+		close(write[READ]);
+		if (arg.here_doc)
+			fd = open(arg.doc_name, O_RDONLY, 0666);
+		else
+			fd = open(arg.argv[1], O_RDONLY, 0666);
+		if (fd == -1)
+			terminate("pipex: input");
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+		dup2(write[WRITE], STDOUT_FILENO);
+		close(write[WRITE]);
 	}
 	else
 	{
-		close(fd[WRITE]);
-		file = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0666);
-		if (file == -1)
-			terminate("pipex: output:");
-		dup2(fd[READ], STDIN_FILENO);
-		close(fd[READ]);
-		dup2(file, STDOUT_FILENO);
-		close(file);
+		close(read[WRITE]);
+		fd = open(arg.argv[arg.argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		if (fd == -1)
+			terminate("pipex: output");
+		dup2(read[READ], STDIN_FILENO);
+		close(read[READ]);
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
 	}
 }
+
 
 static char	*find_path(char *cmd, char **pathv)
 {

@@ -10,8 +10,8 @@ LIBFT_DIR := $(LIB)libft/
 LIBFT := $(LIBFT_DIR)libft.a
 HEADER := -I$(PRINTF_DIR) -I$(LIBFT_DIR) -Iinc/
 
-SRC_MAN	= main pipex_utils exec_proc
-SRC_BONUS = 
+SRC_MAN	= main exec_proc pipex_utils
+SRC_BONUS = main_bonus exec_proc_bonus pipex_utils_bonus pipex_utils_2_bonus
 
 ifdef WITH_BONUS
 	SRC_FIN = $(SRC_BONUS)
@@ -33,6 +33,9 @@ all:
 	@make -sC $(PRINTF_DIR)
 	@mkdir -p obj
 	@make $(NAME)
+
+bonus:
+	@make WITH_BONUS=1
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $^ $(PRINTF) $(LIBFT) -o $@
