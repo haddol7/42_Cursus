@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 16:51:15 by daeha             #+#    #+#             */
-/*   Updated: 2023/11/20 17:57:33 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/30 14:01:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ static char	*my_make_word(char const *s, char c, size_t *offset)
 	while (s[i] != '\0' && s[i] != c)
 		i++;
 	*offset += i;
-	word = (char *)malloc((i + 1) * sizeof(char));
-	if (word == NULL)
-		return (NULL);
+	word = (char *)ft_malloc((i + 1) * sizeof(char));
 	ft_strlcpy(word, s, i + 1);
 	return (word);
 }
@@ -70,9 +68,7 @@ char	**ft_split(char const *s, char c)
 	i = 0;
 	offset = 0;
 	word = my_count_word(s, c);
-	word_set = (char **)malloc((word + 1) * sizeof(char *));
-	if (word_set == NULL)
-		return (0);
+	word_set = (char **)ft_malloc((word + 1) * sizeof(char *));
 	while (i < word)
 	{
 		while (s[offset] == c)

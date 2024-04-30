@@ -1,6 +1,7 @@
 .DS_store
 .vscode/*
 tmp/
+README.md
 
 input.txt
 output.txt

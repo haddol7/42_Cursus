@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 21:21:51 by daeha             #+#    #+#             */
-/*   Updated: 2023/11/20 17:44:57 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/30 14:02:07 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 		return (NULL);
 	i = 0;
 	result = ft_strdup(s);
-	if (result == NULL)
-		return (NULL);
 	while (result[i] != '\0')
 	{
 		result[i] = f(i, s[i]);

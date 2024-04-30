@@ -6,13 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:33:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/07 17:35:45 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/30 13:39:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 
@@ -40,6 +41,8 @@ typedef struct s_result
 	char	*str;
 	size_t	len;
 }	t_result;
+
+void	*ft_malloc(size_t size);
 
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
