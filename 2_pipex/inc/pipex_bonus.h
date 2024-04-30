@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/28 15:12:06 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 14:58:36 by daeha            ###   ########.fr       */
+/*   Created: 2024/04/30 15:47:59 by daeha             #+#    #+#             */
+/*   Updated: 2024/04/30 15:48:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
-int	main(int argc, char *argv[], char *envp[])
-{	
-	if (argc != 5)
-	{
-		ft_putendl_fd("./pipex file1 cmd1 cmd2 file2", 2);
-		return (1);
-	}
-	execute_procs(argv, envp);
-	return (wait_proc());
-}
+# include <stdio.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <unistd.h>
+# include <stdlib.h>
+
+# include "libft.h"
+# include "ft_printf.h"
+
+# define READ 0
+# define WRITE 1
+
+#endif

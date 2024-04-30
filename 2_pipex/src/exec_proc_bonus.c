@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_proc.c                                        :+:      :+:    :+:   */
+/*   exec_proc_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:33:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 15:24:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/30 16:03:03 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 static void	command_proc(int fd[2], char *argv[], char *envp[], int n);
 static void	redirect_io(int fd[2], char *argv[], int n);
