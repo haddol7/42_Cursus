@@ -11,7 +11,7 @@ LIBFT := $(LIBFT_DIR)libft.a
 HEADER := -I$(PRINTF_DIR) -I$(LIBFT_DIR) -Iinc/
 
 SRC_MAN	= main exec_proc pipex_utils
-SRC_BONUS = main_bonus exec_proc_bonus pipex_utils_bonus pipex_utils_2_bonus
+SRC_BONUS = main_bonus exec_proc_bonus pipex_utils_bonus pipex_utils_2_bonus here_doc_bonus
 
 ifdef WITH_BONUS
 	SRC_FIN = $(SRC_BONUS)

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:33:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 17:49:40 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/30 18:28:08 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,17 @@ void	execute_procs(t_param arg, int argc)
 	int		n;
 
 	n = 1;
+
+	fd_a[0] = -1;
+	fd_a[1] = -2;
+	fd_b[0] = -3;
+	fd_b[1] = -4;
 	if (arg.here_doc == 1)
 		argc--;
 	while (++n < argc - 1)
 	{
 		control_fildes(fd_a, fd_b, arg, n);
+		//dprintf(2, "%d-th process : %d %d | %d %d\n", n, fd_a[0], fd_a[1], fd_b[0], fd_b[1]);
 		pid = fork();
 		if (pid == -1)
 			terminate("pipex: fork");
@@ -42,9 +48,13 @@ void	execute_procs(t_param arg, int argc)
 				command_proc(fd_a, fd_b, arg, n);
 		}
 	}
+	//printf("%d, ", fd_a[0]);
 	close(fd_a[0]);
+	//printf("%d, ", fd_a[1]);
 	close(fd_a[1]);
+	//printf("%d, ", fd_b[0]);
 	close(fd_b[0]);
+	//printf("%d\n", fd_b[1]);
 	close(fd_b[1]);
 }
 
@@ -53,6 +63,8 @@ static void	command_proc(int read[2], int write[2], t_param arg, int n)
 	char	*cmd_path;
 	char	**cmd_argv;
 	char	**path;
+
+	//dprintf(2, "%d process : %d %d | %d %d\n", n, read[0], read[1], write[0], write[1]);
 
 	redirect_io(read, write, arg, n);
 	path = parse_envp_path(arg.envp);
@@ -66,7 +78,7 @@ static void	command_proc(int read[2], int write[2], t_param arg, int n)
 
 static void	redirect_io(int read[2], int write[2], t_param arg, int n)
 {	
-	if (n == 2 || n + arg.here_doc == arg.argc - 1)
+	if (n == 2 || n + arg.here_doc == arg.argc - 2)
 		return (redirect_file_io(read, write, arg, n));
 	close(read[WRITE]);
 	dup2(read[READ], STDIN_FILENO);

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 13:23:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/03/07 20:26:10 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/30 19:36:27 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,7 @@ int	find_fd(int fd, t_fd_list **head, t_fd_list **cur)
 			break ;
 		(*cur) = (*cur)->rear;
 	}
-	new_list = (t_fd_list *)malloc(sizeof(t_fd_list));
-	if (new_list == NULL)
-		return (0);
+	new_list = (t_fd_list *)ft_malloc(sizeof(t_fd_list));
 	new_list->fd = fd;
 	new_list->buffer = NULL;
 	new_list->len = 0;
@@ -92,9 +90,7 @@ int	put_fd_buf(char *buf, t_fd_list *cur, ssize_t len_buf)
 		else
 			return (0);
 	}
-	new_fd_buf = (char *)malloc(sizeof(char) * (cur->len + len_buf));
-	if (new_fd_buf == NULL)
-		return (0);
+	new_fd_buf = (char *)ft_malloc(sizeof(char) * (cur->len + len_buf));
 	gnl_memmove(new_fd_buf, cur->buffer, cur->len);
 	gnl_memmove(new_fd_buf + cur->len, buf, len_buf);
 	if (cur->buffer != NULL)
@@ -111,9 +107,7 @@ int	put_result(t_result *res, t_fd_list **head, t_fd_list **cur)
 	len_new_res = res->len;
 	if ((*cur)->buffer[res->len - 1] == '\n')
 		len_new_res++;
-	res->str = (char *)malloc(sizeof(char) * (len_new_res));
-	if (res->str == NULL)
-		return (0);
+	res->str = (char *)ft_malloc(sizeof(char) * (len_new_res));
 	gnl_memmove(res->str, (*cur)->buffer, res->len);
 	(res->str)[len_new_res - 1] = '\0';
 	(*cur)->len -= res->len;

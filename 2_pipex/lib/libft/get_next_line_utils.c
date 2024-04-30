@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:48:51 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 14:03:41 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/30 19:38:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 int	init_gnl(int fd, t_fd_list **head, t_fd_list **cur)
 {	
-	*head = (t_fd_list *)malloc(sizeof(t_fd_list));
-	if (*head == NULL)
-		return (0);
+	*head = (t_fd_list *)ft_malloc(sizeof(t_fd_list));
 	(*head)->fd = fd;
 	(*head)->buffer = NULL;
 	(*head)->len = 0;
@@ -77,7 +75,8 @@ int	put_left_fd_buf(t_result *res, t_fd_list **cur)
 		if (new_fd_buf == NULL)
 		{
 			free(res->str);
-			return (0);
+			perror("malloc:");
+			exit(12);
 		}
 		gnl_memmove(new_fd_buf, (*cur)->buffer + res->len, (*cur)->len);
 	}

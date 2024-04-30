@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:47:59 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 17:32:49 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/30 18:55:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@ typedef struct s_param
 	int		here_doc;
 	char	*doc_name;
 } t_param;
+
+//here_doc_bonus.c
+char	*here_doc(char *limiter);
 
 //exec_proc_bonus.c
 void	execute_procs(t_param arg, int argc);

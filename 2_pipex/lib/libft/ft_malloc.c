@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 13:33:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 14:01:00 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/30 19:38:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	*ft_malloc(size_t size)
 	mem = malloc(size);
 	if (mem == NULL)
 	{
-		perror("malloc : ");
+		perror("malloc: ");
 		exit(12);
 	}
 	return (mem);
