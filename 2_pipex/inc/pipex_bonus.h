@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:47:59 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 18:55:42 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/30 23:20:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_param
 	char	**envp;
 	int		here_doc;
 	char	*doc_name;
-} t_param;
+}	t_param;
 
 //here_doc_bonus.c
 char	*here_doc(char *limiter);
@@ -40,12 +40,14 @@ char	*here_doc(char *limiter);
 //exec_proc_bonus.c
 void	execute_procs(t_param arg, int argc);
 
-//pipex_utils_2_bonus.c
-void 	control_fildes(int fd_a[2], int fd_b[2], t_param arg, int n);
-
 //pipex_utils_bonus.c
 void	terminate(char *msg);
 int		wait_proc(t_param arg);
 char	*extract_first_command(char *cmd);
+
+//pipex_utils_2_bonus.c
+void	control_fildes(int fd_a[2], int fd_b[2], t_param arg, int n);
+void	close_remainder_fds(int fd_a[2], int fd_b[2], int n);
+char	**parse_envp_path(char *envp[]);
 
 #endif

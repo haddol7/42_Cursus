@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:33:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 18:28:08 by daeha            ###   ########.fr       */
+/*   Updated: 2024/04/30 23:20:32 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static void	command_proc(int read[2], int write[2], t_param arg, int n);
 static void	redirect_io(int read[2], int write[2], t_param arg, int n);
 static void	redirect_file_io(int read[2], int write[2], t_param arg, int n);
 static char	*find_path(char *cmd, char **pathv);
-static char	**parse_envp_path(char *envp[]);
 
 void	execute_procs(t_param arg, int argc)
 {
@@ -26,17 +25,11 @@ void	execute_procs(t_param arg, int argc)
 	int		n;
 
 	n = 1;
-
-	fd_a[0] = -1;
-	fd_a[1] = -2;
-	fd_b[0] = -3;
-	fd_b[1] = -4;
 	if (arg.here_doc == 1)
 		argc--;
 	while (++n < argc - 1)
 	{
 		control_fildes(fd_a, fd_b, arg, n);
-		//dprintf(2, "%d-th process : %d %d | %d %d\n", n, fd_a[0], fd_a[1], fd_b[0], fd_b[1]);
 		pid = fork();
 		if (pid == -1)
 			terminate("pipex: fork");
@@ -48,14 +41,7 @@ void	execute_procs(t_param arg, int argc)
 				command_proc(fd_a, fd_b, arg, n);
 		}
 	}
-	//printf("%d, ", fd_a[0]);
-	close(fd_a[0]);
-	//printf("%d, ", fd_a[1]);
-	close(fd_a[1]);
-	//printf("%d, ", fd_b[0]);
-	close(fd_b[0]);
-	//printf("%d\n", fd_b[1]);
-	close(fd_b[1]);
+	close_remainder_fds(fd_a, fd_b, n);
 }
 
 static void	command_proc(int read[2], int write[2], t_param arg, int n)
@@ -63,8 +49,6 @@ static void	command_proc(int read[2], int write[2], t_param arg, int n)
 	char	*cmd_path;
 	char	**cmd_argv;
 	char	**path;
-
-	//dprintf(2, "%d process : %d %d | %d %d\n", n, read[0], read[1], write[0], write[1]);
 
 	redirect_io(read, write, arg, n);
 	path = parse_envp_path(arg.envp);
@@ -88,12 +72,10 @@ static void	redirect_io(int read[2], int write[2], t_param arg, int n)
 	close(write[WRITE]);
 }
 
-
 static void	redirect_file_io(int read[2], int write[2], t_param arg, int n)
 {
-	int fd;
+	int	fd;
 
-	fd = -1;
 	if (n == 2)
 	{
 		close(write[READ]);
@@ -107,20 +89,17 @@ static void	redirect_file_io(int read[2], int write[2], t_param arg, int n)
 		close(fd);
 		dup2(write[WRITE], STDOUT_FILENO);
 		close(write[WRITE]);
+		return ;
 	}
-	else
-	{
-		close(read[WRITE]);
-		fd = open(arg.argv[arg.argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
-		if (fd == -1)
-			terminate("pipex: output");
-		dup2(read[READ], STDIN_FILENO);
-		close(read[READ]);
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
-	}
+	close(read[WRITE]);
+	fd = open(arg.argv[arg.argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	if (fd == -1)
+		terminate("pipex: output");
+	dup2(read[READ], STDIN_FILENO);
+	close(read[READ]);
+	dup2(fd, STDOUT_FILENO);
+	close(fd);
 }
-
 
 static char	*find_path(char *cmd, char **pathv)
 {
@@ -144,19 +123,4 @@ static char	*find_path(char *cmd, char **pathv)
 		pathv++;
 	}
 	return (NULL);
-}
-
-static char	**parse_envp_path(char *envp[])
-{
-	int		i;
-	char	*str_path;
-
-	i = 0;
-	while (envp[i])
-	{	
-		if (!ft_strncmp(envp[i], "PATH=", 5))
-			str_path = envp[i] + 5;
-		i++;
-	}
-	return (ft_split(str_path, ':'));
 }

@@ -1,5 +1,6 @@
 NAME := pipex
-SRC_DIR := src/
+MAN_DIR := src/
+BONUS_DIR := bonus/
 OBJ_DIR := obj/
 CC := cc
 CFLAGS := -Wall -Werror -Wextra
@@ -15,8 +16,10 @@ SRC_BONUS = main_bonus exec_proc_bonus pipex_utils_bonus pipex_utils_2_bonus her
 
 ifdef WITH_BONUS
 	SRC_FIN = $(SRC_BONUS)
+	SRC_DIR = $(BONUS_DIR)
 else
 	SRC_FIN = $(SRC_MAN)
+	SRC_DIR = $(MAN_DIR)
 endif
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FIN)))
@@ -41,7 +44,7 @@ $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $^ $(PRINTF) $(LIBFT) -o $@
 
 ifdef WITH_BONUS
-	@echo "$(PURPLE) 🍴 pipex : make bonus done!$(WHITE)"
+	@echo "$(PURPLE)🍴 pipex : make bonus done!$(WHITE)"
 else
 	@echo "$(GREEN)🍴 pipex : make done!$(WHITE)"
 endif
@@ -63,7 +66,7 @@ fclean:
 	@echo "$(BLUE)🍴 pipex : fclean done!$(WHITE)"
 
 re: fclean
-	@make	
+	@make
 
 -include $(DEP)
 
