@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:47:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 23:17:55 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 20:35:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,21 @@
 
 static void	init_param(t_param *arg, int argc, char *argv[], char *envp[]);
 
+
+void	leak(void)
+{
+	system("leaks pipex");
+}
+
 int	main(int argc, char *argv[], char *envp[])
 {	
 	t_param	arg;
 
+	atexit(leak);
 	init_param(&arg, argc, argv, envp);
 	if (argc < 5)
 	{
-		ft_putendl_fd("pipex : argc error", 2);
-		ft_putendl_fd("./pipex file1 cmd1 ... cmdn file2", 2);
-		ft_putendl_fd("./pipex here_doc LIMITER cmd1 ... cmdn file2", 2);
+		ft_putendl_fd("argc error", 2);
 		return (1);
 	}
 	if (argc >= 6 && !ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])))

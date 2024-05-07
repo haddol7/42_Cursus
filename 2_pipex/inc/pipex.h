@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 18:04:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/29 20:46:40 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 20:01:58 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <string.h>
 
 # include "libft.h"
 # include "ft_printf.h"
