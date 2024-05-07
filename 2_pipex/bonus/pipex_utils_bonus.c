@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:28:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 22:06:06 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 22:10:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	wait_proc(t_param arg)
 	if (arg.here_doc == 1)
 	{
 		unlink(arg.doc_name);
-		free(arg.doc_name);	
+		free(arg.doc_name);
 	}
 	return (WEXITSTATUS(status));
 }

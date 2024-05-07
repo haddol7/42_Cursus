@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:16:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 22:06:06 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 22:10:13 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	**parse_envp_path(char *envp[])
 		if (!ft_strncmp(envp[i], "PATH=", 5))
 		{
 			str_path = envp[i] + 5;
-			break;
+			break ;
 		}
 		i++;
 	}

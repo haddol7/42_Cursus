@@ -6,14 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:47:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 21:40:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 22:10:06 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
 static void	init_param(t_param *arg, int argc, char *argv[], char *envp[]);
-
 
 int	main(int argc, char *argv[], char *envp[])
 {	
