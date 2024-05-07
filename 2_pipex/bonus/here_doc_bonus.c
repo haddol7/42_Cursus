@@ -6,13 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:00:50 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 23:51:54 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 19:14:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
 static char	*name_here_doc(void);
+static int	px_strcmp(char *str1, char *str2);
 
 char	*here_doc(char *limiter)
 {
@@ -24,20 +25,21 @@ char	*here_doc(char *limiter)
 	fd = open(doc_name, O_WRONLY | O_CREAT, 0666);
 	if (fd == -1)
 		terminate("pipex : open");
+	write(STDOUT_FILENO, "heredoc> ", 9);
 	while (1)
 	{
 		str = get_next_line(STDIN_FILENO);
-		if (str != NULL && !ft_strncmp(limiter, str, (int)ft_strlen(str) - 1))
+		if (str != NULL)
 		{
-			if (!ft_strncmp(limiter, str, (int)ft_strlen(str) - 1))
-			{
-				free(str);
+			if (px_strcmp(limiter, str))
 				break ;
-			}
-			ft_putstr_fd(str, fd);
+			if (str[ft_strlen(str) - 1] == '\n')
+				write(STDOUT_FILENO, "heredoc> ", 9);
+			write(fd, str, ft_strlen(str));
 			free(str);
 		}
 	}
+	free(str);
 	close(fd);
 	return (doc_name);
 }
@@ -55,4 +57,18 @@ static char	*name_here_doc(void)
 		doc_name = tmp;
 	}
 	return (doc_name);
+}
+
+static int	px_strcmp(char *str1, char *str2)
+{
+	size_t	len_str1;
+	size_t	len_str2;
+
+	len_str1 = ft_strlen(str1);
+	len_str2 = ft_strlen(str2);
+	if (len_str1 + 1 != len_str2)
+		return (0);
+	if (ft_strncmp(str1, str2, len_str1))
+		return (0);
+	return (1);
 }

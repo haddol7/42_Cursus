@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:47:59 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 23:20:00 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 18:59:45 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ char	*extract_first_command(char *cmd);
 
 //pipex_utils_2_bonus.c
 void	control_fildes(int fd_a[2], int fd_b[2], t_param arg, int n);
+char	*find_path(char *cmd, char **pathv);
 void	close_remainder_fds(int fd_a[2], int fd_b[2], int n);
 char	**parse_envp_path(char *envp[]);
 

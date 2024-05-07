@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:16:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 23:19:54 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 18:59:23 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,30 @@ void	control_fildes(int fd_a[2], int fd_b[2], t_param arg, int n)
 		if (pipe(fd_b) == -1)
 			terminate("pipex: pipe");
 	}
+}
+
+char	*find_path(char *cmd, char **pathv)
+{
+	char	*path;
+	char	*cmd_trim;
+	int		i;
+
+	i = -1;
+	cmd_trim = extract_first_command(cmd);
+	while (pathv[++i] != NULL)
+	{
+		if (!access(cmd_trim, F_OK | X_OK))
+			return (cmd_trim);
+	}
+	while (pathv != NULL)
+	{	
+		path = ft_strjoin(*pathv, cmd_trim);
+		if (!access(path, F_OK | X_OK))
+			return (path);
+		free(path);
+		pathv++;
+	}
+	return (NULL);
 }
 
 void	close_remainder_fds(int fd_a[2], int fd_b[2], int n)

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:33:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 23:20:32 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 19:00:12 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static void	command_proc(int read[2], int write[2], t_param arg, int n);
 static void	redirect_io(int read[2], int write[2], t_param arg, int n);
 static void	redirect_file_io(int read[2], int write[2], t_param arg, int n);
-static char	*find_path(char *cmd, char **pathv);
+static int	open_file_io(t_param arg, int n);
 
 void	execute_procs(t_param arg, int argc)
 {
@@ -76,51 +76,40 @@ static void	redirect_file_io(int read[2], int write[2], t_param arg, int n)
 {
 	int	fd;
 
+	fd = open_file_io(arg, n);
 	if (n == 2)
 	{
 		close(write[READ]);
-		if (arg.here_doc)
-			fd = open(arg.doc_name, O_RDONLY, 0666);
-		else
-			fd = open(arg.argv[1], O_RDONLY, 0666);
-		if (fd == -1)
-			terminate("pipex: input");
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 		dup2(write[WRITE], STDOUT_FILENO);
 		close(write[WRITE]);
-		return ;
 	}
-	close(read[WRITE]);
-	fd = open(arg.argv[arg.argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	if (fd == -1)
-		terminate("pipex: output");
-	dup2(read[READ], STDIN_FILENO);
-	close(read[READ]);
-	dup2(fd, STDOUT_FILENO);
-	close(fd);
+	else
+	{
+		close(read[WRITE]);
+		dup2(read[READ], STDIN_FILENO);
+		close(read[READ]);
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
+	}
 }
 
-static char	*find_path(char *cmd, char **pathv)
+static int	open_file_io(t_param arg, int n)
 {
-	char	*path;
-	char	*cmd_trim;
-	int		i;
+	int	fd;
 
-	i = -1;
-	cmd_trim = extract_first_command(cmd);
-	while (pathv[++i] != NULL)
-	{
-		if (!access(cmd_trim, F_OK | X_OK))
-			return (cmd_trim);
-	}
-	while (pathv != NULL)
-	{	
-		path = ft_strjoin(*pathv, cmd_trim);
-		if (!access(path, F_OK | X_OK))
-			return (path);
-		free(path);
-		pathv++;
-	}
-	return (NULL);
+	if (n == 2 && arg.here_doc)
+		fd = open(arg.doc_name, O_RDONLY, 0666);
+	else if (n == 2)
+		fd = open(arg.argv[1], O_RDONLY, 0666);
+	else if (arg.here_doc)
+		fd = open(arg.argv[arg.argc - 1], O_WRONLY | O_CREAT | O_APPEND, 0666);
+	else
+		fd = open(arg.argv[arg.argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	if (fd == -1 && n == 2)
+		terminate("pipex: input");
+	else if (fd == -1)
+		terminate("pipex: output");
+	return (fd);
 }

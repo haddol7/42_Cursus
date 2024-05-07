@@ -6,11 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 13:23:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 19:36:27 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 17:28:46 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
 //TODO : buffer array must be allocated by malloc 
 //when array is sized by BUFFER_SIZE as static array it overflows in stack
