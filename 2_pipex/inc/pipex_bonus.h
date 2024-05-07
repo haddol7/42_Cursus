@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:47:59 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 18:59:45 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 21:23:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	execute_procs(t_param arg, int argc);
 
 //pipex_utils_bonus.c
 void	terminate(char *msg);
+void	fork_error(t_param arg, int n);
 int		wait_proc(t_param arg);
 char	*extract_first_command(char *cmd);
 

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:33:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 20:06:02 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 21:23:57 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	execute_procs(t_param arg, int argc)
 		control_fildes(fd_a, fd_b, arg, n);
 		pid = fork();
 		if (pid == -1)
-			terminate("fork");
+			fork_error(arg, n);
 		else if (pid == 0)
 		{
 			if (n % 2 == 0)
@@ -57,7 +57,7 @@ static void	command_proc(int read[2], int write[2], t_param arg, int n)
 	cmd_path = find_path(arg.argv[n], path);
 	cmd_argv = ft_split(arg.argv[n], ' ');
 	if (execve(cmd_path, cmd_argv, arg.envp) == -1)
-		terminate("execve");
+		terminate("pipex : execve");
 }
 
 static void	redirect_io(int read[2], int write[2], t_param arg, int n)
@@ -108,8 +108,8 @@ static int	open_file_io(t_param arg, int n)
 	else
 		fd = open(arg.argv[arg.argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (fd == -1 && n == 2)
-		terminate("input");
+		terminate("pipex : input");
 	else if (fd == -1)
-		terminate("output");
+		terminate("pipex : output");
 	return (fd);
 }

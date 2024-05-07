@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:33:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 21:10:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 21:13:41 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ static char	*find_path(char *cmd, char **pathv)
 		free(path);
 	}
 	free(cmd_trim);
-	terminate("command not found");
+	terminate("pipex : command not found");
 	return (NULL);
 }
 
@@ -120,7 +120,7 @@ static char	**parse_envp_path(char *envp[])
 	char	*str_path;
 
 	if (envp == NULL)
-		terminate("No such file or directory");
+		terminate("pipex : No such file or directory");
 	str_path = NULL;
 	i = 0;
 	while (envp[i])
@@ -128,11 +128,11 @@ static char	**parse_envp_path(char *envp[])
 		if (!ft_strncmp(envp[i], "PATH=", 5))
 		{
 			str_path = envp[i] + 5;
-			break;
+			break ;
 		}
 		i++;
 	}
 	if (!str_path)
-		terminate("No such file or directory");
+		terminate("pipex : No such file or directory");
 	return (ft_split(str_path, ':'));
 }

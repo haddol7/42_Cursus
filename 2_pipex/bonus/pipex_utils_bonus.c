@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:28:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 23:52:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 21:23:41 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,21 @@ void	terminate(char *msg)
 {
 	perror(msg);
 	exit(1);
+}
+
+void	fork_error(t_param arg, int n)
+{
+	int	i;
+
+	i = 2;
+	while (i < n)
+	{
+		wait(NULL);
+		i++;
+	}
+	if (arg.here_doc == 1)
+		unlink(arg.doc_name);
+	terminate("pipex : fork");
 }
 
 int	wait_proc(t_param arg)

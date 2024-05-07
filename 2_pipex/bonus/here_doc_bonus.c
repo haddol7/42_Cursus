@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:00:50 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 20:37:44 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 21:14:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*here_doc(char *limiter)
 	doc_name = name_here_doc();
 	fd = open(doc_name, O_WRONLY | O_CREAT, 0666);
 	if (fd == -1)
-		terminate("open");
+		terminate("pipex : open");
 	write(STDOUT_FILENO, "heredoc> ", 9);
 	while (1)
 	{
