@@ -6,14 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:00:50 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 21:14:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 21:38:33 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
 static char	*name_here_doc(void);
-static int	px_strcmp(char *str1, char *str2);
+static int	here_doc_strcmp(char *str1, char *str2);
 
 char	*here_doc(char *limiter)
 {
@@ -31,7 +31,7 @@ char	*here_doc(char *limiter)
 		str = get_next_line(STDIN_FILENO);
 		if (str != NULL)
 		{
-			if (px_strcmp(limiter, str))
+			if (here_doc_strcmp(limiter, str))
 				break ;
 			if (str[ft_strlen(str) - 1] == '\n')
 				write(STDOUT_FILENO, "heredoc> ", 9);
@@ -59,7 +59,7 @@ static char	*name_here_doc(void)
 	return (doc_name);
 }
 
-static int	px_strcmp(char *str1, char *str2)
+static int	here_doc_strcmp(char *str1, char *str2)
 {
 	size_t	len_str1;
 	size_t	len_str2;

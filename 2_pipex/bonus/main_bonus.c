@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:47:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 21:32:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 21:40:34 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	if (argc >= 6 && ft_strlen(argv[1]) == 8 && \
 		!ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])))
+	{
+		arg.here_doc = 1;
 		arg.doc_name = here_doc(argv[2]);
+	}
 	execute_procs(arg, argc);
 	return (wait_proc(arg));
 }
@@ -37,8 +40,6 @@ static void	init_param(t_param *arg, int argc, char *argv[], char *envp[])
 	arg->argc = argc;
 	arg->argv = argv;
 	arg->envp = envp;
-	if (argc >= 6 && !ft_strncmp(argv[1], "here_doc", 8))
-		arg->here_doc = 1;
-	else
-		arg->here_doc = 0;
+	arg->doc_name = NULL;
+	arg->here_doc = 0;
 }

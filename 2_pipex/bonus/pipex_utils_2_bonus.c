@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:16:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 21:24:25 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 22:06:06 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	control_fildes(int fd_a[2], int fd_b[2], t_param arg, int n)
 		if (n + arg.here_doc == arg.argc - 2)
 			return ;
 		if (pipe(fd_a) == -1)
-			fork_error(arg, n);
+			parent_error(arg, n);
 	}
 	else
 	{
@@ -36,7 +36,7 @@ void	control_fildes(int fd_a[2], int fd_b[2], t_param arg, int n)
 		if (n + arg.here_doc == arg.argc - 2)
 			return ;
 		if (pipe(fd_b) == -1)
-			fork_error(arg, n);
+			parent_error(arg, n);
 	}
 }
 

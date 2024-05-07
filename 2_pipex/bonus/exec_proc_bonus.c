@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:33:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 21:23:57 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 22:06:06 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	execute_procs(t_param arg, int argc)
 		control_fildes(fd_a, fd_b, arg, n);
 		pid = fork();
 		if (pid == -1)
-			fork_error(arg, n);
+			parent_error(arg, n);
 		else if (pid == 0)
 		{
 			if (n % 2 == 0)

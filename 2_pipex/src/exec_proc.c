@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:33:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 21:13:41 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 22:06:06 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	execute_procs(char *argv[], char *envp[])
 	{
 		pid = fork();
 		if (pid == -1)
-			fork_error(n);
+			parent_error(n);
 		else if (pid == 0)
 		{
 			if (n % 2 == 0)

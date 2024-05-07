@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/27 18:04:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 20:58:08 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 22:06:06 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 
 //pipex_utils.c
 void	terminate(char *msg);
-void	fork_error(int n);
+void	parent_error(int n);
 char	*extract_first_command(char *cmd);
 int		wait_proc(void);
 
