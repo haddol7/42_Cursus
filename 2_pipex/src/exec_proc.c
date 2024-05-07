@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:33:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 20:46:14 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/07 21:10:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ void	execute_procs(char *argv[], char *envp[])
 	int		n;
 
 	if (pipe(fd) == -1)
-		terminate("pipe");
+		terminate("pipex : pipe");
 	n = -1;
 	while (++n < 2)
 	{
 		pid = fork();
 		if (pid == -1)
-			terminate("fork");
+			fork_error(n);
 		else if (pid == 0)
 		{
 			if (n % 2 == 0)
@@ -54,7 +54,7 @@ static void	command_proc(int fd[2], char *argv[], char *envp[], int n)
 	cmd_path = find_path(argv[n + 2], path);
 	cmd_argv = ft_split(argv[n + 2], ' ');
 	if (execve(cmd_path, cmd_argv, envp) == -1)
-		terminate("execve");
+		terminate("pipex : execve");
 }
 
 static void	redirect_io(int fd[2], char *argv[], int n)
@@ -66,7 +66,7 @@ static void	redirect_io(int fd[2], char *argv[], int n)
 		close(fd[READ]);
 		file = open(argv[1], O_RDONLY, 0666);
 		if (file == -1)
-			terminate("input");
+			terminate("pipex : input");
 		dup2(file, STDIN_FILENO);
 		close(file);
 		dup2(fd[WRITE], STDOUT_FILENO);
@@ -77,7 +77,7 @@ static void	redirect_io(int fd[2], char *argv[], int n)
 		close(fd[WRITE]);
 		file = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 		if (file == -1)
-			terminate("output");
+			terminate("pipex : output");
 		dup2(fd[READ], STDIN_FILENO);
 		close(fd[READ]);
 		dup2(file, STDOUT_FILENO);
@@ -109,6 +109,7 @@ static char	*find_path(char *cmd, char **pathv)
 		}
 		free(path);
 	}
+	free(cmd_trim);
 	terminate("command not found");
 	return (NULL);
 }
@@ -118,14 +119,17 @@ static char	**parse_envp_path(char *envp[])
 	int		i;
 	char	*str_path;
 
-	i = 0;
-	str_path = NULL;
 	if (envp == NULL)
 		terminate("No such file or directory");
+	str_path = NULL;
+	i = 0;
 	while (envp[i])
 	{	
 		if (!ft_strncmp(envp[i], "PATH=", 5))
+		{
 			str_path = envp[i] + 5;
+			break;
+		}
 		i++;
 	}
 	if (!str_path)
