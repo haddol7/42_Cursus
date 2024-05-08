@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:47:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 22:10:06 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/08 16:13:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(int argc, char *argv[], char *envp[])
 		return (1);
 	}
 	if (argc >= 6 && ft_strlen(argv[1]) == 8 && \
-		!ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])))
+		!ft_strncmp(argv[1], "here_doc", 8))
 	{
 		arg.here_doc = 1;
 		arg.doc_name = here_doc(argv[2]);
