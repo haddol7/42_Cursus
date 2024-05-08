@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/28 15:33:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/07 22:06:06 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/08 16:04:15 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,7 @@ void	execute_procs(char *argv[], char *envp[])
 		if (pid == -1)
 			parent_error(n);
 		else if (pid == 0)
-		{
-			if (n % 2 == 0)
-				command_proc(fd, argv, envp, n);
-			else
-				command_proc(fd, argv, envp, n);
-		}
+			command_proc(fd, argv, envp, n);
 	}
 	close(fd[0]);
 	close(fd[1]);
