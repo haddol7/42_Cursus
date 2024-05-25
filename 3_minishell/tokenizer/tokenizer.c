@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/25 19:49:13 by daeha            ###   ########.fr       */
+/*   Created: 2024/05/25 19:39:36 by daeha             #+#    #+#             */
+/*   Updated: 2024/05/25 19:43:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "tokenizer.h"
 
-static int	g_status;
-
-int	main(int argc, char **argv, char **envp)
+t_token	*tokenizer(char *input)
 {
-	t_token	*token;
-	t_node	*ast;
-
-	token = tokenizer(argv[1]);
-	ast = parser(token);
 	return (0);
 }
