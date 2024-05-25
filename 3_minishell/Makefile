@@ -3,12 +3,13 @@ LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
 CC				:= cc
 CFLAGS			:= -Wall -Werror -Wextra
+CFLAGS			:=
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
 
-PARSER			:=
-TOKENIZER		:=
+PARSER			:= parser/parser.c
+TOKENIZER		:= tokenizer/tokenizer.c
 SRC_MAN			:=  $(PARSER)\
 					$(TOKENIZER)\
 					main.c
@@ -20,16 +21,17 @@ SRC_BONUS		:=  $(PARSER_BONUS)\
 					$(TOKENIZER_BONUS)\
 					main_bonus.c
 
+GREEN = \033[0;92m
+BLUE = \033[0;94m
+WHITE = \033[0;97m
+PURPLE = \033[1;35m
+
 ifdef WITH_BONUS
 	SRC_FIN = $(SRC_BONUS)
 else
 	SRC_FIN = $(SRC_MAN)
 endif
 
-GREEN = \033[0;92m
-BLUE = \033[0;94m
-WHITE = \033[0;97m
-PURPLE = \033[1;35m
 
 OBJS	:=	$(SRC_FIN:.c=.o)
 

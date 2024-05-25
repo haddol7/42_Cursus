@@ -1,0 +1,32 @@
+list 		    ::= pipeline
+				| 	list '&&' pipeline
+				| 	list '||' pipeline
+
+pipeline 		::= command
+			    | 	pipeline '|' command
+
+command 	    ::= simple_command
+			    | 	subshell
+			        	
+subshell 		::= '(' list ')' redirect_list
+
+simple_command 	::= WORD
+		 		| 	redirect_list simple_command
+			    |	simple_command cmd_suffix
+
+cmd_suffix 		::= io_redirect
+				|   WORD
+				| 	cmd_suffix io_redirect
+			    | 	cmd_suffix WORD
+
+redirect_list	::= io_redirect
+				|  	redirect_list io_redirect
+
+io_redirect		::= io_file
+				| 	io_here
+
+io_file 		::= '<' WORD
+			    | 	'>' WORD
+				| 	'>>' WORD
+
+io_here 	    ::= '<<' WORD
