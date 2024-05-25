@@ -1,5 +1,6 @@
 gitmessage.txt
 
+.vscode
 *.o
 *.a
 *.dylib

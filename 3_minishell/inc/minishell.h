@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/25 20:05:43 by jungslee         ###   ########.fr       */
+/*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
+/*   Updated: 2024/05/25 19:41:54 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-static int	g_status;
+# include "tokenizer.h"
+# include "parser.h"
 
-int	main(int argc, char **argv, char **envp)
-{
-	t_token	*token;
-	t_node	*ast;
-
-	token = tokenizer(argv[1]);
-	ast = parser(token);
-	return (0);
-}
+#endif
