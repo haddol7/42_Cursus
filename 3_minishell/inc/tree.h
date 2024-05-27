@@ -1,21 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   tree.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/25 17:54:45 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/27 17:35:44 by daeha            ###   ########.fr       */
+/*   Created: 2024/05/27 17:34:27 by daeha             #+#    #+#             */
+/*   Updated: 2024/05/27 17:36:10 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#ifndef TREE_H
+# define TREE_H
 
-# include "tokenizer.h"
-# include "tree.h"
+# include <stdlib.h>
 
-t_node	*list(t_token **token);
+typedef enum e_node_type
+{
+	N_CMD,
+	N_AND,
+	N_OR,
+	N_PIPE,
+	N_SUBSHELL,
+	N_INPUT,
+	N_OUTPUT,
+	N_HERE_DOC,
+	N_APPEND
+}	t_node_type;
+
+typedef struct s_node
+{
+	t_node_type		type;
+	char			**cmd;
+	struct s_node	*left;
+	struct s_node	*right;
+}	t_node;
+
+t_node	*new_parent_node(t_node_type type, t_node *left, t_node *right);
 
 #endif
