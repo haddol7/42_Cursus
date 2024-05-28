@@ -13,7 +13,7 @@ PARSER			:=	parser/parser.c \
 					parser/p_grammer_2.c \
 					parser/p_node_utils.c \
 					parser/p_token_utils.c \
-					
+
 TOKENIZER		:= tokenizer/tokenizer.c
 SRC_MAN			:=  $(PARSER)\
 					$(TOKENIZER)\
