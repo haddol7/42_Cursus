@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:39 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 17:14:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/28 17:32:02 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,22 @@
 //     | list '||' pipeline
 t_node	*list(t_token **token)
 {
-	t_node		*ast;
+	t_node		*list;
 	t_node_type	type;
 
-	ast = pipeline(token);
-	while (is_token(token, T_AND_IF) || is_token(token, T_OR_IF))
+	list = pipeline(token);
+	while (is_token(*token, T_AND_IF) || is_token(*token, T_OR_IF))
 	{
-		if (is_token(token, T_AND_IF))
+		if (is_token(*token, T_AND_IF))
 			type = N_AND;
 		else
 			type = N_OR;
-		ast = new_parent_node(type, ast, NULL);
+		list = new_parent_node(type, list, NULL);
 		token_next(token);
-		ast->right = pipeline(token);
+		list->right = pipeline(token);
 			//syntax error here
 	}
-	return (ast);
+	return (list);
 }
 
 // pipeline ::= command
@@ -44,7 +44,7 @@ t_node *pipeline(t_token **token)
 	pipe = command(token);
 	while (is_token(*token, T_PIPE))
 	{
-		pipe = new_parent_node(T_PIPE, pipe, NULL);
+		pipe = new_parent_node(N_PIPE, pipe, NULL);
 		token_next(token);
 		pipe->right = command(token);
 	}
