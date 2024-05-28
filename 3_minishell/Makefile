@@ -8,7 +8,12 @@ CFLAGS			:=
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
 
-PARSER			:= parser/parser.c
+PARSER			:=	parser/parser.c \
+					parser/p_grammer.c \
+					parser/p_grammer_2.c \
+					parser/p_node_utils.c \
+					parser/p_token_utils.c \
+
 TOKENIZER		:= tokenizer/tokenizer.c
 SRC_MAN			:=  $(PARSER)\
 					$(TOKENIZER)\

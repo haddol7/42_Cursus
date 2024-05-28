@@ -1,19 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   tree.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/27 18:02:58 by daeha            ###   ########.fr       */
+/*   Created: 2024/05/27 17:34:27 by daeha             #+#    #+#             */
+/*   Updated: 2024/05/27 17:36:10 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef TREE_H
+# define TREE_H
 
-# include "tokenizer.h"
-# include "parser.h"
+# include <stdlib.h>
+
+typedef enum e_node_type
+{
+	N_CMD,
+	N_AND,
+	N_OR,
+	N_PIPE,
+	N_SUBSHELL,
+	N_INPUT,
+	N_OUTPUT,
+	N_HERE_DOC,
+	N_APPEND
+}	t_node_type;
+
+typedef struct s_node
+{
+	t_node_type		type;
+	char			**cmd;
+	struct s_node	*left;
+	struct s_node	*right;
+}	t_node;
+
+t_node	*new_parent_node(t_node_type type, t_node *left, t_node *right);
 
 #endif

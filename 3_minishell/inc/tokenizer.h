@@ -41,6 +41,7 @@ typedef struct s_token
 }	t_token;
 
 t_token	*tokenizer(char *input);
+
 t_token	*ms_lstnew(char *value, t_token_type type);
 t_token	*ms_lstlast(t_token *head);
 void	ms_lstadd_back(t_token **head, t_token *new);
