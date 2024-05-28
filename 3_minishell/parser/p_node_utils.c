@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:14:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 20:59:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/28 22:49:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,23 @@ t_node	*new_parent_node(t_node_type type, t_node *left, t_node *right)
 	return (node);
 }
 
-t_node *new_cmd_node(t_node_type type, char **arg)
+t_node *new_cmd_node(t_node_type type, char ***arg)
 {
 	t_node	*node;
 
 	node = malloc(sizeof(t_node));
+
 	if (node == NULL)
 		//error here
 	node->type = type;
-	node->cmd = arg;
+	node->cmd = *arg;
 	node->left = NULL;
 	node->right = NULL;
 	return (node);
 }
 
 //redir 노드의 최하단 leaf의 left에 node 포인터를 넣는 함수
-t_node *link_redir_to_node(t_node *node, t_node **redir)
+t_node *link_redir_to_node(t_node **node, t_node **redir)
 {
 	t_node	*head;
 	
@@ -50,7 +51,7 @@ t_node *link_redir_to_node(t_node *node, t_node **redir)
 		//error?
 	while(*redir && (*redir)->left)
 		*redir = (*redir)->left;
-	(*redir)->left = node;
+	(*redir)->left = *node;
 	return (head);
 }
 
@@ -58,6 +59,7 @@ void	append_redir_node(t_node *redir, t_token **token)
 {
 	t_node	*new_io;
 
+	ft_putendl_fd("append_redir_node", 2);
 	new_io = io_redirect(token);
 	if (redir == NULL)
 		// error ?
@@ -88,8 +90,5 @@ char **append_cmd_arg(char **arg, t_token **token)
 	new_arg[size] = ft_strdup((*token)->value);
 	new_arg[size + 1] = NULL;
 	token_next(token);
-
-	printf("%s\n", (*token)->value);
-
 	return (new_arg);
 }

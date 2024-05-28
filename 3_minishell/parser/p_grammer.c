@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:39 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 20:54:16 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/28 22:53:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,13 @@ t_node	*subshell(t_token **token)
 	if (is_token_redir(*token))
 	{
 		redir = redirect_list(token);
-		node = link_redir_to_node(node, &redir);
+		node = link_redir_to_node(&node, &redir);
 	}
 	subshell = new_parent_node(N_SUBSHELL, node, NULL);
 	return (subshell);
 }
 
+//TODO : 최적화 하세요
 // simple_command 	::= WORD
 // 		 			| 	redirect_list simple_command
 // 			    	|	simple_command cmd_suffix
@@ -105,20 +106,25 @@ t_node	*simple_command(t_token **token)
 	t_node	*redir;
 	
 	arg = NULL;
-
+	redir = NULL;
+	
 	ft_putendl_fd("simp cmd", 2);
 	if (is_token_redir(*token))
 		redir = redirect_list(token);
 	while (is_token(*token, T_WORD) || is_token_redir(*token))
 	{
 		if (is_token_redir(*token))
-			append_redir_node(redir, token);
+		{
+			if (redir == NULL)
+				redir = io_redirect(token);
+			else
+				append_redir_node(redir, token);
+		}
 		else
 			arg = append_cmd_arg(arg, token);
 	}
-	printf("%s\n", arg[0]);
-	cmd = new_cmd_node(N_CMD, arg);
-	
-	//cmd = link_redir_to_node(cmd, &redir);
+	cmd = new_cmd_node(N_CMD, &arg);
+	if (redir != NULL)
+		cmd = link_redir_to_node(&cmd, &redir);
 	return (cmd);
 }

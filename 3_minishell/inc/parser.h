@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:54:45 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 19:58:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/28 22:37:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ t_node	*io_redirect(t_token **token);
 
 //p_node_utils.c
 t_node	*new_parent_node(t_node_type type, t_node *left, t_node *right);
-t_node	*new_cmd_node(t_node_type type, char **arg);
-t_node	*link_redir_to_node(t_node *node, t_node **redir);
+t_node	*new_cmd_node(t_node_type type, char ***arg);
+t_node	*link_redir_to_node(t_node **node, t_node **redir);
 void	append_redir_node(t_node *redir, t_token **token);
 char 	**append_cmd_arg(char **arg, t_token **token);
 

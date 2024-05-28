@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 21:13:24 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/28 22:45:53 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,9 @@ int	main(int argc, char **argv, char **envp)
 
 	token = tokenizer(argv[1]);
 	print_all_value(token);
+	printf("=====token====\n");
 	ast = parser(&token);
-	printf("> %s\n", argv[1]);
+	printf("minishell > %s\n", argv[1]);
 	printf("=====node====\n");
 	print_all_node(ast, 0);
 
