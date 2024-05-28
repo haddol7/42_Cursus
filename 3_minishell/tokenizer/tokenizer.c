@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 17:32:53 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/05/28 18:19:48 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,40 +57,40 @@ t_token	*tokenizer(char *input)
 	return (head);
 }
 
-// #include <stdio.h>
-// //
-// void	print_all_value(t_token *head)
-// {
-// 	t_token	*to_print;
+#include <stdio.h>
 
-// 	to_print = head;
-// 	while (to_print != NULL)
-// 	{
-// 		if (to_print->type == T_WORD)
-// 			printf("T_WORD : ");
-// 		if (to_print->type == T_PIPE)
-// 			printf("T_PIPE : ");
-// 		if (to_print->type == T_DLESS)
-// 			printf("T_DLESS : ");
-// 		if (to_print->type == T_DGREAT)
-// 			printf("T_DGREAT : ");
-// 		if (to_print->type == T_LESS)
-// 			printf("T_LESS : ");
-// 		if (to_print->type == T_GREAT)
-// 			printf("T_GREAT : ");
-// 		if (to_print->type == T_LPAREN)
-// 			printf("T_LPAREN : ");
-// 		if (to_print->type == T_RPAREN)
-// 			printf("T_RPAREN : ");
-// 		if (to_print->type == T_AND_IF)
-// 			printf("T_AND_IF : ");
-// 		if (to_print->type == T_OR_IF)
-// 			printf("T_OR_IF : ");
-// 		if (to_print->type != T_EOF)
-// 			printf("%s\n", to_print->value);
-// 		to_print = to_print->next;
-// 	}
-// }
+void	print_all_value(t_token *head)
+{
+	t_token	*to_print;
+
+	to_print = head;
+	while (to_print != NULL)
+	{
+		if (to_print->type == T_WORD)
+			printf("T_WORD : ");
+		if (to_print->type == T_PIPE)
+			printf("T_PIPE : ");
+		if (to_print->type == T_DLESS)
+			printf("T_DLESS : ");
+		if (to_print->type == T_DGREAT)
+			printf("T_DGREAT : ");
+		if (to_print->type == T_LESS)
+			printf("T_LESS : ");
+		if (to_print->type == T_GREAT)
+			printf("T_GREAT : ");
+		if (to_print->type == T_LPAREN)
+			printf("T_LPAREN : ");
+		if (to_print->type == T_RPAREN)
+			printf("T_RPAREN : ");
+		if (to_print->type == T_AND_IF)
+			printf("T_AND_IF : ");
+		if (to_print->type == T_OR_IF)
+			printf("T_OR_IF : ");
+		if (to_print->type != T_EOF)
+			printf("%s\n", to_print->value);
+		to_print = to_print->next;
+	}
+}
 
 // int	main(int argv, char *argc[])
 // {

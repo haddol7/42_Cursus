@@ -2,8 +2,7 @@ NAME			:= minishell
 LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
 CC				:= cc
-CFLAGS			:= -Wall -Werror -Wextra
-CFLAGS			:=
+CFLAGS			:= -Wall -Werror -Wextra -g
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
@@ -14,7 +13,10 @@ PARSER			:=	parser/parser.c \
 					parser/p_node_utils.c \
 					parser/p_token_utils.c \
 
-TOKENIZER		:= tokenizer/tokenizer.c
+TOKENIZER		:=	tokenizer/tokenizer.c \
+					tokenizer/tokenizer_utils.c \
+					tokenizer/input_type.c \
+					tokenizer/input_type_2.c
 SRC_MAN			:=  $(PARSER)\
 					$(TOKENIZER)\
 					main.c
