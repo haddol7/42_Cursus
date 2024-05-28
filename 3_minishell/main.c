@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 00:09:55 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 14:05:27 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,26 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_token	*token;
 	t_node	*ast;
+	char	*line;
 
-	token = tokenizer(argv[1]);
-	print_all_value(token);
-	printf("=====token====\n");
-	ast = parser(&token);
-	printf("minishell > %s\n", argv[1]);
-	printf("=====node====\n");
-	print_all_node(ast, 0, 0);
-
+	while (1)
+	{
+		line = readline("minishell> ");
+		add_history(line);
+		token = tokenizer(line);
+		print_all_value(token);
+		printf("=====token====\n");
+		ast = parser(&token);
+		printf("=====node====\n");
+		print_all_node(ast, 0, 0);
+		//execution part
+		// print_all_value(token);
+		ms_free_all_token(&token);
+		//free_ast();
+		free(line);
+		line = NULL;
+		token = NULL;
+	}
 	return (0);
 }
 
