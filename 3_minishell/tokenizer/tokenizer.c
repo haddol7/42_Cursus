@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/27 20:24:25 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/05/28 17:01:40 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ int	detect_type(t_token **head, char *input, int *i)
 	else if (input[*i] == ' ')
 		(*i)++;
 	else
-		input_word(head, input, i);
+	{
+		if (input_word(head, input, i) == 0)
+			return (0);
+	}
 	return (1);
 }
 
@@ -55,11 +58,11 @@ t_token	*tokenizer(char *input)
 }
 
 // #include <stdio.h>
-//
+// //
 // void	print_all_value(t_token *head)
 // {
 // 	t_token	*to_print;
-//
+
 // 	to_print = head;
 // 	while (to_print != NULL)
 // 	{

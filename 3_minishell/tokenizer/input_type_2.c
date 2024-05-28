@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 20:12:40 by jungslee          #+#    #+#             */
-/*   Updated: 2024/05/27 20:13:03 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/05/28 17:00:12 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,22 +58,39 @@ void	input_or_if(t_token **head, int *idx)
 	*idx = *idx + 2;
 }
 
-void	input_word(t_token **head, char *input, int *idx)
+int	check_if_terminal(char c1, char c2)
+{
+	if (c1 != '\0' && \
+		c1 != ' ' && c1 != '|' && \
+		c1 != '<' && c1 != '>' && \
+		c1 != '(' && c1 != ')' && \
+		!(c1 == '&' && c2 == '&') && \
+		!(c1 == '|' && c2 == '|')
+	)
+		return (0);
+	else
+		return (1);
+}
+
+int	input_word(t_token **head, char *input, int *idx)
 {
 	t_token	*node;
 	char	*value;
 	int		len;
 	int		start;
+	int		quote;
 
 	len = 1;
 	start = *idx;
-	while (input[start + len] != '\0' && \
-			input[start + len] != ' ' && input[start + len] != '|' && \
-			input[start + len] != '<' && input[start + len] != '>' && \
-			input[start + len] != '(' && input[start + len] != ')' && \
-			!(input[start + len] == '&' && input[start + len] == '&') && \
-			!(input[start + len] == '|' && input[start + len] == '|'))
+	quote = 0;
+	while (check_if_terminal(input[start + len], input[start + len + 1]) == 0)
+	{
+		if (input[start + len] == '\'' || input[start + len] == '\"')
+			quote++;
 		len++;
+	}
+	if (quote % 2 != 0)
+		return (handle_error("syntex error : unclosed quote", 0, head));
 	value = (char *)malloc(sizeof(char) * (len + 1));
 	if (value == NULL)
 		handle_error("exit : malloc error", 1, 0);
@@ -81,4 +98,5 @@ void	input_word(t_token **head, char *input, int *idx)
 	node = ms_lstnew(value, T_WORD);
 	ms_lstadd_back(head, node);
 	*idx = start + len;
+	return (1);
 }
