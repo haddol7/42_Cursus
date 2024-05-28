@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:55:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/25 19:51:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/27 17:47:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ typedef enum e_token_type
 	T_RPAREN,
 	T_AND_IF,
 	T_OR_IF,
-	T_ERROR
+	T_ERROR,
+	T_EOF
 }	t_token_type;
 
 typedef struct s_token
