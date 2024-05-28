@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:54:45 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 17:34:45 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/28 19:58:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include "tokenizer.h"
 # include "tree.h"
 # include "libft.h"
+
+//TODO : 지우기!
+# include <stdio.h>
 
 //parser.c
 t_node *parser(t_token **token);

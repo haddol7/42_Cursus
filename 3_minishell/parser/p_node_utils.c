@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:14:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 16:45:42 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/28 20:59:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ t_node *link_redir_to_node(t_node *node, t_node **redir)
 	t_node	*head;
 	
 	head = *redir;
-	if (redir == NULL)
+	if (*redir == NULL)
 		//error?
 	while(*redir && (*redir)->left)
-		(*redir)->left;
+		*redir = (*redir)->left;
 	(*redir)->left = node;
 	return (head);
 }
@@ -81,12 +81,15 @@ char **append_cmd_arg(char **arg, t_token **token)
 	i = 1;
 	while (++i < size)
 	{
-		new_arg[i - 2] = arg[i - 2];
+		new_arg[i - 2] = ft_strdup(arg[i - 2]);
 		free(arg[i - 2]);
 	}
 	free(arg);
-	new_arg[size - 2] = ft_strdup((*token)->value);
-	new_arg[size - 1] = NULL;
+	new_arg[size] = ft_strdup((*token)->value);
+	new_arg[size + 1] = NULL;
 	token_next(token);
+
+	printf("%s\n", (*token)->value);
+
 	return (new_arg);
 }

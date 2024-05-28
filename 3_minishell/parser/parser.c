@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:48:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 17:47:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/28 20:52:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_node *parser(t_token **token)
 {
 	t_node	*ast;
-
+	printf("%s\n", (*token)->value);
 	if (!is_token(*token, T_EOF))
 	{
 		ast = list(token);

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:00:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 17:34:16 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/28 20:49:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ t_bool	is_token(t_token *token, t_token_type type)
 
 void	token_next(t_token **token)
 {
+	printf("왈루\n");
+	
 	if ((*token)->type == T_EOF)
 		return ;
 	if ((*token) == NULL)
