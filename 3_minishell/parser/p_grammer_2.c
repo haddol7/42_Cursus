@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:47:24 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/29 23:49:02 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 00:00:03 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ t_node	*io_redirect(t_token **token)
 	ft_putendl_fd("BNF : io_redirect", 2);
 
 	if ((*token)->type == T_GREAT)
-		node_type = N_INPUT;
-	else if ((*token)->type == T_LESS)
 		node_type = N_OUTPUT;
+	else if ((*token)->type == T_LESS)
+		node_type = N_INPUT;
 	else if ((*token)->type == T_DLESS)
-		node_type = N_APPEND;
-	else
 		node_type = N_HERE_DOC;
+	else
+		node_type = N_APPEND;
 	
 	token_next(token);
 	if (!is_token(*token, T_WORD))
