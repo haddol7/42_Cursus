@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:14:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/29 23:25:02 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 00:38:37 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ t_node *link_redir_to_node(t_node *node, t_node *redir)
 	t_node	*head;
 	t_node	*cur;
 	
+	if (redir == NULL)
+		return (NULL);
 	head = redir;
 	cur = redir;
 	while(cur && cur->left)
