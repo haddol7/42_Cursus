@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:47:24 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/29 23:40:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/29 23:49:02 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ t_node	*io_redirect(t_token **token)
 	// 	//mallocerror
 	
 	arg[0] = ft_strdup((*token)->value);
-	printf("%s", (*token)->value);
 	token_next(token);
 	arg[1] = NULL;
 	io = new_cmd_node(N_CMD, arg);

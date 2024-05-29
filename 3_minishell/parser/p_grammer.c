@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:39 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/29 23:43:31 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/29 23:50:46 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ t_node	*simple_command(t_token **token)
 	
 	arg = NULL;
 	redir = NULL;
+	cmd = NULL;
 	ft_putendl_fd("BNF : simp cmd", 2);
 	if (is_token_redir(*token))
 		redir = redirect_list(token);
@@ -135,7 +136,8 @@ t_node	*simple_command(t_token **token)
 		else
 			redir = append_redir_node(redir, token);
 	}
-	cmd = new_cmd_node(N_CMD, arg);
+	if (arg != NULL)
+		cmd = new_cmd_node(N_CMD, arg);
 	if (redir != NULL)
 		cmd = link_redir_to_node(cmd, redir);
 	return (cmd);
