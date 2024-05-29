@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:39 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/29 23:39:38 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/29 23:43:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ t_node	*subshell(t_token **token)
 	t_node	*node;
 	t_node	*redir;
 	
-	ft_putendl_fd("subshell", 2);
+	ft_putendl_fd("BNF : subshell", 2);
 
 	token_next(token);
 	node = list(token);
