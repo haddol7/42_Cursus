@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:39 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/29 23:50:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 00:08:13 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,13 @@ t_node	*subshell(t_token **token)
 	node = list(token);
 	if (!is_token(*token, T_RPAREN))
 		syntax_error_test(">> )");
+	subshell = new_parent_node(N_SUBSHELL, node, NULL);
 	token_next(token);
 	if (is_token_redir(*token))
 	{
 		redir = redirect_list(token);
-		node = link_redir_to_node(node, redir);
+		subshell = link_redir_to_node(subshell, redir);
 	}
-	subshell = new_parent_node(N_SUBSHELL, node, NULL);
 	return (subshell);
 }
 
