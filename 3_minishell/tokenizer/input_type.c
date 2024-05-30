@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:48:15 by jungslee          #+#    #+#             */
-/*   Updated: 2024/05/28 15:47:33 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/05/28 22:14:53 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	input_redirection(t_token **head, char *input, int *idx)
 		type = T_DLESS;
 	else if (input[*idx] == '<')
 		type = T_LESS;
-	else if (input[*idx] == '>' && input[*idx] == '>')
+	else if (input[*idx] == '>' && input[*idx + 1] == '>')
 		type = T_DGREAT;
 	else
 		type = T_GREAT;

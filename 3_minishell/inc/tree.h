@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:34:27 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/27 17:36:10 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/29 22:04:21 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,5 @@ typedef struct s_node
 	struct s_node	*left;
 	struct s_node	*right;
 }	t_node;
-
-t_node	*new_parent_node(t_node_type type, t_node *left, t_node *right);
 
 #endif
