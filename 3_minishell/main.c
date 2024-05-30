@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 21:09:44 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:20:05 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		line = readline("minishell> ");
+		if (*line == '\0')
+		{
+			free(line);
+			continue ;
+		}
 		add_history(line);
 		token = tokenizer(line);
 		// ast = parser(token);

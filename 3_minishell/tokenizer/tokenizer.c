@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 18:19:48 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 14:19:50 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	print_all_value(t_token *head)
 	t_token	*to_print;
 
 	to_print = head;
-	while (to_print != NULL)
+	while (to_print != NULL && to_print->type != T_EOF)
 	{
 		if (to_print->type == T_WORD)
 			printf("T_WORD : ");
