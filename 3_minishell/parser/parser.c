@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:48:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 15:39:38 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 16:00:25 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	free_tree(t_node **node)
 		head = (*node)->cmd;
 		while (*(*node)->cmd)
 		{
-			printf("%s\n",*(*node)->cmd);
 			free(*(*node)->cmd);
 			(*node)->cmd++;
 		}

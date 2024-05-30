@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:14:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 00:38:37 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 15:59:58 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,13 +106,39 @@ char **append_cmd_arg(char **arg, t_token **token)
 	// 	//mem_error
 	i = 1;
 	while (++i < size)
-	{
-		new_arg[i - 2] = ft_strdup(arg[i - 2]);
-		free(arg[i - 2]);
-	}
-	free(arg);
+		new_arg[i - 2] = arg[i - 2];
+	if (arg != NULL)
+		free(arg);
 	new_arg[size - 2] = ft_strdup((*token)->value);
 	new_arg[size - 1] = NULL;
 	token_next(token);
 	return (new_arg);
 }
+
+// char **append_cmd_arg(char **arg, t_token **token)
+// {
+// 	char 	**new_arg;
+// 	size_t	size;
+// 	size_t	i;
+
+// 	ft_putendl_fd("utils : append_cmd_arg", 2);
+// 	size = 2;
+// 	while (arg && arg[size - 2])
+// 		size++;
+// 	new_arg = (char **)malloc(sizeof(char *) * (size));
+// 	// if (new_arg)
+// 	// 	//mem_error
+// 	i = 1;
+// 	while (++i < size)
+// 	{
+// 		new_arg[i - 2] = ft_strdup(arg[i - 2]);
+// 		free(arg[i - 2]);
+// 	}
+// 	if (arg != NULL)
+// 		free(arg);
+// 	new_arg[size - 2] = ft_strdup((*token)->value);
+// 	new_arg[size - 1] = NULL;
+// 	token_next(token);
+// 	return (new_arg);
+// }
+
