@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 14:20:05 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/05/30 14:24:27 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,11 @@ int	main(int argc, char **argv, char **envp)
 		}
 		add_history(line);
 		token = tokenizer(line);
-		// ast = parser(token);
-		//execution part
 		print_all_value(token);
+		printf("=====token====\n");
+		ast = parser(&token);
+		printf("=====node====\n");
+		print_all_node(ast, 0, 0);
 		ms_free_all_token(&token);
 		//free_ast();
 		free(line);
