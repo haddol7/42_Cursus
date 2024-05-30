@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:47:24 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 17:49:16 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 19:05:23 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ t_node	*io_redirect(t_token **token)
 		node_type = N_APPEND;
 	token_next(token);
 	if (!is_token(*token, T_WORD))
-		return (syntax_error_test(*token, NULL));
+		return (syntax_error(*token, NULL));
 	arg = (char **)ft_malloc(sizeof(char *) * 2);
 	arg[0] = ft_strdup((*token)->value);
 	arg[1] = NULL;
-	token_next(token);
 	io = new_cmd_node(N_CMD, arg);
 	io = new_parent_node(node_type, NULL, io);
+	token_next(token);
 	return (io);
 }

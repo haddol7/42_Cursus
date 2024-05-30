@@ -6,17 +6,17 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 22:03:33 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 17:52:41 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 19:05:23 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#define SYNTAX_ERR 258
 
 extern int	g_status;
-
 static void	syntax_error_type(t_token *token);
 
-void	*syntax_error_test(t_token *token, t_node **node)
+void	*syntax_error(t_token *token, t_node **node)
 {	
 	if (g_status == 0)
 	{
@@ -28,7 +28,7 @@ void	*syntax_error_test(t_token *token, t_node **node)
 			syntax_error_type(token);
 			ft_putendl_fd("'", 2);
 		}
-		g_status = 258;
+		g_status = SYNTAX_ERR;
 	}
 	free_tree(node);
 	return (NULL);
@@ -53,5 +53,5 @@ static void	syntax_error_type(t_token *token)
 	else if (token->type == T_RPAREN)
 		ft_putstr_fd(")", STDERR_FILENO);
 	else if (token->type == T_LPAREN)
-		ft_putstr_fd("()", STDERR_FILENO);
+		ft_putstr_fd("(", STDERR_FILENO);
 }
