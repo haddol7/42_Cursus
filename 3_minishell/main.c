@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 22:45:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 00:09:55 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,22 @@
 
 static int	g_status;
 
-void print_all_node(t_node *ast, int indent)
+void print_all_node(t_node *ast, int indent, int is_leaf)
 {
 	if (ast == NULL)
 		return ;
 	
 	for(int i = 0; i < indent; i++)
+	{
+		if (i && i % 4 == 0)
+			dprintf(2, "┃");
 		ft_putchar_fd(' ', STDERR_FILENO);
+	}
+	if (is_leaf == 1)
+		dprintf(2, "┗");
+	else if (is_leaf == 2)
+		dprintf(2, "┏");
 
-	
 	if(ast->type == N_AND)
 		ft_putendl_fd("N_AND", STDERR_FILENO);
 	else if (ast->type == N_OR)
@@ -40,7 +47,7 @@ void print_all_node(t_node *ast, int indent)
 	else if (ast->type == N_PIPE)
 		ft_putendl_fd("N_PIPE", STDERR_FILENO);
 	else if (ast->type == N_SUBSHELL)
-		ft_putendl_fd("N_PIPE", STDERR_FILENO);
+		ft_putendl_fd("N_SUBSHELL", STDERR_FILENO);
 	else
 	{
 		char	**arg;
@@ -53,8 +60,12 @@ void print_all_node(t_node *ast, int indent)
 		}
 		ft_putchar_fd('\n', STDERR_FILENO);
 	}
-	print_all_node(ast->left, indent + 4);
-	print_all_node(ast->right, indent + 4);
+	if (ast->left && ast->right)
+		is_leaf = 1;
+	else
+		is_leaf = 0;
+	print_all_node(ast->left, indent + 4, is_leaf * 2);
+	print_all_node(ast->right, indent + 4, is_leaf);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -68,7 +79,7 @@ int	main(int argc, char **argv, char **envp)
 	ast = parser(&token);
 	printf("minishell > %s\n", argv[1]);
 	printf("=====node====\n");
-	print_all_node(ast, 0);
+	print_all_node(ast, 0, 0);
 
 	return (0);
 }

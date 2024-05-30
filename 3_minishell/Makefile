@@ -13,6 +13,7 @@ PARSER			:=	parser/parser.c \
 					parser/p_grammer_2.c \
 					parser/p_node_utils.c \
 					parser/p_token_utils.c \
+					parser/p_syntax_error.c \
 
 TOKENIZER		:=	tokenizer/tokenizer.c \
 					tokenizer/tokenizer_utils.c \
