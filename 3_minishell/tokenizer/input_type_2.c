@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_type_2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 20:12:40 by jungslee          #+#    #+#             */
-/*   Updated: 2024/05/28 17:00:12 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/05/28 22:55:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	input_or_if(t_token **head, int *idx)
 	value = ft_strdup("||");
 	if (value == NULL)
 		handle_error("exit : malloc error", 1, 0);
-	node = ms_lstnew(value, T_AND_IF);
+	node = ms_lstnew(value, T_OR_IF);
 	ms_lstadd_back(head, node);
 	*idx = *idx + 2;
 }

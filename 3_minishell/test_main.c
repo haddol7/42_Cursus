@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   test_main.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 22:45:53 by daeha            ###   ########.fr       */
+/*   Created: 2024/05/30 19:15:31 by daeha             #+#    #+#             */
+/*   Updated: 2024/05/30 19:15:33 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-#include <stdio.h>
+int	g_status;
 
-static int	g_status;
-
-void print_all_node(t_node *ast, int indent)
+void	print_all_node(t_node *ast, int indent)
 {
 	if (ast == NULL)
 		return ;
-	
+
 	for(int i = 0; i < indent; i++)
 		ft_putchar_fd(' ', STDERR_FILENO);
-
-	
-	if(ast->type == N_AND)
+	if (ast->type == N_AND)
 		ft_putendl_fd("N_AND", STDERR_FILENO);
 	else if (ast->type == N_OR)
 		ft_putendl_fd("N_OR", STDERR_FILENO);
@@ -57,19 +53,26 @@ void print_all_node(t_node *ast, int indent)
 	print_all_node(ast->right, indent + 4);
 }
 
+void	leaks(void)
+{
+	system("leaks minishell | grep 'leaks for'");
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_token	*token;
+	t_token *head;
 	t_node	*ast;
 
+	atexit(leaks);
 	token = tokenizer(argv[1]);
+	head = token;
 	print_all_value(token);
 	printf("=====token====\n");
 	ast = parser(&token);
 	printf("minishell > %s\n", argv[1]);
 	printf("=====node====\n");
 	print_all_node(ast, 0);
-
+	free_tree(&ast);
 	return (0);
 }
-
