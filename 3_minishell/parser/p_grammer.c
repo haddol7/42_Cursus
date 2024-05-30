@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:39 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 14:17:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 14:59:41 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_node	*list(t_token **token)
 	
 	list = pipeline(token);
 	if (list == NULL)
-		syntax_error_test(*token);
+		return (syntax_error_test(*token, NULL));
 	while (is_token(*token, T_AND_IF) || is_token(*token, T_OR_IF))
 	{
 		if (is_token(*token, T_AND_IF))
@@ -40,7 +40,7 @@ t_node	*list(t_token **token)
 		token_next(token);
 		list->right = pipeline(token);
 		if (list->right == NULL)
-			syntax_error_test(*token);
+			return (syntax_error_test(*token, &list));
 	}
 	return (list);
 }
@@ -57,14 +57,14 @@ t_node *pipeline(t_token **token)
 
 	pipe = command(token);
 	if (pipe == NULL)
-		syntax_error_test(*token);
+		return (syntax_error_test(*token, NULL));
 	while (is_token(*token, T_PIPE))
 	{
 		pipe = new_parent_node(N_PIPE, pipe, NULL);
 		token_next(token);
 		pipe->right = command(token);
 		if (pipe->right == NULL)
-			syntax_error_test(*token);
+			syntax_error_test(*token, &pipe);
 	}
 	return (pipe);
 }
@@ -99,8 +99,8 @@ t_node	*subshell(t_token **token)
 
 	token_next(token);
 	node = list(token);
-	if (!is_token(*token, T_RPAREN))
-		syntax_error_test(*token);
+	if (!is_token(*token, T_RPAREN) || !node)
+		return (syntax_error_test(*token, &node));
 	subshell = new_parent_node(N_SUBSHELL, node, NULL);
 	token_next(token);
 	if (is_token_redir(*token))

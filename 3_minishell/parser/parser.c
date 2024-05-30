@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:48:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 14:08:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 15:39:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,34 @@ t_node *parser(t_token **token)
 		ast = list(token);
 		if (!(is_token(*token, T_EOF)))
 		{
-			syntax_error_test(*token);
-			//free_ast_node(ast);
+			return (syntax_error_test(*token, &ast));
 			//setsignal_error
-			printf("너는 문법을 지키지 않았어.\n");
-			return (NULL);
 		}
 	}
 	else
 		return (NULL);
 	return (ast);
+}
+
+void	free_tree(t_node **node)
+{
+	char **head;
+	
+	if (node == NULL || (*node) == NULL)
+		return ;
+	free_tree(&(*node)->left);
+	free_tree(&(*node)->right);
+	if ((*node)->cmd != NULL)
+	{	
+		head = (*node)->cmd;
+		while (*(*node)->cmd)
+		{
+			printf("%s\n",*(*node)->cmd);
+			free(*(*node)->cmd);
+			(*node)->cmd++;
+		}
+		free(head);
+	}
+	free(*node);
+	*node = NULL;
 }
