@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:39 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 16:43:06 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 17:51:12 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ t_node	*list(t_token **token)
 	t_node		*list;
 	t_node_type	type;
 
-	ft_putendl_fd("BNF : list", 2);
-	
 	list = pipeline(token);
 	while (list && (is_token(*token, T_AND_IF) || is_token(*token, T_OR_IF)))
 	{
@@ -47,11 +45,9 @@ t_node	*list(t_token **token)
 // 			| 	pipeline '|' command
 
 //1. 파이프 뒤에 아무것도 없을 때
-t_node *pipeline(t_token **token)
+t_node	*pipeline(t_token **token)
 {
 	t_node	*pipe;
-
-	ft_putendl_fd("BNF : pipe", 2);
 
 	pipe = command(token);
 	while (pipe && is_token(*token, T_PIPE))
@@ -70,10 +66,8 @@ t_node *pipeline(t_token **token)
 
 // 1. subshell에서 문법 오류를 발생시켰을 때
 // 2. simple cmd의 문법 오류
-t_node *command(t_token **token)
-{
-	ft_putendl_fd("BNF : cmd", 2);
-
+t_node	*command(t_token **token)
+{	
 	if (is_token(*token, T_LPAREN))
 		return (subshell(token));
 	else if (is_token(*token, T_WORD) || is_token_redir(*token))
@@ -90,8 +84,6 @@ t_node	*subshell(t_token **token)
 	t_node	*subshell;
 	t_node	*node;
 	t_node	*redir;
-	
-	ft_putendl_fd("BNF : subshell", 2);
 
 	token_next(token);
 	node = list(token);
@@ -123,7 +115,7 @@ t_node	*simple_command(t_token **token)
 	char	**arg;
 	t_node	*cmd;
 	t_node	*redir;
-	
+
 	arg = NULL;
 	redir = NULL;
 	cmd = NULL;

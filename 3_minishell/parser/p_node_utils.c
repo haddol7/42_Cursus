@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:14:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 15:59:58 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 17:52:22 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ t_node	*new_parent_node(t_node_type type, t_node *left, t_node *right)
 {
 	t_node	*node;
 
-	node = malloc(sizeof(t_node));
-	if (node == NULL)
-		//error here
+	node = ft_malloc(sizeof(t_node));
 	node->cmd = NULL;
 	node->type = type;
 	node->left = left;
@@ -30,15 +28,12 @@ t_node	*new_parent_node(t_node_type type, t_node *left, t_node *right)
 //새로운 cmd 노드를 만듭니다.
 //주로 N_CMD 노드 혹은 
 //입출력과 관련된 N_HEREDOC, N_INPUT, N_OUTPUT, N_APPEND를 생성할 때 사용합니다.
-t_node *new_cmd_node(t_node_type type, char **arg)
+t_node	*new_cmd_node(t_node_type type, char **arg)
 {
 	t_node	*node;
 
 	ft_putendl_fd("utils : new_cmd_node", 2);
-	node = (t_node *)malloc(sizeof(t_node));
-
-	//if (node == NULL)
-		//error here
+	node = (t_node *)ft_malloc(sizeof(t_node));
 	node->type = type;
 	node->cmd = arg;
 	node->left = NULL;
@@ -50,16 +45,16 @@ t_node *new_cmd_node(t_node_type type, char **arg)
 //붙여지는 node는 N_CMD이거나 N_SHELL입니다.
 //
 //NOTE : 모든 redir->right에는 redirection할 filename이 cmd[0]에 char * 형태로 있습니다.
-t_node *link_redir_to_node(t_node *node, t_node *redir)
+t_node	*link_redir_to_node(t_node *node, t_node *redir)
 {
 	t_node	*head;
 	t_node	*cur;
-	
+
 	if (redir == NULL)
 		return (NULL);
 	head = redir;
 	cur = redir;
-	while(cur && cur->left)
+	while (cur && cur->left)
 		cur = cur->left;
 	cur->left = node;
 	return (head);
@@ -82,7 +77,7 @@ t_node	*append_redir_node(t_node *redir, t_token **token)
 	{
 		while (cur && cur->left)
 			cur = cur->left;
-		cur->left = new_io;	
+		cur->left = new_io;
 	}
 	else
 		head = new_io;
@@ -91,9 +86,9 @@ t_node	*append_redir_node(t_node *redir, t_token **token)
 
 //기존에 있던 2차원 배열의 arg 맨 뒤에 있는 값을, 
 //현재 token->value에 해당하는 값을 추가로 넣습니다.
-char **append_cmd_arg(char **arg, t_token **token)
+char	**append_cmd_arg(char **arg, t_token **token)
 {
-	char 	**new_arg;
+	char	**new_arg;
 	size_t	size;
 	size_t	i;
 
@@ -101,9 +96,7 @@ char **append_cmd_arg(char **arg, t_token **token)
 	size = 2;
 	while (arg && arg[size - 2])
 		size++;
-	new_arg = (char **)malloc(sizeof(char *) * (size));
-	// if (new_arg)
-	// 	//mem_error
+	new_arg = (char **)ft_malloc(sizeof(char *) * (size));
 	i = 1;
 	while (++i < size)
 		new_arg[i - 2] = arg[i - 2];
@@ -114,31 +107,3 @@ char **append_cmd_arg(char **arg, t_token **token)
 	token_next(token);
 	return (new_arg);
 }
-
-// char **append_cmd_arg(char **arg, t_token **token)
-// {
-// 	char 	**new_arg;
-// 	size_t	size;
-// 	size_t	i;
-
-// 	ft_putendl_fd("utils : append_cmd_arg", 2);
-// 	size = 2;
-// 	while (arg && arg[size - 2])
-// 		size++;
-// 	new_arg = (char **)malloc(sizeof(char *) * (size));
-// 	// if (new_arg)
-// 	// 	//mem_error
-// 	i = 1;
-// 	while (++i < size)
-// 	{
-// 		new_arg[i - 2] = ft_strdup(arg[i - 2]);
-// 		free(arg[i - 2]);
-// 	}
-// 	if (arg != NULL)
-// 		free(arg);
-// 	new_arg[size - 2] = ft_strdup((*token)->value);
-// 	new_arg[size - 1] = NULL;
-// 	token_next(token);
-// 	return (new_arg);
-// }
-

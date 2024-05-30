@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:00:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 22:36:55 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 18:36:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_bool	is_token(t_token *token, t_token_type type)
 {
 	if (token == NULL)
 	{
-		ft_putendl_fd("token is NULL!", 2);
+		ft_putendl_fd("token is NULL!", STDERR_FILENO);
 		return (FALSE);
 	}
 	if (token->type == type)
