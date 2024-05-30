@@ -20,6 +20,15 @@ TOKENIZER		:=	tokenizer/tokenizer.c \
 					tokenizer/input_type.c \
 					tokenizer/input_type_2.c
 
+BUILTIN			:=	builtin/cd.c\
+					builtin/echo.c\
+					builtin/env.c\
+					builtin/exit.c\
+					builtin/export.c\
+					builtin/pwd.c\
+					builtin/unset.c\
+
+
 EXPANSION		:=	expansion/print_env.c \
 					expansion/expansion_utils.c\
 					expansion/expansion_utils_2.c
@@ -27,6 +36,7 @@ EXPANSION		:=	expansion/print_env.c \
 SRC_MAN			:=  $(PARSER)\
 					$(TOKENIZER)\
 					$(EXPANSION)\
+					$(BUILTIN)\
 					main.c
 
 #Bonus files for evaluation

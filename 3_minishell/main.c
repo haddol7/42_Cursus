@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/04 21:30:45 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/05 21:30:29 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 
 #include <stdio.h>
 
-static int	g_status;
+int	g_status;
 
 void print_all_node(t_node *ast, int indent, int is_leaf)
 {
+	char	**arg;
+	
 	if (ast == NULL)
 		return ;
-	
 	for(int i = 0; i < indent; i++)
 	{
 		if (i && i % 4 == 0)
@@ -50,8 +51,6 @@ void print_all_node(t_node *ast, int indent, int is_leaf)
 		ft_putendl_fd("N_SUBSHELL", STDERR_FILENO);
 	else
 	{
-		char	**arg;
-
 		arg = ast->cmd;
 		ft_putstr_fd("N_CMD : ", STDERR_FILENO);
 		for(int i = 0; arg[i] != NULL; i++)
@@ -117,7 +116,7 @@ int	main(int argc, char **argv, char **envp)
 		print_all_value(token);
 		printf("=====token====\n");
 		ast = parser(&token);
-		printf("minishell >> %s\n", line);
+		// printf("minishell >> %s\n", line);
 		printf("=====node====\n");
 		print_all_node(ast, 0, 0);
 		check_cmd_node(ast, env);

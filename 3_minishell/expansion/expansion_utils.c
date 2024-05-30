@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 16:46:42 by jungslee          #+#    #+#             */
-/*   Updated: 2024/05/31 17:13:58 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/05 20:05:54 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,13 @@ t_env	*env_new(char *name, char *content)
 
 	node = (t_env *)malloc(sizeof(t_env));
 	if (node == NULL)
-		handle_error("exit : malloc error", 1, 0);
+		handle_error("exit : malloc error6", 1, 0);
 	node->name = name;
 	node->content = content;
+	if (name != NULL && content != NULL)
+		node->complete = 1;
+	else
+		node->complete = 0;
 	node->next = NULL;
 	return (node);
 }

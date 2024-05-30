@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/04 21:22:34 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/05 20:59:35 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 int	detect_type(t_token **head, char *input, int *i)
 {
-	if (input[*i] == '\'' || input[*i] == '\"')
-	{
-		if (input_quotation(head, input, i) == 0)
-			return (0);
-	}
-	else if (input[*i] == '|' && input[*i + 1] != '|')
+	// if (input[*i] == '\'' || input[*i] == '\"')
+	// {
+	// 	if (input_quotation(head, input, i) == 0)
+	// 		return (0);
+	// }
+	if (input[*i] == '|' && input[*i + 1] != '|')
 		input_pipe(head, i);
 	else if (input[*i] == '<' || input[*i] == '>')
 		input_redirection(head, input, i);

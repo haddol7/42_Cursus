@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:53:29 by jungslee          #+#    #+#             */
-/*   Updated: 2024/05/27 20:13:43 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/05 20:05:19 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_token	*ms_lstnew(char *value, t_token_type type)
 
 	node = (t_token *)malloc(sizeof(t_token));
 	if (node == NULL)
-		handle_error("exit : malloc error", 1, 0);
+		handle_error("exit : malloc error9", 1, 0);
 	node->type = type;
 	node->value = value;
 	node->next = NULL;

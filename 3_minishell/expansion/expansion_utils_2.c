@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:27:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/04 20:36:54 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/05 21:00:42 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ char	*env_strcpy(int start, int end, char *str)
 
 	i = 0;
 	ret = (char *)malloc(sizeof(char) * (end - start + 2));
+	// printf("end - start ::: %d\n", end - start + 2);
 	if (ret == NULL)
-		handle_error("exit : malloc error", 1, 0);
+		handle_error("exit : malloc error4", 1, 0);
 	while (start + i <= end)
 	{
 		ret[i] = str[start + i];
@@ -49,7 +50,7 @@ void	env_cpy(t_env **env, char **envp)
 		name = env_strcpy(0, j - 1, envp[i]);
 		content = ft_strdup(envp[i] + j + 1);
 		if (name == NULL || content == NULL)
-			handle_error("exit : malloc error", 1, 0);
+			handle_error("exit : malloc error5", 1, 0);
 		env_add_back(env, env_new(name, content));
 		i++;
 	}

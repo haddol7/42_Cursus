@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/04 17:13:42 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/05 14:58:19 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct s_env
 {
 	char			*name;
 	char			*content;
+	int				complete;
 	struct s_env	*next;
 }	t_env;
 

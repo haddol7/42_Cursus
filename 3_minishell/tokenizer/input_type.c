@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:48:15 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/04 21:13:59 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/05 19:56:37 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,11 @@ int	input_quotation(t_token **head, char *input, int *idx)
 	quote_type = input[start];
 	while (input[start + len] != quote_type)
 	{
+		printf("%c ~!!!!!!!!!!!!!! \n", input[start + len]);
 		if (input[start + len] == '\0')
+		{
 			return (handle_error("syntex error : unclosed quote", 0, head));
+		}
 		len++;
 	}
 	while (!(input[start + len] == ' ' || input[start + len] == '\0'))
