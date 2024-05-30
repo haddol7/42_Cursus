@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:47:24 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 00:00:03 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 14:11:12 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_node	*io_redirect(t_token **token)
 	
 	token_next(token);
 	if (!is_token(*token, T_WORD))
-		syntax_error_test(">> redirection");
+		syntax_error_test(*token);
 		
 	arg = (char **)malloc(sizeof(char *) * 2);
 	// if (arg == NULL)

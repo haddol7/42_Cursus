@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:39 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 00:08:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/05/30 14:17:50 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 //TODO : T_EOF 제대로 발생하는지 확인
 //TODO : Syntax error 처리에 관한 방법 모색
-
 
 //list ::= pipeline 
 //     | list '&&' pipeline
@@ -29,6 +28,8 @@ t_node	*list(t_token **token)
 	ft_putendl_fd("BNF : list", 2);
 	
 	list = pipeline(token);
+	if (list == NULL)
+		syntax_error_test(*token);
 	while (is_token(*token, T_AND_IF) || is_token(*token, T_OR_IF))
 	{
 		if (is_token(*token, T_AND_IF))
@@ -39,7 +40,7 @@ t_node	*list(t_token **token)
 		token_next(token);
 		list->right = pipeline(token);
 		if (list->right == NULL)
-			syntax_error_test(">> || OR &&");
+			syntax_error_test(*token);
 	}
 	return (list);
 }
@@ -55,13 +56,15 @@ t_node *pipeline(t_token **token)
 	ft_putendl_fd("BNF : pipe", 2);
 
 	pipe = command(token);
+	if (pipe == NULL)
+		syntax_error_test(*token);
 	while (is_token(*token, T_PIPE))
 	{
 		pipe = new_parent_node(N_PIPE, pipe, NULL);
 		token_next(token);
 		pipe->right = command(token);
 		if (pipe->right == NULL)
-			syntax_error_test(">> |");
+			syntax_error_test(*token);
 	}
 	return (pipe);
 }
@@ -97,7 +100,7 @@ t_node	*subshell(t_token **token)
 	token_next(token);
 	node = list(token);
 	if (!is_token(*token, T_RPAREN))
-		syntax_error_test(">> )");
+		syntax_error_test(*token);
 	subshell = new_parent_node(N_SUBSHELL, node, NULL);
 	token_next(token);
 	if (is_token_redir(*token))
