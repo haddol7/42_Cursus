@@ -19,8 +19,14 @@ TOKENIZER		:=	tokenizer/tokenizer.c \
 					tokenizer/tokenizer_utils.c \
 					tokenizer/input_type.c \
 					tokenizer/input_type_2.c
+
+EXPANSION		:=	expansion/print_env.c \
+					expansion/expansion_utils.c\
+					expansion/expansion_utils_2.c
+
 SRC_MAN			:=  $(PARSER)\
 					$(TOKENIZER)\
+					$(EXPANSION)\
 					main.c
 
 #Bonus files for evaluation
@@ -28,6 +34,7 @@ PARSER_BONUS	:=
 TOKENIZER_BONUS	:=
 SRC_BONUS		:=  $(PARSER_BONUS)\
 					$(TOKENIZER_BONUS)\
+					$(EXPANSION)\
 					main_bonus.c
 
 GREEN = \033[0;92m

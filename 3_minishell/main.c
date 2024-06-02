@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/01 16:44:10 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/02 10:16:02 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ int	main(int argc, char **argv, char **envp)
 		line = NULL;
 		token = NULL;
 	}
+	rl_clear_history();
 	env_free_all(&env);
 	return (0);
 }
