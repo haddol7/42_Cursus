@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 14:26:50 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:44:10 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,16 +68,46 @@ void print_all_node(t_node *ast, int indent, int is_leaf)
 	print_all_node(ast->right, indent + 4, is_leaf);
 }
 
+int	is_nothing(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] != '\0')
+	{
+		if (line[i] != ' ')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	free_env(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i] != NULL)
+	{
+		free(env[i]);
+		i++;
+	}
+	free(env);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_token	*token;
 	t_node	*ast;
 	char	*line;
+	t_env	*env;
 
+	env_cpy(&env, envp);
+	// print_all_env(env);
 	while (1)
 	{
 		line = readline("minishell> ");
-		if (*line == '\0')
+		if (is_nothing(line) == 1)
 		{
 			free(line);
 			continue ;
@@ -87,7 +117,10 @@ int	main(int argc, char **argv, char **envp)
 		print_all_value(token);
 		printf("=====token====\n");
 		ast = parser(&token);
+		printf("minishell >> %s\n", line);
 		printf("=====node====\n");
+		print_all_node(ast, 0, 0);
+		check_env(ast, env);
 		print_all_node(ast, 0, 0);
 		ms_free_all_token(&token);
 		//free_ast();
@@ -95,5 +128,6 @@ int	main(int argc, char **argv, char **envp)
 		line = NULL;
 		token = NULL;
 	}
+	env_free_all(&env);
 	return (0);
 }
