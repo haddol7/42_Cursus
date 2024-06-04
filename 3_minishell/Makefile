@@ -19,8 +19,12 @@ TOKENIZER		:=	tokenizer/tokenizer.c \
 					tokenizer/tokenizer_utils.c \
 					tokenizer/input_type.c \
 					tokenizer/input_type_2.c
+
+EXECUTION		:=	execution/redirection.c
+
 SRC_MAN			:=  $(PARSER)\
 					$(TOKENIZER)\
+					$(EXECUTION)\
 					main.c
 
 #Bonus files for evaluation

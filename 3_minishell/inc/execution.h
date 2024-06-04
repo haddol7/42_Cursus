@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/04 19:32:14 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/04 22:41:53 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,13 @@
 # include <fcntl.h>
 # include "minishell.h"
 
-void	input(char *filename);
-void	append(char *filename);
-void	here_doc(char *delim);
-void	output(char *filename);
+# define READ 0
+# define WRITE 1
+# define ERR_REDIR 1
+
+int	input(char *filename);
+int	append(char *filename);
+int	here_doc(char *delim);
+int	output(char *filename);
 
 #endif

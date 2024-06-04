@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/04 19:01:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/04 22:42:18 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,23 @@ int	main(int argc, char **argv, char **envp)
 	t_node	*ast;
 	t_token *head;
 
-	atexit(leaks);
-	token = tokenizer(argv[1]);
-	head = token;
-	printf("\e[32m====================token===================\n");
-	print_all_value(token);
-	printf("\e[34m====================node====================\n");
-	ast = parser(&token);
-	print_all_node(ast, 0);
-	printf("\e[0mINPUT : %s\n", argv[1]);
-	free_tree(&ast);
+	// atexit(leaks);
+	// token = tokenizer(argv[1]);
+	// head = token;
+	// printf("\e[32m====================token===================\n");
+	// print_all_value(token);
+	// printf("\e[34m====================node====================\n");
+	// ast = parser(&token);
+	// print_all_node(ast, 0);
+	// printf("\e[0mINPUT : %s\n", argv[1]);
+	// free_tree(&ast);
+
+	char *str;
+
+	here_doc(argv[1]);
+	str = get_next_line(STDIN_FILENO);
+	append(argv[2]);
+	write(STDOUT_FILENO, str, ft_strlen(str) - 1);
 	return (0);
 }
 
