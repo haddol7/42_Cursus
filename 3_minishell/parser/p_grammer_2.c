@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:47:24 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 19:05:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/04 17:40:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,15 @@
 t_node	*redirect_list(t_token **token)
 {
 	t_node	*redir;
+	t_node	*head;
 
 	redir = io_redirect(token);
-	while (is_token_redir(*token))
-		append_redir_node(redir, token);
+	while (redir && is_token_redir(*token))
+	{
+		head = redir;
+		if (!append_redir_node(redir, token))
+			return (free_tree(&head));
+	}
 	return (redir);
 }
 

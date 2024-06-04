@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 22:45:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/04 19:01:04 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,19 @@
 
 #include <stdio.h>
 
-static int	g_status;
+int	g_status;
+
+void leaks(void)
+{
+	system("leaks minishell | grep \"leaks for\"");
+}
 
 void print_all_node(t_node *ast, int indent)
 {
 	if (ast == NULL)
 		return ;
-	
 	for(int i = 0; i < indent; i++)
 		ft_putchar_fd(' ', STDERR_FILENO);
-
-	
 	if(ast->type == N_AND)
 		ft_putendl_fd("N_AND", STDERR_FILENO);
 	else if (ast->type == N_OR)
@@ -40,7 +42,7 @@ void print_all_node(t_node *ast, int indent)
 	else if (ast->type == N_PIPE)
 		ft_putendl_fd("N_PIPE", STDERR_FILENO);
 	else if (ast->type == N_SUBSHELL)
-		ft_putendl_fd("N_PIPE", STDERR_FILENO);
+		ft_putendl_fd("N_SUBSHELL", STDERR_FILENO);
 	else
 	{
 		char	**arg;
@@ -61,15 +63,18 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_token	*token;
 	t_node	*ast;
+	t_token *head;
 
+	atexit(leaks);
 	token = tokenizer(argv[1]);
+	head = token;
+	printf("\e[32m====================token===================\n");
 	print_all_value(token);
-	printf("=====token====\n");
+	printf("\e[34m====================node====================\n");
 	ast = parser(&token);
-	printf("minishell > %s\n", argv[1]);
-	printf("=====node====\n");
 	print_all_node(ast, 0);
-
+	printf("\e[0mINPUT : %s\n", argv[1]);
+	free_tree(&ast);
 	return (0);
 }
 

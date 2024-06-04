@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 22:03:33 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 19:05:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/04 17:46:48 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,6 @@ static void	syntax_error_type(t_token *token)
 		ft_putstr_fd(")", STDERR_FILENO);
 	else if (token->type == T_LPAREN)
 		ft_putstr_fd("(", STDERR_FILENO);
+	else if (token->type == T_WORD)
+		ft_putstr_fd(token->value, STDERR_FILENO);
 }

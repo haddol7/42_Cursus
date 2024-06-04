@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/25 19:39:39 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 19:10:13 by daeha            ###   ########.fr       */
+/*   Created: 2024/06/04 17:40:17 by daeha             #+#    #+#             */
+/*   Updated: 2024/06/04 18:46:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,15 @@ t_node	*subshell(t_token **token)
 
 	token_next(token);
 	node = list(token);
-	if (!node)
-		return (NULL);
-	if (!is_token((*token), T_RPAREN))
+	if (!is_token((*token), T_RPAREN) || !node)
 		return (syntax_error(*token, &node));
 	subshell = new_parent_node(N_SUBSHELL, node, NULL);
 	token_next(token);
 	if (is_token_redir(*token))
 	{
 		redir = redirect_list(token);
+		if (redir == NULL)
+			return (free_tree(&subshell));
 		subshell = link_redir_to_node(subshell, redir);
 	}
 	return (subshell);
@@ -100,22 +100,26 @@ t_node	*simple_command(t_token **token)
 	char	**arg;
 	t_node	*cmd;
 	t_node	*redir;
+	t_node	*temp;
 
 	arg = NULL;
-	redir = NULL;
 	cmd = NULL;
-	if (is_token_redir(*token))
-		redir = redirect_list(token);
+	redir = NULL;
 	while (is_token(*token, T_WORD) || is_token_redir(*token))
 	{
 		if (is_token(*token, T_WORD))
 			arg = append_cmd_arg(arg, token);
 		else
-			redir = append_redir_node(redir, token);
+		{
+			temp = append_redir_node(redir, token);
+			if (temp == NULL)
+				return (free_arg(&arg), free_tree(&redir));
+			else
+				redir = temp;
+		}
 	}
 	if (arg != NULL)
 		cmd = new_cmd_node(N_CMD, arg);
-	if (redir != NULL)
-		cmd = link_redir_to_node(cmd, redir);
+	cmd = link_redir_to_node(cmd, redir);
 	return (cmd);
 }

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:48:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 19:11:26 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/04 18:51:34 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_node	*parser(t_token **token)
 		return (NULL);
 	ast = list(token);
 	if (head == *token || !is_token(*token, T_EOF))
-		return (syntax_error(*token, NULL));
+		syntax_error(*token, &ast);
 	ms_free_all_token(&head);
 	return (ast);
 }
@@ -37,16 +37,29 @@ void	*free_tree(t_node **node)
 	free_tree(&(*node)->left);
 	free_tree(&(*node)->right);
 	if ((*node)->cmd != NULL)
-	{	
-		head = (*node)->cmd;
-		while (*(*node)->cmd)
-		{
-			free(*(*node)->cmd);
-			(*node)->cmd++;
-		}
-		free(head);
-	}
+		free_arg(&(*node)->cmd);
 	free(*node);
 	*node = NULL;
+	return (NULL);
+}
+
+void	*free_arg(char ***cmd)
+{
+	char	**head;
+	char	**cur;
+
+	if (*cmd != NULL)
+	{
+		head = *cmd;
+		cur = *cmd;
+		while (*cur)
+		{
+			free(*cur);
+			*cur = NULL;
+			cur++;
+		}
+		free(head);
+		head = NULL;
+	}
 	return (NULL);
 }

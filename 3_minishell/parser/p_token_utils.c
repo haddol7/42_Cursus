@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:00:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 19:11:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/04 17:16:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ t_bool	is_token_redir(t_token *token)
 {
 	if (is_token(token, T_DLESS) || is_token(token, T_DGREAT) || \
 		is_token(token, T_LESS) || is_token(token, T_GREAT))
+	{
 		return (TRUE);
+	}
 	return (FALSE);
 }
 
