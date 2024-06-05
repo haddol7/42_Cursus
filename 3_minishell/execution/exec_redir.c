@@ -6,11 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:27:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/05 16:34:52 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/05 17:20:43 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+static t_bool	is_redir_input(t_node_type type);
 
 static void	exec_subshell(t_node *node, int fd[2])
 {
@@ -30,9 +32,9 @@ void	exec_redir(t_node *node, int fd[2])
 		fd_heredoc = heredoc(node->right->cmd[0]);
 	if (fd[INPUT] != -1 && fd[OUTPUT] != -1)
 	{
-		if (node->type == N_INPUT || node->type == N_HERE_DOC)
+		if (fd[INPUT] != STDIN_FILENO && is_redir_input(node->type))
 			close(fd[INPUT]);
-		else
+		else if (fd[OUTPUT] != STDOUT_FILENO && !is_redir_input(node->type))
 			close(fd[OUTPUT]);
 		if (node->type == N_INPUT)
 			fd[INPUT] = input(node->right->cmd[0]);
@@ -50,4 +52,11 @@ void	exec_redir(t_node *node, int fd[2])
 		exec_subshell(node->left, fd);
 	else
 		exec_cmd(node->left, fd);
+}
+
+static t_bool	is_redir_input(t_node_type type)
+{
+	if (type == N_INPUT || type == N_HERE_DOC)
+		return (TRUE);
+	return (FALSE);
 }
