@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:21:20 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/05 14:08:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/05 14:11:40 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ int	here_doc(char *delim)
 	{	
 		ft_putstr_fd("> ", STDOUT_FILENO);
 		str = get_next_line(STDIN_FILENO);
-		len_s = ft_strlen(str);
+		if (str)
+			len_s = ft_strlen(str);
 		if (!str || (len_s == len_d + 1 && !ft_strncmp(str, delim, len_d)))
 			break ;
 		write(fd, str, len_s);
