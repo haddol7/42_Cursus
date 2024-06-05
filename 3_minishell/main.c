@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/04 22:42:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/05 14:09:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,11 @@ int	main(int argc, char **argv, char **envp)
 
 	char *str;
 
-	here_doc(argv[1]);
-	str = get_next_line(STDIN_FILENO);
-	append(argv[2]);
-	write(STDOUT_FILENO, str, ft_strlen(str) - 1);
+	int fd = here_doc(argv[1]);
+	printf("fd is %d\n", fd);
+	str = get_next_line(fd);
+	printf("%s\n", str);
+	write(append(argv[2]), str, ft_strlen(str));
 	return (0);
 }
 
