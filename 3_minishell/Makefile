@@ -21,7 +21,11 @@ TOKENIZER		:=	tokenizer/tokenizer.c \
 					tokenizer/input_type_2.c
 
 EXECUTION		:=	execution/redirection.c \
- 					execution/exec_redir.c
+ 					execution/exec_redir.c \
+ 					execution/exec_cmd.c \
+					execution/exec_pipe.c \
+					execution/exec_subshell.c \
+					execution/exec_and_or_if.c
 
 SRC_MAN			:=  $(PARSER)\
 					$(TOKENIZER)\

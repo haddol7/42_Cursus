@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/05 16:53:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/05 20:16:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	main(int argc, char **argv, char **envp)
 	t_node	*ast;
 	t_token *head;
 
-	atexit(leaks);
+	//atexit(leaks);
 	token = tokenizer(argv[1]);
 	head = token;
 	printf("\e[32m====================token===================\n");

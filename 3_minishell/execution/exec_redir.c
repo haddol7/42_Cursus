@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:27:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/05 17:20:43 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/05 20:27:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,6 @@ static t_bool	is_redir_input(t_node_type type);
 static void	exec_subshell(t_node *node, int fd[2])
 {
 	dprintf(2, "sub node - IN : %d OUT : %d\n", fd[0], fd[1]);
-}
-
-static void	exec_cmd(t_node *node, int fd[2])
-{
-	dprintf(2, "cmd node - IN : %d OUT : %d\n", fd[0], fd[1]);
 }
 
 void	exec_redir(t_node *node, int fd[2])
@@ -45,7 +40,7 @@ void	exec_redir(t_node *node, int fd[2])
 		else
 			fd[INPUT] = fd_heredoc;
 	}
-	dprintf(2, "redir node %d(%s)- IN : %d OUT : %d\n", node->type, node->right->cmd[0], fd[0], fd[1]);
+	//dprintf(2, "redir node %d(%s)- IN : %d OUT : %d\n", node->type, node->right->cmd[0], fd[0], fd[1]);
 	if (node->left->type >= N_INPUT && node->left->type <= N_APPEND)
 		exec_redir(node->left, fd);
 	else if (node->left->type == N_SUBSHELL)
