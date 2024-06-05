@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:54:45 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/05 16:27:07 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/05 16:42:43 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define PARSER_H
 
 # include "minishell.h"
+# include "tokenizer.h"
+# include "libft.h"
 
 typedef enum e_node_type
 {

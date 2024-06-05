@@ -3,7 +3,7 @@ LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
 CC				:= cc
 CFLAGS			:= -Wall -Werror -Wextra
-CFLAGS =
+CFLAGS = -g
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
@@ -21,7 +21,7 @@ TOKENIZER		:=	tokenizer/tokenizer.c \
 					tokenizer/input_type_2.c
 
 EXECUTION		:=	execution/redirection.c \
-					execution/exec_redir.c
+ 					execution/exec_redir.c
 
 SRC_MAN			:=  $(PARSER)\
 					$(TOKENIZER)\
