@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/02 10:33:33 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/04 17:13:42 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	env_cpy(t_env **env, char **envp);
 char	*env_strcpy(int start, int end, char *str);
 int		env_strncmp(char *s1, char *name, int n);
 int		is_alpha_num(char *var);
+char	*ms_strjoin(char const *s1, char const *s2);
 
 
 void	print_all_env(t_env *head); //TODO ㅈㅣ우ㅓㅜ

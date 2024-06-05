@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:48:15 by jungslee          #+#    #+#             */
-/*   Updated: 2024/05/28 22:14:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/04 21:13:59 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,15 @@ int	input_quotation(t_token **head, char *input, int *idx)
 			return (handle_error("syntex error : unclosed quote", 0, head));
 		len++;
 	}
+	while (!(input[start + len] == ' ' || input[start + len] == '\0'))
+		len++;
 	value = (char *)malloc(sizeof(char) * (len + 2));
 	if (value == NULL)
 		handle_error("exit : malloc error", 1, 0);
 	ft_strlcpy(value, (const char *)(input + start), len + 2);
 	node = ms_lstnew(value, T_WORD);
 	ms_lstadd_back(head, node);
-	*idx = start + len + 1;
+	*idx = start + len;
 	return (1);
 }
 

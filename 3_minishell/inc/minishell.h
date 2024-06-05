@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 14:26:53 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/05/30 17:19:53 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@
 # include "tokenizer.h"
 # include "parser.h"
 # include "tree.h"
+# include "expansion.h"
 
 #endif
