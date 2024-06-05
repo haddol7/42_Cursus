@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/04 21:10:14 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/05 16:25:37 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-
-# include "tokenizer.h"
+# include "libft.h"
 # include "parser.h"
+# include "tokenizer.h"
 # include "execution.h"
 
 #endif

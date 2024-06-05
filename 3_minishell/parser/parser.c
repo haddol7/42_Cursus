@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:48:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/04 18:51:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/05 16:27:57 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ t_node	*parser(t_token **token)
 
 void	*free_tree(t_node **node)
 {
-	char	**head;
-
 	if (node == NULL || *node == NULL)
 		return (NULL);
 	free_tree(&(*node)->left);

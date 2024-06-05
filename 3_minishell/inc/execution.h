@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/05 15:28:51 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/05 16:33:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	heredoc(char *delim);
 int	output(char *filename);
 
 //exec_redir.c
-void	exec_redir(t_node *node, int fd[2]);
-
+void	exec_redir(struct s_node *node, int fd[2]);
 
 #endif
