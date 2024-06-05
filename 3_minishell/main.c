@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/05 14:09:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/05 15:28:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,28 +61,36 @@ void print_all_node(t_node *ast, int indent)
 
 int	main(int argc, char **argv, char **envp)
 {
+	int		fd[2];
 	t_token	*token;
 	t_node	*ast;
 	t_token *head;
 
-	// atexit(leaks);
-	// token = tokenizer(argv[1]);
-	// head = token;
-	// printf("\e[32m====================token===================\n");
-	// print_all_value(token);
-	// printf("\e[34m====================node====================\n");
-	// ast = parser(&token);
-	// print_all_node(ast, 0);
-	// printf("\e[0mINPUT : %s\n", argv[1]);
-	// free_tree(&ast);
+	atexit(leaks);
+	token = tokenizer(argv[1]);
+	head = token;
+	printf("\e[32m====================token===================\n");
+	print_all_value(token);
+	printf("\e[34m====================node====================\n");
+	ast = parser(&token);
+	print_all_node(ast, 0);
+	printf("\e[0mINPUT : %s\n", argv[1]);
 
-	char *str;
-
-	int fd = here_doc(argv[1]);
-	printf("fd is %d\n", fd);
-	str = get_next_line(fd);
-	printf("%s\n", str);
-	write(append(argv[2]), str, ft_strlen(str));
-	return (0);
+	fd[0] = 0;
+	fd[1] = 1;
+	exec_redir(ast, fd);
+	free_tree(&ast);
+	return (g_status);
 }
 
+/*
+	char *str;
+
+	int fd = heredoc(argv[1]);
+	str = get_next_line(fd);
+	if (str != NULL)
+	{
+		printf("%s\n", str);
+		write(append(argv[2]), str, ft_strlen(str));
+	}
+*/

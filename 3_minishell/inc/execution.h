@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/04 22:41:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/05 15:28:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,19 @@
 # include "minishell.h"
 
 # define READ 0
+# define INPUT 0
 # define WRITE 1
+# define OUTPUT 1
 # define ERR_REDIR 1
 
+//redirection.c
 int	input(char *filename);
 int	append(char *filename);
-int	here_doc(char *delim);
+int	heredoc(char *delim);
 int	output(char *filename);
+
+//exec_redir.c
+void	exec_redir(t_node *node, int fd[2]);
+
 
 #endif

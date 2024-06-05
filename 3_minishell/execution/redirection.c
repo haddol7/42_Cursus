@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:21:20 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/05 14:11:40 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/05 15:47:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	input(char *filename)
 	return (fd);
 }
 
-int	here_doc(char *delim)
+int	heredoc(char *delim)
 {
 	char	*str;
 	int		len_d;
@@ -78,5 +78,5 @@ static void	redir_error(char *name)
 {
 	ft_putstr_fd("bash: ", STDERR_FILENO);
 	perror(name);
-	g_status = 1;
+	g_status = ERR_REDIR;
 }
