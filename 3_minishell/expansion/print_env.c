@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/05 21:29:49 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/06 23:04:19 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,60 +42,80 @@ char	*replace_str(char *str, int start, int *end, char *content)
 
 char	*is_valid_env(char *ori, int *idx, t_env *env)
 {
-	t_env	*tmp;
 	int		start;
 	int		end;
 	char	*ret;
 
-	tmp = env;
+	if (ori[*idx + 1] == '\"' || \
+				ori[*idx + 1] == '\0' || ori[*idx + 1] == '$')
+		return (0);
 	start = (*idx)++;
 	ret = NULL;
 	while (ft_isalnum(*(ori + *idx)) || ori[*idx] == '_')
 		(*idx)++;
 	end = *idx - 1;
-	while (tmp != NULL)
+	while (env != NULL)
 	{
-		if (env_strncmp(ori + start + 1, tmp->name, end - start) == 0)
+		if (env_strncmp(ori + start + 1, env->key, end - start) == 0)
 		{
-			ret = replace_str(ori, start, &end, tmp->content);
+			ret = replace_str(ori, start, &end, env->value);
 			break ;
 		}
-		tmp = tmp->next;
+		env = env->next;
 	}
 	if (ret == NULL)
 		ret = replace_str(ori, start, &end, "");
-	*idx = end;
-	free(ori);
+	*idx = end - 1;
 	return (ret);
 }
 
-void	is_var(t_node *node, t_env *env)
+// void	is_var(t_node *node, t_env *env)
+// {
+// 	int		i;
+// 	int		j;
+// 	char	*content;
+// 	int		single_quote;
+
+// 	i = 0;
+// 	single_quote = -1;
+// 	while (node->cmd[i] != NULL)
+// 	{
+// 		j = 0;
+// 		while (node->cmd[i][j] != '\0')
+// 		{
+// 			if (node->cmd[i][j] == '\'')
+// 				single_quote *= -1;
+// 			if (single_quote == -1 && node->cmd[i][j] == '$')
+// 			{
+// 				if (!(node->cmd[i][j + 1] == '\"' || \
+// 						node->cmd[i][j + 1] == '\0' || node->cmd[i][j + 1] == '$'))
+// 					node->cmd[i] = is_valid_env(node->cmd[i], &j, env);
+// 				continue ;
+// 			}
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// }
+
+char	*is_var(char *cmd, int idx, t_env *env)
 {
 	int		i;
-	int		j;
-	char	*content;
-	int		single_quote;
+	char	*ret;
 
-	i = 0;
-	single_quote = -1;
-	while (node->cmd[i] != NULL)
+	i = idx;
+	ret = NULL;
+	while (cmd[i] != '\0')
 	{
-		j = 0;
-		while (node->cmd[i][j] != '\0')
-		{
-			if (node->cmd[i][j] == '\'')
-				single_quote *= -1;
-			if (single_quote == -1 && node->cmd[i][j] == '$')
-			{
-				if (!(node->cmd[i][j + 1] == '\"' || \
-						node->cmd[i][j + 1] == '\0' || node->cmd[i][j + 1] == '$'))
-					node->cmd[i] = is_valid_env(node->cmd[i], &j, env);
-				continue ;
-			}
-			j++;
-		}
+		if (cmd[i] == '$')
+			ret = is_valid_env(cmd, &i, env);
 		i++;
 	}
+	if (ret == NULL)
+		return (cmd);
+	else
+		free(cmd);
+	return (ret);
 }
 
 // char *single_quote(char *no_quote, char *cmd, int *start)
@@ -169,48 +189,73 @@ char *single_quote(char *cmd, int *idx)
 	return (ret);
 }
 
+char	*double_quote(char *cmd, int *idx, t_env *env)
+{
+	int		i;
+	int		quote_start;
+	int		quote_close;
+	char	*in_quote;
+	char	*ret;
+
+	i = 1;
+	quote_start = *idx;
+	cmd = is_var(cmd, *idx, env);
+	while (cmd[quote_start + i] != '\"')
+		i++;
+	quote_close = quote_start + i;
+	in_quote = env_strcpy(quote_start + 1, quote_close - 1, cmd);
+	ret = replace_str(cmd, quote_start, &quote_close, in_quote);
+	*idx = quote_close - 1;
+	free(in_quote);
+	free(cmd);
+	return (ret);
+}
+
+// char *normal_words(char *cmd, int *idx, t_env *env)
+// {
+// 	int		i;
+// 	char	*ret;
+
+// 	i = *idx;
+// 	while (!(cmd[i] == '\'' || cmd[i] == '\"' || cmd[i] == '\-'))
+// 	{
+// 		if (cmd[i] == '$')
+// 		{
+// 			if (!(cmd[i + 1] == '\"' || \
+// 					cmd[i + 1] == '\0' || cmd[i + 1] == '$'))
+// 				ret = is_valid_env(cmd, &i, env);
+// 			continue ;
+// 		}
+// 		i++;
+// 	}
+// 	if (ret == NULL)
+// 		return (cmd);
+// 	else
+// 		free(cmd);
+// 	*idx = i - 1;
+// 	return (ret);
+// }
+
 void	handle_quote(t_node *node, t_env *env)
 {
 	int		i;
 	int		j;
-	char	*no_quote;
+	char	*words_tmp;
 
 	i = 0;
-	no_quote = NULL ;
 	while (node->cmd[i] != NULL)
 	{
 		j = 0;
 		while (node->cmd[i][j] != '\0')
 		{
 			if (node->cmd[i][j] == '\'')
-			{
-				// printf("cmd ::::::: %s\n", node->cmd[i]);
 				node->cmd[i] = single_quote(node->cmd[i], &j);
-				// printf("cmd ::::::: %s\n", node->cmd[i]);
-			}
-			else
-				j++;
-			// else if (node->cmd[i][j] == '\"')
-			// // 	no_quote = double_quote(node->cmd[i], &j);
-			// if (no_quote == NULL)
-			// 	handle_error("exit : malloc error", 1, 0);
-			// if (node->cmd[i][j] == '\'')
-			// {
-			// 	while (node->cmd[i][j] != '\'')
-			// 		j++;
-			// }
-			// else if (node->cmd[i][j] == '\"')
-			// {
-			// 	while (node->cmd[i][j] != '\"')
-			// 	{
-			// 		if (node->cmd[i][j] == '$')
-			// 			no_quote = is_valid_env(node->cmd[i], &j, env);
-			// 		j++;
-			// 	}
-			// }
+			else if (node->cmd[i][j] == '\"')
+				node->cmd[i] = double_quote(node->cmd[i], &j, env);
+			else if (node->cmd[i][j] == '$')
+				node->cmd[i] = is_valid_env(node->cmd[i], &j, env);
+			j++;
 		}
-		// free(node->cmd[i]);
-		// node->cmd[i] = no_quote;
 		i++;
 	}
 }
@@ -225,7 +270,7 @@ void	check_cmd_node(t_node *ast, t_env *env)//TODO exit status 구현하기
 	node = ast;
 	if (node->type == N_CMD)
 	{
-		is_var(node, env);
+		// is_var(node, env);
 		handle_quote(node, env);
 		
 		// is_wild_card(node);

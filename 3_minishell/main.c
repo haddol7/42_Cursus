@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/05 21:30:29 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/06 20:30:54 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void print_all_node(t_node *ast, int indent, int is_leaf)
 		ft_putstr_fd("N_CMD : ", STDERR_FILENO);
 		for(int i = 0; arg[i] != NULL; i++)
 		{
-			dprintf(STDERR_FILENO, "%s ", arg[i]);
+			dprintf(STDERR_FILENO, "%s,  ", arg[i]);
 		}
 		ft_putchar_fd('\n', STDERR_FILENO);
 	}
