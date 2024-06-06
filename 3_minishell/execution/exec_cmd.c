@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/06 19:01:35 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/06 19:33:28 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,18 @@ extern int g_status;
 static void	exec_proc(char **arg, t_stat *stat)
 {
 	char	**cmd;
+	int		input;
+	int		output;
 
 	cmd = arg;
+	if (stat->fd[INPUT] == -1 || stat->fd[OUTPUT] == -1)
+	{
+		if(stat->fd[INPUT] != -1 && stat->fd[INPUT] != STDIN_FILENO)
+			close(stat->fd[INPUT]);
+		if (stat->fd[OUTPUT] != -1 && stat->fd[INPUT] != STDOUT_FILENO)
+			close(stat->fd[OUTPUT]);
+		exit(EXIT_FAILURE);
+	}
 	if (stat->fd[INPUT] != STDIN_FILENO)
 	{
 		dup2(stat->fd[INPUT], STDIN_FILENO);

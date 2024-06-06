@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/06 19:03:30 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/06 19:17:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ static void	proc_here_doc(char **cmd);
 static void	write_heredoc(char *delim, char *filename);
 static char	*name_tmp_file(void);
 
+
+//TODO : 시그널로 프로세스가 종료되었을 때 남아있던 파일을 삭제하는 동작이 필요함
 void	exec_here_doc(t_node *node)
 {
 	if (node == NULL || node->type == N_CMD)
@@ -48,8 +50,8 @@ static void	proc_here_doc(char **cmd)
 static char	*name_tmp_file(void)
 {
 	char	*name;
-	char	*num_str;
 	char	*tmp;
+	char	*num_str;
 	int		num_file;
 
 	num_file = 1;

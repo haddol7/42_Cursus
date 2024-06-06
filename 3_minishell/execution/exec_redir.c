@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:27:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/06 19:01:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/06 19:24:07 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ void	exec_redir(t_node *node, t_stat *stat)
 			close(stat->fd[OUTPUT]);
 		if (node->type == N_INPUT)
 			stat->fd[INPUT] = input(node->right->cmd[0]);
+		else if (node->type == N_HERE_DOC)
+			stat->fd[INPUT] = heredoc(node->right->cmd[0]);
 		else if (node->type == N_OUTPUT)
 			stat->fd[OUTPUT] = output(node->right->cmd[0]);
-		else if (node->type == N_APPEND)
-			stat->fd[OUTPUT] = append(node->right->cmd[0]);
 		else
-			stat->fd[INPUT] = heredoc(node->right->cmd[0]);
+			stat->fd[OUTPUT] = append(node->right->cmd[0]);
 	}
 	if (node->left->type >= N_INPUT && node->left->type <= N_APPEND)
 		exec_redir(node->left, stat);

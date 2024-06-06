@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/06 18:46:09 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/06 19:29:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,3 @@ int	main(int argc, char **argv, char **envp)
 	free_tree(&ast);
 	return (g_status);
 }
-
-/*
-	char *str;
-
-	int fd = heredoc(argv[1]);
-	str = get_next_line(fd);
-	if (str != NULL)
-	{
-		printf("%s\n", str);
-		write(append(argv[2]), str, ft_strlen(str));
-	}
-*/
