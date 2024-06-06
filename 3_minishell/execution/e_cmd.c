@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_cmd.c                                         :+:      :+:    :+:   */
+/*   e_cmd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/06 19:33:28 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/06 22:47:45 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 extern int g_status;
 
 //TODO: expand = expand(node->cmd)
+//TODO: 실행 파일 경로 찾는 함수
+//TODO: signal 작업
 static void	exec_proc(char **arg, t_stat *stat)
 {
 	char	**cmd;
@@ -25,7 +27,7 @@ static void	exec_proc(char **arg, t_stat *stat)
 	cmd = arg;
 	if (stat->fd[INPUT] == -1 || stat->fd[OUTPUT] == -1)
 	{
-		if(stat->fd[INPUT] != -1 && stat->fd[INPUT] != STDIN_FILENO)
+		if (stat->fd[INPUT] != -1 && stat->fd[INPUT] != STDIN_FILENO)
 			close(stat->fd[INPUT]);
 		if (stat->fd[OUTPUT] != -1 && stat->fd[INPUT] != STDOUT_FILENO)
 			close(stat->fd[OUTPUT]);
@@ -41,16 +43,16 @@ static void	exec_proc(char **arg, t_stat *stat)
 		dup2(stat->fd[OUTPUT], STDOUT_FILENO);
 		close(stat->fd[OUTPUT]);
 	}
-	execve("/bin/cat", cmd, NULL);
+	dprintf(2, "cmd node - IN : %d OUT : %d\n", stat->fd[0], stat->fd[1]);
+	execve("/bin/sleep", cmd, NULL);
 	exit(EXIT_FAILURE);
 }
 
-//	dprintf(2, "cmd node - IN : %d OUT : %d\n", fd[0], fd[1]);
 void	exec_cmd(t_node *node, t_stat *stat)
 {
 	char	**expand;
 	int		pid;
-
+	
 	pid = fork();
 	if (pid == 0)
 		exec_proc(node->cmd, stat);
@@ -60,6 +62,6 @@ void	exec_cmd(t_node *node, t_stat *stat)
 			close(stat->fd[INPUT]);
 		if (stat->fd[OUTPUT] != STDOUT_FILENO)
 			close(stat->fd[OUTPUT]);
-		waitpid(pid, &g_status, 0); 
+		push_pid_list(pid, stat);
 	}
 }

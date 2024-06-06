@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_here_doc.c                                    :+:      :+:    :+:   */
+/*   e_redir_here_doc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/06 19:17:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/06 22:29:06 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*name_tmp_file(void);
 
 //TODO : 시그널로 프로세스가 종료되었을 때 남아있던 파일을 삭제하는 동작이 필요함
 void	exec_here_doc(t_node *node)
-{
+{	
 	if (node == NULL || node->type == N_CMD)
 		return ;
 	if (node->type == N_HERE_DOC)
@@ -30,9 +30,10 @@ void	exec_here_doc(t_node *node)
 	exec_here_doc(node->right);
 }
 
+//TODO :  waitpid 수정
 static void	proc_here_doc(char **cmd)
 {
-	int		pid;
+	pid_t	pid;
 	char	*filename;
 
 	filename = name_tmp_file();

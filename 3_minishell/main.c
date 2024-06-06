@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/06 19:29:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/06 22:43:24 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,10 @@ int	main(int argc, char **argv, char **envp)
 
 	stat.fd[0] = 0;
 	stat.fd[1] = 1;
+	stat.num_pid = 0;
 	exec_here_doc(ast);
-	//exec_cmd(ast, &stat);
-	exec_redir(ast, &stat);
+	execution(ast, &stat);
+	wait_pid_list(&stat);
 	free_tree(&ast);
 	return (g_status);
 }

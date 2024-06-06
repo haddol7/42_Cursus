@@ -8,6 +8,11 @@ CFLAGS = -g
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
 
+TOKENIZER		:=	tokenizer/tokenizer.c \
+					tokenizer/tokenizer_utils.c \
+					tokenizer/input_type.c \
+					tokenizer/input_type_2.c
+
 PARSER			:=	parser/parser.c \
 					parser/p_grammer.c \
 					parser/p_grammer_2.c \
@@ -15,23 +20,18 @@ PARSER			:=	parser/parser.c \
 					parser/p_token_utils.c \
 					parser/p_syntax_error.c \
 
-TOKENIZER		:=	tokenizer/tokenizer.c \
-					tokenizer/tokenizer_utils.c \
-					tokenizer/input_type.c \
-					tokenizer/input_type_2.c
+EXECUTION		:=	execution/execution.c \
+ 					execution/e_and_or_if.c \
+ 					execution/e_cmd.c \
+					execution/e_pipe.c \
+					execution/e_redir_here_doc.c \
+ 					execution/e_redir_utils.c \
+					execution/e_redir.c \
+					execution/e_subshell.c \
+					execution/e_utils.c
 
-EXECUTION		:=	execution/redirection.c \
- 					execution/exec_redir.c \
-					execution/exec_here_doc.c \
- 					execution/exec_cmd.c
-
-#execution/exec_pipe.c
-#execution/exec_subshell.c
-#execution/exec_and_or_if.c
-#execution/exec_utils.c
-
-SRC_MAN			:=  $(PARSER)\
-					$(TOKENIZER)\
+SRC_MAN			:=  $(TOKENIZER)\
+					$(PARSER)\
 					$(EXECUTION)\
 					main.c
 
@@ -59,9 +59,11 @@ OBJS	:=	$(SRC_FIN:.c=.o)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@ -Iinc -Ilibft $(READLINE_OBJ)
 
+#TODO : all에 있는 clean 명령어 지우기
 all: 
 	@make -sC $(LIBFT_DIR)
 	@make $(NAME)
+	#@make clean
 
 bonus:
 	@make WITH_BONUS=1
