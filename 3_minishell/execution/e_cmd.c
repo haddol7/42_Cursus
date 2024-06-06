@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/06 22:47:45 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/06 22:57:13 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ extern int g_status;
 //TODO: expand = expand(node->cmd)
 //TODO: 실행 파일 경로 찾는 함수
 //TODO: signal 작업
+
+// dprintf(2, "cmd node - IN : %d OUT : %d\n", stat->fd[0], stat->fd[1]);
 static void	exec_proc(char **arg, t_stat *stat)
 {
 	char	**cmd;
@@ -43,8 +45,7 @@ static void	exec_proc(char **arg, t_stat *stat)
 		dup2(stat->fd[OUTPUT], STDOUT_FILENO);
 		close(stat->fd[OUTPUT]);
 	}
-	dprintf(2, "cmd node - IN : %d OUT : %d\n", stat->fd[0], stat->fd[1]);
-	execve("/bin/sleep", cmd, NULL);
+	execve("/bin/cat", cmd, NULL);
 	exit(EXIT_FAILURE);
 }
 
