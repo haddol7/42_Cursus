@@ -3,7 +3,7 @@ LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
 CC				:= cc
 CFLAGS			:= -Wall -Werror -Wextra
-CFLAGS = -g
+CFLAGS = -g -fsanitize=address
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
@@ -22,10 +22,13 @@ TOKENIZER		:=	tokenizer/tokenizer.c \
 
 EXECUTION		:=	execution/redirection.c \
  					execution/exec_redir.c \
- 					execution/exec_cmd.c \
-					execution/exec_pipe.c \
-					execution/exec_subshell.c \
-					execution/exec_and_or_if.c
+					execution/exec_here_doc.c \
+ 					execution/exec_cmd.c
+
+#execution/exec_pipe.c
+#execution/exec_subshell.c
+#execution/exec_and_or_if.c
+#execution/exec_utils.c
 
 SRC_MAN			:=  $(PARSER)\
 					$(TOKENIZER)\

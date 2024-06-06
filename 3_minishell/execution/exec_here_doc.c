@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/06 18:45:28 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/06 19:03:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,13 @@
 #include "execution.h"
 
 static void	proc_here_doc(char **cmd);
-static void	heredoc(char *delim, char *filename);
+static void	write_heredoc(char *delim, char *filename);
 static char	*name_tmp_file(void);
 
 void	exec_here_doc(t_node *node)
 {
-	
 	if (node == NULL || node->type == N_CMD)
 		return ;
-	printf("exec -> %s\n", node->right->cmd[0]);
 	if (node->type == N_HERE_DOC)
 		proc_here_doc(node->right->cmd);
 	exec_here_doc(node->left);
@@ -38,7 +36,7 @@ static void	proc_here_doc(char **cmd)
 	filename = name_tmp_file();
 	pid = fork();
 	if (!pid)
-		heredoc(cmd[0], filename);
+		write_heredoc(cmd[0], filename);
 	else
 	{
 		waitpid(pid, 0, 0);
@@ -50,24 +48,24 @@ static void	proc_here_doc(char **cmd)
 static char	*name_tmp_file(void)
 {
 	char	*name;
-	char	*num;
+	char	*num_str;
 	char	*tmp;
-	int		n;
-	
-	n = 1;
+	int		num_file;
+
+	num_file = 1;
 	name = ft_strdup("/tmp/heredoc_0");
 	while (!access(name, F_OK))
 	{
-		num = ft_itoa(n++);
-		tmp = ft_strjoin("/tmp/heredoc_", num);
-		free(num);
+		num_str = ft_itoa(num_file++);
+		tmp = ft_strjoin("/tmp/heredoc_", num_str);
+		free(num_str);
 		free(name);
 		name = tmp;
 	}
 	return (name);
 }
 
-static void	heredoc(char *delim, char *filename)
+static void	write_heredoc(char *delim, char *filename)
 {
 	char	*str;
 	int		len_d;
@@ -85,7 +83,7 @@ static void	heredoc(char *delim, char *filename)
 			len_s = ft_strlen(str);
 		if (!str || (len_s == len_d && !ft_strncmp(str, delim, len_d)))
 			break ;
-		write(fd, str, len_s);
+		ft_putendl_fd(str, fd);
 		free(str);
 	}
 	if (str != NULL)

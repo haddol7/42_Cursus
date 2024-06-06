@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/05 20:16:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/06 18:46:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void print_all_node(t_node *ast, int indent)
 
 int	main(int argc, char **argv, char **envp)
 {
-	int		fd[2];
+	t_stat	stat;
 	t_token	*token;
 	t_node	*ast;
 	t_token *head;
@@ -76,9 +76,11 @@ int	main(int argc, char **argv, char **envp)
 	print_all_node(ast, 0);
 	printf("\e[0mINPUT : %s\n", argv[1]);
 
-	fd[0] = 0;
-	fd[1] = 1;
-	exec_redir(ast, fd);
+	stat.fd[0] = 0;
+	stat.fd[1] = 1;
+	exec_here_doc(ast);
+	//exec_cmd(ast, &stat);
+	exec_redir(ast, &stat);
 	free_tree(&ast);
 	return (g_status);
 }
