@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/06 22:57:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/06 23:08:04 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ static void	exec_proc(char **arg, t_stat *stat)
 	{
 		dup2(stat->fd[OUTPUT], STDOUT_FILENO);
 		close(stat->fd[OUTPUT]);
+	}
+	while (1)
+	{
+		
 	}
 	execve("/bin/cat", cmd, NULL);
 	exit(EXIT_FAILURE);
