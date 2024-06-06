@@ -6,36 +6,28 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/06 18:08:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/06 18:45:28 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <readline/readline.h>
 #include "execution.h"
 
+static void	proc_here_doc(char **cmd);
+static void	heredoc(char *delim, char *filename);
+static char	*name_tmp_file(void);
+
 void	exec_here_doc(t_node *node)
 {
-	if (node == NULL)
+	
+	if (node == NULL || node->type == N_CMD)
 		return ;
+	printf("exec -> %s\n", node->right->cmd[0]);
 	if (node->type == N_HERE_DOC)
-		proc_here_doc(node->cmd);
+		proc_here_doc(node->right->cmd);
 	exec_here_doc(node->left);
 	exec_here_doc(node->right);
-}
-
-static char	*name_tmp_file()
-{
-	char	*name;
-	char	*tmp;
-	
-	name = ft_strdup(TMP_FILE_NAME);
-	while (!access(name, F_OK))
-	{
-		tmp = ft_strjoin(name, ".tmp");
-		free(name);
-		name = tmp;
-	}
-	return (name);
 }
 
 static void	proc_here_doc(char **cmd)
@@ -55,6 +47,26 @@ static void	proc_here_doc(char **cmd)
 	}
 }
 
+static char	*name_tmp_file(void)
+{
+	char	*name;
+	char	*num;
+	char	*tmp;
+	int		n;
+	
+	n = 1;
+	name = ft_strdup("/tmp/heredoc_0");
+	while (!access(name, F_OK))
+	{
+		num = ft_itoa(n++);
+		tmp = ft_strjoin("/tmp/heredoc_", num);
+		free(num);
+		free(name);
+		name = tmp;
+	}
+	return (name);
+}
+
 static void	heredoc(char *delim, char *filename)
 {
 	char	*str;
@@ -71,7 +83,7 @@ static void	heredoc(char *delim, char *filename)
 		str = readline("> ");
 		if (str)
 			len_s = ft_strlen(str);
-		if (!str || (len_s == len_d + 1 && !ft_strncmp(str, delim, len_d)))
+		if (!str || (len_s == len_d && !ft_strncmp(str, delim, len_d)))
 			break ;
 		write(fd, str, len_s);
 		free(str);
@@ -79,4 +91,5 @@ static void	heredoc(char *delim, char *filename)
 	if (str != NULL)
 		free(str);
 	close(fd);
+	exit(EXIT_SUCCESS);
 }
