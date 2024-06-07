@@ -3,10 +3,15 @@ LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
 CC				:= cc
 CFLAGS			:= -Wall -Werror -Wextra
-CFLAGS = -g
+CFLAGS =
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
+
+TOKENIZER		:=	tokenizer/tokenizer.c \
+					tokenizer/tokenizer_utils.c \
+					tokenizer/input_type.c \
+					tokenizer/input_type_2.c
 
 PARSER			:=	parser/parser.c \
 					parser/p_grammer.c \
@@ -15,13 +20,21 @@ PARSER			:=	parser/parser.c \
 					parser/p_token_utils.c \
 					parser/p_syntax_error.c \
 
-TOKENIZER		:=	tokenizer/tokenizer.c \
-					tokenizer/tokenizer_utils.c \
-					tokenizer/input_type.c \
-					tokenizer/input_type_2.c
-SRC_MAN			:=  $(PARSER)\
+EXECUTION		:=	execution/execution.c \
+ 					execution/e_and_or_if.c \
+ 					execution/e_cmd.c \
+					execution/e_pipe.c \
+					execution/e_redir_here_doc.c \
+ 					execution/e_redir_utils.c \
+					execution/e_redir.c \
+					execution/e_subshell.c \
+					execution/e_utils.c
+
+SRC_MAN			:=  main.c \
 					$(TOKENIZER)\
-					main.c
+					$(PARSER)\
+					$(EXECUTION)
+					
 
 #Bonus files for evaluation
 PARSER_BONUS	:=
@@ -47,9 +60,11 @@ OBJS	:=	$(SRC_FIN:.c=.o)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@ -Iinc -Ilibft $(READLINE_OBJ)
 
+#TODO : all에 있는 clean 명령어 지우기
 all: 
 	@make -sC $(LIBFT_DIR)
 	@make $(NAME)
+	#@make clean
 
 bonus:
 	@make WITH_BONUS=1

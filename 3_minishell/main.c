@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/04 19:01:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/08 00:12:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,12 @@ void print_all_node(t_node *ast, int indent)
 
 int	main(int argc, char **argv, char **envp)
 {
+	t_stat	stat;
 	t_token	*token;
 	t_node	*ast;
 	t_token *head;
 
-	atexit(leaks);
+	//atexit(leaks);
 	token = tokenizer(argv[1]);
 	head = token;
 	printf("\e[32m====================token===================\n");
@@ -74,7 +75,15 @@ int	main(int argc, char **argv, char **envp)
 	ast = parser(&token);
 	print_all_node(ast, 0);
 	printf("\e[0mINPUT : %s\n", argv[1]);
-	free_tree(&ast);
-	return (0);
-}
 
+	stat.fd[0] = 0;
+	stat.fd[1] = 1;
+	stat.n_pid = 0;
+	stat.n_pipe = 0;
+	exec_here_doc(ast);
+	execution(ast, &stat);
+	wait_pid_list(&stat);
+	free_tree(&ast);
+	atexit(leaks);
+	return (g_status);
+}
