@@ -6,13 +6,28 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:03:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/06 20:28:44 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/07 23:59:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
+extern int g_status;
+
 void	exec_subshell(t_node *node, t_stat *stat)
 {
-	dprintf(2, "subshell %d(%s)- IN : %d OUT : %d\n", node->type, node->right->cmd[0], stat->fd[0], stat->fd[1]);
+	pid_t	pid;
+
+	pid = fork();
+	if (!pid)
+	{
+		execution(node->left, stat);
+		exit(g_status);
+	}
+	else
+	{
+		//printf("subshell pid : %d\n", pid);
+		waitpid(pid, &g_status, 0);
+	}
+		//push_pid_list(pid, stat);
 }

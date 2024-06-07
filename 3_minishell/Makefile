@@ -3,7 +3,7 @@ LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
 CC				:= cc
 CFLAGS			:= -Wall -Werror -Wextra
-CFLAGS = -g
+CFLAGS =
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
@@ -30,10 +30,11 @@ EXECUTION		:=	execution/execution.c \
 					execution/e_subshell.c \
 					execution/e_utils.c
 
-SRC_MAN			:=  $(TOKENIZER)\
+SRC_MAN			:=  main.c \
+					$(TOKENIZER)\
 					$(PARSER)\
-					$(EXECUTION)\
-					main.c
+					$(EXECUTION)
+					
 
 #Bonus files for evaluation
 PARSER_BONUS	:=

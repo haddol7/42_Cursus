@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/07 21:45:17 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/07 23:57:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,10 @@ static void	close_pipe_fds(t_stat *stat);
 
 void	exec_cmd(t_node *node, t_stat *stat)
 {
-	char	**expand;
 	int		pid;
 
 	pid = fork();
-	if (pid == 0)
+	if (!pid)
 		exec_proc(node->cmd, stat);
 	else
 	{
@@ -36,19 +35,6 @@ void	exec_cmd(t_node *node, t_stat *stat)
 		if (stat->fd[OUTPUT] != STDOUT_FILENO)
 			close(stat->fd[OUTPUT]);
 		push_pid_list(pid, stat);
-	}
-}
-
-static void	close_pipe_fds(t_stat *stat)
-{
-	int	i;
-
-	i = 0;
-	while (i < stat->num_pipe)
-	{
-		if (stat->pipe[i] != stat->fd[0] && stat->pipe[i] != stat->fd[1])
-			close(stat->pipe[i]);
-		i++;
 	}
 }
 
@@ -77,6 +63,19 @@ static void	exec_proc(char **arg, t_stat *stat)
 		dup2(stat->fd[INPUT], STDIN_FILENO);
 		close(stat->fd[INPUT]);
 	}
-	execve("/bin/cat", cmd, NULL);
+	execve("/bin/echo", cmd, NULL);
 	exit(EXIT_FAILURE);
+}
+
+static void	close_pipe_fds(t_stat *stat)
+{
+	int	i;
+
+	i = 0;
+	while (i < stat->n_pipe)
+	{
+		if (stat->pipe[i] != stat->fd[0] && stat->pipe[i] != stat->fd[1])
+			close(stat->pipe[i]);
+		i++;
+	}
 }
