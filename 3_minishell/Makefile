@@ -30,8 +30,9 @@ BUILTIN			:=	builtin/cd.c\
 
 
 EXPANSION		:=	expansion/print_env.c \
-					expansion/expansion_utils.c\
-					expansion/expansion_utils_2.c
+					expansion/env_utils.c \
+					expansion/expansion_utils.c \
+					expansion/new_cmd_utils.c
 
 SRC_MAN			:=  $(PARSER)\
 					$(TOKENIZER)\

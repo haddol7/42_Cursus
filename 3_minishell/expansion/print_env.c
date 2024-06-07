@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/06 23:04:19 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/07 20:32:53 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ char *single_quote(char *cmd, int *idx)
 	quote_close = quote_start + i;
 	in_quote = env_strcpy(quote_start + 1, quote_close - 1, cmd);
 	ret = replace_str(cmd, quote_start, &quote_close, in_quote);
-	*idx = quote_close;
+	*idx = quote_close - 1;
 	free(in_quote);
 	free(cmd);
 	return (ret);

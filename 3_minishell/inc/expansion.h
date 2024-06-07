@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/06 16:54:58 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/07 19:57:29 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_new_cmd
+{
+	char				*cmd;
+	struct s_new_cmd	*next;
+}	t_new_cmd;
+
+
 t_env	*env_new(char *name, char *content);
 t_env	*env_last(t_env *head);
 void	env_add_back(t_env **head, t_env *new);
@@ -35,6 +42,10 @@ char	*env_strcpy(int start, int end, char *str);
 int		env_strncmp(char *s1, char *name, int n);
 int		is_alpha_num(char *var);
 char	*ms_strjoin(char const *s1, char const *s2);
+t_new_cmd	*cmd_new(char *cmd);
+t_new_cmd	*cmd_last(t_new_cmd *head);
+void	cmd_add_back(t_new_cmd **head, t_new_cmd *new);
+int	cmd_free_all(t_new_cmd **head);
 
 
 void	print_all_env(t_env *head); //TODO ㅈㅣ우ㅓㅜ

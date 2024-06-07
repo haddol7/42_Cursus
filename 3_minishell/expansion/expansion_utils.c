@@ -5,80 +5,118 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/31 16:46:42 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/06 16:56:06 by jungslee         ###   ########.fr       */
+/*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
+/*   Updated: 2024/06/07 19:43:49 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
 
-t_env	*env_new(char *name, char *content)
+char	*env_strcpy(int start, int end, char *str)
 {
-	t_env	*node;
+	char	*ret;
+	int		i;
 
-	node = (t_env *)malloc(sizeof(t_env));
-	if (node == NULL)
-		handle_error("exit : malloc error6", 1, 0);
-	node->key = name;
-	node->value = content;
-	if (name != NULL && content != NULL)
-		node->complete = 1;
-	else
-		node->complete = 0;
-	node->next = NULL;
-	return (node);
-}
-
-t_env	*env_last(t_env *head)
-{
-	t_env	*tmp;
-
-	tmp = head;
-	if (head == NULL)
-		return (NULL);
-	while (tmp->next != NULL)
-		tmp = tmp->next;
-	return (tmp);
-}
-
-void	env_add_back(t_env **head, t_env *new)
-{
-	t_env	*last;
-
-	if (head == NULL || new == NULL)
-		return ;
-	if (*head == NULL)
-		*head = new;
-	else
+	i = 0;
+	ret = (char *)malloc(sizeof(char) * (end - start + 2));
+	// printf("end - start ::: %d\n", end - start + 2);
+	if (ret == NULL)
+		handle_error("exit : malloc error4", 1, 0);
+	while (start + i <= end)
 	{
-		last = env_last(*head);
-		last->next = new;
+		ret[i] = str[start + i];
+		i++;
+	}
+	ret[i] = '\0';
+	return (ret);
+}
+
+void	env_cpy(t_env **env, char **envp)
+{
+	char	*name;
+	char	*content;
+	int		i;
+	int		j;
+	int		equal_idx;
+
+	i = 0;
+	equal_idx = 0;
+	while (envp[i] != NULL)
+	{
+		j = 0;
+		while (envp[i][j] != '=')
+			j++;
+		equal_idx = j;
+		name = env_strcpy(0, j - 1, envp[i]);
+		content = ft_strdup(envp[i] + j + 1);
+		if (name == NULL || content == NULL)
+			handle_error("exit : malloc error5", 1, 0);
+		env_add_back(env, env_new(name, content));
+		i++;
 	}
 }
 
-int	env_free_all(t_env **head)
+int	env_strncmp(char *s1, char *name, int n)
 {
-	t_env	*to_free;
-	t_env	*tmp;
-
-	to_free = *head;
-	while (to_free != NULL)
+	while (n-- != 0 || *name != '\0')
 	{
-		tmp = to_free->next;
-		if (to_free->key != NULL)
-			free(to_free->key);
-		if (to_free->value != NULL)
-			free(to_free->value);
-		free(to_free);
-		to_free = tmp;
+		if (*s1 != *name)
+			return (1);
+		s1++;
+		name++;
 	}
+	if (*name != '\0')
+		return (1);
 	return (0);
 }
 
-// void	env_del_one(t_env **head, t_env *node)
-// {
-// 	t_env *tmp;
+int	is_alpha_num(char *var)
+{
+	int	i;
+	int	quote_flag;
 
-// 	tmp = head;
-// 	while (head->name)
+	i = 0;
+	quote_flag = 0;
+	while (var[i] != '\0')
+	{
+		if (!(ft_isalnum(var[i]) || var[i] == '_' || var[i] == '\"'))
+			return (0);
+		if (var[i] == '\"')
+			quote_flag = 1;
+		i++;
+	}
+	if (quote_flag == 1)
+		return (2);
+	return (1);
+}
+
+// char	*ms_strjoin(char const *s1, char const *s2)
+// {
+// 	char	*str;
+// 	size_t	s1_len;
+// 	size_t	s2_len;
+
+// 	if (s1 == NULL || s2 == NULL)
+// 		return (NULL);
+// 	s1_len = ft_strlen(s1);
+// 	s2_len = ft_strlen(s2);
+// 	str = (char *)ft_malloc((s1_len + s2_len + 1) * sizeof(char));
+// 	if (str == NULL)
+// 		handle_error("exit : malloc error", 1, 0);
+// 	ft_memmove(str, s1, s1_len);
+// 	ft_memmove(str + s1_len, s2, s2_len + 1);
+// 	return (str);
+// }
+
+// #include <stdio.h>
+//
+// void	print_all_env(t_env *head)//TODO ㅈㅣ우ㅓ
+// {
+// 	t_env	*to_print;
+// 	int		i;
+//
+// 	to_print = head;
+// 	i = 1;
+// 	while (to_print != NULL)
+// 		to_print = to_print->next;
 // }
