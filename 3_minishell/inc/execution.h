@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/06 22:44:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/07 20:40:53 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,23 @@
 # include <fcntl.h>
 # include "parser.h"
 
-# define MAX_PID 1024
+# define MAX_PIPE 1024
+# define MAX_PID 512
 # define READ 0
 # define INPUT 0
 # define WRITE 1
 # define OUTPUT 1
 # define ERR_REDIR 1
 
+//fd_to_close는 pipe를 통해 얻은 fd[2]의 값을 fork()된 이후로 close()
+//해주기 그 fd를 담는 변수입니다.
 typedef struct s_stat
 {
 	int	fd[2];
 	int pid[MAX_PID];
+	int	pipe[MAX_PIPE];
 	int	num_pid;
+	int	num_pipe;
 	//t_env envp;
 } t_stat;
 
