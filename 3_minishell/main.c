@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/07 23:18:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/08 00:12:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,6 @@ int	main(int argc, char **argv, char **envp)
 	execution(ast, &stat);
 	wait_pid_list(&stat);
 	free_tree(&ast);
+	atexit(leaks);
 	return (g_status);
 }
