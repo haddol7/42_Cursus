@@ -6,67 +6,95 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/07 20:32:53 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/08 07:12:23 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
 
-char	*replace_str(char *str, int start, int *end, char *content)
+int	ms_strlen(char *str)
 {
-	char	*ret;
+	int	cnt;
+
+	cnt = 0;
+	while (!(str == NULL || str[cnt] == '\0'))
+		cnt++;
+	return (cnt);
+}
+
+char	*ms_strjoin(char *s1, char *s2)
+{
+	char	*str;
+	int		idx;
+	int		s1_len;
+	int		s2_len;
+
+	idx = 0;
+	s1_len = ms_strlen(s1);
+	s2_len = ms_strlen(s2);
+	str = (char *)malloc((s1_len + s2_len + 1) * sizeof(char));
+	while (idx < s1_len)
+	{
+		str[idx] = s1[idx];
+		idx++;
+	}
+	while (idx < s1_len + s2_len)
+	{
+		str[idx] = s2[idx - s1_len];
+		idx++;
+	}
+	str[idx] = '\0';
+	return (str);
+}
+
+void	replace_str(char **str, int start, int end, char *content)
+{
+	// char	*cpy;
 	char	*tmp1;
 	char	*tmp2;
 	int		end_tmp;
 
-	tmp1 = env_strcpy(0, start - 1, str);
-	// printf("^^^^^^^^^");
+	tmp1 = env_strcpy(0, start - 1, *str);
 	tmp2 = ft_strjoin(tmp1, content);
 	if (tmp2 == NULL)
 		handle_error("exit : malloc error1", 1, 0);
 	free(tmp1);
-	end_tmp = ft_strlen(tmp2);
-	// printf("end + 1 :::::::: %d\n", *end + 1);
-	// printf("ft_strlen(str) - 1 :::::::: %d\n", ft_strlen(str) - 1);
-	tmp1 = env_strcpy(*end + 1, ft_strlen(str) - 1, str);
-
-
-	ret = ft_strjoin(tmp2, tmp1);
-	if (ret == NULL)
+	tmp1 = env_strcpy(end + 1, ft_strlen(*str) - 1, *str);
+	free(*str);
+	*str = ft_strjoin(tmp2, tmp1);
+	// cpy = ft_strjoin(tmp2, tmp1);
+	if (*str == NULL)
 		handle_error("exit : malloc error2", 1, 0);
 	free(tmp1);
 	free(tmp2);
-	*end = end_tmp;
-	return (ret);
+	// return (cpy);
 }
 
-char	*is_valid_env(char *ori, int *idx, t_env *env)
+char	*env_validity(char *cmd, int idx, t_env *env, int *key_len)
 {
 	int		start;
 	int		end;
-	char	*ret;
 
-	if (ori[*idx + 1] == '\"' || \
-				ori[*idx + 1] == '\0' || ori[*idx + 1] == '$')
-		return (0);
-	start = (*idx)++;
-	ret = NULL;
-	while (ft_isalnum(*(ori + *idx)) || ori[*idx] == '_')
-		(*idx)++;
-	end = *idx - 1;
+	start = idx++;
+	while (ft_isalnum(*(cmd + idx)) || cmd[idx] == '_')
+		idx++;
+	end = idx - 1;
+	*key_len = end - start + 1;
 	while (env != NULL)
 	{
-		if (env_strncmp(ori + start + 1, env->key, end - start) == 0)
-		{
-			ret = replace_str(ori, start, &end, env->value);
-			break ;
-		}
+		if (env_strncmp(cmd + start + 1, env->key, end - start) == 0)
+			return (env->value);
 		env = env->next;
 	}
-	if (ret == NULL)
-		ret = replace_str(ori, start, &end, "");
-	*idx = end - 1;
-	return (ret);
+	return (0);
+}
+
+int	is_exception(char *cmd, int idx)
+{
+	if (cmd[idx + 1] == '\"' || \
+				cmd[idx + 1] == '\0' || cmd[idx + 1] == '$')
+		return (1);
+	return (0);
 }
 
 // void	is_var(t_node *node, t_env *env)
@@ -98,24 +126,30 @@ char	*is_valid_env(char *ori, int *idx, t_env *env)
 // 	}
 // }
 
-char	*is_var(char *cmd, int idx, t_env *env)
+char	*change_env(char *cmd, int idx, t_env *env, int check_end)
 {
 	int		i;
-	char	*ret;
+	char	*cpy;
+	char	*value;
+	int		key_len;
 
 	i = idx;
-	ret = NULL;
-	while (cmd[i] != '\0')
+	key_len = 0;
+	cpy = env_strcpy(0, ms_strlen(cmd) - 1, cmd);
+	while (i < check_end)
 	{
-		if (cmd[i] == '$')
-			ret = is_valid_env(cmd, &i, env);
+		if (cmd[i] == '$'&& is_exception(cmd, i) == 0)
+		{
+			value = env_validity(cmd, i, env, &key_len);
+			if (value == NULL)
+				replace_str(&cpy, i, i + key_len, "");
+			else
+				replace_str(&cpy, i, i + key_len, value);
+			i += key_len;
+		}
 		i++;
 	}
-	if (ret == NULL)
-		return (cmd);
-	else
-		free(cmd);
-	return (ret);
+	return (cpy);
 }
 
 // char *single_quote(char *no_quote, char *cmd, int *start)
@@ -166,15 +200,17 @@ char	*is_var(char *cmd, int idx, t_env *env)
 // 	tmp[ft_strlen(cmd) - 3] = '\0';
 // 	free(cmd);
 // 	return (tmp);
-// }
+// }]
 
-char *single_quote(char *cmd, int *idx)
+
+
+char *single_quote(char *cmd, int *idx, char *words_tmp)
 {
 	int		i;
 	int		quote_start;
 	int		quote_close;
 	char	*in_quote;
-	char	*ret;
+	char	*cpy;
 
 	i = 1;
 	quote_start = *idx;
@@ -182,33 +218,36 @@ char *single_quote(char *cmd, int *idx)
 		i++;
 	quote_close = quote_start + i;
 	in_quote = env_strcpy(quote_start + 1, quote_close - 1, cmd);
-	ret = replace_str(cmd, quote_start, &quote_close, in_quote);
-	*idx = quote_close - 1;
+	cpy = ms_strjoin(words_tmp, in_quote);
+	*idx = quote_close + 1;
 	free(in_quote);
-	free(cmd);
-	return (ret);
+	if (words_tmp != NULL)
+		free(words_tmp);
+	return (cpy);
 }
 
-char	*double_quote(char *cmd, int *idx, t_env *env)
+char	*double_quote(char *cmd, int *idx, char *words_tmp, t_env *env)
 {
 	int		i;
 	int		quote_start;
 	int		quote_close;
-	char	*in_quote;
-	char	*ret;
+	char	*tmp1;
+	char	*tmp2;
 
 	i = 1;
 	quote_start = *idx;
-	cmd = is_var(cmd, *idx, env);
 	while (cmd[quote_start + i] != '\"')
 		i++;
 	quote_close = quote_start + i;
-	in_quote = env_strcpy(quote_start + 1, quote_close - 1, cmd);
-	ret = replace_str(cmd, quote_start, &quote_close, in_quote);
-	*idx = quote_close - 1;
-	free(in_quote);
-	free(cmd);
-	return (ret);
+	tmp1 = env_strcpy(quote_start + 1, quote_close - 1, cmd);
+	tmp2 = change_env(tmp1, *idx, env, ms_strlen(tmp1));
+	free(tmp1);
+	tmp1 = ms_strjoin(words_tmp, tmp2);
+	*idx = quote_close + 1;
+	free(tmp2);
+	if (words_tmp != NULL)
+		free(words_tmp);
+	return (tmp1);
 }
 
 // char *normal_words(char *cmd, int *idx, t_env *env)
@@ -233,28 +272,51 @@ char	*double_quote(char *cmd, int *idx, t_env *env)
 // 	else
 // 		free(cmd);
 // 	*idx = i - 1;
-// 	return (ret);
+// 	return (ret);	
 // }
+
+int	no_quote_env(char *cmd, int *idx, t_env *env, char *tmp)
+{
+	char	*replace;
+	char	**split;
+	char	*ret;
+	int		len;
+
+	len = 1;
+	while (!(cmd[*idx + len] == '\'' || cmd[*idx + len] == '\"' || \
+				cmd[*idx + len] == '\0'))
+		len++;
+	replace = change_env(cmd, *idx, env, *idx + len - 1);
+
+	// ret = replace_str(cmd, *idx, *idx + len, replace);
+	*idx = *idx + len;
+	// return (replace);
+	// split = ft_split(replace, " ");
+}
 
 void	handle_quote(t_node *node, t_env *env)
 {
 	int		i;
 	int		j;
 	char	*words_tmp;
+	t_new_cmd	*head;
 
 	i = 0;
+	words_tmp = NULL;
 	while (node->cmd[i] != NULL)
 	{
 		j = 0;
 		while (node->cmd[i][j] != '\0')
 		{
 			if (node->cmd[i][j] == '\'')
-				node->cmd[i] = single_quote(node->cmd[i], &j);
+				words_tmp = single_quote(node->cmd[i], &j, words_tmp);
 			else if (node->cmd[i][j] == '\"')
-				node->cmd[i] = double_quote(node->cmd[i], &j, env);
-			else if (node->cmd[i][j] == '$')
-				node->cmd[i] = is_valid_env(node->cmd[i], &j, env);
-			j++;
+				words_tmp = double_quote(node->cmd[i], &j, words_tmp, env);
+			// else
+			// {
+			// 	words_tmp = no_quote_env(node->cmd[i], &j, env);
+			// }
+			// printf("############## %s\n", words_tmp);
 		}
 		i++;
 	}
@@ -272,7 +334,6 @@ void	check_cmd_node(t_node *ast, t_env *env)//TODO exit status 구현하기
 	{
 		// is_var(node, env);
 		handle_quote(node, env);
-		
 		// is_wild_card(node);
 		return ;
 	}

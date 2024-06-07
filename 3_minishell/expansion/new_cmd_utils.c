@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:44:24 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/07 19:53:48 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/07 21:27:38 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,20 @@ t_new_cmd	*cmd_last(t_new_cmd *head)
 	return (tmp);
 }
 
-void	cmd_add_back(t_new_cmd **head, t_new_cmd *new)
+void	cmd_add_back(t_new_cmd **head, char *new)
 {
 	t_new_cmd	*last;
+	t_new_cmd	*new_node;
 
-	if (head == NULL || new == NULL)
+	new_node = cmd_new(new);
+	if (head == NULL)
 		return ;
 	if (*head == NULL)
-		*head = new;
+		*head = new_node;
 	else
 	{
 		last = cmd_last(*head);
-		last->next = new;
+		last->next = new_node;
 	}
 }
 

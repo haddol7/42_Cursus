@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 20:42:58 by daeha             #+#    #+#             */
-/*   Updated: 2023/11/08 17:37:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/08 04:45:44 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t	ft_strlen(const char *s)
 	size_t	cnt;
 
 	cnt = 0;
-	while (s[cnt] != '\0')
+	while (s != NULL && s[cnt] != '\0')
 		cnt++;
 	return (cnt);
 }
