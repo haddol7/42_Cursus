@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:44:24 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/07 21:27:38 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/08 11:30:02 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,3 +70,17 @@ int	cmd_free_all(t_new_cmd **head)
 	*head = NULL;
 	return (0);
 }
+
+// void	print_all_cmd(t_new_cmd *head)
+// {
+// 	t_new_cmd	*tmp;
+
+// 	tmp = head;
+// 	printf("------------cmd-------------");
+// 	while (tmp != NULL)
+// 	{
+// 		printf("|%s|\n", tmp->cmd);
+// 		tmp = tmp->next;
+// 	}
+// 	printf("----------------------------");
+// }
