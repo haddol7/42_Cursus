@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:44:24 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/08 11:30:02 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/08 13:16:06 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	cmd_add_back(t_new_cmd **head, char *new)
 	}
 }
 
-int	cmd_free_all(t_new_cmd **head)
+int	list_free_all(t_new_cmd **head)
 {
 	t_new_cmd	*to_free;
 	t_new_cmd	*tmp;
@@ -71,16 +71,31 @@ int	cmd_free_all(t_new_cmd **head)
 	return (0);
 }
 
-// void	print_all_cmd(t_new_cmd *head)
-// {
-// 	t_new_cmd	*tmp;
+int	get_cmd_node_num(t_new_cmd *head)
+{
+	t_new_cmd	*node;
+	int			cnt;
 
-// 	tmp = head;
-// 	printf("------------cmd-------------");
-// 	while (tmp != NULL)
-// 	{
-// 		printf("|%s|\n", tmp->cmd);
-// 		tmp = tmp->next;
-// 	}
-// 	printf("----------------------------");
-// }
+	node = head;
+	cnt = 0;
+	while (node != NULL)
+	{
+		node = node->next;
+		cnt++;
+	}
+	return (cnt);
+}
+
+void	print_all_cmd(t_new_cmd *head)
+{
+	t_new_cmd	*tmp;
+
+	tmp = head;
+	printf("------------cmd-------------");
+	while (tmp != NULL)
+	{
+		printf("|%s|\n", tmp->cmd);
+		tmp = tmp->next;
+	}
+	printf("----------------------------");
+}

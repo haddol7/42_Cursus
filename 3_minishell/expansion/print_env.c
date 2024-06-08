@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/08 11:29:08 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/08 13:30:08 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ char	*ms_strjoin(char *s1, char *s2)
 	s1_len = ms_strlen(s1);
 	s2_len = ms_strlen(s2);
 	str = (char *)malloc((s1_len + s2_len + 1) * sizeof(char));
+	if (str == NULL)
+		handle_error("exit : malloc error", 1, 0);
 	while (idx < s1_len)
 	{
 		str[idx] = s1[idx];
@@ -285,122 +287,105 @@ char	*replace_env(char *cmd, int *idx, t_env *env, int quote)
 
 
 
-char *single_quote(char *cmd, int *idx, char *words_tmp)
+char *de_quote(char *cmd, int *idx, char *words_tmp, char quote)
 {
 	int		i;
 	int		quote_start;
 	int		quote_close;
 	char	*in_quote;
-	char	*cpy;
+	char	*result;
 
 	i = 1;
 	quote_start = *idx;
-	while (cmd[quote_start + i] != '\'')
+	while (cmd[quote_start + i] != quote)
 		i++;
 	quote_close = quote_start + i;
 	in_quote = env_strcpy(quote_start + 1, quote_close - 1, cmd);
-	cpy = ms_strjoin(words_tmp, in_quote);
+	result = ms_strjoin(words_tmp, in_quote);
 	*idx = quote_close + 1;
 	free(in_quote);
 	if (words_tmp != NULL)
 		free(words_tmp);
-	return (cpy);
+	return (result);
 }
 
-char	*double_quote(char *cmd, int *idx, char *words_tmp, t_env *env)
-{
-	int		i;
-	int		quote_start;
-	int		quote_close;
-	char	*tmp1;
-	char	*tmp2;
-
-	i = 1;
-	quote_start = *idx;
-	while (cmd[quote_start + i] != '\"')
-		i++;
-	quote_close = quote_start + i;
-	tmp1 = env_strcpy(quote_start + 1, quote_close - 1, cmd);
-	// tmp2 = change_env(tmp1, *idx, env, ms_strlen(tmp1));
-	free(tmp1);
-	tmp1 = ms_strjoin(words_tmp, tmp2);
-	*idx = quote_close + 1;
-	free(tmp2);
-	if (words_tmp != NULL)
-		free(words_tmp);
-	return (tmp1);
-}
-
-// char *normal_words(char *cmd, int *idx, t_env *env)
+// char	*double_quote(char *cmd, int *idx, char *words_tmp, t_env *env)
 // {
 // 	int		i;
-// 	char	*ret;
+// 	int		quote_start;
+// 	int		quote_close;
+// 	char	*tmp1;
+// 	char	*tmp2;
 
-// 	i = *idx;
-// 	while (!(cmd[i] == '\'' || cmd[i] == '\"' || cmd[i] == '\-'))
-// 	{
-// 		if (cmd[i] == '$')
-// 		{
-// 			if (!(cmd[i + 1] == '\"' || \
-// 					cmd[i + 1] == '\0' || cmd[i + 1] == '$'))
-// 				ret = is_valid_env(cmd, &i, env);
-// 			continue ;
-// 		}
+// 	i = 1;
+// 	quote_start = *idx;
+// 	while (cmd[quote_start + i] != '\"')
 // 		i++;
-// 	}
-// 	if (ret == NULL)
-// 		return (cmd);
-// 	else
-// 		free(cmd);
-// 	*idx = i - 1;
-// 	return (ret);	
+// 	quote_close = quote_start + i;
+// 	tmp1 = env_strcpy(quote_start + 1, quote_close - 1, cmd);
+// 	free(tmp1);
+// 	tmp1 = ms_strjoin(words_tmp, tmp2);
+// 	*idx = quote_close + 1;
+// 	free(tmp2);
+// 	if (words_tmp != NULL)
+// 		free(words_tmp);
+// 	return (tmp1);
 // }
 
-// int	no_quote_env(char *cmd, int *idx, t_env *env, char *tmp)
-// {
-// 	char	*replace;
-// 	char	**split;
-// 	char	*ret;
-// 	int		len;
+char	*no_quote(char *cmd, int *idx, char *words_tmp)
+{
+	int	i;
+	char	*tmp;
+	char	*result;
+	int	start;
+	int	end;
 
-// 	len = 1;
-// 	while (!(cmd[*idx + len] == '\'' || cmd[*idx + len] == '\"' || \
-// 				cmd[*idx + len] == '\0'))
-// 		len++;
-// 	replace = change_env(cmd, *idx, env, *idx + len - 1);
+	i = 0;
+	start = *idx;
+	while (!(cmd[start + i] == '\'' || cmd[start + i] == '\"' || \
+					cmd[start + i] == '\0'))
+		i++;
+	end = start + i - 1;
+	tmp = env_strcpy(start, end, cmd);
+	result = ms_strjoin(words_tmp, tmp);
+	*idx = end + 1;
+	// printf("idx, cmd[idx] : %d, %c\n", *idx, result[*idx]);//TODO 이게 맞ㅇ?
+	free(tmp);
+	if (words_tmp != NULL)
+		free(words_tmp);
+	return (result);
+}
 
-// 	// ret = replace_str(cmd, *idx, *idx + len, replace);
-// 	*idx = *idx + len;
-// 	// return (replace);
-// 	// split = ft_split(replace, " ");
-// }
 
-
-
-void	handle_quote(t_node *node, t_env *env)
+void	handle_quote(t_new_cmd *list, t_env *env)
 {
 	int		i;
 	int		j;
 	char	*words_tmp;
 
-	i = 0;
-	words_tmp = NULL;
-	while (node->cmd[i] != NULL)
+	while (list != NULL)
 	{
-		j = 0;
-		while (node->cmd[i][j] != '\0')
+		words_tmp = NULL;
+		i = 0;
+		while (list->cmd[i] != '\0')
 		{
-			if (node->cmd[i][j] == '\'')
-				words_tmp = single_quote(node->cmd[i], &j, words_tmp);
-			else if (node->cmd[i][j] == '\"')
-				words_tmp = double_quote(node->cmd[i], &j, words_tmp, env);
+			if (list->cmd[i] == '\'' || list->cmd[i] == '\"')
+				words_tmp = de_quote(list->cmd, &i, words_tmp, list->cmd[i]);
+			else
+				words_tmp = no_quote(list->cmd, &i, words_tmp);
+			// else if (node->cmd[i][j] == '\"')
+			// 	words_tmp = double_quote(node->cmd[i], &j, words_tmp, env);
 			// else
 			// {
 			// 	words_tmp = no_quote_env(node->cmd[i], &j, env);
 			// }
 			// printf("############## %s\n", words_tmp);
+			
 		}
-		i++;
+		free(list->cmd);
+		printf("word tmp ::%s\n", words_tmp);
+		list->cmd = words_tmp;
+		list = list->next;
 	}
 }
 
@@ -441,8 +426,10 @@ void	ms_split(char *str, t_new_cmd **list)
 		if (quote_status == 0 && str[i] == ' ')
 		{
 			cmd_add_back(list, env_strcpy(start, i - 1, str));
-			cmd_add_back(list, ft_strdup(" "));
-			start = i + 1;//TODO 일단 공백 1개만 포함.
+			// cmd_add_back(list, ft_strdup(" "));//TODO 일단 공백 1개만 포함.
+			while (str[i] == ' ')
+				i++;
+			start = i;
 		}
 		if (str[i] == '\0')
 		{
@@ -452,8 +439,6 @@ void	ms_split(char *str, t_new_cmd **list)
 		i++;
 	}
 }
-
-// char	*handle_env()
 
 void	iter_cmd(char *cmd, int j, t_env *env, char **str)
 {
@@ -488,25 +473,45 @@ void	check_env_and_replace(t_node *node, t_env *env, t_new_cmd **list)
 		j = 0;
 		str = ft_strdup(node->cmd[i]);
 		iter_cmd(node->cmd[i], j, env, &str);
-		// while (node->cmd[i][j] != '\0')
-		// {
-		// 	quote_lock(node->cmd[i][j], &quote_status);
-		// 	if ((node->cmd[i][j] == '$') && is_exception(node->cmd[i], j) == 0 && \
-		// 		quote_status != 1)
-		// 	{
-		// 		free(str);
-		// 		str = replace_env(node->cmd[i], j, env, &key_len);
-		// 		j += key_len;
-		// 	}
-		// 	j++;
-		// }
 		ms_split(str, list);
 		i++;
 	}
-	print_all_cmd(*list);
+	// print_all_cmd(*list);
 }
 
+char	**list_to_new_cmd(t_new_cmd *new_list)
+{
+	int	word_cnt;
+	int	i;
+	char	**result;
+	t_new_cmd	*tmp;
 
+	tmp = new_list;
+	i = 0;
+	word_cnt = get_cmd_node_num(new_list);
+	result = (char **)malloc(sizeof(char) * (word_cnt + 1));
+	while (i < word_cnt)
+	{
+		result[i] = ft_strdup(tmp->cmd);
+		tmp = tmp->next;
+		i++;
+	}
+	result[i] = NULL;
+	return (result);
+}
+
+void	free_all_old_cmd(char **cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i] != NULL)
+	{
+		free(cmd[i]);
+		i++;
+	}
+	free(cmd);
+}
 
 void	check_cmd_node(t_node *ast, t_env *env)//TODO exit status 구현하기
 {
@@ -521,8 +526,14 @@ void	check_cmd_node(t_node *ast, t_env *env)//TODO exit status 구현하기
 	{
 		check_env_and_replace(node, env, &new_list);
 		// list_to_array()
-		// handle_quote(node, env);
+		// print_all_cmd(new_list);;
+		handle_quote(new_list, env);
 		// is_wild_card(node);
+		// print_all_cmd(new_list);
+		new_cmd = list_to_new_cmd(new_list);
+		list_free_all(&new_list);
+		free_all_old_cmd(node->cmd);
+		node->cmd = new_cmd;
 		return ;
 	}
 	check_cmd_node(node->right, env);

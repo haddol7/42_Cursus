@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/08 10:11:41 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/08 13:16:23 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ char	*ms_strjoin(char *s1, char *s2);
 t_new_cmd	*cmd_new(char *cmd);
 t_new_cmd	*cmd_last(t_new_cmd *head);
 void	cmd_add_back(t_new_cmd **head, char *new);
-int	cmd_free_all(t_new_cmd **head);
-
+int	list_free_all(t_new_cmd **head);
+int	get_cmd_node_num(t_new_cmd *head);
 
 void	print_all_env(t_env *head); //TODO ㅈㅣ우ㅓㅜ
 void	print_all_cmd(t_new_cmd *head);
