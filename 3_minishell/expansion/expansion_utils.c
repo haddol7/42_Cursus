@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/09 20:15:00 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/09 20:50:30 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,29 +31,32 @@ char	*env_strcpy(int start, int end, char *str)
 	return (ret);
 }
 
-void	env_cpy(t_env **env, char **envp)
+t_env *env_cpy(char **envp)
 {
 	char	*name;
 	char	*content;
 	int		i;
 	int		j;
-	int		equal_idx;
+	t_env	*env;
 
 	i = 0;
-	equal_idx = 0;
+	env = NULL;
+	// printf("NO1\n");
 	while (envp[i] != NULL)
 	{
 		j = 0;
 		while (envp[i][j] != '=')
 			j++;
-		equal_idx = j;
+		// printf("NO\n");
 		name = env_strcpy(0, j - 1, envp[i]);
+		// printf("NO\n");
 		content = ft_strdup(envp[i] + j + 1);
 		if (name == NULL || content == NULL)
 			handle_error("exit : malloc error5", 1, 0);
-		env_add_back(env, env_new(name, content));
+		env_add_back(&env, env_new(name, content));
 		i++;
 	}
+	return (env);
 }
 
 int	env_strncmp(char *s1, char *name, int n)
