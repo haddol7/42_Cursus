@@ -112,6 +112,8 @@ int	input_word(t_token **head, char *input, int *idx)
 			break ;
 		len++;
 	}
+	if (quote % 2 != 0)
+		return (handle_error("bash: unexpected EOF while looking for matching quote\n", 0, head));
 	value = (char *)malloc(sizeof(char) * (len + 1));
 	if (value == NULL)
 		handle_error("exit : malloc error3", 1, 0);

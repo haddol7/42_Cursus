@@ -1,39 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tree.h                                             :+:      :+:    :+:   */
+/*   e_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/27 17:34:27 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/29 22:04:21 by daeha            ###   ########.fr       */
+/*   Created: 2024/06/06 16:04:44 by daeha             #+#    #+#             */
+/*   Updated: 2024/06/08 00:02:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TREE_H
-# define TREE_H
+#include "execution.h"
 
-# include <stdlib.h>
+extern int g_status;
 
-typedef enum e_node_type
+void	push_pid_list(pid_t pid, t_stat *stat)
 {
-	N_CMD,
-	N_AND,
-	N_OR,
-	N_PIPE,
-	N_SUBSHELL,
-	N_INPUT,
-	N_OUTPUT,
-	N_HERE_DOC,
-	N_APPEND
-}	t_node_type;
+	stat->pid[stat->n_pid++] = pid;
+	//printf("pid %d\n", stat->pid[stat->n_pid - 1]);
+}
 
-typedef struct s_node
+//TODO: g_status 관리
+void	wait_pid_list(t_stat *stat)
 {
-	t_node_type		type;
-	char			**cmd;
-	struct s_node	*left;
-	struct s_node	*right;
-}	t_node;
-
-#endif
+	while (stat->n_pid)
+	{
+		//printf("pid : %d ", stat->pid[stat->n_pid]);
+		waitpid(stat->pid[stat->n_pid--], &g_status, 0);
+		//printf("g_status : %d\n", g_status);
+	}
+}

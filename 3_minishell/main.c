@@ -15,23 +15,28 @@
 #include <stdio.h>
 
 int	g_status;
+  
+void leaks(void)
+{
+	system("leaks minishell | grep \"leaks for\"");
+}
 
-void print_all_node(t_node *ast, int indent, int is_leaf)
+void print_all_node(t_node *ast, int indent, char *input)
 {
 	char	**arg;
 	
 	if (ast == NULL)
+	{
+		printf("\e[0m");
 		return ;
+	}
+	else if (indent == 0)
+	{
+		printf("\e[34m====================node====================\n");
+	}
 	for(int i = 0; i < indent; i++)
 	{
-		if (i && i % 4 == 0)
-			dprintf(2, "┃");
 		ft_putchar_fd(' ', STDERR_FILENO);
-	}
-	if (is_leaf == 1)
-		dprintf(2, "┗");
-	else if (is_leaf == 2)
-		dprintf(2, "┏");
 
 	if(ast->type == N_AND)
 		ft_putendl_fd("N_AND", STDERR_FILENO);
@@ -59,10 +64,7 @@ void print_all_node(t_node *ast, int indent, int is_leaf)
 		}
 		ft_putchar_fd('\n', STDERR_FILENO);
 	}
-	if (ast->left && ast->right)
-		is_leaf = 1;
-	else
-		is_leaf = 0;
+
 	print_all_node(ast->left, indent + 4, is_leaf * 2);
 	print_all_node(ast->right, indent + 4, is_leaf);
 }
@@ -92,10 +94,15 @@ void	free_env(char **env)
 		i++;
 	}
 	free(env);
+	print_all_node(ast->left, indent + 4, input);
+	print_all_node(ast->right, indent + 4, input);
+	if (indent == 0)
+		printf("\e[31m> %s\e[0m\n", input);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
+	t_stat	stat;
 	t_token	*token;
 	t_node	*ast;
 	char	*line;
@@ -131,3 +138,30 @@ int	main(int argc, char **argv, char **envp)
 	env_free_all(&env);
 	return (0);
 }
+/*
+	char	*input;
+	
+	while (input)
+	{
+		input = readline("> ");
+		if (*input)
+		{
+			stat.fd[0] = 0;
+			stat.fd[1] = 1;
+			stat.n_pid = 0;
+			stat.n_pipe = 0;
+			token = tokenizer(input);
+			ast = parser(token);
+			exec_here_doc(ast);
+			wait_pid_list(&stat);
+			print_all_value(token);
+			print_all_node(ast, 0, input);
+			ms_free_all_token(&token);
+			execution(ast, &stat);
+			free_tree(&ast);
+			free(input);
+		}
+	}
+	
+	return (g_status);
+}*/

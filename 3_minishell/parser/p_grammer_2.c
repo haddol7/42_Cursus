@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:47:24 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 00:00:03 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/04 17:40:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,18 @@
 
 //redirect_list ::= io_redirect
 //					redirect_list io_redirect
-t_node *redirect_list(t_token **token)
+t_node	*redirect_list(t_token **token)
 {
 	t_node	*redir;
-
-	ft_putendl_fd("BNF : redir", 2);
+	t_node	*head;
 
 	redir = io_redirect(token);
-	while (is_token_redir(*token))
-		append_redir_node(redir, token);
+	while (redir && is_token_redir(*token))
+	{
+		head = redir;
+		if (!append_redir_node(redir, token))
+			return (free_tree(&head));
+	}
 	return (redir);
 }
 
@@ -36,9 +39,7 @@ t_node	*io_redirect(t_token **token)
 {
 	t_node		*io;
 	t_node_type	node_type;
-	char 		**arg;
-
-	ft_putendl_fd("BNF : io_redirect", 2);
+	char		**arg;
 
 	if ((*token)->type == T_GREAT)
 		node_type = N_OUTPUT;
@@ -48,19 +49,14 @@ t_node	*io_redirect(t_token **token)
 		node_type = N_HERE_DOC;
 	else
 		node_type = N_APPEND;
-	
 	token_next(token);
 	if (!is_token(*token, T_WORD))
-		syntax_error_test(">> redirection");
-		
-	arg = (char **)malloc(sizeof(char *) * 2);
-	// if (arg == NULL)
-	// 	//mallocerror
-	
+		return (syntax_error(*token, NULL));
+	arg = (char **)ft_malloc(sizeof(char *) * 2);
 	arg[0] = ft_strdup((*token)->value);
-	token_next(token);
 	arg[1] = NULL;
 	io = new_cmd_node(N_CMD, arg);
 	io = new_parent_node(node_type, NULL, io);
+	token_next(token);
 	return (io);
 }

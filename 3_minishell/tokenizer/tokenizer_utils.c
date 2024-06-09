@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:53:29 by jungslee          #+#    #+#             */
 /*   Updated: 2024/06/05 20:05:19 by jungslee         ###   ########.fr       */
@@ -74,9 +74,13 @@ int	ms_free_all_token(t_token **head)
 	{
 		tmp = to_free->next;
 		if (to_free->type != T_EOF)
+		{
 			free(to_free->value);
+			to_free = NULL;
+		}
 		free(to_free);
 		to_free = tmp;
 	}
+	*head = NULL;
 	return (0);
 }

@@ -57,14 +57,16 @@ t_token	*tokenizer(char *input)
 	return (head);
 }
 
-#include <stdio.h>
-
 void	print_all_value(t_token *head)
 {
 	t_token	*to_print;
 
 	to_print = head;
 	while (to_print != NULL && to_print->type != T_EOF)
+	if (!head)
+		return ;
+	printf("\e[32m====================token===================\n");
+	while (to_print->type != T_EOF)
 	{
 		if (to_print->type == T_WORD)
 			printf("T_WORD : ");
@@ -90,15 +92,5 @@ void	print_all_value(t_token *head)
 			printf("%s\n", to_print->value);
 		to_print = to_print->next;
 	}
+	printf("\e[0m");
 }
-
-// int	main(int argv, char *argc[])
-// {
-// 	t_token	*head;
-
-// 	while (1)
-// 	{
-// 		head = tokenizer(get_next_line(0));
-// 		print_all_value(head);
-// 	}
-// }

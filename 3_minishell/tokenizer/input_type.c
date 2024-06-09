@@ -35,9 +35,7 @@ int	input_quotation(t_token **head, char *input, int *idx)
 	{
 		// printf("%c ~!!!!!!!!!!!!!! \n", input[start + len]);
 		if (input[start + len] == '\0')
-		{
-			return (handle_error("syntex error : unclosed quote", 0, head));
-		}
+			return (handle_error("bash: unexpected EOF while looking for matching quote\n", 0, head));
 		len++;
 	}
 	while (!(input[start + len] == ' ' || input[start + len] == '\0'))

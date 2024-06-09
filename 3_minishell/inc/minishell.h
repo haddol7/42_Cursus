@@ -17,9 +17,16 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# include "tokenizer.h"
+# include <stdio.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <string.h>
+# include <readline/readline.h>
+
+# include "libft.h"
 # include "parser.h"
-# include "tree.h"
 # include "expansion.h"
+# include "tokenizer.h"
+# include "execution.h"
 
 #endif
