@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/09 20:30:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/09 20:44:05 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,17 @@ int	is_nothing(char *line)
 	return (1);
 }
 
+void	print_all_env(t_env *head)//TODO ㅈㅣ우ㅓ
+{
+	t_env	*to_print;
+	int		i;
+
+	to_print = head;
+	i = 1;
+	while (to_print != NULL)
+		to_print = to_print->next;
+}
+
 void	free_env(char **env)
 {
 	int	i;
@@ -107,8 +118,9 @@ int	main(int argc, char **argv, char **envp)
 
 	char	*input;
 
-	env = malloc(sizeof(t_env));
-	env_cpy(&env, envp);
+	// env = malloc(sizeof(t_env));
+	env = env_cpy(envp);
+	print_all_env(env);
 	input = "";
 	while (input)
 	{
