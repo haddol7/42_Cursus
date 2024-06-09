@@ -3,7 +3,7 @@ LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
 CC				:= cc
 CFLAGS			:= -Wall -Werror -Wextra
-CFLAGS =
+CFLAGS = 
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
@@ -47,8 +47,8 @@ EXECUTION		:=	execution/execution.c \
 
 SRC_MAN			:=  main.c \
 					$(TOKENIZER)\
-          $(PARSER)\
-          $(EXPANSION)\
+        		 	$(PARSER)\
+        			$(EXPANSION)\
 					$(EXECUTION)
 
 #Bonus files for evaluation
@@ -80,7 +80,6 @@ OBJS	:=	$(SRC_FIN:.c=.o)
 all: 
 	@make -sC $(LIBFT_DIR)
 	@make $(NAME)
-	make clean
 
 bonus:
 	@make WITH_BONUS=1

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/09 21:29:19 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/09 22:08:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -459,7 +459,7 @@ void	iter_cmd(char *cmd, int j, t_env *env, char **str)
 		j++;
 	}
 }
-
+//TODO : j 없애기 
 void	check_env_and_replace(t_node *node, t_env *env, t_new_cmd **list)
 {
 	int		i;
@@ -486,13 +486,17 @@ char	**list_to_new_cmd(t_new_cmd *new_list)
 	char	**result;
 	t_new_cmd	*tmp;
 
+	if (new_list == NULL)
+		return (0);
 	tmp = new_list;
 	i = 0;
 	word_cnt = get_cmd_node_num(new_list);
+	printf("cnt -> %d\n", word_cnt);
 	result = (char **)malloc(sizeof(char) * (word_cnt + 1));
 	while (i < word_cnt)
 	{
-		result[i] = ft_strdup(tmp->cmd);
+		if (tmp->cmd != NULL)
+			result[i] = ft_strdup(tmp->cmd);
 		tmp = tmp->next;
 		i++;
 	}
@@ -532,6 +536,7 @@ void	check_cmd_node(t_node *ast, t_env *env)//TODO exit status 구현하기
 		handle_quote(new_list, env);
 		// is_wild_card(node);
 		// print_all_cmd(new_list);
+		printf("%p\n", new_list);
 		new_cmd = list_to_new_cmd(new_list);
 		list_free_all(&new_list);
 		free_all_old_cmd(node->cmd);
