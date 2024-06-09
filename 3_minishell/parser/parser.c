@@ -6,25 +6,24 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:48:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/05 16:27:57 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/09 16:50:46 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-t_node	*parser(t_token **token)
+t_node	*parser(t_token *token)
 {
 	t_node	*ast;
 	t_token	*head;
 
 	ast = NULL;
-	head = *token;
+	head = token;
 	if (head == NULL)
 		return (NULL);
-	ast = list(token);
-	if (head == *token || !is_token(*token, T_EOF))
-		syntax_error(*token, &ast);
-	ms_free_all_token(&head);
+	ast = list(&token);
+	if (head == token || !is_token(token, T_EOF))
+		syntax_error(token, &ast);
 	return (ast);
 }
 

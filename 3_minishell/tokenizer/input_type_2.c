@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 20:12:40 by jungslee          #+#    #+#             */
-/*   Updated: 2024/05/28 22:55:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/09 17:13:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	input_word(t_token **head, char *input, int *idx)
 		len++;
 	}
 	if (quote % 2 != 0)
-		return (handle_error("syntex error : unclosed quote", 0, head));
+		return (handle_error("bash: unexpected EOF while looking for matching quote\n", 0, head));
 	value = (char *)malloc(sizeof(char) * (len + 1));
 	if (value == NULL)
 		handle_error("exit : malloc error", 1, 0);

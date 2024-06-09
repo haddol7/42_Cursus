@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:21:20 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/08 00:03:21 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/09 17:32:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	redir_error(char *name)
 int	input(char *filename)
 {
 	int	fd;
-
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		redir_error(filename);

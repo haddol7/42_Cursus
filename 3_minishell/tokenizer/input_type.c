@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:48:15 by jungslee          #+#    #+#             */
-/*   Updated: 2024/05/28 22:14:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/09 17:13:41 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	input_quotation(t_token **head, char *input, int *idx)
 	while (input[start + len] != quote_type)
 	{
 		if (input[start + len] == '\0')
-			return (handle_error("syntex error : unclosed quote", 0, head));
+			return (handle_error("bash: unexpected EOF while looking for matching quote\n", 0, head));
 		len++;
 	}
 	value = (char *)malloc(sizeof(char) * (len + 2));

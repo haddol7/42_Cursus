@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/28 20:03:29 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/09 17:22:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,14 @@ t_token	*tokenizer(char *input)
 	return (head);
 }
 
-#include <stdio.h>
-
 void	print_all_value(t_token *head)
 {
 	t_token	*to_print;
 
 	to_print = head;
+	if (!head)
+		return ;
+	printf("\e[32m====================token===================\n");
 	while (to_print->type != T_EOF)
 	{
 		if (to_print->type == T_WORD)
@@ -90,15 +91,5 @@ void	print_all_value(t_token *head)
 			printf("%s\n", to_print->value);
 		to_print = to_print->next;
 	}
+	printf("\e[0m");
 }
-
-// int	main(int argv, char *argc[])
-// {
-// 	t_token	*head;
-
-// 	while (1)
-// 	{
-// 		head = tokenizer(get_next_line(0));
-// 		print_all_value(head);
-// 	}
-// }

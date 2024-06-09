@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:54:45 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/06 16:40:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/09 16:38:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct s_node
 }	t_node;
 
 //parser.c
-t_node	*parser(t_token **token);
+t_node	*parser(t_token *token);
 void	*free_tree(t_node **node);
 void	*free_arg(char ***cmd);
 

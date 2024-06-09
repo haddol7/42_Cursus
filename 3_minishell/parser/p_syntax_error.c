@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 22:03:33 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/04 17:46:48 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/09 17:08:24 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	*syntax_error(t_token *token, t_node **node)
 		}
 		g_status = SYNTAX_ERR;
 	}
-	free_tree(node);
 	return (NULL);
 }
 
