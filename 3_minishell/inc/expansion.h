@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/08 13:16:23 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/09 19:20:35 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "parser.h"
 # include "tokenizer.h"
-# include "tree.h"
 
 typedef struct s_env
 {
