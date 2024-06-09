@@ -1,45 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer_utils.c                                  :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/27 11:53:29 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/05 20:05:19 by jungslee         ###   ########.fr       */
+/*   Created: 2024/06/07 19:43:00 by jungslee          #+#    #+#             */
+/*   Updated: 2024/06/07 19:53:42 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenizer.h"
+#include "expansion.h"
 
-int	handle_error(char *str, int code, t_token **head)
+t_env	*env_new(char *name, char *content)
 {
-	write(2, str, ft_strlen(str));
-	if (code == 1)
-		exit(1);
-	else
-	{
-		ms_free_all_token(head);
-		return (0);
-	}
-}
+	t_env	*node;
 
-t_token	*ms_lstnew(char *value, t_token_type type)
-{
-	t_token	*node;
-
-	node = (t_token *)malloc(sizeof(t_token));
+	node = (t_env *)malloc(sizeof(t_env));
 	if (node == NULL)
-		handle_error("exit : malloc error9", 1, 0);
-	node->type = type;
-	node->value = value;
+		handle_error("exit : malloc error6", 1, 0);
+	node->key = name;
+	node->value = content;
+	if (name != NULL && content != NULL)
+		node->complete = 1;
+	else
+		node->complete = 0;
 	node->next = NULL;
 	return (node);
 }
 
-t_token	*ms_lstlast(t_token *head)
+t_env	*env_last(t_env *head)
 {
-	t_token	*tmp;
+	t_env	*tmp;
 
 	tmp = head;
 	if (head == NULL)
@@ -49,9 +41,9 @@ t_token	*ms_lstlast(t_token *head)
 	return (tmp);
 }
 
-void	ms_lstadd_back(t_token **head, t_token *new)
+void	env_add_back(t_env **head, t_env *new)
 {
-	t_token	*last;
+	t_env	*last;
 
 	if (head == NULL || new == NULL)
 		return ;
@@ -59,28 +51,35 @@ void	ms_lstadd_back(t_token **head, t_token *new)
 		*head = new;
 	else
 	{
-		last = ms_lstlast(*head);
+		last = env_last(*head);
 		last->next = new;
 	}
 }
 
-int	ms_free_all_token(t_token **head)
+int	env_free_all(t_env **head)
 {
-	t_token	*to_free;
-	t_token	*tmp;
+	t_env	*to_free;
+	t_env	*tmp;
 
 	to_free = *head;
 	while (to_free != NULL)
 	{
 		tmp = to_free->next;
-		if (to_free->type != T_EOF)
-		{
+		if (to_free->key != NULL)
+			free(to_free->key);
+		if (to_free->value != NULL)
 			free(to_free->value);
-			to_free = NULL;
-		}
 		free(to_free);
 		to_free = tmp;
 	}
 	*head = NULL;
 	return (0);
 }
+
+// void	env_del_one(t_env **head, t_env *node)
+// {
+// 	t_env *tmp;
+
+// 	tmp = head;
+// 	while (head->name)
+// }

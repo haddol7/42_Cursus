@@ -20,6 +20,21 @@ PARSER			:=	parser/parser.c \
 					parser/p_token_utils.c \
 					parser/p_syntax_error.c \
 
+BUILTIN			:=	builtin/cd.c\
+					builtin/echo.c\
+					builtin/env.c\
+					builtin/exit.c\
+					builtin/export.c\
+					builtin/pwd.c\
+					builtin/unset.c\
+
+
+EXPANSION		:=	expansion/print_env.c \
+					expansion/env_utils.c \
+					expansion/expansion_utils.c \
+					expansion/new_cmd_utils.c
+
+         
 EXECUTION		:=	execution/execution.c \
  					execution/e_and_or_if.c \
  					execution/e_cmd.c \
@@ -32,15 +47,16 @@ EXECUTION		:=	execution/execution.c \
 
 SRC_MAN			:=  main.c \
 					$(TOKENIZER)\
-					$(PARSER)\
+          $(PARSER)\
+          $(EXPANSION)\
 					$(EXECUTION)
-					
 
 #Bonus files for evaluation
 PARSER_BONUS	:=
 TOKENIZER_BONUS	:=
 SRC_BONUS		:=  $(PARSER_BONUS)\
 					$(TOKENIZER_BONUS)\
+					$(EXPANSION)\
 					main_bonus.c
 
 GREEN = \033[0;92m

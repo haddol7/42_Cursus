@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_type.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:48:15 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/09 17:13:41 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/06 20:31:02 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,20 @@ int	input_quotation(t_token **head, char *input, int *idx)
 	quote_type = input[start];
 	while (input[start + len] != quote_type)
 	{
+		// printf("%c ~!!!!!!!!!!!!!! \n", input[start + len]);
 		if (input[start + len] == '\0')
 			return (handle_error("bash: unexpected EOF while looking for matching quote\n", 0, head));
 		len++;
 	}
+	while (!(input[start + len] == ' ' || input[start + len] == '\0'))
+		len++;
 	value = (char *)malloc(sizeof(char) * (len + 2));
 	if (value == NULL)
 		handle_error("exit : malloc error", 1, 0);
 	ft_strlcpy(value, (const char *)(input + start), len + 2);
 	node = ms_lstnew(value, T_WORD);
 	ms_lstadd_back(head, node);
-	*idx = start + len + 1;
+	*idx = start + len;
 	return (1);
 }
 
