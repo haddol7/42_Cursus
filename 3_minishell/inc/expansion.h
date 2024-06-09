@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/09 20:15:24 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/09 20:42:53 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_env	*env_last(t_env *head);
 void	env_add_back(t_env **head, t_env *new);
 int		env_free_all(t_env **head);
 void	check_cmd_node(t_node *ast, t_env *env);
-void	env_cpy(t_env **env, char **envp);
+t_env *env_cpy(char **envp);
 char	*env_strcpy(int start, int end, char *str);
 int		env_strncmp(char *s1, char *name, int n);
 int		is_alpha_num(char *var);
