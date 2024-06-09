@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 20:12:40 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/05 21:29:21 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/09 19:25:50 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,15 +105,13 @@ int	input_word(t_token **head, char *input, int *idx)
 		{
 			in_quote = skip_quote(input, start + len);
 			if (in_quote == -1)
-				return (handle_error("syntex error : unclosed quote!!!!", 0, head));
+				return (handle_error("bash: unexpected EOF while looking for matching quote\n", 0, head));
 			len += in_quote;
 		}
 		if (check_if_terminal(input[start + len], input[start + len + 1]) == 1)
 			break ;
 		len++;
 	}
-	if (quote % 2 != 0)
-		return (handle_error("bash: unexpected EOF while looking for matching quote\n", 0, head));
 	value = (char *)malloc(sizeof(char) * (len + 1));
 	if (value == NULL)
 		handle_error("exit : malloc error3", 1, 0);
