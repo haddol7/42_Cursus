@@ -80,7 +80,7 @@ OBJS	:=	$(SRC_FIN:.c=.o)
 all: 
 	@make -sC $(LIBFT_DIR)
 	@make $(NAME)
-	#@make clean
+	make clean
 
 bonus:
 	@make WITH_BONUS=1

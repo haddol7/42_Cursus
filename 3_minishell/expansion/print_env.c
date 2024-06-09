@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/08 13:30:08 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/09 20:28:58 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -522,6 +522,8 @@ void	check_cmd_node(t_node *ast, t_env *env)//TODO exit status 구현하기
 
 	node = ast;
 	new_list = NULL;
+	if (ast == NULL)
+		return ;
 	if (node->type == N_CMD)
 	{
 		check_env_and_replace(node, env, &new_list);

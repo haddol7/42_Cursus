@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/07 19:43:49 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/09 20:15:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int	is_alpha_num(char *var)
 // {
 // 	t_env	*to_print;
 // 	int		i;
-//
+
 // 	to_print = head;
 // 	i = 1;
 // 	while (to_print != NULL)

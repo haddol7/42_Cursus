@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/05 20:59:35 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/09 20:30:48 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	print_all_value(t_token *head)
 	t_token	*to_print;
 
 	to_print = head;
-	while (to_print != NULL && to_print->type != T_EOF)
 	if (!head)
 		return ;
 	printf("\e[32m====================token===================\n");
