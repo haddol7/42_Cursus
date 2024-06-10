@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/08 00:03:27 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/10 18:46:50 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <fcntl.h>
 # include "parser.h"
+# include "expansion.h"
 
 # define MAX_PIPE 1024
 # define MAX_PID 512
@@ -30,7 +31,7 @@ typedef struct s_stat
 	int	pipe[MAX_PIPE];
 	int	n_pid;
 	int	n_pipe;
-	//t_env envp;
+	t_env *envp;
 }	t_stat;
 
 //e_execution.c
@@ -62,6 +63,7 @@ int		heredoc(char *filename);
 void	exec_subshell(t_node *node, t_stat *stat);
 
 //e_utils.c
+void	error_cmd_not_found(char *cmd);
 void	push_pid_list(pid_t pid, t_stat *stat);
 void	wait_pid_list(t_stat *stat);
 #endif
