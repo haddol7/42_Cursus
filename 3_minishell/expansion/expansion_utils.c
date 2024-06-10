@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/10 17:05:41 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/10 21:44:38 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,21 @@ char	*env_strcpy(int start, int end, char *str)
 	int		i;
 
 	i = 0;
-	ret = (char *)malloc(sizeof(char) * (end - start + 2));
+	// printf("🎨🎨 : %s\n", str);
+	// printf("$@@ START: %d, END : %d\n", start, end);
+
+	ret = (char *)malloc(sizeof(char) * (end - start + 1));
 	if (ret == NULL)
 		handle_error("exit : malloc error4", 1, 0);
-	while (start + i <= end)
+	
+	while (start + i < end)
 	{
 		ret[i] = str[start + i];
+		// printf("%d-th %c\n", str[start + i]);
 		i++;
 	}
 	ret[i] = '\0';
+	// printf("🎨 : %s\n", str);
 	return (ret);
 }
 
@@ -45,7 +51,7 @@ t_env *env_cpy(char **envp)
 		j = 0;
 		while (envp[i][j] != '=')
 			j++;
-		name = env_strcpy(0, j - 1, envp[i]);
+		name = env_strcpy(0, j, envp[i]);
 		content = ft_strdup(envp[i] + j + 1);
 		if (name == NULL || content == NULL)
 			handle_error("exit : malloc error5", 1, 0);

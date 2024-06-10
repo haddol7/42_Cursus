@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/10 14:33:43 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/10 18:58:13 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void print_all_node(t_node *ast, int indent, char *input)
 	{
 		arg = ast->cmd;
 		ft_putstr_fd("N_CMD : ", STDERR_FILENO);
-		for(int i = 0; arg[i] != NULL; i++)
+		for(int i = 0; arg && arg[i] != NULL; i++)
 		{
 			dprintf(STDERR_FILENO, "%s, ", arg[i]);
 		}
@@ -137,7 +137,7 @@ int	main(int argc, char **argv, char **envp)
 			
 			//expansion
 			expansion(ast, env);
-			// print_all_node(ast, 0, input);
+			print_all_node(ast, 0, input);
 
 			//exec
 			exec_here_doc(ast);

@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/10 18:39:25 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/10 22:02:59 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ char	*env_validity(char *cmd, int idx, t_env *env, int *key_len)
 	return (0);
 }
 
+//$PATH!!
 void	check_env_and_expand(t_node *node, t_env *env, t_new_cmd **list)
 {
 	int		i;
@@ -41,9 +42,9 @@ void	check_env_and_expand(t_node *node, t_env *env, t_new_cmd **list)
 	while (node->cmd[i] != NULL)
 	{
 		// printf("node_cmd :: %s\n", node->cmd[i]);
-		str = ft_strdup(node->cmd[i]);
+		// str = ft_strdup(node->cmd[i]);
 		// printf("str 1:: %s\n", str);
-		find_dollar_and_expand(node->cmd[i], env, &str);
+		str = find_dollar_and_expand(node->cmd[i], env);
 		// printf("str 2 ::");
 		if (str[0] == '\0')
 		{
@@ -55,7 +56,7 @@ void	check_env_and_expand(t_node *node, t_env *env, t_new_cmd **list)
 		else
 			ms_split(str, list);
 		i++;
-		printf("expanded :::: %s\n", str);
+		// printf("expanded :::: %s\n", str);
 	}
 }
 
@@ -97,7 +98,7 @@ void	expansion(t_node *ast, t_env *env)//TODO exit status 구현하기
 	if (node->type == N_CMD)
 	{
 		check_env_and_expand(node, env, &new_list);
-		handle_quote(new_list, env);
+		//handle_quote(new_list, env);
 		new_cmd = cpy_list_to_cmd(new_list);
 		list_free_all(&new_list);
 		free_all_old_cmd(node->cmd);

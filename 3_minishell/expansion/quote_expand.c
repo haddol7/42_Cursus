@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:16:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/10 17:14:01 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/10 21:00:58 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*no_quote(char *cmd, int *idx, char *words_tmp)
 	while (!(cmd[start + i] == '\'' || cmd[start + i] == '\"' || \
 					cmd[start + i] == '\0'))
 		i++;
-	end = start + i - 1;
+	end = start + i;
 	tmp = env_strcpy(start, end, cmd);
 	result = ms_strjoin(words_tmp, tmp);
 	*idx = end + 1;
@@ -48,7 +48,7 @@ char	*de_quote(char *cmd, int *idx, char *words_tmp, char quote)
 	while (cmd[quote_start + i] != quote)
 		i++;
 	quote_close = quote_start + i;
-	in_quote = env_strcpy(quote_start + 1, quote_close - 1, cmd);
+	in_quote = env_strcpy(quote_start + 1, quote_close, cmd);
 	result = ms_strjoin(words_tmp, in_quote);
 	*idx = quote_close + 1;
 	free(in_quote);

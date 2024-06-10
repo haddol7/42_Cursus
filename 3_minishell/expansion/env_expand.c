@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:10:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/10 18:38:49 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/10 22:02:04 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	quote_lock(char c, int *status);
 void	ms_split(char *str, t_new_cmd **list);
-void	find_dollar_and_expand(char *cmd, t_env *env, char **str);
-char	*replace_env(char *cmd, int idx, t_env *env, int quote);
+char	*find_dollar_and_expand(char *cmd, t_env *env);
+char	*replace_env(char *cmd, int *idx, t_env *env, int quote);
 int		is_exception(char *cmd, int idx);
 
 int	is_exception(char *cmd, int idx)
@@ -62,7 +62,7 @@ void	ms_split(char *str, t_new_cmd **list)
 		quote_lock(str[i], &quote_status);
 		if (quote_status == 0 && str[i] == ' ')
 		{
-			cmd_add_back(list, env_strcpy(start, i - 1, str));
+			cmd_add_back(list, env_strcpy(start, i, str));
 			// cmd_add_back(list, ft_strdup(" "));//TODO 일단 공백 1개만 포함.
 			while (str[i] == ' ')
 				i++;
@@ -70,59 +70,82 @@ void	ms_split(char *str, t_new_cmd **list)
 		}
 		if (str[i] == '\0')
 		{
-			cmd_add_back(list, env_strcpy(start, i - 1, str));//TODO 요부분
+			cmd_add_back(list, env_strcpy(start, i, str));//TODO 요부분
 			break ;
 		}
 		i++;
 	}
 }
 
-void	find_dollar_and_expand(char *cmd, t_env *env, char **str)
+char	*find_dollar_and_expand(char *cmd, t_env *env)
 {
 	int		i;
 	int		quote_status;
 	int		key_len;
+	char	*str;
+	char	*tmp;
 
 	quote_status = 0;
 	key_len = 0;
 	i = 0;
-	while (cmd != NULL && cmd[i] != '\0')
+	tmp = NULL;
+	str = ft_strdup(cmd);
+	while (str != NULL && str[i] != '\0')
 	{
 		// printf("AERA??");
-		printf("cmd[i] ::: %c\n", cmd[i]);
-		quote_lock(cmd[i], &quote_status);
-		if ((cmd[i] == '$') && is_exception(cmd, i) == 0 && \
+		// printf("cmd[i] ::: %c\n", cmd[i]);
+		// printf("str[3] :: %c\n", str[3]);
+		quote_lock(str[i], &quote_status);
+		if ((str[i] == '$') && is_exception(str, i) == 0 && \
 			quote_status != 1)
 		{
-			free(*str);
-			*str = replace_env(cmd, i, env, quote_status);
+			// free(str);
+			tmp = replace_env(str, &i, env, quote_status);
+			free(str);
+			str = tmp;
 		}
-		i++;
+		// printf("str[3] :: %c\n", str[3]);
+		// printf("str %s\n", str);
+		else
+			i++;
 	}
+	printf("after replace_env str -> %s\n", str);
+	return (str);
 }
 
-char	*replace_env(char *cmd, int idx, t_env *env, int quote)
+char	*replace_env(char *str, int *idx, t_env *env, int quote)
 {
 	int	start;
 	int	end;
 	char	*expand;
 
-	start = idx++;
+	start = (*idx)++;
 	expand = NULL;
-	while (ft_isalnum(*(cmd + idx)) || cmd[idx] == '_')
-		idx++;
-	end = idx - 1;
+	while (ft_isalnum(*(str + *idx)) || str[*idx] == '_')
+		(*idx)++;
+	// printf(" e4wlkertjawera:: idx:::; %d\n", *idx);
+	end = *idx - 1;
 	// *idx = end - start + 1;// TODO 이렇게 하면 부모함수에서 j++ 해줘야 함.
+	// printf("idx:::; %d\n", *idx);
 	while (env != NULL)
 	{
-		if (env_strncmp(cmd + start + 1, env->key, end - start) == 0)
+		if (env_strncmp(str + start + 1, env->key, end - start) == 0)
 		{
-			expand = replace_str(cmd, start, env->value, quote);
+			// printf("cmd in env:: %s\n", str);
+			expand = replace_str(str, start, end, env->value);
+			*idx = start + ms_strlen(env->value);
 			break ;
 		}
 		env = env->next;
 	}
 	if (expand == NULL)
-		expand = replace_str(cmd, start, "", quote);
+	{
+		expand = replace_str(str, start, end, "");
+		*idx = start;
+	}
+	// printf("expand :::: %s\n", expand);
+	// printf("idx ::: %d\n", *idx);
+	// free(str);
+	printf("expand : %s\n", expand);
 	return (expand);
 }
