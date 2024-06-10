@@ -1,7 +1,7 @@
 NAME			:= minishell
 LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
-CC				:= cc
+CC				:= cc -g
 CFLAGS			:= -Wall -Werror -Wextra
 CFLAGS = 
 
@@ -29,10 +29,13 @@ BUILTIN			:=	builtin/cd.c\
 					builtin/unset.c\
 
 
-EXPANSION		:=	expansion/print_env.c \
+EXPANSION		:=	expansion/expansion.c \
 					expansion/env_utils.c \
 					expansion/expansion_utils.c \
-					expansion/new_cmd_utils.c
+					expansion/new_cmd_utils.c \
+					expansion/env_expand.c \
+					expansion/expansion_utils_2.c \
+					expansion/quote_expand.c
 
          
 EXECUTION		:=	execution/execution.c \
@@ -56,7 +59,6 @@ PARSER_BONUS	:=
 TOKENIZER_BONUS	:=
 SRC_BONUS		:=  $(PARSER_BONUS)\
 					$(TOKENIZER_BONUS)\
-					$(EXPANSION)\
 					main_bonus.c
 
 GREEN = \033[0;92m

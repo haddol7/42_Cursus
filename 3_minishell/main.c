@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/09 21:46:26 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/10 14:33:43 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,8 @@ int	main(int argc, char **argv, char **envp)
 			print_all_value(token);
 			
 			//expansion
-			check_cmd_node(ast, env);
-			print_all_node(ast, 0, input);
+			expansion(ast, env);
+			// print_all_node(ast, 0, input);
 
 			//exec
 			exec_here_doc(ast);
