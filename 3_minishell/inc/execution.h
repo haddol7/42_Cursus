@@ -6,13 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/10 18:46:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/11 20:06:34 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTION_H
 # define EXECUTION_H
 
+# include <sys/stat.h>
 # include <fcntl.h>
 # include "parser.h"
 # include "expansion.h"
@@ -63,7 +64,7 @@ int		heredoc(char *filename);
 void	exec_subshell(t_node *node, t_stat *stat);
 
 //e_utils.c
-void	error_cmd_not_found(char *cmd);
+void	exit_cmd_not_found(char *cmd);
 void	push_pid_list(pid_t pid, t_stat *stat);
 void	wait_pid_list(t_stat *stat);
 #endif
