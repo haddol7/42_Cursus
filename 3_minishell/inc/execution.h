@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/11 20:06:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/11 21:15:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,22 @@
 
 # include <sys/stat.h>
 # include <fcntl.h>
+# include <string.h>
 # include "parser.h"
 # include "expansion.h"
 
 # define MAX_PIPE 1024
 # define MAX_PID 512
+
 # define READ 0
 # define WRITE 1
 # define INPUT 0
 # define OUTPUT 1
+
+# define ENOCMD 0
+# define ENOENT 2
+# define EACCES 13
+# define EISDIR 21
 
 typedef struct s_stat
 {
@@ -43,6 +50,13 @@ void	exec_and_or_if(t_node *node, t_stat *stat);
 
 //e_cmd.c
 void	exec_cmd(t_node *node, t_stat *stat);
+
+//e_cmd_utils.c
+void	exit_cmd_error(char *cmd, int error_type);
+void	redirect_to_cmd(t_stat *stat);
+void	close_pipe_fds(t_stat *stat);
+void	if_not_executable_then_exit(char *cmd);
+char	*change_as_absolute_path(char *cmd);
 
 //e_pipe.c
 void	exec_pipe(t_node *node, t_stat *stat);
@@ -64,7 +78,6 @@ int		heredoc(char *filename);
 void	exec_subshell(t_node *node, t_stat *stat);
 
 //e_utils.c
-void	exit_cmd_not_found(char *cmd);
 void	push_pid_list(pid_t pid, t_stat *stat);
 void	wait_pid_list(t_stat *stat);
 #endif
