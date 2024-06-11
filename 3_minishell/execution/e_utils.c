@@ -6,21 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:04:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/10 20:34:33 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/11 17:20:32 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
 extern int g_status;
-
-void	error_cmd_not_found(char *cmd)
-{
-	ft_putstr_fd("bash: ", STDERR_FILENO);
-	ft_putstr_fd(cmd, STDERR_FILENO);
-	ft_putendl_fd(": command not found", STDERR_FILENO);
-	exit(127);
-}
 
 void	push_pid_list(pid_t pid, t_stat *stat)
 {
