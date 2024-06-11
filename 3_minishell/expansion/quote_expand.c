@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:16:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/10 21:00:58 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/11 22:19:16 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ char	*no_quote(char *cmd, int *idx, char *words_tmp)
 					cmd[start + i] == '\0'))
 		i++;
 	end = start + i;
-	tmp = env_strcpy(start, end, cmd);
+	tmp = ms_strcpy(start, end, cmd);
 	result = ms_strjoin(words_tmp, tmp);
-	*idx = end + 1;
+	*idx = end;
 	free(tmp);
 	if (words_tmp != NULL)
 		free(words_tmp);
@@ -48,7 +48,8 @@ char	*de_quote(char *cmd, int *idx, char *words_tmp, char quote)
 	while (cmd[quote_start + i] != quote)
 		i++;
 	quote_close = quote_start + i;
-	in_quote = env_strcpy(quote_start + 1, quote_close, cmd);
+	in_quote = ms_strcpy(quote_start + 1, quote_close, cmd);
+	printf("in_quote--> %s\n", in_quote);
 	result = ms_strjoin(words_tmp, in_quote);
 	*idx = quote_close + 1;
 	free(in_quote);
@@ -57,7 +58,7 @@ char	*de_quote(char *cmd, int *idx, char *words_tmp, char quote)
 	return (result);
 }
 
-void	handle_quote(t_new_cmd *list, t_env *env)
+void	expand_quote(t_new_cmd *list, t_env *env)
 {
 	int		i;
 	int		j;
@@ -67,6 +68,11 @@ void	handle_quote(t_new_cmd *list, t_env *env)
 	{
 		words_tmp = NULL;
 		i = 0;
+		if (list->cmd == NULL || list->cmd[0] == '\0')
+		{
+			list = list->next;
+			continue ;
+		}
 		while (list->cmd[i] != '\0')
 		{
 			if (list->cmd[i] == '\'' || list->cmd[i] == '\"')
@@ -80,6 +86,7 @@ void	handle_quote(t_new_cmd *list, t_env *env)
 		list = list->next;
 	}
 }
+
 
 
 

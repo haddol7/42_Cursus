@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 14:30:41 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/10 21:31:40 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/11 20:03:12 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*replace_str(char *cmd, int start, int end, char *value)
 	printf("cmd :: %s start :: %d end ::: %d\n", cmd, start, end);
 	
 	printf("🎨🎨🎨 : %s\n",cmd);
-	tmp = env_strcpy(0, start, cmd);
+	tmp = ms_strcpy(0, start, cmd);
 	
 	printf("tmp ::: %s\n", tmp);
 	
@@ -79,7 +79,7 @@ char	*replace_str(char *cmd, int start, int end, char *value)
 	if (result1 == NULL)
 		handle_error("exit : malloc error1", 1, 0);
 	free(tmp);
-	tmp = env_strcpy(end + 1, ms_strlen(cmd), cmd);
+	tmp = ms_strcpy(end + 1, ms_strlen(cmd), cmd);
 	printf("tmp ::: %s\n", tmp);
 	result2 = ft_strjoin(result1, tmp);
 	free(result1);

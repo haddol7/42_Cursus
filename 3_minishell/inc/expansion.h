@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/10 20:44:10 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/11 19:55:34 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	env_add_back(t_env **head, t_env *new);
 int		env_free_all(t_env **head);
 void	expansion(t_node *ast, t_env *env);
 t_env *env_cpy(char **envp);
-char	*env_strcpy(int start, int end, char *str);
+char	*ms_strcpy(int start, int end, char *str);
 int		env_strncmp(char *s1, char *name, int n);
 int		is_alpha_num(char *var);
 t_new_cmd	*cmd_new(char *cmd);
@@ -48,7 +48,7 @@ int	get_cmd_node_num(t_new_cmd *head);
 char	*ms_strjoin(char *s1, char *s2);
 int	ms_strlen(char *str);
 void	free_all_old_cmd(char **cmd);
-void	handle_quote(t_new_cmd *list, t_env *env);
+void	expand_quote(t_new_cmd *list, t_env *env);
 char	*no_quote(char *cmd, int *idx, char *words_tmp);
 char	*replace_str(char *cmd, int start, int end, char *value);
 

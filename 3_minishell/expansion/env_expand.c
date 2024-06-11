@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:10:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/10 22:02:04 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/11 20:02:59 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	ms_split(char *str, t_new_cmd **list)
 		quote_lock(str[i], &quote_status);
 		if (quote_status == 0 && str[i] == ' ')
 		{
-			cmd_add_back(list, env_strcpy(start, i, str));
+			cmd_add_back(list, ms_strcpy(start, i, str));
 			// cmd_add_back(list, ft_strdup(" "));//TODO 일단 공백 1개만 포함.
 			while (str[i] == ' ')
 				i++;
@@ -70,7 +70,7 @@ void	ms_split(char *str, t_new_cmd **list)
 		}
 		if (str[i] == '\0')
 		{
-			cmd_add_back(list, env_strcpy(start, i, str));//TODO 요부분
+			cmd_add_back(list, ms_strcpy(start, i, str));//TODO 요부분
 			break ;
 		}
 		i++;

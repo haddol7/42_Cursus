@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/10 18:58:13 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/11 21:26:34 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void print_all_node(t_node *ast, int indent, char *input)
 	}
 	else if (indent == 0)
 	{
-		printf("\e[34m====================node====================\n");
+		printf("\n\e[34m====================node====================\n");
 	}
 	for(int i = 0; i < indent; i++)
 	{
