@@ -37,6 +37,7 @@ EXPANSION		:=	expansion/print_env.c \
          
 EXECUTION		:=	execution/execution.c \
  					execution/e_and_or_if.c \
+					execution/e_cmd_utils.c \ 
  					execution/e_cmd.c \
 					execution/e_pipe.c \
 					execution/e_redir_here_doc.c \
@@ -47,8 +48,8 @@ EXECUTION		:=	execution/execution.c \
 
 SRC_MAN			:=  main.c \
 					$(TOKENIZER)\
-          $(PARSER)\
-          $(EXPANSION)\
+        			$(PARSER)\
+         			$(EXPANSION)\
 					$(EXECUTION)
 
 #Bonus files for evaluation

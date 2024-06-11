@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/10 21:00:37 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/11 17:14:55 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ extern int g_status;
 static void	exec_proc(char **arg, t_stat *stat);
 static void	close_pipe_fds(t_stat *stat);
 static void	set_arg_path(char **cmd, t_env *envp);
-static char	*match_absolute_path(char *cmd, char **path);
+static char	*match_in_env_path(char *cmd, char **path);
 
 //TODO: expand = expand(node->cmd)
 //TODO: signal 작업
@@ -89,28 +89,34 @@ static void	set_arg_path(char **cmd, t_env *envp)
 	{
 		// path = ft_split(env_find_value(envp, "PATH"), ':');
 		path = ft_split("/Users/daeha/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Users/daeha/.brew/bin:", ':');
-		new_cmd = match_absolute_path(*cmd, path);
+		new_cmd = match_in_env_path(*cmd, path);
 		while (path[i])
 			free(path[i]);
 		free(path);
 	}
 	else
-		new_cmd = match_relative_path(*cmd);
+		new_cmd = match_in_current_path(*cmd);
+	if (new_cmd == NULL)
+		error_cmd_not_found(*cmd);
 	free(*cmd);
 	*cmd = new_cmd;
 }
 
-//1. /bin/echo
-//2. ../echo
-//3. ./echo
-//4. ../../../../../../test/test
-//3. echo/test
-static char *match_relative_path(char *cmd)
+//1. /bin/echo 							-> /bin/echo
+//2. ../echo   							-> /Users/daeha/echo
+//3. ./echo   		 					-> /Users/daeha/minishell/echo
+//4. ./minishell						-> O
+//5. ./././././minishell 				-> O
+//6. parser/../parser/.././minishell	-> O
+//7. 
+//8. minishell							-> X	bash: minishell: command not found
+//										-> match_in_env_path
+static char *match_in_current_path(char *cmd)
 {
 	
 }
 
-static char	*match_absolute_path(char *cmd, char **path)
+static char	*match_in_env_path(char *cmd, char **path)
 {
 	char	*new_cmd;
 	char	*cmd_slash;
@@ -130,6 +136,5 @@ static char	*match_absolute_path(char *cmd, char **path)
 		i++;
 	}
 	free(cmd_slash);
-	error_cmd_not_found(cmd);
 	return (NULL);
 }
