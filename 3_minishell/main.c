@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/10 19:53:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/11 18:24:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 
 	env = malloc(sizeof(t_env));
-	env_cpy(&env, envp);
+	//env_cpy(&env, envp);
 	input = "";
 	while (input)
 	{
@@ -134,7 +134,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 	}
 	rl_clear_history();
-	env_free_all(&env);
+	//env_free_all(&env);
 	return (g_status);
 }
 

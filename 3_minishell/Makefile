@@ -3,7 +3,7 @@ LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
 CC				:= cc
 CFLAGS			:= -Wall -Werror -Wextra
-CFLAGS =
+CFLAGS = -fsanitize=address
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
@@ -26,7 +26,7 @@ BUILTIN			:=	builtin/cd.c\
 					builtin/exit.c\
 					builtin/export.c\
 					builtin/pwd.c\
-					builtin/unset.c\
+					builtin/unset.c
 
 
 EXPANSION		:=	expansion/print_env.c \
@@ -37,7 +37,7 @@ EXPANSION		:=	expansion/print_env.c \
          
 EXECUTION		:=	execution/execution.c \
  					execution/e_and_or_if.c \
-					execution/e_cmd_utils.c \ 
+					execution/e_cmd_utils.c \
  					execution/e_cmd.c \
 					execution/e_pipe.c \
 					execution/e_redir_here_doc.c \
