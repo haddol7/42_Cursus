@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 18:31:35 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 21:54:13 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	expansion(t_node *ast, t_env *env)
 		expand_one_node(ast->cmd, env, &list);
 		new_cmd = cpy_list_to_cmd(list);
 		list_free_all(&list);
-		free_all_old_cmd(ast->cmd);
+		free_double_pointer(ast->cmd);
 		ast->cmd = new_cmd;
 		return ;
 	}
