@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 21:37:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 21:54:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void		env_add_back(t_env **head, t_env *new);
 int			env_free_all(t_env **head);
 int			ms_strlen(char *str);
 char		*ms_strjoin(char *s1, char *s2);
-void		free_all_old_cmd(char **cmd);
+void		free_double_pointer(char **cmd);
 void		expansion(t_node *ast, t_env *env);
 char		**cpy_list_to_cmd(t_new_cmd *new_list);
 int			get_cmd_node_num(t_new_cmd *head);
