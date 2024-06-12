@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:03:01 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/07 23:18:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 16:42:17 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@ void	exec_pipe(t_node *node, t_stat *stat)
 
 static void	push_pipe_list(int fd[2], t_stat *stat)
 {
+	if (stat->n_pipe == MAX_PIPE - 1)
+	{
+		ft_putendl_fd("minishell : maximum number of process exceeded", \
+					STDERR_FILENO);
+		wait_pid_list(stat);
+		ft_putendl_fd("exit...", STDERR_FILENO);
+	}
 	stat->pipe[stat->n_pipe++] = fd[OUTPUT];
 	stat->pipe[stat->n_pipe++] = fd[INPUT];
 }

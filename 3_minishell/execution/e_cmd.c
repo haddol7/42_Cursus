@@ -6,20 +6,19 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/11 21:19:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 16:44:57 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-extern int g_status;
+extern int	g_status;
 
 static void	exec_proc(char **arg, t_stat *stat);
 static void	set_arg_path(char **cmd, t_env *envp);
 static char	*match_in_env_path(char *cmd, char **path);
-static char *match_in_current_path(char *cmd);
+static char	*match_in_current_path(char *cmd);
 
-//TODO: expand = expand(node->cmd)
 //TODO: signal 작업
 void	exec_cmd(t_node *node, t_stat *stat)
 {
@@ -65,12 +64,12 @@ static void	set_arg_path(char **cmd, t_env *envp)
 	}
 	else
 		file = match_in_current_path(*cmd);
-	if_not_executable_then_exit(*cmd);
+	if_not_executable_then_exit(file, *cmd);
 	free(*cmd);
 	*cmd = file;
 }
 
-static char *match_in_current_path(char *cmd)
+static char	*match_in_current_path(char *cmd)
 {	
 	char	*file;
 	char	*current_path;
@@ -92,7 +91,6 @@ static char *match_in_current_path(char *cmd)
 }
 
 //TODO : leaks 검사
-//TODO : norm
 static char	*match_in_env_path(char *cmd, char **path)
 {
 	char	*file;

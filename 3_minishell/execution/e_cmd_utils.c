@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/11 21:21:30 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 16:41:48 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	exit_cmd_error(char *cmd, int error_type)
 		exit(126);
 }
 
-void redirect_to_cmd(t_stat *stat)
+void	redirect_to_cmd(t_stat *stat)
 {
 	if (stat->fd[INPUT] == -1 || stat->fd[OUTPUT] == -1)
 	{
@@ -63,14 +63,14 @@ void	close_pipe_fds(t_stat *stat)
 	}
 }
 
-void	if_not_executable_then_exit(char *cmd)
+void	if_not_executable_then_exit(char *file, char *cmd)
 {
 	struct stat	buf;
-	
-	stat(cmd, &buf);
-	if (access(cmd, F_OK))
+
+	stat(file, &buf);
+	if (access(file, F_OK))
 		exit_cmd_error(cmd, ENOENT);
-	else if (access(cmd, X_OK))
+	else if (access(file, X_OK))
 		exit_cmd_error(cmd, EACCES);
 	else if ((buf.st_mode & S_IFMT) == S_IFDIR)
 		exit_cmd_error(cmd, EISDIR);
