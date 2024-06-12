@@ -26,7 +26,7 @@ BUILTIN			:=	builtin/cd.c\
 					builtin/exit.c\
 					builtin/export.c\
 					builtin/pwd.c\
-					builtin/unset.c\
+					builtin/unset.c
 
 
 EXPANSION		:=	expansion/expansion.c \
@@ -40,6 +40,7 @@ EXPANSION		:=	expansion/expansion.c \
          
 EXECUTION		:=	execution/execution.c \
  					execution/e_and_or_if.c \
+					execution/e_cmd_utils.c \
  					execution/e_cmd.c \
 					execution/e_pipe.c \
 					execution/e_redir_here_doc.c \

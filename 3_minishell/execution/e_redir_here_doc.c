@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/07 21:45:30 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 16:48:35 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static void	write_heredoc(char *delim, char *filename)
 
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		redir_error(delim);
+		error_redir(delim);
 	len_d = ft_strlen(delim);
 	while (TRUE)
 	{	

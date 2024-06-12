@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/11 21:26:34 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/11 18:24:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,19 +133,14 @@ int	main(int argc, char **argv, char **envp)
 			add_history(input);
 			token = tokenizer(input);
 			ast = parser(token);
-			print_all_value(token);
-			
-			//expansion
 			expansion(ast, env);
-			print_all_node(ast, 0, input);
-
-			//exec
 			exec_here_doc(ast);
-			execution(ast, &stat);
 			wait_pid_list(&stat);
-
-
+			// print_all_value(token);
+			// print_all_node(ast, 0, input);
+      execution(ast, &stat);
 			ms_free_all_token(&token);
+			wait_pid_list(&stat);
 			free_tree(&ast);
 			free(input);
 		}
