@@ -3,26 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/09 20:15:00 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 16:40:40 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
 
-char	*env_strcpy(int start, int end, char *str)
+char	*ms_strcpy(int start, int end, char *str)
 {
 	char	*ret;
 	int		i;
 
 	i = 0;
-	ret = (char *)malloc(sizeof(char) * (end - start + 2));
-	// printf("end - start ::: %d\n", end - start + 2);
+	ret = (char *)malloc(sizeof(char) * (end - start + 1));
 	if (ret == NULL)
 		handle_error("exit : malloc error4", 1, 0);
-	while (start + i <= end)
+	while (start + i < end)
 	{
 		ret[i] = str[start + i];
 		i++;
@@ -31,29 +30,29 @@ char	*env_strcpy(int start, int end, char *str)
 	return (ret);
 }
 
-void	env_cpy(t_env **env, char **envp)
+t_env	*env_cpy(char **envp)
 {
 	char	*name;
 	char	*content;
 	int		i;
 	int		j;
-	int		equal_idx;
+	t_env	*env;
 
 	i = 0;
-	equal_idx = 0;
+	env = NULL;
 	while (envp[i] != NULL)
 	{
 		j = 0;
 		while (envp[i][j] != '=')
 			j++;
-		equal_idx = j;
-		name = env_strcpy(0, j - 1, envp[i]);
+		name = ms_strcpy(0, j, envp[i]);
 		content = ft_strdup(envp[i] + j + 1);
 		if (name == NULL || content == NULL)
 			handle_error("exit : malloc error5", 1, 0);
-		env_add_back(env, env_new(name, content));
+		env_add_back(&env, env_new(name, content));
 		i++;
 	}
+	return (env);
 }
 
 int	env_strncmp(char *s1, char *name, int n)
@@ -69,54 +68,3 @@ int	env_strncmp(char *s1, char *name, int n)
 		return (1);
 	return (0);
 }
-
-int	is_alpha_num(char *var)
-{
-	int	i;
-	int	quote_flag;
-
-	i = 0;
-	quote_flag = 0;
-	while (var[i] != '\0')
-	{
-		if (!(ft_isalnum(var[i]) || var[i] == '_' || var[i] == '\"'))
-			return (0);
-		if (var[i] == '\"')
-			quote_flag = 1;
-		i++;
-	}
-	if (quote_flag == 1)
-		return (2);
-	return (1);
-}
-
-// char	*ms_strjoin(char const *s1, char const *s2)
-// {
-// 	char	*str;
-// 	size_t	s1_len;
-// 	size_t	s2_len;
-
-// 	if (s1 == NULL || s2 == NULL)
-// 		return (NULL);
-// 	s1_len = ft_strlen(s1);
-// 	s2_len = ft_strlen(s2);
-// 	str = (char *)ft_malloc((s1_len + s2_len + 1) * sizeof(char));
-// 	if (str == NULL)
-// 		handle_error("exit : malloc error", 1, 0);
-// 	ft_memmove(str, s1, s1_len);
-// 	ft_memmove(str + s1_len, s2, s2_len + 1);
-// 	return (str);
-// }
-
-// #include <stdio.h>
-//
-// void	print_all_env(t_env *head)//TODO ㅈㅣ우ㅓ
-// {
-// 	t_env	*to_print;
-// 	int		i;
-
-// 	to_print = head;
-// 	i = 1;
-// 	while (to_print != NULL)
-// 		to_print = to_print->next;
-// }

@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:00 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/07 19:53:42 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 16:41:43 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,15 @@ int	env_free_all(t_env **head)
 	{
 		tmp = to_free->next;
 		if (to_free->key != NULL)
+		{
 			free(to_free->key);
+			to_free->key = NULL;
+		}
 		if (to_free->value != NULL)
+		{
 			free(to_free->value);
+			to_free->value = NULL;
+		}
 		free(to_free);
 		to_free = tmp;
 	}

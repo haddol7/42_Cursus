@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:48:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/09 16:50:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/09 23:00:24 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void	*free_arg(char ***cmd)
 		cur = *cmd;
 		while (*cur)
 		{
-			free(*cur);
+			if (cur != NULL)
+				free(*cur);
 			*cur = NULL;
 			cur++;
 		}

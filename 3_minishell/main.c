@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
 /*   Updated: 2024/06/11 18:24:11 by daeha            ###   ########.fr       */
@@ -32,7 +32,7 @@ void print_all_node(t_node *ast, int indent, char *input)
 	}
 	else if (indent == 0)
 	{
-		printf("\e[34m====================node====================\n");
+		printf("\n\e[34m====================node====================\n");
 	}
 	for(int i = 0; i < indent; i++)
 	{
@@ -58,9 +58,9 @@ void print_all_node(t_node *ast, int indent, char *input)
 	{
 		arg = ast->cmd;
 		ft_putstr_fd("N_CMD : ", STDERR_FILENO);
-		for(int i = 0; arg[i] != NULL; i++)
+		for(int i = 0; arg && arg[i] != NULL; i++)
 		{
-			dprintf(STDERR_FILENO, "%s,  ", arg[i]);
+			dprintf(STDERR_FILENO, "%s, ", arg[i]);
 		}
 		ft_putchar_fd('\n', STDERR_FILENO);
 	}
@@ -82,6 +82,17 @@ int	is_nothing(char *line)
 		i++;
 	}
 	return (1);
+}
+
+void	print_all_env(t_env *head)//TODO ㅈㅣ우ㅓ
+{
+	t_env	*to_print;
+	int		i;
+
+	to_print = head;
+	i = 1;
+	while (to_print != NULL)
+		to_print = to_print->next;
 }
 
 void	free_env(char **env)
@@ -106,8 +117,9 @@ int	main(int argc, char **argv, char **envp)
 
 	char	*input;
 
-	env = malloc(sizeof(t_env));
-	//env_cpy(&env, envp);
+	// env = malloc(sizeof(t_env));
+	env = env_cpy(envp);
+	print_all_env(env);
 	input = "";
 	while (input)
 	{
@@ -121,20 +133,20 @@ int	main(int argc, char **argv, char **envp)
 			add_history(input);
 			token = tokenizer(input);
 			ast = parser(token);
-			//check_cmd_node(ast, env);
+			expansion(ast, env);
 			exec_here_doc(ast);
 			wait_pid_list(&stat);
 			// print_all_value(token);
 			// print_all_node(ast, 0, input);
+      execution(ast, &stat);
 			ms_free_all_token(&token);
-			execution(ast, &stat);
 			wait_pid_list(&stat);
 			free_tree(&ast);
 			free(input);
 		}
 	}
 	rl_clear_history();
-	//env_free_all(&env);
+	env_free_all(&env);
 	return (g_status);
 }
 
