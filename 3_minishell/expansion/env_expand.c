@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:10:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 16:36:04 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 19:25:42 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ void	expand_dollar(char *cmd, t_env *env, t_new_cmd **list)
 	char	*new_cmd;
 
 	j = 0;
+	quote = 0;
 	new_cmd = ft_strdup(cmd);
 	while (new_cmd[j] != '\0')
 	{
