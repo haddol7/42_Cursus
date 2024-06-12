@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_type_2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 20:12:40 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/09 21:36:50 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 21:41:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	input_word(t_token **head, char *input, int *idx)
 		{
 			in_quote = skip_quote(input, start + len);
 			if (in_quote == -1)
-				return (handle_error("bash: unexpected EOF while looking for matching quote\n", 0, head));
+				return (handle_error("minishell: unexpected EOF while looking for matching quote\n", 0, head));
 			len += in_quote;
 		}
 		if (check_if_terminal(input[start + len], input[start + len + 1]) == 1)
