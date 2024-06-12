@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quote_expand.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:16:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 16:47:37 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 22:30:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,9 @@ char	*de_quote(char *cmd, int *idx, char *words_tmp, char quote)
 	return (result);
 }
 
-void	expand_quote(t_new_cmd *list, t_env *env)
+void	expand_quote(t_new_cmd *list)
 {
 	int		i;
-	int		j;
 	char	*words_tmp;
 
 	while (list != NULL)

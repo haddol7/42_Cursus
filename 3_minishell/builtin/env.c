@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:51 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 20:45:27 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 22:31:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,6 @@
 
 void	ms_env(char **arg, t_env *stat)
 {
-	printf("ms_env func detected\n");
+	if (arg != NULL || stat != NULL)
+		printf("ms_env func detected\n");
 }

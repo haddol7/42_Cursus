@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 17:40:17 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/04 18:46:16 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 22:29:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_node	*list(t_token **token)
 		token_next(token);
 		list->right = pipeline(token);
 		if (list->right == NULL)
-			return (syntax_error(*token, &list));
+			return (syntax_error(*token));
 	}
 	return (list);
 }
@@ -49,7 +49,7 @@ t_node	*pipeline(t_token **token)
 		token_next(token);
 		pipe->right = command(token);
 		if (pipe->right == NULL)
-			return (syntax_error(*token, &pipe));
+			return (syntax_error(*token));
 	}
 	return (pipe);
 }
@@ -75,14 +75,14 @@ t_node	*subshell(t_token **token)
 	token_next(token);
 	node = list(token);
 	if (!is_token((*token), T_RPAREN) || !node)
-		return (syntax_error(*token, &node));
+		return (syntax_error(*token));
 	subshell = new_parent_node(N_SUBSHELL, node, NULL);
 	token_next(token);
 	if (is_token_redir(*token))
 	{
 		redir = redirect_list(token);
 		if (redir == NULL)
-			return (free_tree(&subshell));
+			return (free_all_tree(&subshell));
 		subshell = link_redir_to_node(subshell, redir);
 	}
 	return (subshell);
@@ -113,7 +113,7 @@ t_node	*simple_command(t_token **token)
 		{
 			temp = append_redir_node(redir, token);
 			if (temp == NULL)
-				return (free_arg(&arg), free_tree(&redir));
+				return (free_arg(&arg), free_all_tree(&redir));
 			else
 				redir = temp;
 		}

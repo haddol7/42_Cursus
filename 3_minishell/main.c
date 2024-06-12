@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 21:40:47 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 22:28:17 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,18 @@
 
 int	g_status;
 
+static void	init_stat(t_stat *stat);
+
 //TODO: 환경변수가 다 지워졌을 때, unset으로 다 지웠을 때를 생각!
 int	main(int argc, char **argv, char **envp)
 {
-	char	*input;
-	t_stat	stat;
-	t_token	*token;
 	t_node	*ast;
+	t_token	*token;
+	t_stat	stat;
+	char	*input;
 
+	if (argc > 0)
+		argv[0] = 0;
 	stat.envp = env_cpy(envp);
 	input = "";
 	while (input)
@@ -29,27 +33,30 @@ int	main(int argc, char **argv, char **envp)
 		input = readline("minishell$ ");
 		if (*input)
 		{
-			stat.fd[0] = 0;
-			stat.fd[1] = 1;
-			stat.n_pid = 0;
-			stat.n_pipe = 0;
+			init_stat(&stat);
 			add_history(input);
 			token = tokenizer(input);
 			ast = parser(token);
 			expansion(ast, stat.envp);
 			exec_here_doc(ast);
-			//print_all_value(token);
-			//print_all_node(ast, 0, input);
       		execution(ast, &stat);
 			wait_pid_list(&stat);
-			ms_free_all_token(&token);
-			free_tree(&ast);
+			free_all_token(&token);
+			free_all_tree(&ast);
 			free(input);
 		}
 	}
 	rl_clear_history();
 	env_free_all(&stat.envp);
 	return (g_status);
+}
+
+static void	init_stat(t_stat *stat)
+{
+	stat->fd[INPUT] = STDIN_FILENO;
+	stat->fd[OUTPUT] = STDOUT_FILENO;
+	stat->n_pid = 0;
+	stat->n_pipe = 0;
 }
 
 void	print_all_value(t_token *head)

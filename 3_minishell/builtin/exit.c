@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 20:45:10 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 22:31:52 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,6 @@
 
 void	ms_exit(char **arg, t_env *stat)
 {
-	printf("ms_exit func detected\n");
+	if (arg != NULL || stat != NULL)
+		printf("ms_exit func detected\n");
 }

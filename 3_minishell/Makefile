@@ -4,9 +4,10 @@ NAME			:= minishell
 LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
 CC				:= cc
-CC				:= cc -g
+CC				:= cc
 CFLAGS			:= -Wall -Werror -Wextra
-CFLAGS = 
+CFLAGS			:= -Wall -Werror -Wextra
+
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include

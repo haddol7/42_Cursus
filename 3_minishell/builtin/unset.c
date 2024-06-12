@@ -14,5 +14,6 @@
 
 void ms_unset(char **arg, t_env *stat)
 {
-	printf("ms_unset func detected\n");
+	if (arg != NULL || stat != NULL)
+		printf("ms_unset func detected\n");
 }

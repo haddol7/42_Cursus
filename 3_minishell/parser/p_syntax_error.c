@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 22:03:33 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 21:41:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 22:28:48 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 extern int	g_status;
 static void	syntax_error_type(t_token *token);
 
-void	*syntax_error(t_token *token, t_node **node)
+void	*syntax_error(t_token *token)
 {	
 	if (g_status == 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 21:54:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 22:31:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	expand_one_node(char **cmd, t_env *env, t_new_cmd **list)
 		expand_dollar(cmd[i], env, list);
 		i++;
 	}
-	expand_quote(*list, env);
+	expand_quote(*list);
 }
 
 char	**cpy_list_to_cmd(t_new_cmd *new_list)

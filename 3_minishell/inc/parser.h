@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:54:45 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/04 15:15:16 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 22:29:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_node
 
 //parser.c
 t_node	*parser(t_token *token);
-void	*free_tree(t_node **node);
+void	*free_all_tree(t_node **node);
 void	*free_arg(char ***cmd);
 
 //p_grammer.c
@@ -66,5 +66,5 @@ t_bool	is_token(t_token *token, t_token_type type);
 void	token_next(t_token **token);
 
 //p_syntax_error.c
-void	*syntax_error(t_token *token, t_node **node);
+void	*syntax_error(t_token *token);
 #endif

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 20:44:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 22:31:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void ms_export(char **arg, t_env *stat)
 {
-	printf("ms_export func detected\n");
+	if (arg != NULL || stat != NULL)
+		printf("ms_export func detected\n");
 }
 // //if node->cmd[0] == export일 때 이 함수를 들어왔다고 가정.
 // void	export(t_node *node)

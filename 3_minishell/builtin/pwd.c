@@ -14,5 +14,6 @@
 
 void ms_pwd(char **arg, t_env *stat)
 {
-	printf("ms_pwd func detected\n");
+	if (arg != NULL || stat != NULL)
+		printf("ms_pwd func detected\n");
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:48:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/09 23:00:24 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 22:29:55 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,16 @@ t_node	*parser(t_token *token)
 		return (NULL);
 	ast = list(&token);
 	if (head == token || !is_token(token, T_EOF))
-		syntax_error(token, &ast);
+		syntax_error(token);
 	return (ast);
 }
 
-void	*free_tree(t_node **node)
+void	*free_all_tree(t_node **node)
 {
 	if (node == NULL || *node == NULL)
 		return (NULL);
-	free_tree(&(*node)->left);
-	free_tree(&(*node)->right);
+	free_all_tree(&(*node)->left);
+	free_all_tree(&(*node)->right);
 	if ((*node)->cmd != NULL)
 		free_arg(&(*node)->cmd);
 	free(*node);

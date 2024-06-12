@@ -14,5 +14,6 @@
 
 void	ms_cd(char **arg, t_env *stat)
 {
-	printf("ms_cd func detected\n");
+	if (arg != NULL || stat != NULL)
+		printf("ms_cd func detected\n");
 }

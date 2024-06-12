@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:53:29 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 21:32:31 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 22:25:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	handle_error(char *str, int code, t_token **head)
 		exit(1);
 	else
 	{
-		ms_free_all_token(head);
+		free_all_token(head);
 		return (0);
 	}
 }
@@ -64,7 +64,7 @@ void	ms_lstadd_back(t_token **head, t_token *new)
 	}
 }
 
-int	ms_free_all_token(t_token **head)
+int	free_all_token(t_token **head)
 {
 	t_token	*to_free;
 	t_token	*tmp;

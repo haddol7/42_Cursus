@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:46:14 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 20:49:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 22:31:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,6 @@
 
 void ms_echo(char **arg, t_env *stat)
 {
-	printf("ms_echo func detected\n");
+	if (arg != NULL || stat != NULL)
+		printf("ms_echo func detected\n");
 }
