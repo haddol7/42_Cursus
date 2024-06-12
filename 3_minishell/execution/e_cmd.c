@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 20:08:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 22:14:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,21 +48,16 @@ static void	exec_proc(char **arg, t_stat *stat)
 	exit(EXIT_FAILURE);
 }
 
-//TODO : path = ft_split(env_find_value(envp, "PATH"), ':');
 static void	set_arg_path(char **cmd, t_env *envp)
 {
-	int		i;
 	char	**path;
 	char	*file;
 
-	i = 0;
 	if (ft_strchr(*cmd, '/') == NULL)
 	{
-		path = ft_split("/Users/daeha/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Users/daeha/.brew/bin:", ':');
+		path = ft_split(env_find_value("PATH", envp), ':');
 		file = match_in_env_path(*cmd, path);
-		while (path[i])
-			free(path[i++]);
-		free(path);
+		free_double_pointer(path);
 	}
 	else
 		file = match_in_current_path(*cmd);
