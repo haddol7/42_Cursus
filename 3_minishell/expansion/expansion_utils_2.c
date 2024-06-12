@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 14:30:41 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/11 20:03:12 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 16:44:02 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,37 +60,4 @@ void	free_all_old_cmd(char **cmd)
 		i++;
 	}
 	free(cmd);
-}
-
-char	*replace_str(char *cmd, int start, int end, char *value)
-{
-	char	*tmp;
-	char	*result1;
-	char	*result2;
-
-	printf("cmd :: %s start :: %d end ::: %d\n", cmd, start, end);
-	
-	printf("🎨🎨🎨 : %s\n",cmd);
-	tmp = ms_strcpy(0, start, cmd);
-	
-	printf("tmp ::: %s\n", tmp);
-	
-	result1 = ft_strjoin(tmp, value);
-	if (result1 == NULL)
-		handle_error("exit : malloc error1", 1, 0);
-	free(tmp);
-	tmp = ms_strcpy(end + 1, ms_strlen(cmd), cmd);
-	printf("tmp ::: %s\n", tmp);
-	result2 = ft_strjoin(result1, tmp);
-	free(result1);
-	free(tmp);
-	// if (quote != 0)
-	// {
-	// 	result2 = ft_strjoin(result1, "\"");
-	// 	if (result2 == NULL)
-	// 		handle_error("exit : malloc error", 1, 0);
-	// 	free(result1);
-	// 	return (result2);
-	// }
-	return (result2);
 }

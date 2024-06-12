@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:16:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/11 22:19:16 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 16:47:37 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 char	*no_quote(char *cmd, int *idx, char *words_tmp)
 {
-	int	i;
+	int		i;
 	char	*tmp;
 	char	*result;
-	int	start;
-	int	end;
+	int		start;
+	int		end;
 
 	i = 0;
 	start = *idx;
@@ -49,7 +49,6 @@ char	*de_quote(char *cmd, int *idx, char *words_tmp, char quote)
 		i++;
 	quote_close = quote_start + i;
 	in_quote = ms_strcpy(quote_start + 1, quote_close, cmd);
-	printf("in_quote--> %s\n", in_quote);
 	result = ms_strjoin(words_tmp, in_quote);
 	*idx = quote_close + 1;
 	free(in_quote);
@@ -81,12 +80,7 @@ void	expand_quote(t_new_cmd *list, t_env *env)
 				words_tmp = no_quote(list->cmd, &i, words_tmp);
 		}
 		free(list->cmd);
-		// printf("word tmp ::%s\n", words_tmp);
 		list->cmd = words_tmp;
 		list = list->next;
 	}
 }
-
-
-
-
