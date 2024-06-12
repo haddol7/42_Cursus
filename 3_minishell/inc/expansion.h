@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 20:47:27 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 21:37:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,4 @@ t_new_cmd	*cmd_last(t_new_cmd *head);
 t_new_cmd	*cmd_new(char *cmd);
 void		expand_quote(t_new_cmd *list, t_env *env);
 
-// void	print_all_env(t_env *head); //TODO ㅈㅣ우ㅓㅜ
-void		print_all_cmd(t_new_cmd *head);
 #endif

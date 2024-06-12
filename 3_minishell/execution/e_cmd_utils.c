@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 16:48:28 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 21:41:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	error_cmd_exit(char *cmd, int error_type)
 {
-	ft_putstr_fd("bash: ", STDERR_FILENO);
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	if (error_type != ENOCMD)

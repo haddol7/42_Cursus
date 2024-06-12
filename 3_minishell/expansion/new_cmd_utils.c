@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:44:24 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 18:30:22 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 21:37:04 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,17 +86,3 @@ int	get_cmd_node_num(t_new_cmd *head)
 	}
 	return (cnt);
 }
-
-// void	print_all_cmd(t_new_cmd *head)
-// {
-// 	t_new_cmd	*tmp;
-
-// 	tmp = head;
-// 	printf("------------cmd-------------");
-// 	while (tmp != NULL)
-// 	{
-// 		printf("|%s|\n", tmp->cmd);
-// 		tmp = tmp->next;
-// 	}
-// 	printf("----------------------------");
-// }

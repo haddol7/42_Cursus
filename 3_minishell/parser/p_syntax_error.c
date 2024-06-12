@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 22:03:33 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/09 17:08:24 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 21:41:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ void	*syntax_error(t_token *token, t_node **node)
 	if (g_status == 0)
 	{
 		if (token->type == T_EOF)
-			ft_putendl_fd("bash: syntax error: unexpected end of file", 2);
+			ft_putendl_fd("minishell: syntax error: unexpected end of file", 2);
 		else
 		{
-			ft_putstr_fd("bash: syntax error near unexpected token `", 2);
+			ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 			syntax_error_type(token);
 			ft_putendl_fd("'", 2);
 		}

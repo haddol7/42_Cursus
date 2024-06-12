@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:55:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/05 16:42:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 21:37:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,5 @@ int		input_word(t_token **head, char *input, int *idx);
 int		ms_free_all_token(t_token **head);
 void	eof_node(t_token **head);
 int		handle_error(char *str, int code, t_token **head);
-
-void	print_all_value(t_token *head);//TODO 지워
 
 #endif
