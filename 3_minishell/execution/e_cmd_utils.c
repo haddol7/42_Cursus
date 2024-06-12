@@ -6,13 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 16:41:48 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 16:48:28 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-void	exit_cmd_error(char *cmd, int error_type)
+void	error_cmd_exit(char *cmd, int error_type)
 {
 	ft_putstr_fd("bash: ", STDERR_FILENO);
 	ft_putstr_fd(cmd, STDERR_FILENO);
@@ -69,11 +69,11 @@ void	if_not_executable_then_exit(char *file, char *cmd)
 
 	stat(file, &buf);
 	if (access(file, F_OK))
-		exit_cmd_error(cmd, ENOENT);
+		error_cmd_exit(cmd, ENOENT);
 	else if (access(file, X_OK))
-		exit_cmd_error(cmd, EACCES);
+		error_cmd_exit(cmd, EACCES);
 	else if ((buf.st_mode & S_IFMT) == S_IFDIR)
-		exit_cmd_error(cmd, EISDIR);
+		error_cmd_exit(cmd, EISDIR);
 }
 
 char	*change_as_absolute_path(char *cmd)
@@ -93,7 +93,7 @@ char	*change_as_absolute_path(char *cmd)
 	ft_strlcpy(path, cmd, str_len - file_len + 1);
 	ft_strlcpy(file, cmd + str_len - file_len, file_len + 2);
 	if (chdir(path) == -1)
-		exit_cmd_error(cmd, ENOENT);
+		error_cmd_exit(cmd, ENOENT);
 	free(path);
 	path = getcwd(NULL, 0);
 	ret = ft_strjoin(path, file);

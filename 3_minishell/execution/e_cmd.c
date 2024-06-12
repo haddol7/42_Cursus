@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 16:44:57 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 16:48:28 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,6 @@ static char	*match_in_env_path(char *cmd, char **path)
 	if (!access(file, F_OK | X_OK))
 		return (file);
 	free(file);
-	exit_cmd_error(cmd, ENOCMD);
+	error_cmd_exit(cmd, ENOCMD);
 	return (NULL);
 }

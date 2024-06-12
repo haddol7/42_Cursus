@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:21:20 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 16:42:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 16:48:35 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern int	g_status;
 
-void	redir_error(char *name)
+void	error_redir(char *name)
 {
 	ft_putstr_fd("bash: ", STDERR_FILENO);
 	perror(name);
@@ -27,7 +27,7 @@ int	input(char *filename)
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
-		redir_error(filename);
+		error_redir(filename);
 	return (fd);
 }
 
@@ -37,7 +37,7 @@ int	output(char *filename)
 
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
-		redir_error(filename);
+		error_redir(filename);
 	return (fd);
 }
 
@@ -47,7 +47,7 @@ int	append(char *filename)
 
 	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
-		redir_error(filename);
+		error_redir(filename);
 	return (fd);
 }
 
@@ -57,7 +57,7 @@ int	heredoc(char *filename)
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
-		redir_error(filename);
+		error_redir(filename);
 	unlink(filename);
 	return (fd);
 }
