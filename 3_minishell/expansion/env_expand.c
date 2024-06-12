@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:10:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 19:22:24 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 20:07:22 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ char	*return_value(char *dollar_start, t_env *env)
 	i = 1;
 	key_len = 0;
 	value = NULL;
+	if (dollar_start[i] == '?')
+		return (exit_status());
 	if (ft_isalnum(dollar_start[i]) == 0)
 		return (0);
 	while (ft_isalnum(dollar_start[i]) || dollar_start[i] == '_')
@@ -68,6 +70,8 @@ char	*replace_cmd(char *origin, char **value, int *dollar_idx)
 	while (ft_isalnum(*(origin + *dollar_idx + del_len)) || \
 			*(origin + *dollar_idx + del_len) == '_')
 		del_len++;
+	if (del_len == 1 && origin[*dollar_idx + del_len])
+		del_len = 2;
 	part1 = ms_strcpy(0, *dollar_idx, origin);
 	tmp = ft_strjoin(part1, *value);
 	part2 = ms_strcpy(*dollar_idx + del_len, ms_strlen(origin), origin);

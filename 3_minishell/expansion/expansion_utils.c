@@ -6,11 +6,13 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 16:40:40 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 20:00:29 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
+
+extern	int g_status;
 
 char	*ms_strcpy(int start, int end, char *str)
 {
@@ -67,4 +69,12 @@ int	env_strncmp(char *s1, char *name, int n)
 	if (*name != '\0')
 		return (1);
 	return (0);
+}
+
+char	*exit_status(void)
+{
+	char	*status;
+
+	status = ft_itoa(g_status);
+	return (status);
 }
