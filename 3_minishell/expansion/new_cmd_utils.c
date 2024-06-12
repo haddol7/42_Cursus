@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   new_cmd_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:44:24 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 16:46:08 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 18:30:22 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,9 @@ int	get_cmd_node_num(t_new_cmd *head)
 	cnt = 0;
 	while (node != NULL)
 	{
+		if (node->cmd != NULL && node->cmd[0] != '\0')
+			cnt++;
 		node = node->next;
-		cnt++;
 	}
 	return (cnt);
 }

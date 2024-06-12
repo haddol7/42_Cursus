@@ -1,19 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   e_builtin.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/30 20:42:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 17:39:42 by daeha            ###   ########.fr       */
+/*   Created: 2024/06/12 17:40:58 by daeha             #+#    #+#             */
+/*   Updated: 2024/06/12 17:43:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
+#include "execution.h"
 
-# include "parser.h"
-# include "execution.h"
+t_bool	is_builtin(char **arg, t_stat *stat)
+{
+	char	*file;
+	size_t	len;
 
-#endif
+	file = arg[0];
+	len = ft_strlen(arg[0]);
+	if (ft_strncmp(arg[0]))
+}

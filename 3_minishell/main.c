@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/11 18:24:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 18:32:27 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 #include <stdio.h>
 
 int	g_status;
-  
-void leaks(void)
+
+void	leaks(void)
 {
 	system("leaks minishell | grep \"leaks for\"");
 }
 
-void print_all_node(t_node *ast, int indent, char *input)
+void	print_all_node(t_node *ast, int indent, char *input)
 {
 	char	**arg;
-	
+
 	if (ast == NULL)
 	{
 		printf("\e[0m");
@@ -135,10 +135,9 @@ int	main(int argc, char **argv, char **envp)
 			ast = parser(token);
 			expansion(ast, env);
 			exec_here_doc(ast);
-			wait_pid_list(&stat);
 			// print_all_value(token);
-			// print_all_node(ast, 0, input);
-      execution(ast, &stat);
+			//print_all_node(ast, 0, input);
+      		execution(ast, &stat);
 			ms_free_all_token(&token);
 			wait_pid_list(&stat);
 			free_tree(&ast);

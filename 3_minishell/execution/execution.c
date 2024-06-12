@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:06:05 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/07 21:46:03 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 17:49:40 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	execution(t_node *node, t_stat *stat)
 		return ;
 	if (node->type == N_AND || node->type == N_OR)
 		exec_and_or_if(node, stat);
-	else if (node->type == N_CMD)
+	else if (node->type == N_CMD && node->cmd != NULL)
 		exec_cmd(node, stat);
 	else if (node->type == N_PIPE)
 		exec_pipe(node, stat);

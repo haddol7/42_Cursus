@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 16:48:28 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 17:43:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ static void	exec_proc(char **arg, t_stat *stat)
 {
 	close_pipe_fds(stat);
 	redirect_to_cmd(stat);
+	// if (is_builtin(arg[0]))
+	// 	exec_builtin(arg, stat);
 	set_arg_path(&arg[0], stat->envp);
 	execve(arg[0], arg, NULL);
 	exit(EXIT_FAILURE);

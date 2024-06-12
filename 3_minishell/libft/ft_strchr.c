@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 20:02:28 by daeha             #+#    #+#             */
-/*   Updated: 2023/11/18 19:53:43 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 18:33:45 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 char	*ft_strchr(const char *s, int c)
 {
+	if (s == NULL)
+		return (NULL);
 	while (*s != '\0')
 	{
 		if (*s == (unsigned char)c)

@@ -1,9 +1,10 @@
 NAME			:= minishell
 LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
+CC				:= cc
 CC				:= cc -g
 CFLAGS			:= -Wall -Werror -Wextra
-CFLAGS = 
+CFLAGS = -fsanitize=address
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
