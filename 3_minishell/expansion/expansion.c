@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 16:45:27 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 17:02:54 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	expand_one_node(char **cmd, t_env *env, t_new_cmd **list)
 		i++;
 	}
 	expand_quote(*list, env);
-	print_all_cmd(*list);
 }
 
 char	**cpy_list_to_cmd(t_new_cmd *new_list)

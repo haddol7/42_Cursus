@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 16:47:21 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 17:01:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 # define EXPANSION_H
 
 # include "minishell.h"
-// # include "parser.h"
-// # include "tokenizer.h"
 
 typedef struct s_env
 {
@@ -53,5 +51,5 @@ t_new_cmd	*cmd_new(char *cmd);
 void		expand_quote(t_new_cmd *list, t_env *env);
 
 // void	print_all_env(t_env *head); //TODO ㅈㅣ우ㅓㅜ
-void	print_all_cmd(t_new_cmd *head);
+void		print_all_cmd(t_new_cmd *head);
 #endif

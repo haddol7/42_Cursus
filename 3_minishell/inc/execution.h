@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 16:48:36 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 17:01:56 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@
 
 typedef struct s_stat
 {
-	t_env	*envp;
-	int		fd[2];
-	int		pid[MAX_PID];
-	int		n_pid;
-	int		pipe[MAX_PIPE];
-	int		n_pipe;
+	struct s_env	*envp;
+	int				fd[2];
+	int				pid[MAX_PID];
+	int				n_pid;
+	int				pipe[MAX_PIPE];
+	int				n_pipe;
 }	t_stat;
 
 //e_execution.c
