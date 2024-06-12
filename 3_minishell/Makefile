@@ -1,3 +1,5 @@
+#TODO : CC FLAG 지우기
+
 NAME			:= minishell
 LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
@@ -41,6 +43,7 @@ EXPANSION		:=	expansion/expansion.c \
          
 EXECUTION		:=	execution/execution.c \
  					execution/e_and_or_if.c \
+					execution/e_builtin.c \
 					execution/e_cmd_utils.c \
  					execution/e_cmd.c \
 					execution/e_pipe.c \
@@ -54,6 +57,7 @@ SRC_MAN			:=  main.c \
 					$(TOKENIZER)\
         		 	$(PARSER)\
         			$(EXPANSION)\
+					$(BUILTIN)\
 					$(EXECUTION)
 
 #Bonus files for evaluation
@@ -74,13 +78,11 @@ else
 	SRC_FIN = $(SRC_MAN)
 endif
 
-
 OBJS	:=	$(SRC_FIN:.c=.o)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@ -Iinc -Ilibft $(READLINE_OBJ)
 
-#TODO : all에 있는 clean 명령어 지우기
 all: 
 	@make -sC $(LIBFT_DIR)
 	@make $(NAME)

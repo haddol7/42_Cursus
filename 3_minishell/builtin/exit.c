@@ -6,8 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/30 20:48:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 20:45:10 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ms_exit(char **arg, t_env *stat)
+{
+	printf("ms_exit func detected\n");
+}

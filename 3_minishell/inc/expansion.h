@@ -6,14 +6,16 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 17:01:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 20:47:27 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPANSION_H
 # define EXPANSION_H
 
-# include "minishell.h"
+# include <stdlib.h>
+# include "parser.h"
+# include "libft.h"
 
 typedef struct s_env
 {

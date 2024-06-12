@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 17:01:56 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 20:08:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,9 @@ void	execution(t_node *node, t_stat *stat);
 
 //e_and_of_if.c
 void	exec_and_or_if(t_node *node, t_stat *stat);
+
+//e_builtin.c
+t_bool	is_builtin_then_exec(char **arg, t_stat *stat);
 
 //e_cmd.c
 void	exec_cmd(t_node *node, t_stat *stat);
