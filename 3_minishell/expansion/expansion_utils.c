@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 16:40:40 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 23:09:52 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ t_env	*env_cpy(char **envp)
 
 	i = 0;
 	env = NULL;
+	printf("1\n");
 	while (envp[i] != NULL)
 	{
 		j = 0;
@@ -51,6 +52,7 @@ t_env	*env_cpy(char **envp)
 			handle_error("exit : malloc error5", 1, 0);
 		env_add_back(&env, env_new(name, content));
 		i++;
+		printf("name %s content %s\n", name, content);
 	}
 	return (env);
 }

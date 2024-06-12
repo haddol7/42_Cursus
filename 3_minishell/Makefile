@@ -4,10 +4,7 @@ NAME			:= minishell
 LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
 CC				:= cc
-CC				:= cc
 CFLAGS			:= -Wall -Werror -Wextra
-CFLAGS			:= -Wall -Werror -Wextra
-
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
@@ -32,7 +29,6 @@ BUILTIN			:=	builtin/cd.c\
 					builtin/pwd.c\
 					builtin/unset.c
 
-
 EXPANSION		:=	expansion/expansion.c \
 					expansion/env_utils.c \
 					expansion/expansion_utils.c \
@@ -40,7 +36,6 @@ EXPANSION		:=	expansion/expansion.c \
 					expansion/env_expand.c \
 					expansion/expansion_utils_2.c \
 					expansion/quote_expand.c
-
          
 EXECUTION		:=	execution/execution.c \
  					execution/e_and_or_if.c \

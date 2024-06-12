@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 22:28:17 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/12 23:11:34 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 int	g_status;
 
 static void	init_stat(t_stat *stat);
+static void display_title(int argc, char **argv);
 
 //TODO: 환경변수가 다 지워졌을 때, unset으로 다 지웠을 때를 생각!
+//TODO: 터미널 환경 설정 non-canonical
 int	main(int argc, char **argv, char **envp)
 {
 	t_node	*ast;
@@ -24,9 +26,8 @@ int	main(int argc, char **argv, char **envp)
 	t_stat	stat;
 	char	*input;
 
-	if (argc > 0)
-		argv[0] = 0;
 	stat.envp = env_cpy(envp);
+	display_title(argc, argv);
 	input = "";
 	while (input)
 	{
@@ -59,6 +60,21 @@ static void	init_stat(t_stat *stat)
 	stat->n_pipe = 0;
 }
 
+static void display_title(int argc, char **argv)
+{
+	if (argc > 1 && !ft_strncmp(argv[1], "-s", 2))
+		return ;
+	printf("\033[0;32m");
+	printf("  _____ _   _                __           _                  \n");
+    printf(" |_   _| | ( )              / _|         | |                 \n");
+    printf("   | | | |_|/ ___    __ _  | |_ ___  __ _| |_ _   _ _ __ ___ \n");
+    printf("   | | | __| / __|  / _` | |  _/ _ \\/ _` | __| | | | '__/ _ \\\n");
+    printf("  _| |_| |_  \\__ \\ | (_| | | ||  __| (_| | |_| |_| | | |  __/\n");
+    printf(" |_____\\___| |___/  \\__,_| |_| \\___|\\__,_|\\__|\\__,_|_|  \\___|\n\n");
+	printf("\033[0m");
+}
+
+/*
 void	print_all_value(t_token *head)
 {
 	t_token	*to_print;
@@ -144,4 +160,5 @@ void	print_all_node(t_node *ast, int indent, char *input)
 	if (indent == 0)
 		printf("\e[31m> %s\e[0m\n\n", input);
 }
+*/
 
