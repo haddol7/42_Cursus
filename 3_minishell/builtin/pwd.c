@@ -6,13 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 22:32:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/14 22:32:15 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 23:13:04 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ms_pwd(char **arg, t_env *stat)
+void	ms_pwd(char **arg, t_env *stat)
 {
 	if (arg != NULL || stat != NULL)
 		printf("ms_pwd func detected\n");

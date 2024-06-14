@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/14 22:31:07 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 23:20:17 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*ms_strcpy(int start, int end, char *str)
 	return (ret);
 }
 
-t_env	*env_cpy(char **envp)
+t_env	*init_env_list(char **envp)
 {
 	char	*name;
 	char	*content;

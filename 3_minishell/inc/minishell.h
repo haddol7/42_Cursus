@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/14 20:20:15 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 23:12:37 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,13 @@
 # include "tokenizer.h"
 # include "builtin.h"
 # include "execution.h"
+
+typedef struct s_minishell
+{
+	t_node	*ast;
+	t_token	*token;
+	t_stat	stat;
+	char	*input;
+}	t_minishell;
 
 #endif

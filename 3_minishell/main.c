@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/14 22:54:43 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 23:21:58 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,67 +15,70 @@
 int	g_status;
 
 static void	init_stat(t_stat *stat);
-static void display_title(int argc, char **argv);
-
+static void	display_title(int argc, char **argv);
+static void	loop_prompt(t_minishell *ms);
 
 //TODO: 환경변수가 다 지워졌을 때, unset으로 다 지웠을 때를 생각!
 //TODO: 터미널 환경 설정 non-canonical
 int	main(int argc, char **argv, char **envp)
 {
-	t_node	*ast;
-	t_token	*token;
-	t_stat	stat;
+	t_minishell	ms;
+
+	display_title(argc, argv);
+	ms.stat.envp = init_env_list(envp);
+	loop_prompt(&ms);
+	env_free_all(&ms.stat.envp);
+	return (g_status);
+}
+
+static void	loop_prompt(t_minishell *ms)
+{
 	char	*input;
 
-	stat.envp = env_cpy(envp);
-	display_title(argc, argv);
 	input = "";
 	while (input)
 	{
 		input = readline("minishell$ ");
-		if (*input)
+		if (input && *input)
 		{
-			init_stat(&stat);
+			init_stat(&ms->stat);
 			add_history(input);
-			token = tokenizer(input);
-			ast = parser(token);
-			expansion(ast, stat.envp);
-			exec_here_doc(ast);
-      		execution(ast, &stat);
-			wait_pid_list(&stat);
-			free_all_token(&token);
-			free_all_tree(&ast);
+			ms->token = tokenizer(input);
+			ms->ast = parser(ms->token);
+			expansion(ms->ast, ms->stat.envp);
+			exec_here_doc(ms->ast);
+			execution(ms->ast, &ms->stat);
+			wait_pid_list(&ms->stat);
+			free_all_token(&ms->token);
+			free_all_tree(&ms->ast);
 			free(input);
 		}
-		g_status = 0;
 	}
 	rl_clear_history();
-	env_free_all(&stat.envp);
-	return (g_status);
 }
 
 static void	init_stat(t_stat *stat)
 {
+	g_status = 0;
 	stat->fd[INPUT] = STDIN_FILENO;
 	stat->fd[OUTPUT] = STDOUT_FILENO;
 	stat->n_pid = 0;
 	stat->n_pipe = 0;
 }
 
-static void display_title(int argc, char **argv)
+static void	display_title(int argc, char **argv)
 {
 	if (argc > 1 && !ft_strncmp(argv[1], "-s", 2))
 		return ;
 	printf("\033[0;32m");
 	printf("  _____ _   _                __           _                  \n");
-    printf(" |_   _| | ( )              / _|         | |                 \n");
-    printf("   | | | |_|/ ___    __ _  | |_ ___  __ _| |_ _   _ _ __ ___ \n");
-    printf("   | | | __| / __|  / _` | |  _/ _ \\/ _` | __| | | | '__/ _ \\\n");
-    printf("  _| |_| |_  \\__ \\ | (_| | | ||  __| (_| | |_| |_| | | |  __/\n");
-    printf(" |_____\\___| |___/  \\__,_| |_| \\___|\\__,_|\\__|\\__,_|_|  \\___|\n\n");
+	printf(" |_   _| | ( )              / _|         | |                 \n");
+	printf("   | | | |_|/ ___    __ _  | |_ ___  __ _| |_ _   _ _ __ ___ \n");
+	printf("   | | | __| / __|  / _` | |  _/ _ \\/ _` | __| | | | '__/ _ \\\n");
+	printf("  _| |_| |_  \\__ \\ | (_| | | ||  __| (_| | |_| |_| | | |  __/\n");
+	printf(" |_____\\___| |___/  \\__,_| |_| \\___|\\__,_|\\__|\\__,_|_|  \\___|\n\n");
 	printf("\033[0m");
 }
-
 /*
 void	print_all_value(t_token *head)
 {
@@ -163,4 +166,3 @@ void	print_all_node(t_node *ast, int indent, char *input)
 		printf("\e[31m> %s\e[0m\n\n", input);
 }
 */
-

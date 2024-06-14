@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/14 22:30:48 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 23:20:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_new_cmd
 void		quote_lock(char c, int *status);
 void		expand_dollar(char *cmd, t_env *env, t_new_cmd **list);
 char		*ms_strcpy(int start, int end, char *str);
-t_env		*env_cpy(char **envp);
+t_env		*init_env_list(char **envp);
 int			env_strncmp(char *s1, char *name, int n);
 t_env		*env_new(char *name, char *content);
 t_env		*env_last(t_env *head);

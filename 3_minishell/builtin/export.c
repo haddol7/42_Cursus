@@ -6,13 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 22:31:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 23:13:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-void ms_export(char **arg, t_env *stat)
+void	ms_export(char **arg, t_env *stat)
 {
 	if (arg != NULL || stat != NULL)
 		printf("ms_export func detected\n");
