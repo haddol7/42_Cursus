@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 23:11:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 22:54:43 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	g_status;
 
 static void	init_stat(t_stat *stat);
 static void display_title(int argc, char **argv);
+
 
 //TODO: 환경변수가 다 지워졌을 때, unset으로 다 지웠을 때를 생각!
 //TODO: 터미널 환경 설정 non-canonical
@@ -46,6 +47,7 @@ int	main(int argc, char **argv, char **envp)
 			free_all_tree(&ast);
 			free(input);
 		}
+		g_status = 0;
 	}
 	rl_clear_history();
 	env_free_all(&stat.envp);
