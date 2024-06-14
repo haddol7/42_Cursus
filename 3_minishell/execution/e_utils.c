@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:04:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/14 22:27:03 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 00:18:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 extern int	g_status;
 
+//TODO: kill 함수로 다 죽여버릴까? 아님 기다릴까..
 void	push_pid_list(pid_t pid, t_stat *stat)
 {
 	if (stat->n_pid == MAX_PID - 1)

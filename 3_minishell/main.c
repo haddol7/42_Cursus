@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/14 23:31:21 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 23:49:33 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static void	loop_prompt(t_minishell *ms)
 		}
 	}
 	rl_clear_history();
+	write(STDOUT_FILENO, "exit\n", 5);
 }
 
 static void	init_stat(t_stat *stat)

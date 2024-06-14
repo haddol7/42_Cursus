@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/14 22:24:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 23:38:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	*match_in_current_path(char *cmd);
 //TODO: signal 작업
 void	exec_cmd(t_node *node, t_stat *stat)
 {
-	int		pid;
+	int	pid;
 
 	pid = fork();
 	if (!pid)
@@ -87,7 +87,6 @@ static char	*match_in_current_path(char *cmd)
 	return (NULL);
 }
 
-//TODO : leaks 검사
 static char	*match_in_env_path(char *cmd, char **path)
 {
 	char	*file;

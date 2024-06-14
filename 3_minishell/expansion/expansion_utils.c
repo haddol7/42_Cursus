@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/14 23:30:00 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 23:46:53 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ t_env	*init_env_list(char **envp)
 		if (name == NULL || content == NULL)
 			handle_error("exit : malloc error5", 1, 0);
 		env_add_back(&env, env_new(name, content));
-		printf("name : %s\n-->content : %s\n", name, content);
 		i++;
 	}
 	return (env);
@@ -71,6 +70,7 @@ int	env_strncmp(char *s1, char *name, int n)
 }
 
 //these below funtions are used in e_cmd.c
+//TODO: complete flag에 따라서 count할지 안할지를 고려해야됨
 char	**env_join(t_env *ms_envp)
 {
 	char	**envp;
