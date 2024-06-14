@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:40:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 20:52:25 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 22:31:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_bool	is_builtin_then_exec(char **arg, t_stat *stat)
 	else if (len == 3 && !ft_strncmp(file, "pwd", 3))
 		ms_pwd(arg, stat->envp);
 	else if (len == 4 && !ft_strncmp(file, "echo", 4))
-		ms_echo(arg, stat->envp);	
+		ms_echo(arg, stat->envp);
 	else if (len == 4 && !ft_strncmp(file, "exit", 4))
 		ms_exit(arg, stat->envp);
 	else if (len == 5 && !ft_strncmp(file, "unset", 5))

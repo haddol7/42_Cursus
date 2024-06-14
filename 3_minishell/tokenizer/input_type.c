@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:48:15 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 21:41:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 22:45:57 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,8 @@ int	input_quotation(t_token **head, char *input, int *idx)
 	quote_type = input[start];
 	while (input[start + len] != quote_type)
 	{
-		// printf("%c ~!!!!!!!!!!!!!! \n", input[start + len]);
 		if (input[start + len] == '\0')
-			return (handle_error("minishell: unexpected EOF while looking for matching quote\n", 0, head));
+			return (handle_error(ERR_TOK, 0, head));
 		len++;
 	}
 	while (!(input[start + len] == ' ' || input[start + len] == '\0'))
@@ -89,4 +88,33 @@ void	input_redirection(t_token **head, char *input, int *idx)
 	node = ms_lstnew(value, type);
 	ms_lstadd_back(head, node);
 	*idx = *idx + len;
+}
+
+int	input_word(t_token **head, char *input, int *idx)
+{
+	char	*value;
+	int		len;
+	int		start;
+	int		in_quote;
+
+	len = -1;
+	start = *idx;
+	in_quote = 0;
+	while (input[start + ++len] != '\0')
+	{
+		if (input[start + len] == '\'' || input[start + len] == '\"')
+		{
+			in_quote = skip_quote(input, start + len);
+			if (in_quote == -1)
+				return (handle_error(ERR_TOK, 0, head));
+			len += in_quote;
+		}
+		if (check_if_terminal(input[start + len], input[start + len + 1]) == 1)
+			break ;
+	}
+	value = (char *)ft_malloc(sizeof(char) * (len + 1));
+	ft_strlcpy(value, (const char *)(input + start), len + 1);
+	ms_lstadd_back(head, ms_lstnew(value, T_WORD));
+	*idx = start + len;
+	return (1);
 }

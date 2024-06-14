@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:55:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 22:25:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 22:47:34 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include "../libft/libft.h"
+
+# define ERR_TOK "minishell: unexpected EOF while looking for matching quote\n"
 
 typedef enum e_token_type
 {
@@ -55,5 +57,7 @@ int		input_word(t_token **head, char *input, int *idx);
 int		free_all_token(t_token **head);
 void	eof_node(t_token **head);
 int		handle_error(char *str, int code, t_token **head);
+int		skip_quote(char *input, int idx);
+int		check_if_terminal(char c1, char c2);
 
 #endif

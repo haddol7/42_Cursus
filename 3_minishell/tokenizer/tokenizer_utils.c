@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:53:29 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 22:25:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 22:34:58 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	free_all_token(t_token **head)
 	while (to_free != NULL)
 	{
 		tmp = to_free->next;
-		if(to_free->value != NULL)
+		if (to_free->value != NULL)
 		{
 			free(to_free->value);
 			to_free->value = NULL;

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 21:37:17 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 22:34:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,6 @@
 
 int	detect_type(t_token **head, char *input, int *i)
 {
-	// if (input[*i] == '\'' || input[*i] == '\"')
-	// {
-	// 	if (input_quotation(head, input, i) == 0)
-	// 		return (0);
-	// }
 	if (input[*i] == '|' && input[*i + 1] != '|')
 		input_pipe(head, i);
 	else if (input[*i] == '<' || input[*i] == '>')

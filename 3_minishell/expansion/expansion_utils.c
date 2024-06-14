@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/14 22:27:33 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 22:31:07 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,14 +69,13 @@ int	env_strncmp(char *s1, char *name, int n)
 	return (0);
 }
 
-
 //these below funtions are used in e_cmd.c
 char	**env_join(t_env *ms_envp)
 {
 	char	**envp;
 	t_env	*head;
 	size_t	size;
-	
+
 	size = 1;
 	head = ms_envp;
 	while (head)
@@ -94,7 +93,7 @@ char	**env_join(t_env *ms_envp)
 	return (envp);
 }
 
-char *env_join_key_value(char *key, char *value)
+char	*env_join_key_value(char *key, char *value)
 {
 	char	*temp;
 	char	*str;
