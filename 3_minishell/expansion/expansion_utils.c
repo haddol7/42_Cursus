@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 23:09:52 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/14 22:27:33 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ t_env	*env_cpy(char **envp)
 
 	i = 0;
 	env = NULL;
-	printf("1\n");
 	while (envp[i] != NULL)
 	{
 		j = 0;
@@ -52,7 +51,6 @@ t_env	*env_cpy(char **envp)
 			handle_error("exit : malloc error5", 1, 0);
 		env_add_back(&env, env_new(name, content));
 		i++;
-		printf("name %s content %s\n", name, content);
 	}
 	return (env);
 }
@@ -69,4 +67,40 @@ int	env_strncmp(char *s1, char *name, int n)
 	if (*name != '\0')
 		return (1);
 	return (0);
+}
+
+
+//these below funtions are used in e_cmd.c
+char	**env_join(t_env *ms_envp)
+{
+	char	**envp;
+	t_env	*head;
+	size_t	size;
+	
+	size = 1;
+	head = ms_envp;
+	while (head)
+	{
+		size++;
+		head = head->next;
+	}
+	envp = ft_malloc(sizeof(char *) * (size));
+	envp[size-- - 1] = NULL;
+	while (size)
+	{
+		envp[size-- - 1] = env_join_key_value(ms_envp->key, ms_envp->value);
+		ms_envp = ms_envp->next;
+	}
+	return (envp);
+}
+
+char *env_join_key_value(char *key, char *value)
+{
+	char	*temp;
+	char	*str;
+
+	temp = ft_strjoin(key, "=");
+	str = ft_strjoin(temp, value);
+	free(temp);
+	return (str);
 }
