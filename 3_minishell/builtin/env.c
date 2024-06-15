@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:51 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 21:35:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/16 04:09:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ms_env(char **arg, t_env *env)
 		g_status = EXIT_FAILURE;
 		return ;
 	}
-	while (env)
+	while (env && env->key)
 	{
 		if (env->complete == 0)
 			continue;

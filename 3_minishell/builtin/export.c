@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/16 00:45:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/16 04:26:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ t_bool	is_env_key_valid(char *str)
 {
 	size_t	i;
 	
-	i = 0;
-	if (str[i] != '_' && !ft_isalpha(str[i++]))
+	i = 1;
+	if (str[0] != '_' && !ft_isalpha(str[0]))
 	{
 		error_cmd_exit(str, EVALUE);
 		return (FALSE);
@@ -69,13 +69,16 @@ static void env_export(char *arg, t_env *env)
 	key = get_key_or_value(arg, KEY);
 	value = get_key_or_value(arg, VALUE);
 	temp_env = env_find_pointer(key, env);
-	if (temp_env == NULL)
+	if (!temp_env && env->key == NULL)
 	{
-		temp_env = env_new(key, value);
-		if (value == NULL)
-			temp_env->complete = 0;
-		env_add_back(&env, temp_env);
+		env->key = key;
+		env->value = value;
+		env->complete = 0;
+		if (value != NULL)
+			env->complete = 1;
 	}
+	else if (!temp_env)
+		env_add_back(&env, env_new(key, value));
 	else if (value != NULL) 
 	{
 		temp_env->complete = 1;
