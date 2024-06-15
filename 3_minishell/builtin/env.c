@@ -6,16 +6,26 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:51 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 19:05:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 21:35:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "builtin.h"
+#include "execution.h"
+
+extern int g_status;
 
 void	ms_env(char **arg, t_env *env)
 {
 	if (arg[1] != NULL)
-		error_cmd_exit(arg[1], ENOENT);
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(arg[1], STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putendl_fd(strerror(ENOENT), STDERR_FILENO);
+		g_status = EXIT_FAILURE;
+		return ;
+	}
 	while (env)
 	{
 		if (env->complete == 0)
@@ -25,5 +35,5 @@ void	ms_env(char **arg, t_env *env)
 		ft_putendl_fd(env->value, STDOUT_FILENO);
 		env = env->next;
 	}
-	exit(EXIT_SUCCESS);
+	g_status = EXIT_SUCCESS;
 }

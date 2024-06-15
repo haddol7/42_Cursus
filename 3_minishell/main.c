@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/14 23:49:33 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 22:30:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ static void	init_stat(t_stat *stat)
 	stat->fd[OUTPUT] = STDOUT_FILENO;
 	stat->n_pid = 0;
 	stat->n_pipe = 0;
+	stat->is_pipe = 0;
 }
 
 static void	display_title(int argc, char **argv)

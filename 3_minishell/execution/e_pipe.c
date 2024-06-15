@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:03:01 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 16:42:17 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 21:51:34 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	exec_pipe(t_node *node, t_stat *stat)
 	int	fd[2];
 	int	temp[2];
 
+	stat->is_pipe = TRUE;
 	temp[INPUT] = stat->fd[INPUT];
 	temp[OUTPUT] = stat->fd[OUTPUT];
 	pipe(fd);
@@ -30,6 +31,7 @@ void	exec_pipe(t_node *node, t_stat *stat)
 	stat->fd[INPUT] = fd[INPUT];
 	execution(node->right, stat);
 	stat->n_pipe--;
+	stat->is_pipe = FALSE;
 }
 
 static void	push_pipe_list(int fd[2], t_stat *stat)

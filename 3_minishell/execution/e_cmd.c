@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 21:25:54 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 22:21:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,13 @@ static char	*match_in_current_path(char *cmd);
 //TODO: signal 작업
 void	exec_cmd(t_node *node, t_stat *stat)
 {
-	int	pid;
+	pid_t	pid;
 
+	if (node->cmd && is_builtin(node->cmd[0]))
+	{
+		exec_builtin(node, stat);
+		return ;
+	}
 	pid = fork();
 	if (!pid)
 		exec_proc(node->cmd, stat);
@@ -41,8 +46,6 @@ static void	exec_proc(char **arg, t_stat *stat)
 {
 	close_pipe_fds(stat);
 	redirect_to_cmd(stat);
-	if (is_builtin_then_exec(arg, stat))
-		exit(EXIT_SUCCESS);
 	set_arg_path(&arg[0], stat->envp);
 	execve(arg[0], arg, env_join(stat->envp));
 	exit(EXIT_FAILURE);

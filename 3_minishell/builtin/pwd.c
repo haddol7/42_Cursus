@@ -6,11 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 22:32:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 18:49:56 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 21:32:22 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "builtin.h"
+
+extern int g_status;
 
 void	ms_pwd(void)
 {
@@ -18,8 +20,11 @@ void	ms_pwd(void)
 
 	dir = getcwd(NULL, 0);
 	if (!dir)
-		exit(EXIT_FAILURE);
+	{
+		g_status = EXIT_FAILURE;
+		return ;
+	}
 	ft_putendl_fd(dir, STDIN_FILENO);
 	free(dir);
-	exit(EXIT_SUCCESS);
+	g_status = EXIT_SUCCESS;
 }

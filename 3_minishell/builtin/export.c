@@ -6,12 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 21:26:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 21:31:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "execution.h"
+
+extern int g_status;
 
 static char *get_key_or_value(char **str, char delim);
 
@@ -54,8 +56,8 @@ void	ms_export(char **arg, t_env *env)
 		arg++;
 	}
 	if (error)
-		exit(EXIT_FAILURE);
-	exit(EXIT_SUCCESS);
+		g_status = EXIT_FAILURE;
+	g_status = EXIT_SUCCESS;
 }
 
 static char *get_key_or_value(char **str, char delim)

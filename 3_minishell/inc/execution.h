@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 20:59:03 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 22:20:10 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_stat
 	int				n_pid;
 	int				pipe[MAX_PIPE];
 	int				n_pipe;
+	t_bool			is_pipe;
 }	t_stat;
 
 //e_execution.c
@@ -50,7 +51,8 @@ void	execution(t_node *node, t_stat *stat);
 void	exec_and_or_if(t_node *node, t_stat *stat);
 
 //e_builtin.c
-t_bool	is_builtin_then_exec(char **arg, t_stat *stat);
+t_bool	is_builtin(char *arg);
+void	exec_builtin(t_node *node, t_stat *stat);
 
 //e_cmd.c
 void	exec_cmd(t_node *node, t_stat *stat);

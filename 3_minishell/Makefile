@@ -5,6 +5,7 @@ LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
 CC				:= cc -fsanitize=address
 CFLAGS			:= -Wall -Werror -Wextra
+CFLAGS =
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
