@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:40:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 22:30:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 23:41:35 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	exec_builtin(t_node *node, t_stat *stat)
 		exec_forked_builtin(node, stat);
 	else
 	{	
-		printf("is parent!!!!!!\n");
 		fd[INPUT] = dup(STDIN_FILENO);
 		fd[OUTPUT] = dup(STDOUT_FILENO);
 		redirect_to_cmd(stat);
