@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:04:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 00:18:51 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 20:58:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,21 @@ char	*env_find_value(char *key, t_env *envp)
 		envp = envp->next;
 	}
 	return (NULL);
+}
+
+t_env	*env_find_pointer(char *key, t_env *envp)
+{
+	size_t	len_key;
+	size_t	len_envp;
+
+	len_key = ft_strlen(key);
+	while (envp)
+	{
+		len_envp = ft_strlen(envp->key);
+		if (len_key == len_envp && !ft_strncmp(key, envp->key, len_key))
+			return (envp);
+		envp = envp->next;
+	}
+	return (NULL);
+
 }

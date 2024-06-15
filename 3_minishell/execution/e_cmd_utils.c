@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 21:41:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 20:39:32 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,19 @@
 void	error_cmd_exit(char *cmd, int error_type)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(cmd, STDERR_FILENO);
+	if (error_type == EVALUE)
+	{
+		ft_putchar_fd('`', STDERR_FILENO);
+		ft_putstr_fd(cmd, STDERR_FILENO);
+		ft_putchar_fd('\'', STDERR_FILENO);
+	}
+	else
+		ft_putstr_fd(cmd, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
-	if (error_type != ENOCMD)
+	if (error_type != EVALUE && error_type != ENOCMD)
 		ft_putendl_fd(strerror(error_type), STDERR_FILENO);
+	else if (error_type == EVALUE)
+		ft_putendl_fd("not a valid identifier", STDERR_FILENO);
 	else
 		ft_putendl_fd("command not found", STDERR_FILENO);
 	if (error_type == ENOENT || error_type == ENOCMD)

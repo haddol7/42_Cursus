@@ -6,43 +6,93 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/14 23:13:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 21:26:04 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include "execution.h"
 
-void	ms_export(char **arg, t_env *stat)
+static char *get_key_or_value(char **str, char delim);
+
+void	ms_export(char **arg, t_env *env)
 {
-	if (arg != NULL || stat != NULL)
-		printf("ms_export func detected\n");
+	t_bool	error;
+	t_env	*temp_env;
+	char	*key;
+	char	*value;
+	
+	arg++;
+	error = FALSE;
+	// if (*arg == NULL)
+	// 	display_declare_list(env);
+	while (*arg)
+	{
+		if (is_env_key_valid(*arg))
+		{
+			key = get_key_or_value(&(*arg), KEY);
+			value = get_key_or_value(&(*arg), VALUE);
+			temp_env = env_find_pointer(key, env);
+			if (temp_env == NULL)
+			{
+				temp_env = env_new(key, value);
+				if (value == NULL)
+					temp_env->complete = 0;
+				env_add_back(&env, temp_env);
+			}
+			else if (value != NULL) 
+			{
+				temp_env->complete = 1;
+				if (temp_env->value != NULL)
+					free(temp_env->value);
+				temp_env->value = value;
+				free(key);
+			}
+		}
+		else
+			error = TRUE;
+		arg++;
+	}
+	if (error)
+		exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 }
-// //if node->cmd[0] == export일 때 이 함수를 들어왔다고 가정.
-// void	export(t_node *node)
-// {
-// 	int	i;
 
-// 	i = 0;
-// 	if (node->cmd[1] == NULL)
-// 		//env전체 출력 -> 앞에 접두사로 declare -x 붙이고, ascii 문자 정렬 순서대로 출력..
-// 	while (node->cmd[i] != NULL)
-// 	{
-// 		// = 혹은 += 으로 앞뒤 스플릿.
-// 		//에러인지
-// 		//name만 들어왓는지
-// 		//word 도 들어왔는지
-// 		//띄어쓰기 까지 .. -> 어차피 스필리팅이 될 것임.
-// 	}
-// 		//= 전까지 스플릿해서 env 에 저장해야겠다!
-// 	//올바르지 않은형식은 에러처리...
-// 	// 1. 변수 컨벤션에 맞지 않거나,.(영어 _ 이외의 글자가 있는경우, 숫자가 가장 앞에 오는 경우)
-// 	// 2. 띄어쓰기 있는 경우
+static char *get_key_or_value(char **str, char delim)
+{
+	char	*key;
+	size_t	len;
 
-// }
+	len = 0;
+	if (!(*str)[len])
+		return (NULL);
+	while ((*str)[len] && (*str)[len] != delim)
+		len++;
+	key = malloc(sizeof(char) * (len + 1));
+	ft_strlcpy(key, *str, len + 1);
+	*str += len;
+	if (delim == KEY && **str != '\0')
+		(*str)++;
+	return (key);
+}
 
-// export a                            #key값만 생성
-// export b=                           #value에 아무 값 없음
-// export c=hello          
-// export c+=world                     #환경변수 뒤에 덧붙이기
-// export d="oh      my          god"  #echo출력과 export출력 다름
-// export e=elephant f=flower
+t_bool	is_env_key_valid(char *str)
+{
+	size_t	i;
+	
+	i = 0;
+	if (str[i] != '_' && !ft_isalpha(str[i++]))
+	{
+		error_cmd_exit(str, EVALUE);
+		return (FALSE);
+	}
+	while (str[i] && str[i] != '=')
+	{
+		if (str[i] != '_' && !ft_isalnum(str[i++]))
+		{
+			error_cmd_exit(str, EVALUE);
+			return (FALSE);
+		}
+	}
+	return (TRUE);
+}

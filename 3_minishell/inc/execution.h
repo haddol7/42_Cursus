@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 22:12:35 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 20:59:03 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define ENOENT 2
 # define EACCES 13
 # define EISDIR 21
+# define EVALUE 1
 
 typedef struct s_stat
 {
@@ -84,4 +85,6 @@ void	exec_subshell(t_node *node, t_stat *stat);
 void	push_pid_list(pid_t pid, t_stat *stat);
 void	wait_pid_list(t_stat *stat);
 char	*env_find_value(char *key, t_env *envp);
+t_env	*env_find_pointer(char *key, t_env *envp);
+
 #endif
