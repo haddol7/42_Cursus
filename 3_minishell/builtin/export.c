@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 23:41:41 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/16 00:45:46 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	ms_export(char **arg, t_env *env)
 	
 	arg++;
 	error = FALSE;
-	// if (*arg == NULL)
-	// 	display_declare_list(env);
+	if (*arg == NULL)
+		display_declare_list(env);
 	while (*arg)
 	{
 		if (is_env_key_valid(*arg))

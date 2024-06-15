@@ -5,7 +5,6 @@ LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
 CC				:= cc -fsanitize=address
 CFLAGS			:= -Wall -Werror -Wextra
-CFLAGS =
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
@@ -22,12 +21,13 @@ PARSER			:=	parser/parser.c \
 					parser/p_token_utils.c \
 					parser/p_syntax_error.c \
 
-BUILTIN			:=	builtin/cd.c\
-					builtin/echo.c\
-					builtin/env.c\
-					builtin/exit.c\
-					builtin/export.c\
-					builtin/pwd.c\
+BUILTIN			:=	builtin/cd.c \
+					builtin/echo.c \
+					builtin/env.c \
+					builtin/exit.c \
+					builtin/export.c \
+					builtin/export_utils.c \
+					builtin/pwd.c \
 					builtin/unset.c
 
 EXPANSION		:=	expansion/expansion.c \
@@ -51,10 +51,10 @@ EXECUTION		:=	execution/execution.c \
 					execution/e_utils.c
 
 SRC_MAN			:=  main.c \
-					$(TOKENIZER)\
-        		 	$(PARSER)\
-        			$(EXPANSION)\
-					$(BUILTIN)\
+					$(TOKENIZER) \
+        		 	$(PARSER) \
+        			$(EXPANSION) \
+					$(BUILTIN) \
 					$(EXECUTION)
 
 #Bonus files for evaluation

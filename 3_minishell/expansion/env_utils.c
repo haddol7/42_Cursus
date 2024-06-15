@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:00 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 16:41:43 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/16 03:11:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,3 @@ int	env_free_all(t_env **head)
 	*head = NULL;
 	return (0);
 }
-
-// void	env_del_one(t_env **head, t_env *node)
-// {
-// 	t_env *tmp;
-
-// 	tmp = head;
-// 	while (head->name)
-// }

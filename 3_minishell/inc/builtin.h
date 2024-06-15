@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:42:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 22:19:36 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/16 00:46:43 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,13 @@ void	ms_pwd(void);
 void	ms_echo(char **arg);
 void	ms_exit(char **arg, t_env *env);
 void	ms_unset(char **arg, t_env *env);
+
+//export.c
 void	ms_export(char **arg, t_env *env);
 t_bool	is_env_key_valid(char *str);
+
+//export_utils.c
+void	display_declare_list(t_env *env);
+
 
 #endif
