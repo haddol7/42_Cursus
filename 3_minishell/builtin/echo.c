@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:46:14 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 18:15:31 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 18:26:02 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	ms_echo(char **arg)
 	}
 	if (!option)
 		ft_putchar_fd('\n', STDOUT_FILENO);
+	exit(EXIT_SUCCESS);
 }
 
 static t_bool is_str_option(char *str, t_bool *option)
