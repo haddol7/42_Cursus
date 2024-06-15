@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 17:33:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/05/27 18:03:45 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/16 00:28:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,6 @@ int		put_result(t_result *res, t_fd_list **head, t_fd_list **cur);
 int		put_left_fd_buf(t_result *res, t_fd_list **cur);
 void	*gnl_memmove(char *dst, char *src, size_t len);
 char	*free_node(t_fd_list **head, t_fd_list **cur);
+int		ft_strcmp(const char *s1, const char *s2);
 
 #endif
