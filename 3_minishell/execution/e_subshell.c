@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:03:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 16:44:40 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 18:51:23 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,19 @@ void	exec_subshell(t_node *node, t_stat *stat)
 
 	pid = fork();
 	if (!pid)
-	{
+	{	
+		stat->n_pid = 0;
 		execution(node->left, stat);
+		wait_pid_list(stat);
 		exit(g_status);
 	}
 	else
+	{
+		push_pid_list(pid, stat);
 		waitpid(pid, &g_status, 0);
+		if (WIFEXITED(g_status))
+			g_status = WEXITSTATUS(g_status);
+		else if (WIFSIGNALED(g_status))
+			g_status = WTERMSIG(g_status);
+	}
 }

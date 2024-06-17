@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 16:47:00 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 18:26:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ extern int g_status;
 static void env_export(char *arg, t_env *env);
 static char *get_key_or_value(char *str, char type);
 
+
+//TODO : export PATH
+//export PATH=
 void	ms_export(char **arg, t_env *env)
 {
 	t_bool	error;

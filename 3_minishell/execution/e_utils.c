@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:04:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 16:22:25 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 18:52:22 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	wait_pid_list(t_stat *stat)
 	int	pid;
 
 	pid = 0;
+	if (stat->n_pid == 0)
+		return ;
 	while (pid < stat->n_pid)
 	{
 		waitpid(stat->pid[pid], &g_status, 0);

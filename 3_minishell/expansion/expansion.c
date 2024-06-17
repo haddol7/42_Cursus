@@ -6,11 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 22:35:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 18:44:55 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
+#include "execution.h"
 
 void	expand_one_node(char **cmd, t_env *env, t_new_cmd **list)
 {
@@ -68,4 +69,18 @@ void	expansion(t_node *ast, t_env *env)
 	}
 	expansion(ast->right, env);
 	expansion(ast->left, env);
+}
+
+void	cmd_expansion(t_node *node, t_env *env)
+{
+	t_new_cmd	*list;
+	char		**new_cmd;
+
+	list = NULL;
+	expand_one_node(node->cmd, env, &list);
+	new_cmd = cpy_list_to_cmd(list);
+	list_free_all(&list);
+	free_double_pointer(node->cmd);
+	node->cmd = new_cmd;
+	return ;
 }

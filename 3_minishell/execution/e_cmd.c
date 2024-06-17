@@ -6,11 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 22:21:30 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 17:39:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+#include "expansion.h"
 
 extern int	g_status;
 
@@ -24,6 +25,7 @@ void	exec_cmd(t_node *node, t_stat *stat)
 {
 	pid_t	pid;
 
+	cmd_expansion(node, stat->envp);
 	if (node->cmd && is_builtin(node->cmd[0]))
 	{
 		exec_builtin(node, stat);
