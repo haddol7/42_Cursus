@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 18:26:38 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 23:42:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,10 @@ extern int g_status;
 static void env_export(char *arg, t_env *env);
 static char *get_key_or_value(char *str, char type);
 
-
-//TODO : export PATH
-//export PATH=
 void	ms_export(char **arg, t_env *env)
 {
 	t_bool	error;
-	
+
 	arg++;
 	error = FALSE;
 	if (*arg == NULL)
@@ -95,7 +92,7 @@ static void env_export(char *arg, t_env *env)
 
 static char *get_key_or_value(char *str, char type)
 {
-	char	*key;
+	char	*content;
 	size_t	len;
 
 	len = 0;
@@ -105,14 +102,18 @@ static char *get_key_or_value(char *str, char type)
 	{
 		while (*str && *str != '=')
 			str++;
-		if (*str)
+		if (*str == '=')
+		{
 			str++;
+			if (!*str)
+				return (ft_strdup(""));
+		}
+		else
+			return (NULL);
 	}
 	while (str[len] && str[len] != type)
 		len++;
-	key = malloc(sizeof(char) * (len + 1));
-	ft_strlcpy(key, str, len + 1);
-	if (type == KEY && str[len] != '\0')
-		len++;
-	return (key);
+	content = malloc(sizeof(char) * (len + 1));
+	ft_strlcpy(content, str, len + 1);
+	return (content);
 }

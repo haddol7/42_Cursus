@@ -4,7 +4,6 @@ NAME			:= minishell
 LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
 CC				:= cc -fsanitize=address
-CC				:= cc
 CFLAGS			:= -Wall -Werror -Wextra
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
