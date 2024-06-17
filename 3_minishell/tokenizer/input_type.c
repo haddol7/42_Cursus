@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:48:15 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/06 20:31:02 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 18:48:03 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,8 @@ int	input_quotation(t_token **head, char *input, int *idx)
 	quote_type = input[start];
 	while (input[start + len] != quote_type)
 	{
-		// printf("%c ~!!!!!!!!!!!!!! \n", input[start + len]);
-		if (input[start + len] == '\0')
-			return (handle_error("bash: unexpected EOF while looking for matching quote\n", 0, head));
-		len++;
+		if (input[start + len++] == '\0')
+			return (handle_error(QUOTE_ERROR, 0, head));
 	}
 	while (!(input[start + len] == ' ' || input[start + len] == '\0'))
 		len++;

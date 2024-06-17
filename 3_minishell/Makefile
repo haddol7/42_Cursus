@@ -12,7 +12,8 @@ READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
 TOKENIZER		:=	tokenizer/tokenizer.c \
 					tokenizer/tokenizer_utils.c \
 					tokenizer/input_type.c \
-					tokenizer/input_type_2.c
+					tokenizer/input_type_2.c \
+					tokenizer/input_type_3.c
 
 PARSER			:=	parser/parser.c \
 					parser/p_grammer.c \

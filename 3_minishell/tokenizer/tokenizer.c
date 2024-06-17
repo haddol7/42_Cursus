@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 19:39:36 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/09 20:30:48 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 18:48:30 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,6 @@
 
 int	detect_type(t_token **head, char *input, int *i)
 {
-	// if (input[*i] == '\'' || input[*i] == '\"')
-	// {
-	// 	if (input_quotation(head, input, i) == 0)
-	// 		return (0);
-	// }
 	if (input[*i] == '|' && input[*i + 1] != '|')
 		input_pipe(head, i);
 	else if (input[*i] == '<' || input[*i] == '>')
@@ -57,39 +52,39 @@ t_token	*tokenizer(char *input)
 	return (head);
 }
 
-void	print_all_value(t_token *head)
-{
-	t_token	*to_print;
+// void	print_all_value(t_token *head)
+// {
+// 	t_token	*to_print;
 
-	to_print = head;
-	if (!head)
-		return ;
-	printf("\e[32m====================token===================\n");
-	while (to_print->type != T_EOF)
-	{
-		if (to_print->type == T_WORD)
-			printf("T_WORD : ");
-		if (to_print->type == T_PIPE)
-			printf("T_PIPE : ");
-		if (to_print->type == T_DLESS)
-			printf("T_DLESS : ");
-		if (to_print->type == T_DGREAT)
-			printf("T_DGREAT : ");
-		if (to_print->type == T_LESS)
-			printf("T_LESS : ");
-		if (to_print->type == T_GREAT)
-			printf("T_GREAT : ");
-		if (to_print->type == T_LPAREN)
-			printf("T_LPAREN : ");
-		if (to_print->type == T_RPAREN)
-			printf("T_RPAREN : ");
-		if (to_print->type == T_AND_IF)
-			printf("T_AND_IF : ");
-		if (to_print->type == T_OR_IF)
-			printf("T_OR_IF : ");
-		if (to_print->type != T_EOF)
-			printf("%s\n", to_print->value);
-		to_print = to_print->next;
-	}
-	printf("\e[0m");
-}
+// 	to_print = head;
+// 	if (!head)
+// 		return ;
+// 	printf("\e[32m====================token===================\n");
+// 	while (to_print->type != T_EOF)
+// 	{
+// 		if (to_print->type == T_WORD)
+// 			printf("T_WORD : ");
+// 		if (to_print->type == T_PIPE)
+// 			printf("T_PIPE : ");
+// 		if (to_print->type == T_DLESS)
+// 			printf("T_DLESS : ");
+// 		if (to_print->type == T_DGREAT)
+// 			printf("T_DGREAT : ");
+// 		if (to_print->type == T_LESS)
+// 			printf("T_LESS : ");
+// 		if (to_print->type == T_GREAT)
+// 			printf("T_GREAT : ");
+// 		if (to_print->type == T_LPAREN)
+// 			printf("T_LPAREN : ");
+// 		if (to_print->type == T_RPAREN)
+// 			printf("T_RPAREN : ");
+// 		if (to_print->type == T_AND_IF)
+// 			printf("T_AND_IF : ");
+// 		if (to_print->type == T_OR_IF)
+// 			printf("T_OR_IF : ");
+// 		if (to_print->type != T_EOF)
+// 			printf("%s\n", to_print->value);
+// 		to_print = to_print->next;
+// 	}
+// 	printf("\e[0m");
+// }

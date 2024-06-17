@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 18:16:49 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/16 06:32:06 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 18:06:35 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	del_one_cmd(t_new_cmd **head, t_new_cmd **node)
 	}
 }
 
-t_new_cmd	*join_sub_cmd(t_new_cmd **head, t_new_cmd *node, t_new_cmd *sub_list)
+t_new_cmd	*join_sub_cmd(t_new_cmd **head, t_new_cmd *node, \
+							t_new_cmd *sub_list)
 {
 	t_new_cmd	*next;
 	t_new_cmd	*sub_end;

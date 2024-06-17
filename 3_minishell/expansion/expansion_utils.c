@@ -6,13 +6,13 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 20:00:29 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 18:05:44 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
 
-extern	int g_status;
+extern int	g_status;
 
 char	*ms_strcpy(int start, int end, char *str)
 {

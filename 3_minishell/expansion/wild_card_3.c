@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 16:47:06 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 17:31:16 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 18:10:39 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ void	init_and_cnt_star(char *cmd, t_wild_card *list)
 	while (cmd[i] != '\0')
 	{
 		quote_lock(cmd[i], &quote);
-		if(cmd[i] == '*' && quote == 0)
+		if (cmd[i] == '*' && quote == 0)
 			list->len++;
 		i++;
 	}
 	list->idx_list = (int *)malloc(sizeof(int) * list->len);
 }
 
-void    check_star_idx(char *cmd, t_wild_card *list)
+void	check_star_idx(char *cmd, t_wild_card *list)
 {
 	int	i;
 	int	j;
@@ -85,7 +85,7 @@ int	is_in_star_list(t_wild_card star_list, int idx)
 //     int i;
 
 //     i = 0;
-//     while (node->cmd[i] == '\'' || node->cmd[i] == '\"' || \
+//     while (node->cmd[i] == '\'' || node->cmd[i] == '\"' || 
 //             node->cmd[i] == ' ')
 //         i++;
 //     if (node->cmd[i] != '.' && d_name[0] == '.')

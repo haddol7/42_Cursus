@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 16:29:59 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 17:48:01 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 18:10:06 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	**init_table(int t, int p, char *pattern, t_wild_card star_list)
 	return (table);
 }
 
-void	free_table(int **table, int	t)
+void	free_table(int **table, int t)
 {
 	int	i;
 
@@ -66,13 +66,11 @@ int	is_match_cmd(char *text, char *pattern, t_wild_card star_list)
 
 	text_len = ms_strlen(text);
 	pattern_len = ms_strlen(pattern);
-	// if (is_all_star(pattern))
-	// 	return (1);
 	table = init_table(text_len, pattern_len, pattern, star_list);
 	calculate_table(table, text, pattern, star_list);
 	ret = table[text_len][pattern_len];
 	free_table(table, text_len);
-	return (ret);	
+	return (ret);
 }
 
 void	delete_quote(t_new_cmd *node)
@@ -84,7 +82,7 @@ void	delete_quote(t_new_cmd *node)
 	word_tmp = NULL;
 	while (node->cmd[i] != '\0')
 	{
-		if (node->cmd[i] ==  '\'' || node->cmd[i] == '\"')
+		if (node->cmd[i] == '\'' || node->cmd[i] == '\"')
 			word_tmp = de_quote(node->cmd, &i, word_tmp, node->cmd[i]);
 		else
 			word_tmp = no_quote(node->cmd, &i, word_tmp);

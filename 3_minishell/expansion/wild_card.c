@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:51 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 18:03:01 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 18:09:17 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	fill_table(int **table, char *pattern, int t, t_wild_card star_list)
 		table[0][j] = 1;
 		j++;
 	}
-	while(j <= ms_strlen(pattern))
+	while (j <= ms_strlen(pattern))
 	{
 		table[0][j] = 0;
 		j++;
@@ -36,7 +36,8 @@ void	fill_table(int **table, char *pattern, int t, t_wild_card star_list)
 	}
 }
 
-void	calculate_table(int **table, char *text, char *pattern, t_wild_card star_list)
+void	calculate_table(int **table, char *text, char *pattern, \
+						t_wild_card star_list)
 {
 	int	i;
 	int	j;
@@ -67,7 +68,7 @@ void	calculate_table(int **table, char *text, char *pattern, t_wild_card star_li
 
 t_new_cmd	*expand_wild_card(t_new_cmd *node, t_wild_card star_list)
 {
-	char 			path[256];
+	char			path[256];
 	DIR				*p_dir;
 	struct dirent	*dir_ent;
 	t_new_cmd		*sub_list;
@@ -86,14 +87,15 @@ t_new_cmd	*expand_wild_card(t_new_cmd *node, t_wild_card star_list)
 			break ;
 		if (node->cmd[0] != '.' && dir_ent->d_name[0] == '.')
 			continue ;
-		if (cmd_len == star_list.len || is_match_cmd(dir_ent->d_name, node->cmd, star_list) == 1)
+		if (cmd_len == star_list.len || \
+			is_match_cmd(dir_ent->d_name, node->cmd, star_list) == 1)
 			cmd_add_back(&sub_list, ft_strdup(dir_ent->d_name));
 	}
 	closedir(p_dir);
 	return (sub_list);
 }
 
-t_new_cmd *check_one_cmd(t_new_cmd *node)
+t_new_cmd	*check_one_cmd(t_new_cmd *node)
 {
 	int			i;
 	int			quote;
