@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:40:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 23:41:35 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 14:44:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static void	exec_builtin_func(t_node *node, t_stat *stat)
 	else if (len == 4 && !ft_strncmp(file, "echo", 4))
 		ms_echo(node->cmd);
 	else if (len == 4 && !ft_strncmp(file, "exit", 4))
-		ms_exit(node->cmd, stat->envp);
+		ms_exit(node->cmd);
 	else if (len == 5 && !ft_strncmp(file, "unset", 5))
 		ms_unset(node->cmd, stat->envp);
 	else
