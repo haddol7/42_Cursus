@@ -6,11 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 22:15:25 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 21:01:21 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+extern int	g_status;
 
 void	error_cmd_exit(char *cmd, int error_type)
 {
@@ -36,15 +38,16 @@ void	error_cmd_exit(char *cmd, int error_type)
 		exit(126);
 }
 
-void	redirect_to_cmd(t_stat *stat)
+void	redirect_to_cmd(t_stat *stat, t_bool is_forked)
 {
-	if (stat->fd[INPUT] == -1 || stat->fd[OUTPUT] == -1)
+	if (g_status == EXIT_FAILURE || stat->fd[INPUT] == -1 || stat->fd[OUTPUT] == -1)
 	{
 		if (stat->fd[INPUT] != -1 && stat->fd[INPUT] != STDIN_FILENO)
 			close(stat->fd[INPUT]);
 		if (stat->fd[OUTPUT] != -1 && stat->fd[INPUT] != STDOUT_FILENO)
 			close(stat->fd[OUTPUT]);
-		exit(EXIT_FAILURE);
+		if (is_forked)
+			exit(EXIT_FAILURE);
 	}
 	if (stat->fd[OUTPUT] != STDOUT_FILENO)
 	{
