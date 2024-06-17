@@ -1,10 +1,11 @@
+#TODO : CC FLAG 지우기
+
 NAME			:= minishell
 LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
+CC				:= cc -fsanitize=address
 CC				:= cc
-CC				:= cc -g
 CFLAGS			:= -Wall -Werror -Wextra
-CFLAGS = -fsanitize=address
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
@@ -22,14 +23,14 @@ PARSER			:=	parser/parser.c \
 					parser/p_token_utils.c \
 					parser/p_syntax_error.c \
 
-BUILTIN			:=	builtin/cd.c\
-					builtin/echo.c\
-					builtin/env.c\
-					builtin/exit.c\
-					builtin/export.c\
-					builtin/pwd.c\
+BUILTIN			:=	builtin/cd.c \
+					builtin/echo.c \
+					builtin/env.c \
+					builtin/exit.c \
+					builtin/export.c \
+					builtin/export_utils.c \
+					builtin/pwd.c \
 					builtin/unset.c
-
 
 EXPANSION		:=	expansion/expansion.c \
 					expansion/env_utils.c \
@@ -42,10 +43,10 @@ EXPANSION		:=	expansion/expansion.c \
 					expansion/new_cmd_utils_2.c \
 					expansion/wild_card_2.c \
 					expansion/wild_card_3.c
-
          
 EXECUTION		:=	execution/execution.c \
  					execution/e_and_or_if.c \
+					execution/e_builtin.c \
 					execution/e_cmd_utils.c \
  					execution/e_cmd.c \
 					execution/e_pipe.c \
@@ -56,9 +57,10 @@ EXECUTION		:=	execution/execution.c \
 					execution/e_utils.c
 
 SRC_MAN			:=  main.c \
-					$(TOKENIZER)\
-        		 	$(PARSER)\
-        			$(EXPANSION)\
+					$(TOKENIZER) \
+        		 	$(PARSER) \
+        			$(EXPANSION) \
+					$(BUILTIN) \
 					$(EXECUTION)
 
 #Bonus files for evaluation
@@ -79,13 +81,11 @@ else
 	SRC_FIN = $(SRC_MAN)
 endif
 
-
 OBJS	:=	$(SRC_FIN:.c=.o)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@ -Iinc -Ilibft $(READLINE_OBJ)
 
-#TODO : all에 있는 clean 명령어 지우기
 all: 
 	@make -sC $(LIBFT_DIR)
 	@make $(NAME)

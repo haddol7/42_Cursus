@@ -86,15 +86,3 @@ int	get_cmd_node_num(t_new_cmd *head)
 	}
 	return (cnt);
 }
-
-// void	print_all_cmd(t_new_cmd *head)
-// {
-// 	t_new_cmd	*tmp;
-
-// 	tmp = head;
-// 	while (tmp != NULL)
-// 	{
-// 		printf("|%s|\n", tmp->cmd);
-// 		tmp = tmp->next;
-// 	}
-// }

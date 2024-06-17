@@ -3,41 +3,116 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/05 16:04:53 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 18:26:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include "execution.h"
 
-// //if node->cmd[0] == export일 때 이 함수를 들어왔다고 가정.
-// void	export(t_node *node)
-// {
-// 	int	i;
+extern int g_status;
 
-// 	i = 0;
-// 	if (node->cmd[1] == NULL)
-// 		//env전체 출력 -> 앞에 접두사로 declare -x 붙이고, ascii 문자 정렬 순서대로 출력..
-// 	while (node->cmd[i] != NULL)
-// 	{
-// 		// = 혹은 += 으로 앞뒤 스플릿.
-// 		//에러인지
-// 		//name만 들어왓는지
-// 		//word 도 들어왔는지
-// 		//띄어쓰기 까지 .. -> 어차피 스필리팅이 될 것임.
-// 	}
-// 		//= 전까지 스플릿해서 env 에 저장해야겠다!
-// 	//올바르지 않은형식은 에러처리...
-// 	// 1. 변수 컨벤션에 맞지 않거나,.(영어 _ 이외의 글자가 있는경우, 숫자가 가장 앞에 오는 경우)
-// 	// 2. 띄어쓰기 있는 경우
+static void env_export(char *arg, t_env *env);
+static char *get_key_or_value(char *str, char type);
 
-// }
 
-// export a                            #key값만 생성
-// export b=                           #value에 아무 값 없음
-// export c=hello          
-// export c+=world                     #환경변수 뒤에 덧붙이기
-// export d="oh      my          god"  #echo출력과 export출력 다름
-// export e=elephant f=flower
+//TODO : export PATH
+//export PATH=
+void	ms_export(char **arg, t_env *env)
+{
+	t_bool	error;
+	
+	arg++;
+	error = FALSE;
+	if (*arg == NULL)
+		display_declare_list(env);
+	while (*arg)
+	{
+		if (is_env_key_valid(*arg))
+			env_export(*arg, env);
+		else
+			error = TRUE;
+		arg++;
+	}
+	if (error)
+		g_status = EXIT_FAILURE;
+	g_status = EXIT_SUCCESS;
+}
+
+t_bool	is_env_key_valid(char *str)
+{
+	size_t	i;
+	
+	i = 1;
+	if (str[0] != '_' && !ft_isalpha(str[0]))
+	{
+		error_cmd_exit(str, EVALUE);
+		return (FALSE);
+	}
+	while (str[i] && str[i] != '=')
+	{
+		if (str[i] != '_' && !ft_isalnum(str[i]))
+		{
+			error_cmd_exit(str, EVALUE);
+			return (FALSE);
+		}
+		i++;
+	}
+	return (TRUE);
+}
+
+static void env_export(char *arg, t_env *env)
+{
+	t_env	*temp_env;
+	char	*key;
+	char	*value;
+
+	key = get_key_or_value(arg, KEY);
+	value = get_key_or_value(arg, VALUE);
+	temp_env = env_find_pointer(key, env);
+	if (!temp_env && env->key == NULL)
+	{
+		env->key = key;
+		env->value = value;
+		env->complete = 0;
+		if (value != NULL)
+			env->complete = 1;
+	}
+	else if (!temp_env)
+		env_add_back(&env, env_new(key, value));
+	else if (value != NULL) 
+	{
+		temp_env->complete = 1;
+		if (temp_env->value != NULL)
+			free(temp_env->value);
+		temp_env->value = value;
+		free(key);
+	}
+}
+
+static char *get_key_or_value(char *str, char type)
+{
+	char	*key;
+	size_t	len;
+
+	len = 0;
+	if (!str[0])
+		return (NULL);
+	if (type == VALUE)
+	{
+		while (*str && *str != '=')
+			str++;
+		if (*str)
+			str++;
+	}
+	while (str[len] && str[len] != type)
+		len++;
+	key = malloc(sizeof(char) * (len + 1));
+	ft_strlcpy(key, str, len + 1);
+	if (type == KEY && str[len] != '\0')
+		len++;
+	return (key);
+}

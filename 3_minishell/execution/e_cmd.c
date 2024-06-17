@@ -6,11 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 17:43:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 17:39:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+#include "expansion.h"
 
 extern int	g_status;
 
@@ -22,8 +23,14 @@ static char	*match_in_current_path(char *cmd);
 //TODO: signal 작업
 void	exec_cmd(t_node *node, t_stat *stat)
 {
-	int		pid;
+	pid_t	pid;
 
+	cmd_expansion(node, stat->envp);
+	if (node->cmd && is_builtin(node->cmd[0]))
+	{
+		exec_builtin(node, stat);
+		return ;
+	}
 	pid = fork();
 	if (!pid)
 		exec_proc(node->cmd, stat);
@@ -41,28 +48,21 @@ static void	exec_proc(char **arg, t_stat *stat)
 {
 	close_pipe_fds(stat);
 	redirect_to_cmd(stat);
-	// if (is_builtin(arg[0]))
-	// 	exec_builtin(arg, stat);
 	set_arg_path(&arg[0], stat->envp);
-	execve(arg[0], arg, NULL);
+	execve(arg[0], arg, env_join(stat->envp));
 	exit(EXIT_FAILURE);
 }
 
-//TODO : path = ft_split(env_find_value(envp, "PATH"), ':');
 static void	set_arg_path(char **cmd, t_env *envp)
 {
-	int		i;
 	char	**path;
 	char	*file;
 
-	i = 0;
 	if (ft_strchr(*cmd, '/') == NULL)
 	{
-		path = ft_split("/Users/daeha/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Users/daeha/.brew/bin:", ':');
+		path = ft_split(env_find_value("PATH", envp), ':');
 		file = match_in_env_path(*cmd, path);
-		while (path[i])
-			free(path[i++]);
-		free(path);
+		free_double_pointer(path);
 	}
 	else
 		file = match_in_current_path(*cmd);
@@ -92,7 +92,6 @@ static char	*match_in_current_path(char *cmd)
 	return (NULL);
 }
 
-//TODO : leaks 검사
 static char	*match_in_env_path(char *cmd, char **path)
 {
 	char	*file;

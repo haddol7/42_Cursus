@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_utils_2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 14:30:41 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 16:44:02 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/12 21:54:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*ms_strjoin(char *s1, char *s2)
 	return (str);
 }
 
-void	free_all_old_cmd(char **cmd)
+void	free_double_pointer(char **cmd)
 {
 	int	i;
 

@@ -13,8 +13,10 @@
 #ifndef EXPANSION_H
 # define EXPANSION_H
 
-# include "minishell.h"
 # include <dirent.h>
+# include <stdlib.h>
+# include "parser.h"
+# include "libft.h"
 
 typedef struct s_env
 {
@@ -39,7 +41,7 @@ typedef struct s_wild_card
 void		quote_lock(char c, int *status);
 void		expand_dollar(char *cmd, t_env *env, t_new_cmd **list);
 char		*ms_strcpy(int start, int end, char *str);
-t_env		*env_cpy(char **envp);
+t_env		*init_env_list(char **envp);
 int			env_strncmp(char *s1, char *name, int n);
 t_env		*env_new(char *name, char *content);
 t_env		*env_last(t_env *head);
@@ -47,7 +49,7 @@ void		env_add_back(t_env **head, t_env *new);
 int			env_free_all(t_env **head);
 int			ms_strlen(char *str);
 char		*ms_strjoin(char *s1, char *s2);
-void		free_all_old_cmd(char **cmd);
+void		free_double_pointer(char **cmd);
 void		expansion(t_node *ast, t_env *env);
 char		**cpy_list_to_cmd(t_new_cmd *new_list);
 int			get_cmd_node_num(t_new_cmd *head);
@@ -77,7 +79,8 @@ void		wild_card(t_new_cmd **head);
 void		check_star_idx(char *cmd, t_wild_card *list);
 int			is_in_star_list(t_wild_card star_list, int idx);
 int			**init_table(int t, int p, char *pattern, t_wild_card star_list);
-// // void	print_all_env(t_env *head); //TODO ㅈㅣ우ㅓㅜ
-// void		print_all_cmd(t_new_cmd *head);
-// int is_hidden_file(t_new_cmd *node, char *d_name);
+char		**env_join(t_env *ms_envp);
+char		*env_join_key_value(char *key, char *value);
+void		cmd_expansion(t_node *node, t_env *env);
+
 #endif

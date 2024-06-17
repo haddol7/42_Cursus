@@ -6,29 +6,33 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 22:03:33 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/09 17:08:24 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 15:39:54 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-#define SYNTAX_ERR 258
 
 extern int	g_status;
+
 static void	syntax_error_type(t_token *token);
 
-void	*syntax_error(t_token *token, t_node **node)
+void	*syntax_error(t_token *token)
 {	
-	if (g_status == 0)
+	t_bool	is_error;
+
+	is_error = *get_parser_error();
+	if (!is_error)
 	{
 		if (token->type == T_EOF)
-			ft_putendl_fd("bash: syntax error: unexpected end of file", 2);
+			ft_putendl_fd("minishell: syntax error: unexpected end of file", 2);
 		else
 		{
-			ft_putstr_fd("bash: syntax error near unexpected token `", 2);
+			ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 			syntax_error_type(token);
 			ft_putendl_fd("'", 2);
 		}
 		g_status = SYNTAX_ERR;
+		set_parser_error(TRUE);
 	}
 	return (NULL);
 }

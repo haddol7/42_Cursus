@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   input_type_2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 20:12:40 by jungslee          #+#    #+#             */
 /*   Updated: 2024/06/17 18:21:32 by jungslee         ###   ########.fr       */

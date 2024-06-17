@@ -6,11 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:04:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 16:43:29 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 18:52:22 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+#include "expansion.h"
 
 extern int	g_status;
 
@@ -27,13 +28,53 @@ void	push_pid_list(pid_t pid, t_stat *stat)
 	stat->pid[stat->n_pid++] = pid;
 }
 
-//TODO: g_status 관리
 void	wait_pid_list(t_stat *stat)
-{
-	while (stat->n_pid >= 0)
+{	
+	int	pid;
+
+	pid = 0;
+	if (stat->n_pid == 0)
+		return ;
+	while (pid < stat->n_pid)
 	{
-		waitpid(stat->pid[--stat->n_pid], &g_status, 0);
-		if (WIFEXITED(g_status))
-			g_status = WEXITSTATUS(g_status);
+		waitpid(stat->pid[pid], &g_status, 0);
+		pid++;
 	}
+	if (WIFEXITED(g_status))
+		g_status = WEXITSTATUS(g_status);
+	else if (WIFSIGNALED(g_status))
+		g_status = WTERMSIG(g_status);
+}
+
+char	*env_find_value(char *key, t_env *envp)
+{
+	size_t	len_key;
+	size_t	len_envp;
+
+	len_key = ft_strlen(key);
+	while (envp)
+	{
+		len_envp = ft_strlen(envp->key);
+		if (len_key == len_envp && !ft_strncmp(key, envp->key, len_key))
+			return (envp->value);
+		envp = envp->next;
+	}
+	return (NULL);
+}
+
+t_env	*env_find_pointer(char *key, t_env *envp)
+{
+	size_t	len_key;
+	size_t	len_envp;
+
+	len_key = ft_strlen(key);
+	while (envp)
+	{
+		len_envp = ft_strlen(envp->key);
+		if (len_key == len_envp && !ft_strncmp(key, envp->key, len_key))
+			return (envp);
+		envp = envp->next;
+	}
+	return (NULL);
+
 }

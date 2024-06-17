@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 17:01:56 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/15 22:20:10 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define ENOENT 2
 # define EACCES 13
 # define EISDIR 21
+# define EVALUE 1
 
 typedef struct s_stat
 {
@@ -40,6 +41,7 @@ typedef struct s_stat
 	int				n_pid;
 	int				pipe[MAX_PIPE];
 	int				n_pipe;
+	t_bool			is_pipe;
 }	t_stat;
 
 //e_execution.c
@@ -47,6 +49,10 @@ void	execution(t_node *node, t_stat *stat);
 
 //e_and_of_if.c
 void	exec_and_or_if(t_node *node, t_stat *stat);
+
+//e_builtin.c
+t_bool	is_builtin(char *arg);
+void	exec_builtin(t_node *node, t_stat *stat);
 
 //e_cmd.c
 void	exec_cmd(t_node *node, t_stat *stat);
@@ -80,4 +86,7 @@ void	exec_subshell(t_node *node, t_stat *stat);
 //e_utils.c
 void	push_pid_list(pid_t pid, t_stat *stat);
 void	wait_pid_list(t_stat *stat);
+char	*env_find_value(char *key, t_env *envp);
+t_env	*env_find_pointer(char *key, t_env *envp);
+
 #endif

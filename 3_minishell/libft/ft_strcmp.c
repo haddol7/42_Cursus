@@ -1,30 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/14 22:32:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 21:32:22 by daeha            ###   ########.fr       */
+/*   Created: 2024/06/16 00:25:45 by daeha             #+#    #+#             */
+/*   Updated: 2024/06/16 00:27:54 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
+#include "libft.h"
 
-extern int g_status;
-
-void	ms_pwd(void)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	char	*dir;
-
-	dir = getcwd(NULL, 0);
-	if (!dir)
+	while (*s1 && *s2)
 	{
-		g_status = EXIT_FAILURE;
-		return ;
+		if (*s1 != *s2)
+			return (*s1  - *s2);
+		s1++;
+		s2++;
 	}
-	ft_putendl_fd(dir, STDIN_FILENO);
-	free(dir);
-	g_status = EXIT_SUCCESS;
+	return (*s1 - *s2);
 }

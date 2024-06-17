@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
 /*   Updated: 2024/06/17 18:05:44 by jungslee         ###   ########.fr       */
@@ -32,7 +32,7 @@ char	*ms_strcpy(int start, int end, char *str)
 	return (ret);
 }
 
-t_env	*env_cpy(char **envp)
+t_env	*init_env_list(char **envp)
 {
 	char	*name;
 	char	*content;
@@ -77,4 +77,40 @@ char	*exit_status(void)
 
 	status = ft_itoa(g_status);
 	return (status);
+}
+
+//these below funtions are used in e_cmd.c
+//TODO: complete flag에 따라서 count할지 안할지를 고려해야됨
+char	**env_join(t_env *ms_envp)
+{
+	char	**envp;
+	t_env	*head;
+	size_t	size;
+
+	size = 1;
+	head = ms_envp;
+	while (head)
+	{
+		size++;
+		head = head->next;
+	}
+	envp = ft_malloc(sizeof(char *) * (size));
+	envp[size-- - 1] = NULL;
+	while (size)
+	{
+		envp[size-- - 1] = env_join_key_value(ms_envp->key, ms_envp->value);
+		ms_envp = ms_envp->next;
+	}
+	return (envp);
+}
+
+char	*env_join_key_value(char *key, char *value)
+{
+	char	*temp;
+	char	*str;
+
+	temp = ft_strjoin(key, "=");
+	str = ft_strjoin(temp, value);
+	free(temp);
+	return (str);
 }
