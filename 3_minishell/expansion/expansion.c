@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
 /*   Updated: 2024/06/17 18:44:55 by daeha            ###   ########.fr       */
@@ -23,7 +23,8 @@ void	expand_one_node(char **cmd, t_env *env, t_new_cmd **list)
 		expand_dollar(cmd[i], env, list);
 		i++;
 	}
-	expand_quote(*list);
+	wild_card(list);
+	expand_quote(*list, env);
 }
 
 char	**cpy_list_to_cmd(t_new_cmd *new_list)

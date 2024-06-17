@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 20:12:40 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/14 22:41:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 18:21:32 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,34 +56,4 @@ void	input_or_if(t_token **head, int *idx)
 	node = ms_lstnew(value, T_OR_IF);
 	ms_lstadd_back(head, node);
 	*idx = *idx + 2;
-}
-
-int	check_if_terminal(char c1, char c2)
-{
-	if (c1 != '\0' && \
-		c1 != ' ' && c1 != '|' && \
-		c1 != '<' && c1 != '>' && \
-		c1 != '(' && c1 != ')' && \
-		!(c1 == '&' && c2 == '&') && \
-		!(c1 == '|' && c2 == '|')
-	)
-		return (0);
-	else
-		return (1);
-}
-
-int	skip_quote(char *input, int idx)
-{
-	char	quote;
-	int		i;
-
-	i = 1;
-	quote = input[idx];
-	while (input[idx + i] != quote)
-	{
-		if (input[idx + i] == '\0')
-			return (-1);
-		i++;
-	}
-	return (i);
 }

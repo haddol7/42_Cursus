@@ -6,11 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/14 23:46:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 18:05:44 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
+
+extern int	g_status;
 
 char	*ms_strcpy(int start, int end, char *str)
 {
@@ -67,6 +69,14 @@ int	env_strncmp(char *s1, char *name, int n)
 	if (*name != '\0')
 		return (1);
 	return (0);
+}
+
+char	*exit_status(void)
+{
+	char	*status;
+
+	status = ft_itoa(g_status);
+	return (status);
 }
 
 //these below funtions are used in e_cmd.c
