@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 22:30:44 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 15:20:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	loop_prompt(t_minishell *ms)
 
 	input = "";
 	while (input)
-	{
+	{	
 		input = readline("minishell$ ");
 		if (input && *input)
 		{
@@ -59,7 +59,6 @@ static void	loop_prompt(t_minishell *ms)
 
 static void	init_stat(t_stat *stat)
 {
-	g_status = 0;
 	stat->fd[INPUT] = STDIN_FILENO;
 	stat->fd[OUTPUT] = STDOUT_FILENO;
 	stat->n_pid = 0;

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:54:45 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 22:29:09 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 15:36:08 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "tokenizer.h"
 # include "libft.h"
+
+#define SYNTAX_ERR 258
 
 typedef enum e_node_type
 {
@@ -41,6 +43,8 @@ typedef struct s_node
 t_node	*parser(t_token *token);
 void	*free_all_tree(t_node **node);
 void	*free_arg(char ***cmd);
+t_bool	*get_parser_error();
+void	set_parser_error(t_bool is_error);
 
 //p_grammer.c
 t_node	*list(t_token **token);

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:48:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 23:15:14 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 15:36:07 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_node	*parser(t_token *token)
 	head = token;
 	if (head == NULL)
 		return (NULL);
+	set_parser_error(FALSE);
 	ast = list(&token);
 	if (head == token || !is_token(token, T_EOF))
 		syntax_error(token);
@@ -58,3 +59,18 @@ void	*free_arg(char ***cmd)
 	head = NULL;
 	return (NULL);
 }
+
+t_bool	*get_parser_error()
+{
+	static t_bool	s_syntax_error;
+	return (&s_syntax_error);
+}
+
+void	set_parser_error(t_bool is_error)
+{
+	t_bool	*status;
+
+	status = get_parser_error();
+	*status = is_error;
+}
+
