@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 18:44:55 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 19:24:25 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	expand_one_node(char **cmd, t_env *env, t_new_cmd **list)
 		i++;
 	}
 	wild_card(list);
-	expand_quote(*list, env);
+	expand_quote(*list);
 }
 
 char	**cpy_list_to_cmd(t_new_cmd *new_list)
@@ -49,27 +49,6 @@ char	**cpy_list_to_cmd(t_new_cmd *new_list)
 	}
 	result[i] = NULL;
 	return (result);
-}
-
-void	expansion(t_node *ast, t_env *env)
-{
-	t_new_cmd	*list;
-	char		**new_cmd;
-
-	list = NULL;
-	if (ast == NULL)
-		return ;
-	if (ast->type == N_CMD)
-	{
-		expand_one_node(ast->cmd, env, &list);
-		new_cmd = cpy_list_to_cmd(list);
-		list_free_all(&list);
-		free_double_pointer(ast->cmd);
-		ast->cmd = new_cmd;
-		return ;
-	}
-	expansion(ast->right, env);
-	expansion(ast->left, env);
 }
 
 void	cmd_expansion(t_node *node, t_env *env)

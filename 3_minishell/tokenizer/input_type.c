@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:48:15 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 18:48:03 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 19:20:03 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,33 +87,4 @@ void	input_redirection(t_token **head, char *input, int *idx)
 	node = ms_lstnew(value, type);
 	ms_lstadd_back(head, node);
 	*idx = *idx + len;
-}
-
-int	input_word(t_token **head, char *input, int *idx)
-{
-	char	*value;
-	int		len;
-	int		start;
-	int		in_quote;
-
-	len = -1;
-	start = *idx;
-	in_quote = 0;
-	while (input[start + ++len] != '\0')
-	{
-		if (input[start + len] == '\'' || input[start + len] == '\"')
-		{
-			in_quote = skip_quote(input, start + len);
-			if (in_quote == -1)
-				return (handle_error(ERR_TOK, 0, head));
-			len += in_quote;
-		}
-		if (check_if_terminal(input[start + len], input[start + len + 1]) == 1)
-			break ;
-	}
-	value = (char *)ft_malloc(sizeof(char) * (len + 1));
-	ft_strlcpy(value, (const char *)(input + start), len + 1);
-	ms_lstadd_back(head, ms_lstnew(value, T_WORD));
-	*idx = start + len;
-	return (1);
 }

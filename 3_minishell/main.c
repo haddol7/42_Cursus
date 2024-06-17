@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 18:45:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 19:21:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ static void	loop_prompt(t_minishell *ms)
 			add_history(input);
 			ms->token = tokenizer(input);
 			ms->ast = parser(ms->token);
-			//expansion(ms->ast, ms->stat.envp);
 			exec_here_doc(ms->ast);
 			execution(ms->ast, &ms->stat);
 			wait_pid_list(&ms->stat);

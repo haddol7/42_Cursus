@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input_type_3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 18:19:42 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 18:47:33 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 19:19:49 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	skip_quote(char *input, int idx)
 	return (i);
 }
 
-int	word_len(char *input, int start, int in_quote, t_token **head)
+int	word_len(char *input, int start, int in_quote)
 {
 	int	len;
 
@@ -73,9 +73,9 @@ int	input_word(t_token **head, char *input, int *idx)
 
 	start = *idx;
 	in_quote = 0;
-	len = word_len(input, start, in_quote, head);
+	len = word_len(input, start, in_quote);
 	if (len == -1)
-		return (handle_error(QUOTE_ERROR, 0, head));
+		return (handle_error(ERR_TOK, 0, head));
 	value = (char *)malloc(sizeof(char) * (len + 1));
 	if (value == NULL)
 		handle_error("exit : malloc error3", 1, 0);

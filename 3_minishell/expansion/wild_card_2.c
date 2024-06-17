@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wild_card_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 16:29:59 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 18:10:06 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 19:18:27 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int	**init_table(int t, int p, char *pattern, t_wild_card star_list)
 {
 	int	**table;
 	int	i;
-	int	j;
 
 	i = 0;
 	table = (int **)malloc((sizeof(int *)) * (t + 1));

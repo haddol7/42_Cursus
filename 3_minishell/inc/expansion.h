@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 18:21:16 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 19:24:34 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,13 @@ int			env_free_all(t_env **head);
 int			ms_strlen(char *str);
 char		*ms_strjoin(char *s1, char *s2);
 void		free_double_pointer(char **cmd);
-void		expansion(t_node *ast, t_env *env);
 char		**cpy_list_to_cmd(t_new_cmd *new_list);
 int			get_cmd_node_num(t_new_cmd *head);
 int			list_free_all(t_new_cmd **head);
 void		cmd_add_back(t_new_cmd **head, char *new);
 t_new_cmd	*cmd_last(t_new_cmd *head);
 t_new_cmd	*cmd_new(char *cmd);
-void		expand_quote(t_new_cmd *list, t_env *env);
+void		expand_quote(t_new_cmd *list);
 char		*exit_status(void);
 char		*de_quote(char *cmd, int *idx, char *words_tmp, char quote);
 char		*no_quote(char *cmd, int *idx, char *words_tmp);
