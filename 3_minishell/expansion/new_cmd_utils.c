@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:44:24 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 18:06:17 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 19:41:54 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	get_cmd_node_num(t_new_cmd *head)
 	cnt = 0;
 	while (node != NULL)
 	{
-		if (node->cmd != NULL && node->cmd[0] != '\0')
+		if (node->cmd != NULL)
 			cnt++;
 		node = node->next;
 	}

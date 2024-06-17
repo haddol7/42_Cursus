@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 19:24:25 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 19:41:46 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	**cpy_list_to_cmd(t_new_cmd *new_list)
 	i = 0;
 	while (i < word_cnt)
 	{
-		if (tmp->cmd != NULL && tmp->cmd[0] != '\0')
+		if (tmp->cmd != NULL)
 			result[i] = ft_strdup(tmp->cmd);
 		tmp = tmp->next;
 		i++;
