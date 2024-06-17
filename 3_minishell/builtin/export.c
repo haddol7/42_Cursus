@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/16 04:26:29 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 16:47:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,12 @@ t_bool	is_env_key_valid(char *str)
 	}
 	while (str[i] && str[i] != '=')
 	{
-		if (str[i] != '_' && !ft_isalnum(str[i++]))
+		if (str[i] != '_' && !ft_isalnum(str[i]))
 		{
 			error_cmd_exit(str, EVALUE);
 			return (FALSE);
 		}
+		i++;
 	}
 	return (TRUE);
 }
