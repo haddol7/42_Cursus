@@ -6,24 +6,24 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:51 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 17:03:28 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 18:03:01 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
 
-void	fill_table(int **table, char *pattern, int t, int p)
+void	fill_table(int **table, char *pattern, int t, t_wild_card star_list)
 {
 	int	i;
 	int	j;
 
 	j = 1;
-	while (pattern[j - 1] == '*')
+	while (pattern[j - 1] == '*' && is_in_star_list(star_list, j - 1))
 	{
 		table[0][j] = 1;
 		j++;
 	}
-	while(j <= p)
+	while(j <= ms_strlen(pattern))
 	{
 		table[0][j] = 0;
 		j++;
@@ -36,7 +36,7 @@ void	fill_table(int **table, char *pattern, int t, int p)
 	}
 }
 
-void	calculate_table(int **table, char *text, char *pattern)
+void	calculate_table(int **table, char *text, char *pattern, t_wild_card star_list)
 {
 	int	i;
 	int	j;
@@ -52,27 +52,29 @@ void	calculate_table(int **table, char *text, char *pattern)
 		while (++j <= p_len)
 		{
 			table[i][j] = 0;
-			if (text[i - 1] == pattern[j - 1])
-				table[i][j] = table[i - 1][j - 1];
-			else if (pattern[j - 1] == '*')
+			if (pattern[j - 1] == '*' && is_in_star_list(star_list, j - 1))
 			{
 				if (table[i - 1][j] == 1 || table[i][j - 1] == 1)
 					table[i][j] = 1;
 				else
 					table[i][j] = 0;
 			}
+			else if (text[i - 1] == pattern[j - 1])
+				table[i][j] = table[i - 1][j - 1];
 		}
 	}
 }
 
-t_new_cmd	*expand_wild_card(t_new_cmd *node)
+t_new_cmd	*expand_wild_card(t_new_cmd *node, t_wild_card star_list)
 {
 	char 			path[256];
 	DIR				*p_dir;
 	struct dirent	*dir_ent;
 	t_new_cmd		*sub_list;
+	int				cmd_len;
 
 	sub_list = NULL;
+	cmd_len = ms_strlen(node->cmd);
 	delete_quote(node);
 	ft_memset(path, 0, 256);
 	getcwd(path, 256);
@@ -84,7 +86,7 @@ t_new_cmd	*expand_wild_card(t_new_cmd *node)
 			break ;
 		if (node->cmd[0] != '.' && dir_ent->d_name[0] == '.')
 			continue ;
-		if (is_match_cmd(dir_ent->d_name, node->cmd) == 1)
+		if (cmd_len == star_list.len || is_match_cmd(dir_ent->d_name, node->cmd, star_list) == 1)
 			cmd_add_back(&sub_list, ft_strdup(dir_ent->d_name));
 	}
 	closedir(p_dir);
@@ -107,7 +109,7 @@ t_new_cmd *check_one_cmd(t_new_cmd *node)
 		quote_lock(node->cmd[i], &quote);
 		if (quote == 0 && node->cmd[i] == '*')
 		{
-			sub_list = expand_wild_card(node);
+			sub_list = expand_wild_card(node, star_list);
 			break ;
 		}
 		i++;

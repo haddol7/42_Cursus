@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 16:29:59 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 16:34:50 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:48:01 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	is_all_star(char *pattern)
 	return (1);
 }
 
-int	**init_table(int t, int p, char *pattern)
+int	**init_table(int t, int p, char *pattern, t_wild_card star_list)
 {
 	int	**table;
 	int	i;
@@ -40,7 +40,7 @@ int	**init_table(int t, int p, char *pattern)
 		i++;
 	}
 	table[0][0] = 1;
-	fill_table(table, pattern, t, p);
+	fill_table(table, pattern, t, star_list);
 	return (table);
 }
 
@@ -57,7 +57,7 @@ void	free_table(int **table, int	t)
 	free(table);
 }
 
-int	is_match_cmd(char *text, char *pattern)
+int	is_match_cmd(char *text, char *pattern, t_wild_card star_list)
 {
 	int	pattern_len;
 	int	text_len;
@@ -66,10 +66,10 @@ int	is_match_cmd(char *text, char *pattern)
 
 	text_len = ms_strlen(text);
 	pattern_len = ms_strlen(pattern);
-	if (is_all_star(pattern))
-		return (1);
-	table = init_table(text_len, pattern_len, pattern);
-	calculate_table(table, text, pattern);
+	// if (is_all_star(pattern))
+	// 	return (1);
+	table = init_table(text_len, pattern_len, pattern, star_list);
+	calculate_table(table, text, pattern, star_list);
 	ret = table[text_len][pattern_len];
 	free_table(table, text_len);
 	return (ret);	
