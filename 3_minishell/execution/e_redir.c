@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:27:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 23:08:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 00:43:52 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static t_bool	expansion_and_check_error(t_node *node, t_stat *stat)
 	{
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(error_str, STDERR_FILENO);
-		ft_putendl_fd(": ambigous redirect", STDERR_FILENO);
+		ft_putendl_fd(": ambiguous redirect", STDERR_FILENO);
 		g_status = EXIT_FAILURE;
 		free(error_str);
 		return (TRUE);

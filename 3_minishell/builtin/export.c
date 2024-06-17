@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 23:42:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 00:39:21 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ extern int g_status;
 
 static void env_export(char *arg, t_env *env);
 static char *get_key_or_value(char *str, char type);
+static t_bool	is_env_key_valid(char *str);
 
 void	ms_export(char **arg, t_env *env)
 {
@@ -36,10 +37,11 @@ void	ms_export(char **arg, t_env *env)
 	}
 	if (error)
 		g_status = EXIT_FAILURE;
-	g_status = EXIT_SUCCESS;
+	else
+		g_status = EXIT_SUCCESS;
 }
 
-t_bool	is_env_key_valid(char *str)
+static t_bool	is_env_key_valid(char *str)
 {
 	size_t	i;
 	

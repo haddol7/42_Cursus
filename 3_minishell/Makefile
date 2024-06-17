@@ -3,7 +3,7 @@
 NAME			:= minishell
 LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
-CC				:= cc -fsanitize=address
+CC				:= cc
 CFLAGS			:= -Wall -Werror -Wextra
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
@@ -18,8 +18,8 @@ TOKENIZER		:=	tokenizer/tokenizer.c \
 PARSER			:=	parser/parser.c \
 					parser/p_grammer.c \
 					parser/p_grammer_2.c \
-					parser/p_node_utils.c \
-					parser/p_token_utils.c \
+					parser/p_utils.c \
+					parser/p_utils_2.c \
 					parser/p_syntax_error.c \
 
 BUILTIN			:=	builtin/cd.c \

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:10:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 20:07:22 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/18 00:50:48 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,6 @@ void	quote_lock(char c, int *status)
 	}
 }
 
-//TODO: 아래의 코드가 안전한가?
-//			if (env->complete == 0)
-//				break;
 char	*return_value(char *dollar_start, t_env *env)
 {
 	int		i;

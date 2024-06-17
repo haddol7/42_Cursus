@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 22:31:54 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/16 04:28:41 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 00:41:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ extern int g_status;
 
 static void	env_del_node(char *arg, t_env *env);
 static void	swap_contents_without_change_node(t_env *env);
+static t_bool	is_env_key_valid(char *str);
 
 void	ms_unset(char **arg, t_env *env)
 {
@@ -34,7 +35,8 @@ void	ms_unset(char **arg, t_env *env)
 	}
 	if (error)
 		g_status = EXIT_FAILURE;
-	g_status = EXIT_SUCCESS;
+	else
+		g_status = EXIT_SUCCESS;
 }
 
 static void	env_del_node(char *arg, t_env *env)
@@ -75,4 +77,26 @@ static void	swap_contents_without_change_node(t_env *env)
 	temp->value = NULL;
 	temp->next = NULL;
 	free(temp);
+}
+
+static t_bool	is_env_key_valid(char *str)
+{
+	size_t	i;
+	
+	i = 1;
+	if (str[0] != '_' && !ft_isalpha(str[0]))
+	{
+		error_cmd_exit(str, EVALUE);
+		return (FALSE);
+	}
+	while (str[i])
+	{
+		if (str[i] != '_' && !ft_isalnum(str[i]))
+		{
+			error_cmd_exit(str, EVALUE);
+			return (FALSE);
+		}
+		i++;
+	}
+	return (TRUE);
 }
