@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 20:00:16 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:03:17 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define EXPANSION_H
 
 # include "minishell.h"
-
+# include <dirent.h>
 typedef struct s_env
 {
 	char			*key;
@@ -28,6 +28,12 @@ typedef struct s_new_cmd
 	char				*cmd;
 	struct s_new_cmd	*next;
 }	t_new_cmd;
+
+typedef struct s_wild_card
+{
+	int	*idx_list;
+	int	len;
+}	t_wild_card;
 
 void		quote_lock(char c, int *status);
 void		expand_dollar(char *cmd, t_env *env, t_new_cmd **list);
@@ -50,7 +56,24 @@ t_new_cmd	*cmd_last(t_new_cmd *head);
 t_new_cmd	*cmd_new(char *cmd);
 void		expand_quote(t_new_cmd *list, t_env *env);
 char		*exit_status(void);
-
+char	*de_quote(char *cmd, int *idx, char *words_tmp, char quote);\
+char	*no_quote(char *cmd, int *idx, char *words_tmp);
+void	del_one_cmd(t_new_cmd **head, t_new_cmd **node);
+t_new_cmd	*join_sub_cmd(t_new_cmd **head, t_new_cmd *node, t_new_cmd *sub_list);
 // void	print_all_env(t_env *head); //TODO ㅈㅣ우ㅓㅜ
 void		print_all_cmd(t_new_cmd *head);
+
+int	is_all_star(char *pattern);
+
+void	wild_card(t_new_cmd **head);
+int	**init_table(int t, int p, char *pattern);
+void	free_table(int **table, int	t);
+int	is_match_cmd(char *text, char *pattern);
+void	delete_quote(t_new_cmd *node);
+void	fill_table(int **table, char *pattern, int t, int p);
+void	calculate_table(int **table, char *text, char *pattern);
+t_new_cmd	*expand_wild_card(t_new_cmd *node);
+t_new_cmd *check_one_cmd(t_new_cmd *node);
+void	wild_card(t_new_cmd **head);
+void    check_star_idx(char *cmd, t_wild_card *list);
 #endif

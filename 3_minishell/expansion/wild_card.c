@@ -6,25 +6,11 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:51 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/16 07:12:02 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:03:28 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
-
-int	is_all_star(char *f_name)
-{
-	int	i;
-
-	i = 0;
-	while (f_name[i] != '\0')
-	{
-		if (f_name[i] != '*')
-			return (0);
-		i++;
-	}
-	return (1);
-}
 
 void	fill_table(int **table, char *pattern, int t, int p)
 {
@@ -48,45 +34,6 @@ void	fill_table(int **table, char *pattern, int t, int p)
 		table[i][0] = 0;
 		i++;
 	}
-}
-
-void	print_table(int **table, int t, int p)//TODO 지워
-{
-	int	i;
-	int j;
-
-	i = 0;
-	j = 0;
-
-	while (i <= t)
-	{
-		j = 0;
-		while (j <= p)
-		{
-			printf("%d  ", table[i][j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
-}
-
-int	**init_table(int t, int p, char *pattern)
-{
-	int	**table;
-	int	i;
-	int	j;
-
-	i = 0;
-	table = (int **)malloc((sizeof(int *)) * (t + 1));
-	while (i <= t)
-	{
-		table[i] = (int *)malloc((sizeof(int)) * (p + 1));
-		i++;
-	}
-	table[0][0] = 1;
-	fill_table(table, pattern, t, p);
-	return (table);
 }
 
 void	calculate_table(int **table, char *text, char *pattern)
@@ -116,55 +63,6 @@ void	calculate_table(int **table, char *text, char *pattern)
 			}
 		}
 	}
-}
-
-void	free_table(int **table, int	t)
-{
-	int	i;
-
-	i = 0;
-	while (i < t + 1)
-	{
-		free(table[i]);
-		i++;
-	}
-	free(table);
-}
-
-int	is_match_cmd(char *text, char *pattern)
-{
-	int	pattern_len;
-	int	text_len;
-	int	**table;
-	int	ret;
-
-	text_len = ms_strlen(text);
-	pattern_len = ms_strlen(pattern);
-	if (is_all_star(pattern))
-		return (1);
-	table = init_table(text_len, pattern_len, pattern);
-	calculate_table(table, text, pattern);
-	ret = table[text_len][pattern_len];
-	free_table(table, text_len);
-	return (ret);	
-}
-
-void	delete_quote(t_new_cmd *node)
-{
-	int		i;
-	char	*word_tmp;
-
-	i = 0;
-	word_tmp = NULL;
-	while (node->cmd[i] != '\0')
-	{
-		if (node->cmd[i] ==  '\'' || node->cmd[i] == '\"')
-			word_tmp = de_quote(node->cmd, &i, word_tmp, node->cmd[i]);
-		else
-			word_tmp = no_quote(node->cmd, &i, word_tmp);
-	}
-	free(node->cmd);
-	node->cmd = word_tmp;
 }
 
 t_new_cmd	*expand_wild_card(t_new_cmd *node)
@@ -198,10 +96,12 @@ t_new_cmd *check_one_cmd(t_new_cmd *node)
 	int			i;
 	int			quote;
 	t_new_cmd	*sub_list;
+	t_wild_card	star_list;
 
 	i = 0;
 	quote = 0;
 	sub_list = NULL;
+	check_star_idx(node->cmd, &star_list);
 	while (node->cmd[i] != '\0')
 	{
 		quote_lock(node->cmd[i], &quote);
@@ -212,6 +112,8 @@ t_new_cmd *check_one_cmd(t_new_cmd *node)
 		}
 		i++;
 	}
+	if (star_list.idx_list != NULL)
+		free(star_list.idx_list);
 	return (sub_list);
 }
 
