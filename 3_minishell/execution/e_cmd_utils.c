@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 21:01:21 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 23:10:37 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ void	error_cmd_exit(char *cmd, int error_type)
 		exit(126);
 }
 
-void	redirect_to_cmd(t_stat *stat, t_bool is_forked)
+t_bool	redirect_to_cmd(t_stat *stat, t_bool is_forked)
 {
-	if (g_status == EXIT_FAILURE || stat->fd[INPUT] == -1 || stat->fd[OUTPUT] == -1)
+	if (stat->fd[INPUT] == -1 || stat->fd[OUTPUT] == -1)
 	{
 		if (stat->fd[INPUT] != -1 && stat->fd[INPUT] != STDIN_FILENO)
 			close(stat->fd[INPUT]);
@@ -48,6 +48,8 @@ void	redirect_to_cmd(t_stat *stat, t_bool is_forked)
 			close(stat->fd[OUTPUT]);
 		if (is_forked)
 			exit(EXIT_FAILURE);
+		else
+			return (FALSE);
 	}
 	if (stat->fd[OUTPUT] != STDOUT_FILENO)
 	{
@@ -59,6 +61,7 @@ void	redirect_to_cmd(t_stat *stat, t_bool is_forked)
 		dup2(stat->fd[INPUT], STDIN_FILENO);
 		close(stat->fd[INPUT]);
 	}
+	return (TRUE);
 }
 
 void	close_pipe_fds(t_stat *stat)

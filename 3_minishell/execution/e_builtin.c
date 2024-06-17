@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:40:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 20:57:31 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 23:11:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ void	exec_builtin(t_node *node, t_stat *stat)
 	{	
 		fd[INPUT] = dup(STDIN_FILENO);
 		fd[OUTPUT] = dup(STDOUT_FILENO);
-		redirect_to_cmd(stat, FALSE);
-		if (g_status == EXIT_SUCCESS)
+		if (redirect_to_cmd(stat, FALSE))
 			exec_builtin_func(node, stat);
 		dup2(fd[INPUT], STDIN_FILENO);
 		dup2(fd[OUTPUT], STDOUT_FILENO);
