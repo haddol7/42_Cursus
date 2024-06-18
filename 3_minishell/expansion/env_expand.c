@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_expand.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:10:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/12 20:07:22 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:46:47 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	add_list(t_new_cmd **list, char *new_cmd)
 	i = 0;
 	start = 0;
 	quote = 0;
-	while (new_cmd[i] != '\0')
+	while (new_cmd != NULL && new_cmd[i] != '\0')
 	{
 		quote_lock(new_cmd[i], &quote);
 		if (quote == 0 && new_cmd[i] == ' ')
@@ -132,7 +132,7 @@ void	expand_dollar(char *cmd, t_env *env, t_new_cmd **list)
 	j = 0;
 	quote = 0;
 	new_cmd = ft_strdup(cmd);
-	while (new_cmd[j] != '\0')
+	while (new_cmd != NULL && new_cmd[j] != '\0')
 	{
 		quote_lock(new_cmd[j], &quote);
 		if (new_cmd[j] == '$' && quote != 1)
@@ -143,6 +143,10 @@ void	expand_dollar(char *cmd, t_env *env, t_new_cmd **list)
 		}
 		j++;
 	}
-	add_list(list, new_cmd);
-	free(new_cmd);
+	if (new_cmd != NULL && new_cmd[0] == '\0')
+		new_cmd = cmd_to_null(new_cmd);
+	else
+		add_list(list, new_cmd);
+	if (new_cmd != NULL)
+		free(new_cmd);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:00 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/16 06:03:29 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:58:22 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_env	*env_new(char *name, char *content)
 
 	node = (t_env *)malloc(sizeof(t_env));
 	if (node == NULL)
-		handle_error("exit : malloc error6", 1, 0);
+		handle_error("exit : malloc error", 1, 0);
 	node->key = name;
 	node->value = content;
 	if (name != NULL && content != NULL)
@@ -79,5 +79,11 @@ int	env_free_all(t_env **head)
 		to_free = tmp;
 	}
 	*head = NULL;
+	return (0);
+}
+
+char	*cmd_to_null(char *new_cmd)
+{
+	free(new_cmd);
 	return (0);
 }

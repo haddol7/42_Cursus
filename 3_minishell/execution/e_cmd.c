@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_cmd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 17:39:36 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:56:39 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	exec_cmd(t_node *node, t_stat *stat)
 	pid_t	pid;
 
 	cmd_expansion(node, stat->envp);
+	if (node->cmd == NULL)
+		return ;
 	if (node->cmd && is_builtin(node->cmd[0]))
 	{
 		exec_builtin(node, stat);
@@ -45,7 +47,7 @@ void	exec_cmd(t_node *node, t_stat *stat)
 }
 
 static void	exec_proc(char **arg, t_stat *stat)
-{
+{	
 	close_pipe_fds(stat);
 	redirect_to_cmd(stat);
 	set_arg_path(&arg[0], stat->envp);
