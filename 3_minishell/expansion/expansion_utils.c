@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 18:05:44 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:46:40 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,6 @@ char	*exit_status(void)
 	return (status);
 }
 
-//these below funtions are used in e_cmd.c
-//TODO: complete flag에 따라서 count할지 안할지를 고려해야됨
 char	**env_join(t_env *ms_envp)
 {
 	char	**envp;
@@ -109,6 +107,8 @@ char	*env_join_key_value(char *key, char *value)
 	char	*temp;
 	char	*str;
 
+	if (value == NULL)
+		return (key);
 	temp = ft_strjoin(key, "=");
 	str = ft_strjoin(temp, value);
 	free(temp);

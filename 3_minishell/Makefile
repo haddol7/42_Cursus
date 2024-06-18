@@ -1,5 +1,3 @@
-#TODO : CC FLAG 지우기
-
 NAME			:= minishell
 LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
