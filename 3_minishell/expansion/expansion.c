@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/18 16:50:39 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/18 17:34:35 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,17 @@ void	cmd_expansion(t_node *node, t_env *env)
 	free_double_pointer(node->cmd);
 	node->cmd = new_cmd;
 	return ;
+}
+
+char	*env_join_key_value(char *key, char *value)
+{
+	char	*temp;
+	char	*str;
+
+	if (value == NULL)
+		return (key);
+	temp = ft_strjoin(key, "=");
+	str = ft_strjoin(temp, value);
+	free(temp);
+	return (str);
 }

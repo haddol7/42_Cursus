@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_expand.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 15:10:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/18 16:46:47 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/18 17:33:52 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*return_value(char *dollar_start, t_env *env)
 		if (env_strncmp(dollar_start + 1, env->key, i - 1) == 0)
 		{
 			if (env->complete == 0)
-				break;
+				break ;
 			return (ft_strdup(env->value));
 		}
 		env = env->next;

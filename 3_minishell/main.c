@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 16:28:47 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 17:33:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	g_status;
 static void	init_stat(t_stat *stat);
 static void	display_title(int argc, char **argv);
 static void	loop_prompt(t_minishell *ms);
+static void	close_all_fds(t_stat *stat);
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -48,6 +49,7 @@ static void	loop_prompt(t_minishell *ms)
 			wait_pid_list(&ms->stat);
 			free_all_token(&ms->token);
 			free_all_tree(&ms->ast);
+			close_all_fds(&ms->stat);
 			free(input);
 		}
 	}
@@ -62,6 +64,14 @@ static void	init_stat(t_stat *stat)
 	stat->n_pid = 0;
 	stat->n_pipe = 0;
 	stat->is_pipe = 0;
+}
+
+static void	close_all_fds(t_stat *stat)
+{	
+	if (stat->fd[INPUT] != STDIN_FILENO)
+		close(stat->fd[INPUT]);
+	if (stat->fd[OUTPUT] != STDOUT_FILENO)
+		close(stat->fd[OUTPUT]);
 }
 
 static void	display_title(int argc, char **argv)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/18 16:44:58 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/18 17:34:28 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,17 +102,4 @@ char	**env_join(t_env *ms_envp)
 		ms_envp = ms_envp->next;
 	}
 	return (envp);
-}
-
-char	*env_join_key_value(char *key, char *value)
-{
-	char	*temp;
-	char	*str;
-
-	if (value == NULL)
-		return (key);
-	temp = ft_strjoin(key, "=");
-	str = ft_strjoin(temp, value);
-	free(temp);
-	return (str);
 }
