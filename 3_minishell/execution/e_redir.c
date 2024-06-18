@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:27:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 16:30:52 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 17:01:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ extern int	g_status;
 
 static t_bool	is_redir_in(t_node_type type);
 static t_bool	expansion_and_check_error(t_node *node, t_stat *stat);
-static t_bool	make_fd_error(t_node *node, t_stat *stat);
+static void		make_fd_error(t_node *node, t_stat *stat);
 
 void	exec_redir(t_node *node, t_stat *stat)
 {
@@ -67,7 +67,7 @@ static t_bool	expansion_and_check_error(t_node *node, t_stat *stat)
 	return (FALSE);
 }
 
-static t_bool	make_fd_error(t_node *node, t_stat *stat)
+static void	make_fd_error(t_node *node, t_stat *stat)
 {
 	if (stat->fd[INPUT] != STDIN_FILENO && is_redir_in(node->type))
 	{
