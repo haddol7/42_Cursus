@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 00:07:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 18:00:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,9 @@ void	if_not_executable_then_exit(char *file, char *cmd)
 	struct stat	buf;
 
 	stat(file, &buf);
-	if (access(file, F_OK | X_OK))
+	if (access(file, F_OK))
 		error_cmd_exit(cmd, ENOENT);
-	else if (access(file, F_OK))
+	else if (access(file, X_OK))
 		error_cmd_exit(cmd, EACCES);
 	else if ((buf.st_mode & S_IFMT) == S_IFDIR)
 		error_cmd_exit(cmd, EISDIR);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_cmd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 16:56:39 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/18 18:06:45 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ static void	set_arg_path(char **cmd, t_env *envp)
 static char	*match_in_current_path(char *cmd)
 {	
 	char	*file;
-	char	*current_path;
 
 	if (*cmd == '/')
 	{
@@ -86,13 +85,8 @@ static char	*match_in_current_path(char *cmd)
 		else
 			return (NULL);
 	}
-	current_path = getcwd(NULL, 0);
 	file = change_as_absolute_path(cmd);
-	chdir(current_path);
-	if (!access(file, F_OK | X_OK))
-		return (file);
-	free(file);
-	return (NULL);
+	return (file);
 }
 
 static char	*match_in_env_path(char *cmd, char **path)
