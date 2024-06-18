@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:51 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 16:39:35 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 21:19:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,12 @@ void	ms_env(char **arg, t_env *env)
 	}
 	while (env && env->key)
 	{
-		if (env->complete == 0)
-			continue ;
-		ft_putstr_fd(env->key, STDOUT_FILENO);
-		ft_putchar_fd('=', STDOUT_FILENO);
-		ft_putendl_fd(env->value, STDOUT_FILENO);
+		if (env->complete != 0)
+		{
+			ft_putstr_fd(env->key, STDOUT_FILENO);
+			ft_putchar_fd('=', STDOUT_FILENO);
+			ft_putendl_fd(env->value, STDOUT_FILENO);
+		}
 		env = env->next;
 	}
 	g_status = EXIT_SUCCESS;
