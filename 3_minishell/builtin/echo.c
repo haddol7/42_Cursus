@@ -6,15 +6,15 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:46:14 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 23:58:21 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:39:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-extern int g_status;
+extern int	g_status;
 
-static t_bool is_str_option(char *str, t_bool *option);
+static t_bool	is_str_option(char *str, t_bool *option);
 
 void	ms_echo(char **arg)
 {
@@ -24,10 +24,10 @@ void	ms_echo(char **arg)
 	while (*arg)
 	{
 		arg++;
-		if(!is_str_option(*arg, &option))
-			break;
+		if (!is_str_option(*arg, &option))
+			break ;
 	}
-	while(*arg)
+	while (*arg)
 	{
 		ft_putstr_fd(*(arg)++, STDOUT_FILENO);
 		if (*arg)
@@ -38,7 +38,7 @@ void	ms_echo(char **arg)
 	g_status = EXIT_SUCCESS;
 }
 
-static t_bool is_str_option(char *str, t_bool *option)
+static t_bool	is_str_option(char *str, t_bool *option)
 {
 	size_t	i;
 

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:04:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 18:52:22 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:31:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,4 @@ t_env	*env_find_pointer(char *key, t_env *envp)
 		envp = envp->next;
 	}
 	return (NULL);
-
 }

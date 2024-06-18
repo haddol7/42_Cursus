@@ -6,14 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:51 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 18:14:42 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:39:35 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "execution.h"
 
-extern int g_status;
+extern int	g_status;
 
 void	ms_env(char **arg, t_env *env)
 {
@@ -29,7 +29,7 @@ void	ms_env(char **arg, t_env *env)
 	while (env && env->key)
 	{
 		if (env->complete == 0)
-			continue;
+			continue ;
 		ft_putstr_fd(env->key, STDOUT_FILENO);
 		ft_putchar_fd('=', STDOUT_FILENO);
 		ft_putendl_fd(env->value, STDOUT_FILENO);

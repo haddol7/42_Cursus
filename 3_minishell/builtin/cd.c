@@ -6,13 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 22:32:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/16 06:12:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:39:50 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern int g_status;
+extern int	g_status;
 
 static void	error_enoent(char *arg);
 static char	*get_absolute_path(char *arg, t_bool *malloc);
@@ -64,17 +64,18 @@ static void	env_update_pwd(t_env *env)
 	}
 	env_update_oldpwd(env, old_pwd);
 }
+
 static void	env_update_oldpwd(t_env *env, char *old_pwd)
 {
 	t_env	*node;
-	
+
 	node = env_find_pointer("OLDPWD", env);
 	if (node == NULL)
 		env_add_back(&env, env_new(ft_strdup("OLDPWD"), old_pwd));
 	else
 	{	
 		node->complete = 1;
-		if(node->value)
+		if (node->value)
 			free(node->value);
 		node->value = old_pwd;
 		if (!old_pwd)

@@ -6,17 +6,17 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 00:39:21 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:38:50 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "execution.h"
 
-extern int g_status;
+extern int	g_status;
 
-static void env_export(char *arg, t_env *env);
-static char *get_key_or_value(char *str, char type);
+static void		env_export(char *arg, t_env *env);
+static char		*get_key_or_value(char *str, char type);
 static t_bool	is_env_key_valid(char *str);
 
 void	ms_export(char **arg, t_env *env)
@@ -44,7 +44,7 @@ void	ms_export(char **arg, t_env *env)
 static t_bool	is_env_key_valid(char *str)
 {
 	size_t	i;
-	
+
 	i = 1;
 	if (str[0] != '_' && !ft_isalpha(str[0]))
 	{
@@ -63,7 +63,7 @@ static t_bool	is_env_key_valid(char *str)
 	return (TRUE);
 }
 
-static void env_export(char *arg, t_env *env)
+static void	env_export(char *arg, t_env *env)
 {
 	t_env	*temp_env;
 	char	*key;
@@ -82,7 +82,7 @@ static void env_export(char *arg, t_env *env)
 	}
 	else if (!temp_env)
 		env_add_back(&env, env_new(key, value));
-	else if (value != NULL) 
+	else if (value != NULL)
 	{
 		temp_env->complete = 1;
 		if (temp_env->value != NULL)
@@ -92,7 +92,7 @@ static void env_export(char *arg, t_env *env)
 	}
 }
 
-static char *get_key_or_value(char *str, char type)
+static char	*get_key_or_value(char *str, char type)
 {
 	char	*content;
 	size_t	len;

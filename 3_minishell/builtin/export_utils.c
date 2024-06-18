@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 00:45:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 00:35:00 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:35:03 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static t_env	*env_bubble_sort(t_env *env)
 	t_env	*sorted;
 	t_env	*i;
 	t_env	*j;
-	
+
 	sorted = env_copy_for_sorts(env);
 	i = sorted;
 	while (i)

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:48:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 16:38:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:33:17 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	*free_arg(char ***cmd)
 {
 	char	**head;
 	size_t	i;
-	
+
 	i = 0;
 	head = *cmd;
 	while (head[i])
@@ -64,9 +64,10 @@ void	*free_arg(char ***cmd)
 	return (NULL);
 }
 
-t_bool	*get_parser_error()
+t_bool	*get_parser_error(void)
 {
 	static t_bool	s_syntax_error;
+
 	return (&s_syntax_error);
 }
 
@@ -77,4 +78,3 @@ void	set_parser_error(t_bool is_error)
 	status = get_parser_error();
 	*status = is_error;
 }
-

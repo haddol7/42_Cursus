@@ -6,13 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:53:29 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/18 00:23:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:35:57 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
 
-extern int g_status;
+extern int	g_status;
 
 int	handle_error(char *str, int code, t_token **head)
 {	
