@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:27:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 17:01:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 19:48:45 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ static t_bool	expansion_and_check_error(t_node *node, t_stat *stat)
 		free(error_str);
 		return (TRUE);
 	}
+	free(error_str);
 	return (FALSE);
 }
 
