@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:04:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 17:51:07 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 20:59:56 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@ extern int	g_status;
 
 void	push_pid_list(pid_t pid, t_stat *stat)
 {
-	if (stat->n_pid == MAX_PID - 1)
-	{
+	stat->pid[stat->n_pid++] = pid;
+	if (stat->n_pid == MAX_PID)
+	{	
 		ft_putendl_fd("minishell : maximum number of process exceeded", \
 					STDERR_FILENO);
 		wait_pid_list(stat);
 		ft_putendl_fd("exit...", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
-	stat->pid[stat->n_pid++] = pid;
 }
 
 void	wait_pid_list(t_stat *stat)
