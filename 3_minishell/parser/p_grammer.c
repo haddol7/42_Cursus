@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 17:40:17 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 22:29:29 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 00:20:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ t_node	*simple_command(t_token **token)
 		{
 			temp = append_redir_node(redir, token);
 			if (temp == NULL)
-				return (free_arg(&arg), free_all_tree(&redir));
+				return (free_simple_command(arg, redir));
 			else
 				redir = temp;
 		}

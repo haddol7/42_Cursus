@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:54:45 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 15:36:08 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:31:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "tokenizer.h"
 # include "libft.h"
 
-#define SYNTAX_ERR 258
+# define SYNTAX_ERR 2
 
 typedef enum e_node_type
 {
@@ -43,7 +43,7 @@ typedef struct s_node
 t_node	*parser(t_token *token);
 void	*free_all_tree(t_node **node);
 void	*free_arg(char ***cmd);
-t_bool	*get_parser_error();
+t_bool	*get_parser_error(void);
 void	set_parser_error(t_bool is_error);
 
 //p_grammer.c
@@ -57,14 +57,15 @@ t_node	*simple_command(t_token **token);
 t_node	*redirect_list(t_token **token);
 t_node	*io_redirect(t_token **token);
 
-//p_node_utils.c
+//p_utils.c
 t_node	*new_parent_node(t_node_type type, t_node *left, t_node *right);
 t_node	*new_cmd_node(t_node_type type, char **arg);
 t_node	*link_redir_to_node(t_node *node, t_node *redir);
 t_node	*append_redir_node(t_node *redir, t_token **token);
 char	**append_cmd_arg(char **arg, t_token **token);
 
-//p_token_utils.c
+//p_utils_2.c
+void	*free_simple_command(char **arg, t_node *node);
 t_bool	is_token_redir(t_token *token);
 t_bool	is_token(t_token *token, t_token_type type);
 void	token_next(t_token **token);

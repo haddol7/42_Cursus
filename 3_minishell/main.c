@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 19:21:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:28:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static void	init_stat(t_stat *stat);
 static void	display_title(int argc, char **argv);
 static void	loop_prompt(t_minishell *ms);
 
-//TODO: malloc null check 통일
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	ms;

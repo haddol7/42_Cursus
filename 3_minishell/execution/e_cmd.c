@@ -20,7 +20,6 @@ static void	set_arg_path(char **cmd, t_env *envp);
 static char	*match_in_env_path(char *cmd, char **path);
 static char	*match_in_current_path(char *cmd);
 
-//TODO: signal 작업
 void	exec_cmd(t_node *node, t_stat *stat)
 {
 	pid_t	pid;
@@ -49,7 +48,7 @@ void	exec_cmd(t_node *node, t_stat *stat)
 static void	exec_proc(char **arg, t_stat *stat)
 {	
 	close_pipe_fds(stat);
-	redirect_to_cmd(stat);
+	redirect_to_cmd(stat, TRUE);
 	set_arg_path(&arg[0], stat->envp);
 	execve(arg[0], arg, env_join(stat->envp));
 	exit(EXIT_FAILURE);
@@ -60,14 +59,16 @@ static void	set_arg_path(char **cmd, t_env *envp)
 	char	**path;
 	char	*file;
 
-	if (ft_strchr(*cmd, '/') == NULL)
+	if (ft_strcmp(*cmd, "") && ft_strchr(*cmd, '/') == NULL)
 	{
 		path = ft_split(env_find_value("PATH", envp), ':');
 		file = match_in_env_path(*cmd, path);
 		free_double_pointer(path);
 	}
-	else
+	else if (ft_strcmp(*cmd, ""))
 		file = match_in_current_path(*cmd);
+	else
+		file = NULL;
 	if_not_executable_then_exit(file, *cmd);
 	free(*cmd);
 	*cmd = file;

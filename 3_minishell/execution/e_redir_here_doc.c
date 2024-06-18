@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 17:48:55 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:43:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static void	proc_here_doc(char **cmd);
 static void	write_heredoc(char *delim, char *filename);
 static char	*name_tmp_file(void);
 
-//TODO : 시그널로 프로세스가 종료되었을 때 남아있던 파일을 삭제하는 동작이 필요함
+extern int	g_status;
+
 void	exec_here_doc(t_node *node)
 {	
 	if (node == NULL || node->type == N_CMD)
@@ -29,7 +30,6 @@ void	exec_here_doc(t_node *node)
 	exec_here_doc(node->right);
 }
 
-//TODO :  waitpid 수정
 static void	proc_here_doc(char **cmd)
 {
 	pid_t	pid;
@@ -41,7 +41,11 @@ static void	proc_here_doc(char **cmd)
 		write_heredoc(cmd[0], filename);
 	else
 	{
-		waitpid(pid, 0, 0);
+		waitpid(pid, &g_status, 0);
+		if (WIFEXITED(g_status))
+			g_status = WEXITSTATUS(g_status);
+		else if (WIFSIGNALED(g_status))
+			g_status = WTERMSIG(g_status);
 		free(cmd[0]);
 		cmd[0] = filename;
 	}

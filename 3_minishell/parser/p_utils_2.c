@@ -1,16 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   p_token_utils.c                                    :+:      :+:    :+:   */
+/*   p_utils_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:00:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/04 17:16:26 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 00:20:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+void	*free_simple_command(char **arg, t_node *redir)
+{
+	if (arg != NULL)
+		free_arg(&arg);
+	if (redir != NULL)
+		free_all_tree(&redir);
+	return (NULL);
+}
 
 t_bool	is_token_redir(t_token *token)
 {

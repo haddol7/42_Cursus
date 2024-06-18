@@ -33,9 +33,6 @@ void	quote_lock(char c, int *status)
 	}
 }
 
-//TODO: 아래의 코드가 안전한가?
-//			if (env->complete == 0)
-//				break;
 char	*return_value(char *dollar_start, t_env *env)
 {
 	int		i;

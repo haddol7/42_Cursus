@@ -6,22 +6,22 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 15:54:08 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:39:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-extern int g_status;
+extern int	g_status;
 
-static int exit_atoi(char *str);
+static int	exit_atoi(char *str);
 static void	error_exit(char *str);
 
 void	ms_exit(char **arg)
 {
 	int		status;
 	char	*nbr;
-	
+
 	nbr = arg[1];
 	ft_putendl_fd("exit", STDOUT_FILENO);
 	if (nbr == NULL)
@@ -56,7 +56,7 @@ static char	*move_to_num(char *str, int *sign)
 	return (str);
 }
 
-static int exit_atoi(char *str)
+static int	exit_atoi(char *str)
 {
 	long	result;
 	int		sign;

@@ -6,11 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 22:15:25 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 00:07:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+extern int	g_status;
 
 void	error_cmd_exit(char *cmd, int error_type)
 {
@@ -36,7 +38,7 @@ void	error_cmd_exit(char *cmd, int error_type)
 		exit(126);
 }
 
-void	redirect_to_cmd(t_stat *stat)
+t_bool	redirect_to_cmd(t_stat *stat, t_bool is_forked)
 {
 	if (stat->fd[INPUT] == -1 || stat->fd[OUTPUT] == -1)
 	{
@@ -44,7 +46,10 @@ void	redirect_to_cmd(t_stat *stat)
 			close(stat->fd[INPUT]);
 		if (stat->fd[OUTPUT] != -1 && stat->fd[INPUT] != STDOUT_FILENO)
 			close(stat->fd[OUTPUT]);
-		exit(EXIT_FAILURE);
+		if (is_forked)
+			exit(EXIT_FAILURE);
+		else
+			return (FALSE);
 	}
 	if (stat->fd[OUTPUT] != STDOUT_FILENO)
 	{
@@ -56,6 +61,7 @@ void	redirect_to_cmd(t_stat *stat)
 		dup2(stat->fd[INPUT], STDIN_FILENO);
 		close(stat->fd[INPUT]);
 	}
+	return (TRUE);
 }
 
 void	close_pipe_fds(t_stat *stat)
@@ -77,9 +83,9 @@ void	if_not_executable_then_exit(char *file, char *cmd)
 	struct stat	buf;
 
 	stat(file, &buf);
-	if (access(file, F_OK))
+	if (access(file, F_OK | X_OK))
 		error_cmd_exit(cmd, ENOENT);
-	else if (access(file, X_OK))
+	else if (access(file, F_OK))
 		error_cmd_exit(cmd, EACCES);
 	else if ((buf.st_mode & S_IFMT) == S_IFDIR)
 		error_cmd_exit(cmd, EISDIR);

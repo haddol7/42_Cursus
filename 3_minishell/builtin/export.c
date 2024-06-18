@@ -6,25 +6,23 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 18:26:38 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:38:50 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "execution.h"
 
-extern int g_status;
+extern int	g_status;
 
-static void env_export(char *arg, t_env *env);
-static char *get_key_or_value(char *str, char type);
+static void		env_export(char *arg, t_env *env);
+static char		*get_key_or_value(char *str, char type);
+static t_bool	is_env_key_valid(char *str);
 
-
-//TODO : export PATH
-//export PATH=
 void	ms_export(char **arg, t_env *env)
 {
 	t_bool	error;
-	
+
 	arg++;
 	error = FALSE;
 	if (*arg == NULL)
@@ -39,13 +37,14 @@ void	ms_export(char **arg, t_env *env)
 	}
 	if (error)
 		g_status = EXIT_FAILURE;
-	g_status = EXIT_SUCCESS;
+	else
+		g_status = EXIT_SUCCESS;
 }
 
-t_bool	is_env_key_valid(char *str)
+static t_bool	is_env_key_valid(char *str)
 {
 	size_t	i;
-	
+
 	i = 1;
 	if (str[0] != '_' && !ft_isalpha(str[0]))
 	{
@@ -64,7 +63,7 @@ t_bool	is_env_key_valid(char *str)
 	return (TRUE);
 }
 
-static void env_export(char *arg, t_env *env)
+static void	env_export(char *arg, t_env *env)
 {
 	t_env	*temp_env;
 	char	*key;
@@ -83,7 +82,7 @@ static void env_export(char *arg, t_env *env)
 	}
 	else if (!temp_env)
 		env_add_back(&env, env_new(key, value));
-	else if (value != NULL) 
+	else if (value != NULL)
 	{
 		temp_env->complete = 1;
 		if (temp_env->value != NULL)
@@ -93,9 +92,9 @@ static void env_export(char *arg, t_env *env)
 	}
 }
 
-static char *get_key_or_value(char *str, char type)
+static char	*get_key_or_value(char *str, char type)
 {
-	char	*key;
+	char	*content;
 	size_t	len;
 
 	len = 0;
@@ -105,14 +104,18 @@ static char *get_key_or_value(char *str, char type)
 	{
 		while (*str && *str != '=')
 			str++;
-		if (*str)
+		if (*str == '=')
+		{
 			str++;
+			if (!*str)
+				return (ft_strdup(""));
+		}
+		else
+			return (NULL);
 	}
 	while (str[len] && str[len] != type)
 		len++;
-	key = malloc(sizeof(char) * (len + 1));
-	ft_strlcpy(key, str, len + 1);
-	if (type == KEY && str[len] != '\0')
-		len++;
-	return (key);
+	content = malloc(sizeof(char) * (len + 1));
+	ft_strlcpy(content, str, len + 1);
+	return (content);
 }

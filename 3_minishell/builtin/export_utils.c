@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 00:45:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/16 03:12:15 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:35:03 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,16 @@ void	display_declare_list(t_env *env)
 
 	sorted = env_bubble_sort(env);
 	while (sorted)
-	{
-		printf("declare -x %s=\"%s\"\n", sorted->key, sorted->value);
+	{	
+		ft_putstr_fd("declare -x ", STDOUT_FILENO);
+		ft_putstr_fd(sorted->key, STDOUT_FILENO);
+		if (sorted->complete == 1)
+		{
+			ft_putstr_fd("=\"", STDOUT_FILENO);
+			ft_putstr_fd(sorted->value, STDOUT_FILENO);
+			ft_putstr_fd("\"", STDOUT_FILENO);
+		}
+		ft_putstr_fd("\n", STDOUT_FILENO);
 		temp = sorted->next;
 		free(sorted);
 		sorted = temp;
@@ -36,7 +44,7 @@ static t_env	*env_bubble_sort(t_env *env)
 	t_env	*sorted;
 	t_env	*i;
 	t_env	*j;
-	
+
 	sorted = env_copy_for_sorts(env);
 	i = sorted;
 	while (i)

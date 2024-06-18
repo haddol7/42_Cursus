@@ -6,14 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:40:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 18:14:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:29:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "execution.h"
 
-extern int g_status;
+extern int	g_status;
 
 static void	exec_forked_builtin(t_node *node, t_stat *stat);
 static void	exec_builtin_func(t_node *node, t_stat *stat);
@@ -21,7 +21,7 @@ static void	exec_builtin_func(t_node *node, t_stat *stat);
 t_bool	is_builtin(char *arg)
 {
 	size_t	len;
-	
+
 	if (arg == NULL)
 		return (FALSE);
 	len = ft_strlen(arg);
@@ -53,8 +53,8 @@ void	exec_builtin(t_node *node, t_stat *stat)
 	{	
 		fd[INPUT] = dup(STDIN_FILENO);
 		fd[OUTPUT] = dup(STDOUT_FILENO);
-		redirect_to_cmd(stat);
-		exec_builtin_func(node, stat);
+		if (redirect_to_cmd(stat, FALSE))
+			exec_builtin_func(node, stat);
 		dup2(fd[INPUT], STDIN_FILENO);
 		dup2(fd[OUTPUT], STDOUT_FILENO);
 		close(fd[INPUT]);
@@ -70,7 +70,7 @@ static void	exec_forked_builtin(t_node *node, t_stat *stat)
 	if (!pid)
 	{
 		close_pipe_fds(stat);
-		redirect_to_cmd(stat);
+		redirect_to_cmd(stat, TRUE);
 		exec_builtin_func(node, stat);
 		exit(g_status);
 	}

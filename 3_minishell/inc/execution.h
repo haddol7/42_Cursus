@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/15 22:20:10 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/17 23:11:22 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	exec_cmd(t_node *node, t_stat *stat);
 
 //e_cmd_utils.c
 void	error_cmd_exit(char *cmd, int error_type);
-void	redirect_to_cmd(t_stat *stat);
+t_bool	redirect_to_cmd(t_stat *stat, t_bool is_forked);
 void	close_pipe_fds(t_stat *stat);
 void	if_not_executable_then_exit(char *file, char *cmd);
 char	*change_as_absolute_path(char *cmd);
