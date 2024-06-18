@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 18:13:52 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 19:05:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	loop_prompt(t_minishell *ms)
 	while (input)
 	{	
 		input = readline("minishell$ ");
-		if (input && *input)
+		if (input)
 		{
 			init_stat(&ms->stat);
 			add_history(input);
