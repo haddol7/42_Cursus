@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:04:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 16:31:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 17:51:07 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	wait_pid_list(t_stat *stat)
 		waitpid(stat->pid[pid], &g_status, 0);
 		pid++;
 	}
+	stat->n_pid = 0;
 	if (WIFEXITED(g_status))
 		g_status = WEXITSTATUS(g_status);
 	else if (WIFSIGNALED(g_status))
