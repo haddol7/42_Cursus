@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/18 16:27:09 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:42:22 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,6 @@ int			**init_table(int t, int p, char *pattern, t_wild_card star_list);
 char		**env_join(t_env *ms_envp);
 char		*env_join_key_value(char *key, char *value);
 void		cmd_expansion(t_node *node, t_env *env);
+char		*cmd_to_null(char *new_cmd);
 
 #endif

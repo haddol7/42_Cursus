@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:44:24 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 19:41:54 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:45:25 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	cmd_add_back(t_new_cmd **head, char *new)
 	t_new_cmd	*last;
 	t_new_cmd	*new_node;
 
+	if (new == NULL)
+		return ;
 	new_node = cmd_new(new);
 	if (head == NULL)
 		return ;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/18 16:46:40 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 16:44:58 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ char	*ms_strcpy(int start, int end, char *str)
 	int		i;
 
 	i = 0;
+	if (str == NULL)
+		return (0);
 	ret = (char *)malloc(sizeof(char) * (end - start + 1));
 	if (ret == NULL)
 		handle_error("exit : malloc error4", 1, 0);
