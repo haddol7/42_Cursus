@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:54:45 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 16:31:47 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 19:56:21 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "libft.h"
 
 # define SYNTAX_ERR 2
+# define SYNTAX_MSG "minishell: syntax error near unexpected token `newline'"
 
 typedef enum e_node_type
 {

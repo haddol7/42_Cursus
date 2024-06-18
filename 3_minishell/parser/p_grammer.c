@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 17:40:17 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 00:20:47 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/18 20:04:14 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ t_node	*list(t_token **token)
 		token_next(token);
 		list->right = pipeline(token);
 		if (list->right == NULL)
+		{
+			free_all_tree(&list);
 			return (syntax_error(*token));
+		}
 	}
 	return (list);
 }
@@ -49,7 +52,10 @@ t_node	*pipeline(t_token **token)
 		token_next(token);
 		pipe->right = command(token);
 		if (pipe->right == NULL)
+		{
+			free_all_tree(&pipe);
 			return (syntax_error(*token));
+		}
 	}
 	return (pipe);
 }
@@ -75,7 +81,10 @@ t_node	*subshell(t_token **token)
 	token_next(token);
 	node = list(token);
 	if (!is_token((*token), T_RPAREN) || !node)
+	{
+		free_all_tree(&node);
 		return (syntax_error(*token));
+	}
 	subshell = new_parent_node(N_SUBSHELL, node, NULL);
 	token_next(token);
 	if (is_token_redir(*token))
