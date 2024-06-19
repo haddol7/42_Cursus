@@ -65,13 +65,6 @@ SRC_MAN			:=  main.c \
 					$(EXECUTION) \
 					$(SIGNAL)
 
-#Bonus files for evaluation
-PARSER_BONUS	:=
-TOKENIZER_BONUS	:=
-SRC_BONUS		:=  $(PARSER_BONUS)\
-					$(TOKENIZER_BONUS)\
-					main_bonus.c
-
 GREEN = \033[0;92m
 BLUE = \033[0;94m
 WHITE = \033[0;97m
