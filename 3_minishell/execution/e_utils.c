@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:04:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 20:59:56 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 19:22:35 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,36 +45,4 @@ void	wait_pid_list(t_stat *stat)
 		g_status = WEXITSTATUS(g_status);
 	else if (WIFSIGNALED(g_status))
 		g_status = WTERMSIG(g_status);
-}
-
-char	*env_find_value(char *key, t_env *envp)
-{
-	size_t	len_key;
-	size_t	len_envp;
-
-	len_key = ft_strlen(key);
-	while (envp)
-	{
-		len_envp = ft_strlen(envp->key);
-		if (len_key == len_envp && !ft_strncmp(key, envp->key, len_key))
-			return (envp->value);
-		envp = envp->next;
-	}
-	return (NULL);
-}
-
-t_env	*env_find_pointer(char *key, t_env *envp)
-{
-	size_t	len_key;
-	size_t	len_envp;
-
-	len_key = ft_strlen(key);
-	while (envp)
-	{
-		len_envp = ft_strlen(envp->key);
-		if (len_key == len_envp && !ft_strncmp(key, envp->key, len_key))
-			return (envp);
-		envp = envp->next;
-	}
-	return (NULL);
 }

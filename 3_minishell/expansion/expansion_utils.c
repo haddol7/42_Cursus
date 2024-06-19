@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/19 19:04:12 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 19:28:46 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,22 @@ t_env	*init_env_list(char **envp)
 	int		j;
 	t_env	*env;
 
-	i = 0;
+	i = -1;
 	env = NULL;
-	while (envp[i] != NULL)
+	while (envp[++i] != NULL)
 	{
 		j = 0;
 		while (envp[i][j] != '=')
 			j++;
 		name = ms_strcpy(0, j, envp[i]);
 		content = ft_strdup(envp[i] + j + 1);
-		if (name == NULL || content == NULL)
-			handle_error("exit : malloc error5", 1, 0);
 		env_add_back(&env, env_new(name, content));
-		i++;
 	}
 	env_update_shlvl(&env);
-	env_update_pwd(&env);
+	content = env_update_pwd(&env);
+	if (content != NULL)
+		free(content);
+	env_update_oldpwd(&env, NULL);
 	return (env);
 }
 
