@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 22:32:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 18:55:14 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 19:04:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ extern int	g_status;
 
 static int	error_enoent(char *arg);
 static char	*get_absolute_path(char *arg, t_bool *malloc);
-static void	env_update_oldpwd(t_env *env, char *old_pwd);
+static void	env_update_oldpwd(t_env **env, char *old_pwd);
 static int	home_err(void);
 
 int	ms_cd(char **arg, t_env *env)
@@ -42,19 +42,19 @@ int	ms_cd(char **arg, t_env *env)
 		return (error_enoent(file));
 	if (target_malloc)
 		free(target);
-	old_pwd = env_update_pwd(env);
-	env_update_oldpwd(env, old_pwd);
+	old_pwd = env_update_pwd(&env);
+	env_update_oldpwd(&env, old_pwd);
 	g_status = EXIT_SUCCESS;
 	return (0);
 }
 
-static void	env_update_oldpwd(t_env *env, char *old_pwd)
+static void	env_update_oldpwd(t_env **env, char *old_pwd)
 {
 	t_env	*node;
 
-	node = env_find_pointer("OLDPWD", env);
+	node = env_find_pointer("OLDPWD", *env);
 	if (node == NULL)
-		env_add_back(&env, env_new(ft_strdup("OLDPWD"), old_pwd));
+		env_add_back(env, env_new(ft_strdup("OLDPWD"), old_pwd));
 	else
 	{	
 		node->complete = 1;

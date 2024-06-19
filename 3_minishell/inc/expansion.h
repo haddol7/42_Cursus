@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/19 18:39:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 19:05:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,6 @@ char		*env_join_key_value(char *key, char *value);
 void		cmd_expansion(t_node *node, t_env *env);
 char		*cmd_to_null(char *new_cmd);
 void		env_update_shlvl(t_env **env);
-char		*env_update_pwd(t_env *env);
+char		*env_update_pwd(t_env **env);
 
 #endif

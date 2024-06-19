@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 14:30:41 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/19 18:40:52 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 19:04:57 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,17 +84,17 @@ void	env_update_shlvl(t_env **env)
 	shlvl->complete = 1;
 }
 
-char	*env_update_pwd(t_env *env)
+char	*env_update_pwd(t_env **env)
 {
 	t_env	*node;
 	char	*old_pwd;
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
-	node = env_find_pointer("PWD", env);
+	node = env_find_pointer("PWD", *env);
 	if (node == NULL)
 	{	
-		env_add_back(&env, env_new(ft_strdup("PWD"), pwd));
+		env_add_back(env, env_new(ft_strdup("PWD"), pwd));
 		old_pwd = NULL;
 	}
 	else
