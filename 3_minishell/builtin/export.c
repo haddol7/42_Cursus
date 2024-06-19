@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 17:52:15 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 19:50:08 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ extern int	g_status;
 
 static void		env_export(char *arg, t_env *env);
 static char		*get_key_or_value(char *str, char type);
+static void		set_env_info(char *key, char *value, t_env *env);
 static t_bool	is_env_key_valid(char *str);
 
 void	ms_export(char **arg, t_env *env)
@@ -73,13 +74,7 @@ static void	env_export(char *arg, t_env *env)
 	value = get_key_or_value(arg, VALUE);
 	temp_env = env_find_pointer(key, env);
 	if (!temp_env && env->key == NULL)
-	{
-		env->key = key;
-		env->value = value;
-		env->complete = 0;
-		if (value != NULL)
-			env->complete = 1;
-	}
+		set_env_info(key, value, env);
 	else if (!temp_env)
 		env_add_back(&env, env_new(key, value));
 	else if (value != NULL)
@@ -90,6 +85,8 @@ static void	env_export(char *arg, t_env *env)
 		temp_env->value = value;
 		free(key);
 	}
+	else
+		free(key);
 }
 
 static char	*get_key_or_value(char *str, char type)
@@ -118,4 +115,13 @@ static char	*get_key_or_value(char *str, char type)
 	content = malloc(sizeof(char) * (len + 1));
 	ft_strlcpy(content, str, len + 1);
 	return (content);
+}
+
+static void	set_env_info(char *key, char *value, t_env *env)
+{
+	env->key = key;
+	env->value = value;
+	env->complete = 0;
+	if (value != NULL)
+		env->complete = 1;
 }
