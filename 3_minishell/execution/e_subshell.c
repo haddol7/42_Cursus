@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:03:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 18:51:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:58:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ void	exec_subshell(t_node *node, t_stat *stat)
 		if (WIFEXITED(g_status))
 			g_status = WEXITSTATUS(g_status);
 		else if (WIFSIGNALED(g_status))
-			g_status = WTERMSIG(g_status);
+			g_status = WTERMSIG(g_status) + 128;
 	}
 }

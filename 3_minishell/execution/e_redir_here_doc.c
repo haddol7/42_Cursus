@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 22:40:16 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:58:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static void	proc_here_doc(char **cmd)
 		if (WIFEXITED(g_status))
 			g_status = WEXITSTATUS(g_status);
 		else if (WIFSIGNALED(g_status))
-			g_status = WTERMSIG(g_status);
+			g_status = WTERMSIG(g_status) + 128;
 		free(cmd[0]);
 		cmd[0] = filename;
 	}
