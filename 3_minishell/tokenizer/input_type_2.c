@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 20:12:40 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 18:21:32 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/19 22:48:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ void	input_paren(t_token **head, char input, int *idx)
 		type = T_LPAREN;
 	else
 		type = T_RPAREN;
-	value = (char *)malloc(sizeof(char) * 2);
-	if (value == NULL)
-		handle_error("exit : malloc error", 1, 0);
+	value = (char *)ft_malloc(sizeof(char) * 2);
 	value[0] = input;
 	value[1] = '\0';
 	node = ms_lstnew(value, type);
@@ -51,8 +49,6 @@ void	input_or_if(t_token **head, int *idx)
 	char	*value;
 
 	value = ft_strdup("||");
-	if (value == NULL)
-		handle_error("exit : malloc error", 1, 0);
 	node = ms_lstnew(value, T_OR_IF);
 	ms_lstadd_back(head, node);
 	*idx = *idx + 2;

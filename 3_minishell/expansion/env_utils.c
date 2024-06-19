@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:00 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/18 16:58:22 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/19 22:47:52 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ t_env	*env_new(char *name, char *content)
 {
 	t_env	*node;
 
-	node = (t_env *)malloc(sizeof(t_env));
-	if (node == NULL)
-		handle_error("exit : malloc error", 1, 0);
+	node = (t_env *)ft_malloc(sizeof(t_env));
 	node->key = name;
 	node->value = content;
 	if (name != NULL && content != NULL)

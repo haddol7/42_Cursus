@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 18:00:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:47:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,8 @@ char	*change_as_absolute_path(char *cmd)
 	file_len = 0;
 	while (cmd[str_len - file_len] != '/')
 		file_len++;
-	path = (char *)malloc(sizeof(char) * (str_len - file_len + 1));
-	file = (char *)malloc(sizeof(char) * (file_len + 2));
+	path = (char *)ft_malloc(sizeof(char) * (str_len - file_len + 1));
+	file = (char *)ft_malloc(sizeof(char) * (file_len + 2));
 	ft_strlcpy(path, cmd, str_len - file_len + 1);
 	ft_strlcpy(file, cmd + str_len - file_len, file_len + 2);
 	if (chdir(path) == -1)

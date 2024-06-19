@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/19 19:28:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:47:56 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,7 @@ char	*ms_strcpy(int start, int end, char *str)
 	i = 0;
 	if (str == NULL)
 		return (0);
-	ret = (char *)malloc(sizeof(char) * (end - start + 1));
-	if (ret == NULL)
-		handle_error("exit : malloc error4", 1, 0);
+	ret = (char *)ft_malloc(sizeof(char) * (end - start + 1));
 	while (start + i < end)
 	{
 		ret[i] = str[start + i];

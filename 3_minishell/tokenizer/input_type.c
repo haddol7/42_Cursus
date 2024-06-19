@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/26 19:48:15 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/19 21:00:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:48:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,7 @@ int	input_quotation(t_token **head, char *input, int *idx)
 	}
 	while (!(input[start + len] == ' ' || input[start + len] == '\0'))
 		len++;
-	value = (char *)malloc(sizeof(char) * (len + 2));
-	if (value == NULL)
-		handle_error("exit : malloc error", 1, 0);
+	value = (char *)ft_malloc(sizeof(char) * (len + 2));
 	ft_strlcpy(value, (const char *)(input + start), len + 2);
 	node = ms_lstnew(value, T_WORD);
 	ms_lstadd_back(head, node);
@@ -54,8 +52,6 @@ void	input_pipe(t_token **head, int *idx)
 	t_token	*node;
 
 	value = ft_strdup("|");
-	if (value == NULL)
-		handle_error("exit : malloc error", 1, 0);
 	node = ms_lstnew(value, T_PIPE);
 	ms_lstadd_back(head, node);
 	*idx = *idx + 1;
@@ -80,9 +76,7 @@ void	input_redirection(t_token **head, char *input, int *idx)
 		len = 2;
 	else
 		len = 1;
-	value = (char *)malloc(sizeof(char) * len + 1);
-	if (value == NULL)
-		handle_error("exit : malloc error", 1, 0);
+	value = (char *)ft_malloc(sizeof(char) * len + 1);
 	ft_strlcpy(value, input + (*idx), len + 1);
 	node = ms_lstnew(value, type);
 	ms_lstadd_back(head, node);

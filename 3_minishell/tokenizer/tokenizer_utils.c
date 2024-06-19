@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:53:29 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/18 16:35:57 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:48:35 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ t_token	*ms_lstnew(char *value, t_token_type type)
 {
 	t_token	*node;
 
-	node = (t_token *)malloc(sizeof(t_token));
-	if (node == NULL)
-		handle_error("exit : malloc error9", 1, 0);
+	node = (t_token *)ft_malloc(sizeof(t_token));
 	node->type = type;
 	node->value = value;
 	node->next = NULL;

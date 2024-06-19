@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 18:19:42 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 19:19:49 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:48:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,7 @@ int	input_word(t_token **head, char *input, int *idx)
 	len = word_len(input, start, in_quote);
 	if (len == -1)
 		return (handle_error(ERR_TOK, 0, head));
-	value = (char *)malloc(sizeof(char) * (len + 1));
-	if (value == NULL)
-		handle_error("exit : malloc error3", 1, 0);
+	value = (char *)ft_malloc(sizeof(char) * (len + 1));
 	ft_strlcpy(value, (const char *)(input + start), len + 1);
 	node = ms_lstnew(value, T_WORD);
 	ms_lstadd_back(head, node);

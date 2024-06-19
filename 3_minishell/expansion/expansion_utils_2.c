@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 14:30:41 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/19 19:33:49 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:47:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*ms_strjoin(char *s1, char *s2)
 	idx = 0;
 	s1_len = ms_strlen(s1);
 	s2_len = ms_strlen(s2);
-	str = (char *)malloc((s1_len + s2_len + 1) * sizeof(char));
+	str = (char *)ft_malloc((s1_len + s2_len + 1) * sizeof(char));
 	if (str == NULL)
 		handle_error("exit : malloc error", 1, 0);
 	while (idx < s1_len)

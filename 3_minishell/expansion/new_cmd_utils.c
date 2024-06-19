@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   new_cmd_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:44:24 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/18 16:45:25 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/19 22:47:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_new_cmd	*cmd_new(char *cmd)
 {
 	t_new_cmd	*node;
 
-	node = (t_new_cmd *)malloc(sizeof(t_new_cmd));
+	node = (t_new_cmd *)ft_malloc(sizeof(t_new_cmd));
 	if (node == NULL)
 		handle_error("exit : malloc error7", 1, 0);
 	node->cmd = cmd;

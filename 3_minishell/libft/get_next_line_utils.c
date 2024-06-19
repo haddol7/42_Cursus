@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:48:51 by daeha             #+#    #+#             */
-/*   Updated: 2024/04/30 19:38:26 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:47:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	put_left_fd_buf(t_result *res, t_fd_list **cur)
 	new_fd_buf = NULL;
 	if ((*cur)->len != 0)
 	{
-		new_fd_buf = (char *)malloc(sizeof(char) * (*cur)->len);
+		new_fd_buf = (char *)ft_malloc(sizeof(char) * (*cur)->len);
 		if (new_fd_buf == NULL)
 		{
 			free(res->str);

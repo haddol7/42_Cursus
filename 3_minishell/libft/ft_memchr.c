@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 16:51:08 by daeha             #+#    #+#             */
-/*   Updated: 2023/11/20 17:23:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:47:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	*ft_memchr(const void *s, int c, size_t n)
 // #include <string.h>
 // int main(int argc, char **argv)
 // {
-// 	char *s = malloc(sizeof(char) * 5);
+// 	char *s = ft_malloc(sizeof(char) * 5);
 // 	for (int i = 0; i < 5; i++)
 // 		s[i] = 'a' + i;
 // 	for (int i = 0; i < 5; i++)

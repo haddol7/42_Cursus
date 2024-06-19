@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:27 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/18 17:34:35 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:47:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	**cpy_list_to_cmd(t_new_cmd *new_list)
 		return (0);
 	tmp = new_list;
 	word_cnt = get_cmd_node_num(new_list);
-	result = (char **)malloc(sizeof(char *) * (word_cnt + 1));
+	result = (char **)ft_malloc(sizeof(char *) * (word_cnt + 1));
 	i = 0;
 	while (i < word_cnt)
 	{

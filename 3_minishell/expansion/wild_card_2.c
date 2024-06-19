@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 16:29:59 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 19:18:27 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:47:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ int	**init_table(int t, int p, char *pattern, t_wild_card star_list)
 	int	i;
 
 	i = 0;
-	table = (int **)malloc((sizeof(int *)) * (t + 1));
+	table = (int **)ft_malloc((sizeof(int *)) * (t + 1));
 	while (i <= t)
 	{
-		table[i] = (int *)malloc((sizeof(int)) * (p + 1));
+		table[i] = (int *)ft_malloc((sizeof(int)) * (p + 1));
 		i++;
 	}
 	table[0][0] = 1;

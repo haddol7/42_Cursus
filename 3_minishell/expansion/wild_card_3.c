@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wild_card_3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 16:47:06 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 18:10:39 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/19 22:47:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	init_and_cnt_star(char *cmd, t_wild_card *list)
 			list->len++;
 		i++;
 	}
-	list->idx_list = (int *)malloc(sizeof(int) * list->len);
+	list->idx_list = (int *)ft_malloc(sizeof(int) * list->len);
 }
 
 void	check_star_idx(char *cmd, t_wild_card *list)

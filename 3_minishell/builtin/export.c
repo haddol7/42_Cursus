@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 19:50:08 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:47:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ static char	*get_key_or_value(char *str, char type)
 	}
 	while (str[len] && str[len] != type)
 		len++;
-	content = malloc(sizeof(char) * (len + 1));
+	content = ft_malloc(sizeof(char) * (len + 1));
 	ft_strlcpy(content, str, len + 1);
 	return (content);
 }
