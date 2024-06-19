@@ -6,11 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/18 17:34:28 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 18:38:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
+#include "execution.h"
+#include "builtin.h"
 
 extern int	g_status;
 
@@ -56,11 +58,16 @@ t_env	*init_env_list(char **envp)
 		env_add_back(&env, env_new(name, content));
 		i++;
 	}
+	env_update_shlvl(&env);
+	env_update_pwd(env);
 	return (env);
 }
 
+
 int	env_strncmp(char *s1, char *name, int n)
 {
+	if (name == NULL)
+		return (1);
 	while (n-- != 0 || *name != '\0')
 	{
 		if (*s1 != *name)
