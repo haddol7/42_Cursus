@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 00:45:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 16:35:03 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 19:40:03 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void		swap_string(char **str1, char **str2);
 static t_env	*env_bubble_sort(t_env *env);
 static t_env	*env_copy_for_sorts(t_env *env);
+static void		swap_int(int *a, int *b);
 
 void	display_declare_list(t_env *env)
 {
@@ -56,6 +57,7 @@ static t_env	*env_bubble_sort(t_env *env)
 			{
 				swap_string(&j->key, &j->next->key);
 				swap_string(&j->value, &j->next->value);
+				swap_int(&j->complete, &j->next->complete);
 			}
 			j = j->next;
 		}
@@ -86,4 +88,13 @@ static void	swap_string(char **str1, char **str2)
 	temp = *str1;
 	*str1 = *str2;
 	*str2 = temp;
+}
+
+static void	swap_int(int *a, int *b)
+{
+	int	temp;
+
+	temp = *a;
+	*a = *b;
+	*b = temp;
 }
