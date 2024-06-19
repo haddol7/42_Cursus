@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 22:32:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 16:39:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 18:55:14 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,55 +14,38 @@
 
 extern int	g_status;
 
-static void	error_enoent(char *arg);
+static int	error_enoent(char *arg);
 static char	*get_absolute_path(char *arg, t_bool *malloc);
-static void	env_update_pwd(t_env *env);
 static void	env_update_oldpwd(t_env *env, char *old_pwd);
+static int	home_err(void);
 
-void	ms_cd(char **arg, t_env *env)
+int	ms_cd(char **arg, t_env *env)
 {
 	t_bool	target_malloc;
 	char	*target;
 	char	*file;
+	char	*old_pwd;
 
 	file = arg[1];
 	target_malloc = FALSE;
 	if (!file || !ft_strcmp(file, "~"))
+	{
 		target = env_find_value("HOME", env);
+		if (target == NULL)
+			return (home_err());
+	}
 	else if (*file != '.' && *file != '/')
 		target = get_absolute_path(file, &target_malloc);
 	else
 		target = file;
 	if (chdir(target) == -1)
-	{
-		error_enoent(file);
-		return ;
-	}
+		return (error_enoent(file));
 	if (target_malloc)
 		free(target);
-	env_update_pwd(env);
-	g_status = EXIT_SUCCESS;
-}
-
-static void	env_update_pwd(t_env *env)
-{
-	t_env	*node;
-	char	*old_pwd;
-	char	*pwd;
-
-	pwd = getcwd(NULL, 0);
-	node = env_find_pointer("PWD", env);
-	if (node == NULL)
-	{	
-		env_add_back(&env, env_new(ft_strdup("PWD"), pwd));
-		old_pwd = NULL;
-	}
-	else
-	{
-		old_pwd = node->value;
-		node->value = pwd;
-	}
+	old_pwd = env_update_pwd(env);
 	env_update_oldpwd(env, old_pwd);
+	g_status = EXIT_SUCCESS;
+	return (0);
 }
 
 static void	env_update_oldpwd(t_env *env, char *old_pwd)
@@ -83,13 +66,14 @@ static void	env_update_oldpwd(t_env *env, char *old_pwd)
 	}
 }
 
-static void	error_enoent(char *arg)
+static int	error_enoent(char *arg)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	ft_putendl_fd(strerror(ENOENT), STDERR_FILENO);
 	g_status = EXIT_FAILURE;
+	return (0);
 }
 
 static char	*get_absolute_path(char *arg, t_bool *malloc)
@@ -104,4 +88,11 @@ static char	*get_absolute_path(char *arg, t_bool *malloc)
 	free(temp);
 	*malloc = TRUE;
 	return (target);
+}
+
+static int	home_err(void)
+{
+	ft_putendl_fd("bash: cd: HOME not set", STDERR_FILENO);
+	g_status = EXIT_FAILURE;
+	return (0);
 }

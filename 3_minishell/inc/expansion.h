@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/18 16:42:22 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/19 18:39:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,7 @@ char		**env_join(t_env *ms_envp);
 char		*env_join_key_value(char *key, char *value);
 void		cmd_expansion(t_node *node, t_env *env);
 char		*cmd_to_null(char *new_cmd);
+void		env_update_shlvl(t_env **env);
+char		*env_update_pwd(t_env *env);
 
 #endif
