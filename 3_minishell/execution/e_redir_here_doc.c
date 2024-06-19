@@ -6,12 +6,10 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 16:43:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:40:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <readline/readline.h>
 #include "execution.h"
 
 static void	proc_here_doc(char **cmd);
@@ -78,6 +76,7 @@ static void	write_heredoc(char *delim, char *filename)
 	int		len_s;
 	int		fd;
 
+	sig_heredoc_mode();
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		error_redir(delim);

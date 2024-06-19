@@ -54,12 +54,16 @@ EXECUTION		:=	execution/execution.c \
 					execution/e_subshell.c \
 					execution/e_utils.c
 
+SIGNAL			:= signal/signal.c \
+				   signal/signal_utils.c
+
 SRC_MAN			:=  main.c \
 					$(TOKENIZER) \
         		 	$(PARSER) \
         			$(EXPANSION) \
 					$(BUILTIN) \
-					$(EXECUTION)
+					$(EXECUTION) \
+					$(SIGNAL)
 
 #Bonus files for evaluation
 PARSER_BONUS	:=

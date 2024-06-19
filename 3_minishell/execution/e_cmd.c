@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 18:06:45 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:39:53 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	exec_cmd(t_node *node, t_stat *stat)
 {
 	pid_t	pid;
 
+	sig_forked_mode();
 	cmd_expansion(node, stat->envp);
 	if (node->cmd == NULL)
 		return ;

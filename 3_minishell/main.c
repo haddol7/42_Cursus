@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 19:05:26 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 22:43:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static void	loop_prompt(t_minishell *ms)
 	input = "";
 	while (input)
 	{	
+		sig_prompt_mode();
 		input = readline("minishell$ ");
 		if (input)
 		{
@@ -53,7 +54,7 @@ static void	loop_prompt(t_minishell *ms)
 			free(input);
 		}
 	}
-	rl_clear_history();
+	clear_history();
 	write(STDOUT_FILENO, "exit\n", 5);
 }
 
@@ -76,7 +77,7 @@ static void	close_all_fds(t_stat *stat)
 
 static void	display_title(int argc, char **argv)
 {
-	if (argc > 1 && !ft_strncmp(argv[1], "-s", 2))
+	if (argc > 1 && !ft_strcmp(argv[1], "-s"))
 		return ;
 	printf("\033[0;32m");
 	printf("  _____ _   _                __           _                  \n");

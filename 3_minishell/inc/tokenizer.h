@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:55:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/17 18:40:32 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/19 21:00:15 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
-
-# ifndef QUOTE_ERROR
-#  define QUOTE_ERROR "bash: unexpected EOF while looking for matching quote\n"
-# endif
 
 # include <unistd.h>
 # include <stdlib.h>

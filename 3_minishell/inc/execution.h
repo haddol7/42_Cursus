@@ -6,16 +6,19 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 19:24:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/19 21:02:08 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXECUTION_H
 # define EXECUTION_H
 
+# include <stdio.h>
+# include <readline/readline.h>
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <string.h>
+# include "signals.h"
 # include "parser.h"
 # include "expansion.h"
 
