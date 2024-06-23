@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_cmd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 22:39:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/23 20:21:35 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	exec_cmd(t_node *node, t_stat *stat)
 {
 	pid_t	pid;
 
-	sig_forked_mode();
 	cmd_expansion(node, stat->envp);
 	if (node->cmd == NULL)
 		return ;
@@ -33,11 +32,13 @@ void	exec_cmd(t_node *node, t_stat *stat)
 		exec_builtin(node, stat);
 		return ;
 	}
+	sig_forked_mode();
 	pid = fork();
 	if (!pid)
 		exec_proc(node->cmd, stat);
 	else
 	{
+		sig_parent_mode();
 		push_pid_list(pid, stat);
 		if (stat->fd[INPUT] != STDIN_FILENO)
 			close(stat->fd[INPUT]);
@@ -47,7 +48,7 @@ void	exec_cmd(t_node *node, t_stat *stat)
 }
 
 static void	exec_proc(char **arg, t_stat *stat)
-{	
+{
 	close_pipe_fds(stat);
 	redirect_to_cmd(stat, TRUE);
 	set_arg_path(&arg[0], stat->envp);
