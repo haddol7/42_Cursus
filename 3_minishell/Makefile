@@ -65,6 +65,64 @@ SRC_MAN			:=  main.c \
 					$(EXECUTION) \
 					$(SIGNAL)
 
+TOKENIZER_BONUS		:=	bonus/tokenizer/tokenizer_bonus.c \
+					bonus/tokenizer/tokenizer_utils_bonus.c \
+					bonus/tokenizer/input_type_bonus.c \
+					bonus/tokenizer/input_type_2_bonus.c \
+					bonus/tokenizer/input_type_3_bonus.c
+
+PARSER_BONUS		:=	bonus/parser/parser_bonus.c \
+					bonus/parser/p_grammer_bonus.c \
+					bonus/parser/p_grammer_2_bonus.c \
+					bonus/parser/p_utils_bonus.c \
+					bonus/parser/p_utils_2_bonus.c \
+					bonus/parser/p_syntax_error_bonus.c \
+
+BUILTIN_BONUS		:=	bonus/builtin/cd_bonus.c \
+					bonus/builtin/echo_bonus.c \
+					bonus/builtin/env_bonus.c \
+					bonus/builtin/exit_bonus.c \
+					bonus/builtin/export_bonus.c \
+					bonus/builtin/export_utils_bonus.c \
+					bonus/builtin/pwd_bonus.c \
+					bonus/builtin/unset_bonus.c
+
+EXPANSION_BONUS		:=	bonus/expansion/expansion_bonus.c \
+					bonus/expansion/env_utils_bonus.c \
+					bonus/expansion/expansion_utils_bonus.c \
+					bonus/expansion/new_cmd_utils_bonus.c \
+					bonus/expansion/env_expand_bonus.c \
+					bonus/expansion/expansion_utils_2_bonus.c \
+					bonus/expansion/expansion_utils_3_bonus.c \
+					bonus/expansion/quote_expand_bonus.c \
+					bonus/expansion/wild_card_bonus.c \
+					bonus/expansion/new_cmd_utils_2_bonus.c \
+					bonus/expansion/wild_card_2_bonus.c \
+					bonus/expansion/wild_card_3_bonus.c
+         
+EXECUTION_BONUS		:=	bonus/execution/execution_bonus.c \
+ 					bonus/execution/e_and_or_if_bonus.c \
+					bonus/execution/e_builtin_bonus.c \
+					bonus/execution/e_cmd_utils_bonus.c \
+ 					bonus/execution/e_cmd_bonus.c \
+					bonus/execution/e_pipe_bonus.c \
+					bonus/execution/e_redir_here_doc_bonus.c \
+ 					bonus/execution/e_redir_utils_bonus.c \
+					bonus/execution/e_redir_bonus.c \
+					bonus/execution/e_subshell_bonus.c \
+					bonus/execution/e_utils_bonus.c
+
+SIGNAL_BONUS		:= bonus/signal/signal_bonus.c \
+				  	bonus/signal/signal_utils_bonus.c
+
+SRC_BONUS			:=  bonus/main_bonus.c \
+					$(TOKENIZER_BONUS) \
+        		 	$(PARSER_BONUS) \
+        			$(EXPANSION_BONUS) \
+					$(BUILTIN_BONUS) \
+					$(EXECUTION_BONUS) \
+					$(SIGNAL_BONUS)
+
 GREEN = \033[0;92m
 BLUE = \033[0;94m
 WHITE = \033[0;97m
@@ -72,14 +130,16 @@ PURPLE = \033[1;35m
 
 ifdef WITH_BONUS
 	SRC_FIN = $(SRC_BONUS)
+	INC_FLAG = -Ibonus/inc
 else
 	SRC_FIN = $(SRC_MAN)
+	INC_FLAG = -Iinc
 endif
 
 OBJS	:=	$(SRC_FIN:.c=.o)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ -Iinc -Ilibft $(READLINE_OBJ)
+	$(CC) $(CFLAGS) -c $< -o $@ $(INC_FLAG) -Ilibft $(READLINE_OBJ)
 
 all: 
 	@make -sC $(LIBFT_DIR)

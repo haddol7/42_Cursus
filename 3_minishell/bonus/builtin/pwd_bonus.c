@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
+/*   pwd_bonus.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/19 22:16:56 by daeha             #+#    #+#             */
-/*   Updated: 2023/11/20 17:15:12 by daeha            ###   ########.fr       */
+/*   Created: 2024/06/14 22:32:09 by daeha             #+#    #+#             */
+/*   Updated: 2024/06/19 23:20:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "builtin_bonus.h"
 
-void	ft_lstiter(t_list *lst, void (*f)(void *))
+extern int	g_status;
+
+void	ms_pwd(void)
 {
-	if (f == NULL)
-		return ;
-	while (lst != NULL)
+	char	*dir;
+
+	dir = getcwd(NULL, 0);
+	if (!dir)
 	{
-		f(lst->content);
-		lst = lst->next;
+		g_status = EXIT_FAILURE;
+		return ;
 	}
+	ft_putendl_fd(dir, STDOUT_FILENO);
+	free(dir);
+	g_status = EXIT_SUCCESS;
 }
