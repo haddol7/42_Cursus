@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:03:01 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 21:01:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/23 17:33:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,23 @@ static void	push_pipe_list(int fd[2], t_stat *stat);
 void	exec_pipe(t_node *node, t_stat *stat)
 {
 	int	fd[2];
-	int	temp[2];
+	int	origin[2];
 
 	stat->is_pipe = TRUE;
-	temp[INPUT] = stat->fd[INPUT];
-	temp[OUTPUT] = stat->fd[OUTPUT];
+	origin[INPUT] = stat->fd[INPUT];
+	origin[OUTPUT] = stat->fd[OUTPUT];
 	pipe(fd);
 	stat->fd[OUTPUT] = fd[OUTPUT];
 	push_pipe_list(fd, stat);
+	//printf("left-pipe - %d %d \n", stat->fd[INPUT], stat->fd[OUTPUT]);
 	execution(node->left, stat);
 	stat->n_pipe--;
-	stat->fd[OUTPUT] = temp[OUTPUT];
+	stat->fd[OUTPUT] = origin[OUTPUT];
 	stat->fd[INPUT] = fd[INPUT];
+	//printf("right-pipe - %d %d \n", stat->fd[INPUT], stat->fd[OUTPUT]);
 	execution(node->right, stat);
 	stat->n_pipe--;
+	stat->fd[INPUT] = origin[INPUT];
 	stat->is_pipe = FALSE;
 }
 

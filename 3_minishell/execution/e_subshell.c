@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:03:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 22:58:16 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/23 17:15:52 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	exec_subshell(t_node *node, t_stat *stat)
 	if (!pid)
 	{	
 		stat->n_pid = 0;
+		close_pipe_fds(stat);
 		execution(node->left, stat);
 		wait_pid_list(stat);
 		exit(g_status);

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 22:43:44 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/23 17:19:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,55 @@ static void	init_stat(t_stat *stat);
 static void	display_title(int argc, char **argv);
 static void	loop_prompt(t_minishell *ms);
 static void	close_all_fds(t_stat *stat);
+
+void	print_all_node(t_node *ast, int indent, char *input)
+{
+	char	**arg;
+
+	if (ast == NULL)
+	{
+		printf("\e[0m");
+		return ;
+	}
+	else if (indent == 0)
+	{
+		printf("\n\e[34m====================node====================\n");
+	}
+	for(int i = 0; i < indent; i++)
+	{
+		ft_putchar_fd(' ', STDERR_FILENO);
+	}
+	if(ast->type == N_AND)
+		ft_putendl_fd("N_AND", STDERR_FILENO);
+	else if (ast->type == N_OR)
+		ft_putendl_fd("N_OR", STDERR_FILENO);
+	else if (ast->type == N_OUTPUT)
+		ft_putendl_fd("N_OUTPUT", STDERR_FILENO);
+	else if (ast->type == N_APPEND)
+		ft_putendl_fd("N_APPEND", STDERR_FILENO);
+	else if (ast->type == N_HERE_DOC)
+		ft_putendl_fd("N_HERE_DOC", STDERR_FILENO);
+	else if (ast->type == N_INPUT)
+		ft_putendl_fd("N_INPUT", STDERR_FILENO);
+	else if (ast->type == N_PIPE)
+		ft_putendl_fd("N_PIPE", STDERR_FILENO);
+	else if (ast->type == N_SUBSHELL)
+		ft_putendl_fd("N_SUBSHELL", STDERR_FILENO);
+	else
+	{
+		arg = ast->cmd;
+		ft_putstr_fd("N_CMD : ", STDERR_FILENO);
+		for(int i = 0; arg && arg[i] != NULL; i++)
+		{
+			dprintf(STDERR_FILENO, "%s, ", arg[i]);
+		}
+		ft_putchar_fd('\n', STDERR_FILENO);
+	}
+	print_all_node(ast->left, indent + 4, input);
+	print_all_node(ast->right, indent + 4, input);
+	if (indent == 0)
+		printf("\e[31m> %s\e[0m\n\n", input);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -45,6 +94,7 @@ static void	loop_prompt(t_minishell *ms)
 			add_history(input);
 			ms->token = tokenizer(input);
 			ms->ast = parser(ms->token);
+			print_all_node(ms->ast, 0, input);
 			exec_here_doc(ms->ast);
 			execution(ms->ast, &ms->stat);
 			wait_pid_list(&ms->stat);
@@ -124,54 +174,5 @@ void	print_all_value(t_token *head)
 		to_print = to_print->next;
 	}
 	printf("\e[0m");
-}
-
-void	print_all_node(t_node *ast, int indent, char *input)
-{
-	char	**arg;
-
-	if (ast == NULL)
-	{
-		printf("\e[0m");
-		return ;
-	}
-	else if (indent == 0)
-	{
-		printf("\n\e[34m====================node====================\n");
-	}
-	for(int i = 0; i < indent; i++)
-	{
-		ft_putchar_fd(' ', STDERR_FILENO);
-	}
-	if(ast->type == N_AND)
-		ft_putendl_fd("N_AND", STDERR_FILENO);
-	else if (ast->type == N_OR)
-		ft_putendl_fd("N_OR", STDERR_FILENO);
-	else if (ast->type == N_OUTPUT)
-		ft_putendl_fd("N_OUTPUT", STDERR_FILENO);
-	else if (ast->type == N_APPEND)
-		ft_putendl_fd("N_APPEND", STDERR_FILENO);
-	else if (ast->type == N_HERE_DOC)
-		ft_putendl_fd("N_HERE_DOC", STDERR_FILENO);
-	else if (ast->type == N_INPUT)
-		ft_putendl_fd("N_INPUT", STDERR_FILENO);
-	else if (ast->type == N_PIPE)
-		ft_putendl_fd("N_PIPE", STDERR_FILENO);
-	else if (ast->type == N_SUBSHELL)
-		ft_putendl_fd("N_SUBSHELL", STDERR_FILENO);
-	else
-	{
-		arg = ast->cmd;
-		ft_putstr_fd("N_CMD : ", STDERR_FILENO);
-		for(int i = 0; arg && arg[i] != NULL; i++)
-		{
-			dprintf(STDERR_FILENO, "%s, ", arg[i]);
-		}
-		ft_putchar_fd('\n', STDERR_FILENO);
-	}
-	print_all_node(ast->left, indent + 4, input);
-	print_all_node(ast->right, indent + 4, input);
-	if (indent == 0)
-		printf("\e[31m> %s\e[0m\n\n", input);
 }
 */
