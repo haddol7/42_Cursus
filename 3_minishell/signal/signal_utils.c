@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 20:53:08 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/23 20:33:56 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/24 18:05:54 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ void	sig_forked_mode(void)
 	signal(SIGQUIT, SIG_DFL);
 }
 
+void	sig_heredoc_parent(void)
+{
+	signal(SIGINT, kill_child);
+}
+
 void	sig_heredoc_mode(void)
 {
 	struct termios	term;
@@ -71,6 +76,6 @@ void	sig_heredoc_mode(void)
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~ECHOCTL;
 	tcsetattr(STDIN_FILENO, 0, &term);
-	signal(SIGINT, SIG_DFL);
+	signal(SIGINT, exit_heredoc);
 	signal(SIGQUIT, SIG_IGN);
 }

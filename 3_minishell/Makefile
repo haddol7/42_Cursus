@@ -2,7 +2,7 @@ NAME			:= minishell
 LIBFT_DIR 		:= libft/
 LIBFT 			:= $(LIBFT_DIR)libft.a
 CC				:= cc
-CFLAGS			:= -Wall -Werror -Wextra
+CFLAGS			:= -Wall -Werror -Wextra -g
 
 READLINE		:= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_OBJ	:= -I${HOME}/.brew/opt/readline/include
@@ -58,6 +58,7 @@ SIGNAL			:= signal/signal.c \
 				   signal/signal_utils.c
 
 SRC_MAN			:=  main.c \
+					main_utils.c \
 					$(TOKENIZER) \
         		 	$(PARSER) \
         			$(EXPANSION) \

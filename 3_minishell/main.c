@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 22:43:44 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 20:48:41 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	main(int argc, char **argv, char **envp)
 static void	loop_prompt(t_minishell *ms)
 {
 	char	*input;
+	static int		pre_status;
 
 	input = "";
 	while (input)
@@ -42,14 +43,14 @@ static void	loop_prompt(t_minishell *ms)
 		if (input)
 		{
 			init_stat(&ms->stat);
-			add_history(input);
+			add_history_if_not_null(input);
 			ms->token = tokenizer(input);
 			ms->ast = parser(ms->token);
 			exec_here_doc(ms->ast);
-			execution(ms->ast, &ms->stat);
+			execution_no_sig(ms->ast, &ms->stat);
 			wait_pid_list(&ms->stat);
-			free_all_token(&ms->token);
-			free_all_tree(&ms->ast);
+			free_all_nodes(ms);
+			save_status(&pre_status);
 			close_all_fds(&ms->stat);
 			free(input);
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_builtin.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:40:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 22:39:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 20:50:04 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	exec_builtin(t_node *node, t_stat *stat)
 	if (stat->is_pipe)
 		exec_forked_builtin(node, stat);
 	else
-	{	
+	{
 		fd[INPUT] = dup(STDIN_FILENO);
 		fd[OUTPUT] = dup(STDOUT_FILENO);
 		if (redirect_to_cmd(stat, FALSE))
@@ -76,7 +76,7 @@ static void	exec_forked_builtin(t_node *node, t_stat *stat)
 		exit(g_status);
 	}
 	else
-	{	
+	{
 		push_pid_list(pid, stat);
 		if (stat->fd[INPUT] != STDIN_FILENO)
 			close(stat->fd[INPUT]);

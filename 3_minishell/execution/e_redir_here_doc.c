@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_redir_here_doc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 22:58:09 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 20:50:00 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ static char	*name_tmp_file(void);
 extern int	g_status;
 
 void	exec_here_doc(t_node *node)
-{	
+{
+	if (g_status == 128 + SIGINT)
+		return ;
 	if (node == NULL || node->type == N_CMD)
 		return ;
 	if (node->type == N_HERE_DOC)
@@ -34,15 +36,19 @@ static void	proc_here_doc(char **cmd)
 	char	*filename;
 
 	filename = name_tmp_file();
+	sig_heredoc_mode();
 	pid = fork();
 	if (!pid)
 		write_heredoc(cmd[0], filename);
 	else
 	{
+		sig_heredoc_parent();
 		waitpid(pid, &g_status, 0);
+		if (g_status == 128 + SIGINT)
+			kill(pid, SIGINT);
 		if (WIFEXITED(g_status))
 			g_status = WEXITSTATUS(g_status);
-		else if (WIFSIGNALED(g_status))
+		if (WIFSIGNALED(g_status))
 			g_status = WTERMSIG(g_status) + 128;
 		free(cmd[0]);
 		cmd[0] = filename;
@@ -76,13 +82,12 @@ static void	write_heredoc(char *delim, char *filename)
 	int		len_s;
 	int		fd;
 
-	sig_heredoc_mode();
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		error_redir(delim);
 	len_d = ft_strlen(delim);
 	while (TRUE)
-	{	
+	{
 		str = readline("> ");
 		if (str)
 			len_s = ft_strlen(str);
