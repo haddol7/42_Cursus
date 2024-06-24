@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:40:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 23:59:02 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/25 01:38:40 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ static void	exec_forked_builtin(t_node *node, t_stat *stat)
 	}
 	else
 	{
+		sig_parent_mode();
 		push_pid_list(pid, stat);
 		if (stat->fd[INPUT] != STDIN_FILENO)
 			close(stat->fd[INPUT]);

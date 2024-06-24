@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:03:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/25 00:12:35 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/25 01:18:16 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,7 @@ void	exec_subshell(t_node *node, t_stat *stat)
 	}
 	else
 	{
+		sig_parent_mode();
 		push_pid_list(pid, stat);
-		waitpid(pid, status, 0);
-		if (WIFEXITED(*status))
-			set_status(WEXITSTATUS(*status));
-		else if (WIFSIGNALED(*status))
-			set_status(WTERMSIG(*status) + 128);
 	}
 }

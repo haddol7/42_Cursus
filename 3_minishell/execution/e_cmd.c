@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 23:57:06 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/25 01:08:45 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	exec_cmd(t_node *node, t_stat *stat)
 	{
 		sig_parent_mode();
 		push_pid_list(pid, stat);
-  }
+	}
 }
 
 static void	exec_proc(char **arg, t_stat *stat)
