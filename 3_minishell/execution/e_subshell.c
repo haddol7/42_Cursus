@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:03:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 20:20:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 20:41:45 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@ void	exec_subshell(t_node *node, t_stat *stat)
 		close_dump_fds(stat);
 		execution(node->left, stat);
 		wait_pid_list(stat);
-		close(stat->fd[INPUT]);
-		close(stat->fd[OUTPUT]);
+		if (stat->fd[INPUT] != STDIN_FILENO)
+			close(stat->fd[INPUT]);
+		if (stat->fd[OUTPUT] != STDOUT_FILENO)
+			close(stat->fd[OUTPUT]);
 		exit(g_status);
 	}
 	else

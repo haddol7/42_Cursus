@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:40:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 20:10:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 20:42:55 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,20 @@ t_bool	is_builtin(char *arg)
 
 void	exec_builtin(t_node *node, t_stat *stat)
 {
-	int		fd[2];
+	int		std[2];
 
 	if (stat->fd_pipe != -1)
 		exec_forked_builtin(node, stat);
 	else
 	{	
-		fd[INPUT] = dup(STDIN_FILENO);
-		fd[OUTPUT] = dup(STDOUT_FILENO);
+		std[INPUT] = dup(STDIN_FILENO);
+		std[OUTPUT] = dup(STDOUT_FILENO);
 		if (redirect_to_cmd(stat, FALSE))
 			exec_builtin_func(node, stat);
-		dup2(fd[INPUT], STDIN_FILENO);
-		dup2(fd[OUTPUT], STDOUT_FILENO);
-		close(fd[INPUT]);
-		close(fd[OUTPUT]);
+		dup2(std[INPUT], STDIN_FILENO);
+		dup2(std[OUTPUT], STDOUT_FILENO);
+		close(std[INPUT]);
+		close(std[OUTPUT]);
 	}
 }
 

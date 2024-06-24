@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 20:33:30 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 21:02:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,22 +53,12 @@ t_bool	redirect_to_cmd(t_stat *stat, t_bool is_forked)
 	}
 	if (stat->fd[OUTPUT] != STDOUT_FILENO)
 	{
-		if(dup2(stat->fd[OUTPUT], STDOUT_FILENO) == -1)
-		{
-			dprintf(2, "%d-->",stat->fd[OUTPUT]);
-			perror("redir : OUTPUT");
-			exit(1);
-		}
+		dup2(stat->fd[OUTPUT], STDOUT_FILENO);
 		close(stat->fd[OUTPUT]);
 	}
 	if (stat->fd[INPUT] != STDIN_FILENO)
 	{
-		if(dup2(stat->fd[INPUT], STDIN_FILENO) == -1)
-		{
-			dprintf(2, "%d-->",stat->fd[INPUT]);
-			perror("redir : INPUT");
-			exit(1);
-		}
+		dup2(stat->fd[INPUT], STDIN_FILENO);
 		close(stat->fd[INPUT]);
 	}
 	return (TRUE);
@@ -82,13 +72,11 @@ void	close_dump_fds(t_stat *stat)
 	while (i < stat->n_dump)
 	{
 		if (stat->fd_dump[i] != stat->fd[INPUT] \
-			&& stat->fd_dump[i] != stat->fd[OUTPUT])
-		{	
-			if (stat->fd_dump[i] != STDIN_FILENO && stat->fd_dump[i] != STDOUT_FILENO)
-			{
-				close(stat->fd_dump[i]);
-				//printf("close[%d] : %d\n", i,stat->fd_dump[i]);
-			}
+			&& stat->fd_dump[i] != stat->fd[OUTPUT] \
+			&& stat->fd_dump[i] != STDIN_FILENO \
+			&& stat->fd_dump[i] != STDOUT_FILENO)
+		{
+			close(stat->fd_dump[i]);
 		}
 		i++;
 	}
