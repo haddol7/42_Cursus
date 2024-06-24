@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   p_syntax_error.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 22:03:33 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 19:56:28 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 23:54:11 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-extern int	g_status;
+#include "minishell.h"
 
 static void	syntax_error_type(t_token *token);
 
@@ -31,7 +30,7 @@ void	*syntax_error(t_token *token)
 			syntax_error_type(token);
 			ft_putendl_fd("'", 2);
 		}
-		g_status = SYNTAX_ERR;
+		set_status(SYNTAX_ERR);
 		set_parser_error(TRUE);
 	}
 	return (NULL);

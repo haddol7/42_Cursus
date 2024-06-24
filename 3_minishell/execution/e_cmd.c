@@ -6,14 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/25 00:04:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 01:08:45 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+#include "minishell.h"
 #include "expansion.h"
-
-extern int	g_status;
 
 static void	exec_proc(char **arg, t_stat *stat);
 static void	set_arg_path(char **cmd, t_env *envp);

@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 21:03:34 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/24 23:35:20 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,7 @@ void	free_all_nodes(t_minishell *ms);
 void	save_status(int *pre_status);
 void	execution_no_sig(t_node *node, t_stat *stat);
 void	add_history_if_not_null(char *input);
+int		*get_status(void);
+void	set_status(int status);
 
 #endif

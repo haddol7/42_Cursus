@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/19 22:47:56 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 23:54:32 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion.h"
 #include "execution.h"
 #include "builtin.h"
-
-extern int	g_status;
+#include "minishell.h"
 
 char	*ms_strcpy(int start, int end, char *str)
 {
@@ -80,8 +79,10 @@ int	env_strncmp(char *s1, char *name, int n)
 char	*exit_status(void)
 {
 	char	*status;
+	int		*int_status;
 
-	status = ft_itoa(g_status);
+	int_status = get_status();
+	status = ft_itoa(*int_status);
 	return (status);
 }
 

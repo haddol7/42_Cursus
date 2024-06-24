@@ -6,11 +6,12 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 20:50:00 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/25 00:18:25 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+#include "minishell.h"
 
 static void	proc_here_doc(char **cmd);
 static void	write_heredoc(char *delim, char *filename);
@@ -34,7 +35,9 @@ static void	proc_here_doc(char **cmd)
 {
 	pid_t	pid;
 	char	*filename;
+	int		*status;
 
+	status = get_status();
 	filename = name_tmp_file();
 	sig_heredoc_mode();
 	pid = fork();
@@ -43,13 +46,13 @@ static void	proc_here_doc(char **cmd)
 	else
 	{
 		sig_heredoc_parent();
-		waitpid(pid, &g_status, 0);
+		waitpid(pid, status, 0);
 		if (g_status == 128 + SIGINT)
 			kill(pid, SIGINT);
-		if (WIFEXITED(g_status))
-			g_status = WEXITSTATUS(g_status);
-		if (WIFSIGNALED(g_status))
-			g_status = WTERMSIG(g_status) + 128;
+		if (WIFEXITED(*status))
+			set_status(WEXITSTATUS(*status));
+		if (WIFSIGNALED(*status))
+			set_status(1);//TODO ㅇㅣ부분 확인
 		free(cmd[0]);
 		cmd[0] = filename;
 	}

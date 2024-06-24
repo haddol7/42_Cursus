@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   e_cmd_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/25 02:21:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 23:57:01 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
-
-extern int	g_status;
+#include "minishell.h"
 
 void	error_cmd_exit(char *cmd, int error_type)
 {

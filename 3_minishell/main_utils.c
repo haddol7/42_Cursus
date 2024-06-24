@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 18:26:30 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/24 21:08:22 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/24 23:36:07 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ void	free_all_nodes(t_minishell *ms)
 	free_all_tree(&ms->ast);
 }
 
-void	save_status(int *pre_status)
-{
-	*pre_status = g_status;
-	g_status = 0;
-}
+// void	save_status(int *pre_status)
+// {
+// 	*pre_status = g_status;
+// 	g_status = 0;
+// }
 
 void	execution_no_sig(t_node *node, t_stat *stat)
 {
@@ -36,4 +36,19 @@ void	add_history_if_not_null(char *input)
 {
 	if (input != NULL && input[0] != '\0')
 		add_history(input);
+}
+
+int	*get_status(void)
+{
+	static int	exit_status = 0;
+
+	return (&exit_status);
+}
+
+void	set_status(int status)
+{
+	int	*exit_status;
+
+	exit_status = get_status();
+	*exit_status = status;
 }
