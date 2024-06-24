@@ -6,17 +6,11 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 16:47:06 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/19 22:47:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 20:46:04 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// void	init_star_list(t_wild_card *list)
-// {
-// 	list->len = 0;
-// 	list->idx_list = NULL;
-// }
 
 void	init_and_cnt_star(char *cmd, t_wild_card *list)
 {
@@ -79,16 +73,3 @@ int	is_in_star_list(t_wild_card star_list, int idx)
 	}
 	return (0);
 }
-
-// int is_hidden_file(t_new_cmd *node, char *d_name)
-// {
-//     int i;
-
-//     i = 0;
-//     while (node->cmd[i] == '\'' || node->cmd[i] == '\"' || 
-//             node->cmd[i] == ' ')
-//         i++;
-//     if (node->cmd[i] != '.' && d_name[0] == '.')
-//         return (1);
-//     return (0);
-// }

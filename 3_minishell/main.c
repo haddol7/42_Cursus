@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 21:07:08 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/24 21:00:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ static void	init_stat(t_stat *stat)
 	stat->fd[INPUT] = STDIN_FILENO;
 	stat->fd[OUTPUT] = STDOUT_FILENO;
 	stat->n_pid = 0;
-	stat->n_pipe = 0;
-	stat->is_pipe = 0;
+	stat->n_dump = 0;
+	stat->fd_pipe = -1;
 }
 
 static void	close_all_fds(t_stat *stat)

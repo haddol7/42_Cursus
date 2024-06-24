@@ -28,10 +28,7 @@ void	exec_cmd(t_node *node, t_stat *stat)
 	if (node->cmd == NULL)
 		return ;
 	if (node->cmd && is_builtin(node->cmd[0]))
-	{
-		exec_builtin(node, stat);
-		return ;
-	}
+    return (exec_builtin(node, stat));
 	sig_forked_mode();
 	pid = fork();
 	if (!pid)
@@ -40,16 +37,12 @@ void	exec_cmd(t_node *node, t_stat *stat)
 	{
 		sig_parent_mode();
 		push_pid_list(pid, stat);
-		if (stat->fd[INPUT] != STDIN_FILENO)
-			close(stat->fd[INPUT]);
-		if (stat->fd[OUTPUT] != STDOUT_FILENO)
-			close(stat->fd[OUTPUT]);
-	}
+  }
 }
 
 static void	exec_proc(char **arg, t_stat *stat)
-{
-	close_pipe_fds(stat);
+{	
+	close_dump_fds(stat);
 	redirect_to_cmd(stat, TRUE);
 	set_arg_path(&arg[0], stat->envp);
 	execve(arg[0], arg, env_join(stat->envp));
