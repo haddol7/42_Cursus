@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 18:42:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 20:33:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,18 @@ void	exec_cmd(t_node *node, t_stat *stat)
 		exec_proc(node->cmd, stat);
 	else
 	{
-		if (stat->fd[INPUT] != STDIN_FILENO && stat->fd[INPUT] != stat->fd_pipe)
-			close(stat->fd[INPUT]);
-		if (stat->fd[OUTPUT] != STDOUT_FILENO && stat->fd[OUTPUT] != stat->fd_pipe)
-			close(stat->fd[OUTPUT]);
+		// if (stat->fd[INPUT] != STDIN_FILENO && stat->fd[INPUT] != stat->fd_pipe)
+		// 	close(stat->fd[INPUT]);
+		// if (stat->fd[OUTPUT] != STDOUT_FILENO && stat->fd[OUTPUT] != stat->fd_pipe)
+		// 	close(stat->fd[OUTPUT]);
 		push_pid_list(pid, stat);
 	}
 }
 
 static void	exec_proc(char **arg, t_stat *stat)
 {	
-	close_pipe_fds(stat);
+	//printf("[%s] : %d | %d | fd->pipe : %d\n", arg[0], stat->fd[0], stat->fd[1], stat->fd_pipe);
+	close_dump_fds(stat);
 	redirect_to_cmd(stat, TRUE);
 	set_arg_path(&arg[0], stat->envp);
 	execve(arg[0], arg, env_join(stat->envp));

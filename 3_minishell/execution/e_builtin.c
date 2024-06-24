@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:40:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 18:47:36 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 20:10:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ static void	exec_forked_builtin(t_node *node, t_stat *stat)
 	sig_forked_mode();
 	pid = fork();
 	if (!pid)
-	{
-		close_pipe_fds(stat);
+	{	
+		close_dump_fds(stat);
 		redirect_to_cmd(stat, TRUE);
 		exec_builtin_func(node, stat);
 		exit(g_status);
