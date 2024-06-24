@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 20:48:27 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/24 21:03:34 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ typedef struct s_minishell
 }	t_minishell;
 
 void	free_all_nodes(t_minishell *ms);
-void    save_status(int *pre_status);
-void    execution_no_sig(t_node *node, t_stat *stat);
-void    add_history_if_not_null(char *input);
+void	save_status(int *pre_status);
+void	execution_no_sig(t_node *node, t_stat *stat);
+void	add_history_if_not_null(char *input);
 
 #endif

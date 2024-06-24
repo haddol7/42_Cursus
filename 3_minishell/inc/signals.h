@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 20:09:53 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 18:37:09 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/24 21:02:54 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,5 @@ void	sig_forked_mode(void);
 void	sig_heredoc_parent(void);
 void	sig_heredoc_mode(void);
 void	sig_parent_mode(void);
+
 #endif

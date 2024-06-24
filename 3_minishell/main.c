@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 20:48:41 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/24 21:07:08 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	main(int argc, char **argv, char **envp)
 
 static void	loop_prompt(t_minishell *ms)
 {
-	char	*input;
+	char			*input;
 	static int		pre_status;
 
 	input = "";
