@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/25 02:54:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 03:21:05 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 static void	proc_here_doc(char **cmd);
 static void	write_heredoc(char *delim, char *filename);
 static char	*name_tmp_file(void);
+static char	*delim_expand_quote(char *delim);
 
 extern int	g_signal;
 
@@ -78,6 +79,24 @@ static char	*name_tmp_file(void)
 	return (name);
 }
 
+static char	*delim_expand_quote(char *delim)
+{
+	int		i;
+	char	*word_tmp;
+
+	i = 0;
+	word_tmp = 0;
+	while (delim[i] != '\0')
+	{
+		if (delim[i] == '\'' || delim[i] == '\"')
+			word_tmp = de_quote(delim, &i, word_tmp, delim[i]);
+		else
+			word_tmp = no_quote(delim, &i, word_tmp);
+	}
+	free(delim);
+	return (word_tmp);
+}
+
 static void	write_heredoc(char *delim, char *filename)
 {
 	char	*str;
@@ -85,6 +104,7 @@ static void	write_heredoc(char *delim, char *filename)
 	int		len_s;
 	int		fd;
 
+	delim = delim_expand_quote(delim);
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		error_redir(delim);
