@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 21:02:29 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 02:21:04 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	close_dump_fds(t_stat *stat)
 		}
 		i++;
 	}
+	stat->n_dump = 0;
 }
 
 void	if_not_executable_then_exit(char *file, char *cmd)

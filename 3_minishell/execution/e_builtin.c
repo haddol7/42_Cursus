@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_builtin.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:40:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 20:42:55 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 02:07:12 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,8 @@ static void	exec_forked_builtin(t_node *node, t_stat *stat)
 	}
 	else
 	{
+		sig_parent_mode();
 		push_pid_list(pid, stat);
-		if (stat->fd[INPUT] != STDIN_FILENO)
-			close(stat->fd[INPUT]);
-		if (stat->fd[OUTPUT] != STDOUT_FILENO)
-			close(stat->fd[OUTPUT]);
 	}
 }
 

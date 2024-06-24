@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:04:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/23 20:31:07 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/25 01:40:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ extern int	g_status;
 
 void	push_pid_list(pid_t pid, t_stat *stat)
 {
-	stat->pid[stat->n_pid++] = pid;
 	if (stat->n_pid == MAX_PID)
 	{	
 		ft_putendl_fd("minishell : maximum number of process exceeded", \
@@ -26,6 +25,7 @@ void	push_pid_list(pid_t pid, t_stat *stat)
 		ft_putendl_fd("exit...", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
+	stat->pid[stat->n_pid++] = pid;
 }
 
 void	wait_pid_list(t_stat *stat)

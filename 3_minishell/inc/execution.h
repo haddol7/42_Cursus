@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 20:10:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 01:53:34 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include "parser.h"
 # include "expansion.h"
 
-# define MAX_PIPE 1024
+# define MAX_PIPE 2048
 # define MAX_PID 512
 
 # define READ 0
@@ -69,6 +69,7 @@ char	*change_as_absolute_path(char *cmd);
 
 //e_pipe.c
 void	exec_pipe(t_node *node, t_stat *stat);
+void	push_pipe_list(int fd, t_stat *stat);
 
 //e_redir.c
 void	exec_redir(t_node *node, t_stat *stat);
