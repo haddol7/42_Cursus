@@ -6,13 +6,12 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:27:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 20:28:17 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/24 23:57:19 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
-
-extern int	g_status;
+#include "minishell.h"
 
 static t_bool	is_redir_in(t_node_type type);
 static t_bool	expansion_and_check_error(t_node *node, t_stat *stat);
@@ -60,7 +59,7 @@ static t_bool	expansion_and_check_error(t_node *node, t_stat *stat)
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(error_str, STDERR_FILENO);
 		ft_putendl_fd(": ambiguous redirect", STDERR_FILENO);
-		g_status = EXIT_FAILURE;
+		set_status(EXIT_FAILURE);
 		free(error_str);
 		return (TRUE);
 	}

@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:46:14 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 16:39:47 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 23:57:46 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
-
-extern int	g_status;
+#include "minishell.h"
 
 static t_bool	is_str_option(char *str, t_bool *option);
 
@@ -35,7 +34,7 @@ void	ms_echo(char **arg)
 	}
 	if (!option)
 		ft_putchar_fd('\n', STDOUT_FILENO);
-	g_status = EXIT_SUCCESS;
+	set_status(EXIT_SUCCESS);
 }
 
 static t_bool	is_str_option(char *str, t_bool *option)

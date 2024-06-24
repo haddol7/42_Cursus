@@ -6,14 +6,13 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/23 20:21:35 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/24 23:57:06 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+#include "minishell.h"
 #include "expansion.h"
-
-extern int	g_status;
 
 static void	exec_proc(char **arg, t_stat *stat);
 static void	set_arg_path(char **cmd, t_env *envp);

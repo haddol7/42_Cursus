@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   e_subshell.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:03:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 20:41:45 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 00:12:35 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
-
-extern int	g_status;
+#include "minishell.h"
 
 void	exec_subshell(t_node *node, t_stat *stat)
 {
 	pid_t	pid;
+	int		*status;
 
+	status = get_status();
 	pid = fork();
 	if (!pid)
 	{	
@@ -29,15 +30,16 @@ void	exec_subshell(t_node *node, t_stat *stat)
 			close(stat->fd[INPUT]);
 		if (stat->fd[OUTPUT] != STDOUT_FILENO)
 			close(stat->fd[OUTPUT]);
-		exit(g_status);
+		status = get_status();
+		exit(*status);
 	}
 	else
 	{
 		push_pid_list(pid, stat);
-		waitpid(pid, &g_status, 0);
-		if (WIFEXITED(g_status))
-			g_status = WEXITSTATUS(g_status);
-		else if (WIFSIGNALED(g_status))
-			g_status = WTERMSIG(g_status) + 128;
+		waitpid(pid, status, 0);
+		if (WIFEXITED(*status))
+			set_status(WEXITSTATUS(*status));
+		else if (WIFSIGNALED(*status))
+			set_status(WTERMSIG(*status) + 128);
 	}
 }

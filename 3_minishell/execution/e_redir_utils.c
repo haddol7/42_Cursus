@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   e_redir_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:21:20 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/12 21:41:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 23:57:14 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
-
-extern int	g_status;
+#include "minishell.h"
 
 void	error_redir(char *name)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	perror(name);
-	g_status = EXIT_FAILURE;
+	set_status(EXIT_FAILURE);
 }
 
 int	input(char *filename)

@@ -3,20 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:53:29 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/19 22:48:35 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 23:53:54 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
-
-extern int	g_status;
+#include "minishell.h"
 
 int	handle_error(char *str, int code, t_token **head)
 {	
-	g_status = 2;
+	set_status(2);
 	write(2, str, ft_strlen(str));
 	if (code == 1)
 		exit(1);

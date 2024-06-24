@@ -6,14 +6,13 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:40:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 20:42:55 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 23:59:02 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "execution.h"
-
-extern int	g_status;
+#include "minishell.h"
 
 static void	exec_forked_builtin(t_node *node, t_stat *stat);
 static void	exec_builtin_func(t_node *node, t_stat *stat);
@@ -65,6 +64,7 @@ void	exec_builtin(t_node *node, t_stat *stat)
 static void	exec_forked_builtin(t_node *node, t_stat *stat)
 {
 	pid_t	pid;
+	int		*status;
 
 	sig_forked_mode();
 	pid = fork();
@@ -73,7 +73,8 @@ static void	exec_forked_builtin(t_node *node, t_stat *stat)
 		close_dump_fds(stat);
 		redirect_to_cmd(stat, TRUE);
 		exec_builtin_func(node, stat);
-		exit(g_status);
+		status = get_status();
+		exit(*status);
 	}
 	else
 	{

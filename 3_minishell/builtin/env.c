@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:51 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 21:19:47 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 23:57:49 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "execution.h"
-
-extern int	g_status;
+#include "minishell.h"
 
 void	ms_env(char **arg, t_env *env)
 {
@@ -23,7 +22,7 @@ void	ms_env(char **arg, t_env *env)
 		ft_putstr_fd(arg[1], STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 		ft_putendl_fd(strerror(ENOENT), STDERR_FILENO);
-		g_status = EXIT_FAILURE;
+		set_status(EXIT_FAILURE);
 		return ;
 	}
 	while (env && env->key)
@@ -36,5 +35,5 @@ void	ms_env(char **arg, t_env *env)
 		}
 		env = env->next;
 	}
-	g_status = EXIT_SUCCESS;
+	set_status(EXIT_SUCCESS);
 }

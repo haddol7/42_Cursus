@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 21:00:31 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 00:15:25 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ int	main(int argc, char **argv, char **envp)
 	ms.stat.envp = init_env_list(envp);
 	loop_prompt(&ms);
 	env_free_all(&ms.stat.envp);
-	return (g_status);
+	return (*get_status());
 }
 
 static void	loop_prompt(t_minishell *ms)
 {
 	char			*input;
-	static int		pre_status;
+	// static int		pre_status;
 
 	input = "";
 	while (input)
@@ -50,7 +50,8 @@ static void	loop_prompt(t_minishell *ms)
 			execution_no_sig(ms->ast, &ms->stat);
 			wait_pid_list(&ms->stat);
 			free_all_nodes(ms);
-			save_status(&pre_status);
+			g_status = 0;
+			// save_status(&pre_status);
 			close_all_fds(&ms->stat);
 			free(input);
 		}

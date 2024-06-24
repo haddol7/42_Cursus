@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 22:31:54 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 16:39:16 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 23:58:03 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "execution.h"
-
-extern int	g_status;
+#include "minishell.h"
 
 static void		env_del_node(char *arg, t_env *env);
 static void		swap_contents_without_change_node(t_env *env);
@@ -34,9 +33,9 @@ void	ms_unset(char **arg, t_env *env)
 		arg++;
 	}
 	if (error)
-		g_status = EXIT_FAILURE;
+		set_status(EXIT_FAILURE);
 	else
-		g_status = EXIT_SUCCESS;
+		set_status(EXIT_SUCCESS);
 }
 
 static void	env_del_node(char *arg, t_env *env)
