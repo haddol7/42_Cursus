@@ -1,37 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/19 20:16:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 21:10:16 by jungslee         ###   ########.fr       */
+/*   Created: 2024/06/24 18:26:30 by jungslee          #+#    #+#             */
+/*   Updated: 2024/06/24 21:08:22 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "signals.h"
+#include "minishell.h"
 
 extern int	g_status;
 
-void	show_new_prompt(int signal)
+void	free_all_nodes(t_minishell *ms)
 {
-	(void) signal;
-	ft_putstr_fd("\n", STDOUT_FILENO);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	g_status = 1;
+	free_all_token(&ms->token);
+	free_all_tree(&ms->ast);
 }
 
-void	kill_child(int signal)
+void	save_status(int *pre_status)
 {
-	g_status = 128 + signal;
+	*pre_status = g_status;
+	g_status = 0;
 }
 
-void	exit_heredoc(int signal)
+void	execution_no_sig(t_node *node, t_stat *stat)
 {
-	(void) signal;
-	ft_putendl_fd("", STDOUT_FILENO);
-	exit(128 + signal);
+	if (g_status != 128 + SIGINT)
+		execution(node, stat);
+}
+
+void	add_history_if_not_null(char *input)
+{
+	if (input != NULL && input[0] != '\0')
+		add_history(input);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_redir.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:27:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 19:48:45 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 20:28:17 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	exec_redir(t_node *node, t_stat *stat)
 			stat->fd[INPUT] = heredoc(node->right->cmd[0]);
 		else if (node->type == N_OUTPUT)
 			stat->fd[OUTPUT] = output(node->right->cmd[0]);
-		else
+		else if (node->type == N_APPEND)
 			stat->fd[OUTPUT] = append(node->right->cmd[0]);
 	}
 	execution(node->left, stat);

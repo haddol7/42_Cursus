@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_cmd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 20:48:32 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/23 20:21:35 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,20 @@ void	exec_cmd(t_node *node, t_stat *stat)
 {
 	pid_t	pid;
 
-	sig_forked_mode();
 	cmd_expansion(node, stat->envp);
 	if (node->cmd == NULL)
 		return ;
 	if (node->cmd && is_builtin(node->cmd[0]))
-		return (exec_builtin(node, stat));
+    return (exec_builtin(node, stat));
+	sig_forked_mode();
 	pid = fork();
 	if (!pid)
 		exec_proc(node->cmd, stat);
 	else
+	{
+		sig_parent_mode();
 		push_pid_list(pid, stat);
+  }
 }
 
 static void	exec_proc(char **arg, t_stat *stat)
