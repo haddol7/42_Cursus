@@ -6,14 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:51 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 23:20:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:48:10 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin_bonus.h"
 #include "execution_bonus.h"
-
-extern int	g_status;
+#include "minishell_bonus.h"
 
 void	ms_env(char **arg, t_env *env)
 {
@@ -23,7 +22,7 @@ void	ms_env(char **arg, t_env *env)
 		ft_putstr_fd(arg[1], STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 		ft_putendl_fd(strerror(ENOENT), STDERR_FILENO);
-		g_status = EXIT_FAILURE;
+		set_status(EXIT_FAILURE);
 		return ;
 	}
 	while (env && env->key)
@@ -36,5 +35,5 @@ void	ms_env(char **arg, t_env *env)
 		}
 		env = env->next;
 	}
-	g_status = EXIT_SUCCESS;
+	set_status(EXIT_SUCCESS);
 }

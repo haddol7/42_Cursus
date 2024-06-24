@@ -6,13 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 23:20:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:37:33 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin_bonus.h"
-
-extern int	g_status;
+#include "minishell_bonus.h"
 
 static int	exit_atoi(char *str);
 static void	error_exit(char *str);
@@ -25,12 +24,12 @@ void	ms_exit(char **arg)
 	nbr = arg[1];
 	ft_putendl_fd("exit", STDOUT_FILENO);
 	if (nbr == NULL)
-		exit(g_status);
+		exit(*get_status());
 	status = exit_atoi(nbr);
 	if (arg[2] != NULL)
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
-		g_status = EXIT_FAILURE;
+		set_status(EXIT_FAILURE);
 		return ;
 	}
 	if (status >= 0)

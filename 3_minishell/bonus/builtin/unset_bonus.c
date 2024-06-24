@@ -6,14 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 22:31:54 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 23:20:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:37:33 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin_bonus.h"
 #include "execution_bonus.h"
-
-extern int	g_status;
+#include "minishell_bonus.h"
 
 static void		env_del_node(char *arg, t_env *env);
 static void		swap_contents_without_change_node(t_env *env);
@@ -34,9 +33,9 @@ void	ms_unset(char **arg, t_env *env)
 		arg++;
 	}
 	if (error)
-		g_status = EXIT_FAILURE;
+		set_status(EXIT_FAILURE);
 	else
-		g_status = EXIT_SUCCESS;
+		set_status(EXIT_SUCCESS);
 }
 
 static void	env_del_node(char *arg, t_env *env)

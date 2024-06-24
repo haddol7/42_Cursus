@@ -6,13 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 23:22:31 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:35:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_bonus.h"
 
-int	g_status;
+int	g_signal;
 
 static void	init_stat(t_stat *stat);
 static void	display_title(int argc, char **argv);
@@ -27,7 +27,7 @@ int	main(int argc, char **argv, char **envp)
 	ms.stat.envp = init_env_list(envp);
 	loop_prompt(&ms);
 	env_free_all(&ms.stat.envp);
-	return (g_status);
+	return (*get_status());
 }
 
 static void	loop_prompt(t_minishell *ms)
@@ -42,14 +42,14 @@ static void	loop_prompt(t_minishell *ms)
 		if (input)
 		{
 			init_stat(&ms->stat);
-			add_history(input);
+			add_history_if_not_null(input);
 			ms->token = tokenizer(input);
 			ms->ast = parser(ms->token);
 			exec_here_doc(ms->ast);
-			execution(ms->ast, &ms->stat);
+			execution_no_sig(ms->ast, &ms->stat);
+			close_all_fds(&ms->stat);
 			wait_pid_list(&ms->stat);
-			free_all_token(&ms->token);
-			free_all_tree(&ms->ast);
+			free_all_nodes(ms);
 			close_all_fds(&ms->stat);
 			free(input);
 		}
@@ -59,12 +59,13 @@ static void	loop_prompt(t_minishell *ms)
 }
 
 static void	init_stat(t_stat *stat)
-{
+{	
+	g_signal = 0;
 	stat->fd[INPUT] = STDIN_FILENO;
 	stat->fd[OUTPUT] = STDOUT_FILENO;
 	stat->n_pid = 0;
-	stat->n_pipe = 0;
-	stat->is_pipe = 0;
+	stat->n_dump = 0;
+	stat->fd_pipe = -1;
 }
 
 static void	close_all_fds(t_stat *stat)

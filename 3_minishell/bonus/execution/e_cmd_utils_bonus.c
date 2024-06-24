@@ -6,13 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 23:20:36 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:35:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution_bonus.h"
-
-extern int	g_status;
+#include "minishell_bonus.h"
 
 void	error_cmd_exit(char *cmd, int error_type)
 {
@@ -64,18 +63,23 @@ t_bool	redirect_to_cmd(t_stat *stat, t_bool is_forked)
 	return (TRUE);
 }
 
-void	close_pipe_fds(t_stat *stat)
+void	close_dump_fds(t_stat *stat)
 {
 	int	i;
 
 	i = 0;
-	while (i < stat->n_pipe)
+	while (i < stat->n_dump)
 	{
-		if (stat->pipe[i] != stat->fd[INPUT] \
-			&& stat->pipe[i] != stat->fd[OUTPUT])
-			close(stat->pipe[i]);
+		if (stat->fd_dump[i] != stat->fd[INPUT] \
+			&& stat->fd_dump[i] != stat->fd[OUTPUT] \
+			&& stat->fd_dump[i] != STDIN_FILENO \
+			&& stat->fd_dump[i] != STDOUT_FILENO)
+		{
+			close(stat->fd_dump[i]);
+		}
 		i++;
 	}
+	stat->n_dump = 0;
 }
 
 void	if_not_executable_then_exit(char *file, char *cmd)

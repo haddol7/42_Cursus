@@ -6,14 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 23:20:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:35:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution_bonus.h"
+#include "minishell_bonus.h"
 #include "expansion_bonus.h"
-
-extern int	g_status;
 
 static void	exec_proc(char **arg, t_stat *stat);
 static void	set_arg_path(char **cmd, t_env *envp);
@@ -24,31 +23,25 @@ void	exec_cmd(t_node *node, t_stat *stat)
 {
 	pid_t	pid;
 
-	sig_forked_mode();
 	cmd_expansion(node, stat->envp);
 	if (node->cmd == NULL)
 		return ;
 	if (node->cmd && is_builtin(node->cmd[0]))
-	{
-		exec_builtin(node, stat);
-		return ;
-	}
+		return (exec_builtin(node, stat));
+	sig_forked_mode();
 	pid = fork();
 	if (!pid)
 		exec_proc(node->cmd, stat);
 	else
 	{
+		sig_parent_mode();
 		push_pid_list(pid, stat);
-		if (stat->fd[INPUT] != STDIN_FILENO)
-			close(stat->fd[INPUT]);
-		if (stat->fd[OUTPUT] != STDOUT_FILENO)
-			close(stat->fd[OUTPUT]);
 	}
 }
 
 static void	exec_proc(char **arg, t_stat *stat)
 {	
-	close_pipe_fds(stat);
+	close_dump_fds(stat);
 	redirect_to_cmd(stat, TRUE);
 	set_arg_path(&arg[0], stat->envp);
 	execve(arg[0], arg, env_join(stat->envp));

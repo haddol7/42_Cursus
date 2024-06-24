@@ -6,17 +6,16 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:53:29 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/19 23:22:28 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:35:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer_bonus.h"
-
-extern int	g_status;
+#include "minishell_bonus.h"
 
 int	handle_error(char *str, int code, t_token **head)
 {	
-	g_status = 2;
+	set_status(2);
 	write(2, str, ft_strlen(str));
 	if (code == 1)
 		exit(1);

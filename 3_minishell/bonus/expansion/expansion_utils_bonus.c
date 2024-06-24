@@ -6,15 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:43:46 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/19 23:21:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:35:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expansion_bonus.h"
 #include "execution_bonus.h"
 #include "builtin_bonus.h"
-
-extern int	g_status;
+#include "minishell_bonus.h"
 
 char	*ms_strcpy(int start, int end, char *str)
 {
@@ -80,8 +79,10 @@ int	env_strncmp(char *s1, char *name, int n)
 char	*exit_status(void)
 {
 	char	*status;
+	int		*int_status;
 
-	status = ft_itoa(g_status);
+	int_status = get_status();
+	status = ft_itoa(*int_status);
 	return (status);
 }
 

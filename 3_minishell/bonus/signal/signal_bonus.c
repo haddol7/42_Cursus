@@ -6,35 +6,34 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 20:16:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 23:22:09 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:35:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "signals_bonus.h"
+#include "minishell_bonus.h"
 
-extern int	g_status;
+extern int	g_signal;
 
 void	show_new_prompt(int signal)
 {
 	(void) signal;
-	ft_putendl_fd("", STDOUT_FILENO);
+	ft_putstr_fd("\n", STDOUT_FILENO);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	g_status = 1;
+	g_signal = 1;
+	set_status(g_signal);
 }
 
-void	exit_forked(int signal)
+void	kill_child(int signal)
 {
-	if (signal == SIGINT)
-		ft_putendl_fd("", STDOUT_FILENO);
-	else if (signal == SIGQUIT)
-		ft_putendl_fd("Quit: 3", STDOUT_FILENO);
+	g_signal = 128 + signal;
 }
 
 void	exit_heredoc(int signal)
 {
 	(void) signal;
 	ft_putendl_fd("", STDOUT_FILENO);
-	exit(1);
+	exit(128 + signal);
 }

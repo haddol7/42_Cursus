@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:55:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 23:39:21 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:49:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-# include "libft.h"
+# include "../libft/libft.h"
 
 # define ERR_TOK "minishell: unexpected EOF while looking for matching quote\n"
 

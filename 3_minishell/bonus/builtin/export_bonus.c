@@ -6,14 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 23:20:16 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:37:33 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin_bonus.h"
 #include "execution_bonus.h"
-
-extern int	g_status;
+#include "minishell_bonus.h"
 
 static void		env_export(char *arg, t_env *env);
 static char		*get_key_or_value(char *str, char type);
@@ -37,9 +36,9 @@ void	ms_export(char **arg, t_env *env)
 		arg++;
 	}
 	if (error)
-		g_status = EXIT_FAILURE;
+		set_status(EXIT_FAILURE);
 	else
-		g_status = EXIT_SUCCESS;
+		set_status(EXIT_SUCCESS);
 }
 
 static t_bool	is_env_key_valid(char *str)

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 20:53:08 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 23:22:12 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:35:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,16 @@ void	sig_prompt_mode(void)
 {
 	struct termios	term;
 
-	tcgetattr(1, &term);
+	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~ECHOCTL;
-	tcsetattr(1, 0, &term);
+	tcsetattr(STDIN_FILENO, 0, &term);
 	signal(SIGINT, show_new_prompt);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	sig_parent_mode(void)
+{
+	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 }
 
@@ -27,15 +33,25 @@ void	sig_forked_mode(void)
 {
 	struct termios	term;
 
-	tcgetattr(1, &term);
+	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag |= ECHOCTL;
-	tcsetattr(1, 0, &term);
-	signal(SIGINT, exit_forked);
-	signal(SIGQUIT, exit_forked);
+	tcsetattr(STDIN_FILENO, 0, &term);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}
+
+void	sig_heredoc_parent(void)
+{
+	signal(SIGINT, kill_child);
 }
 
 void	sig_heredoc_mode(void)
 {
+	struct termios	term;
+
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, 0, &term);
 	signal(SIGINT, exit_heredoc);
 	signal(SIGQUIT, SIG_IGN);
 }

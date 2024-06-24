@@ -6,15 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 22:32:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 23:19:55 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:48:05 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin_bonus.h"
 #include "expansion_bonus.h"
 #include "execution_bonus.h"
-
-extern int	g_status;
+#include "minishell_bonus.h"
 
 static int	error_enoent(char *arg);
 static char	*get_absolute_path(char *arg, t_bool *malloc);
@@ -45,7 +44,7 @@ int	ms_cd(char **arg, t_env *env)
 		free(target);
 	old_pwd = env_update_pwd(&env);
 	env_update_oldpwd(&env, old_pwd);
-	g_status = EXIT_SUCCESS;
+	set_status(EXIT_SUCCESS);
 	return (0);
 }
 
@@ -55,7 +54,7 @@ static int	error_enoent(char *arg)
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	ft_putendl_fd(strerror(2), STDERR_FILENO);
-	g_status = EXIT_FAILURE;
+	set_status(EXIT_FAILURE);
 	return (0);
 }
 
@@ -76,6 +75,6 @@ static char	*get_absolute_path(char *arg, t_bool *malloc)
 static int	home_err(void)
 {
 	ft_putendl_fd("bash: cd: HOME not set", STDERR_FILENO);
-	g_status = EXIT_FAILURE;
+	set_status(EXIT_FAILURE);
 	return (0);
 }

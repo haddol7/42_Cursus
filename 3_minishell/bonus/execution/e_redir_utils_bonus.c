@@ -6,19 +6,18 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 19:21:20 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 23:20:48 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:35:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution_bonus.h"
-
-extern int	g_status;
+#include "minishell_bonus.h"
 
 void	error_redir(char *name)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	perror(name);
-	g_status = EXIT_FAILURE;
+	set_status(EXIT_FAILURE);
 }
 
 int	input(char *filename)

@@ -6,20 +6,24 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 23:20:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/25 04:35:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution_bonus.h"
+#include "minishell_bonus.h"
 
 static void	proc_here_doc(char **cmd);
 static void	write_heredoc(char *delim, char *filename);
 static char	*name_tmp_file(void);
+static char	*delim_expand_quote(char *delim);
 
-extern int	g_status;
+extern int	g_signal;
 
 void	exec_here_doc(t_node *node)
-{	
+{
+	if (g_signal == 128 + SIGINT)
+		return ;
 	if (node == NULL || node->type == N_CMD)
 		return ;
 	if (node->type == N_HERE_DOC)
@@ -32,18 +36,24 @@ static void	proc_here_doc(char **cmd)
 {
 	pid_t	pid;
 	char	*filename;
+	int		*status;
 
+	status = get_status();
 	filename = name_tmp_file();
+	sig_heredoc_mode();
 	pid = fork();
 	if (!pid)
 		write_heredoc(cmd[0], filename);
 	else
 	{
-		waitpid(pid, &g_status, 0);
-		if (WIFEXITED(g_status))
-			g_status = WEXITSTATUS(g_status);
-		else if (WIFSIGNALED(g_status))
-			g_status = WTERMSIG(g_status) + 128;
+		sig_heredoc_parent();
+		waitpid(pid, status, 0);
+		if (g_signal == 128 + SIGINT)
+			kill(pid, SIGINT);
+		if (WIFEXITED(*status))
+			set_status(WEXITSTATUS(*status));
+		if (WIFSIGNALED(*status))
+			set_status(1);
 		free(cmd[0]);
 		cmd[0] = filename;
 	}
@@ -69,6 +79,24 @@ static char	*name_tmp_file(void)
 	return (name);
 }
 
+static char	*delim_expand_quote(char *delim)
+{
+	int		i;
+	char	*word_tmp;
+
+	i = 0;
+	word_tmp = 0;
+	while (delim[i] != '\0')
+	{
+		if (delim[i] == '\'' || delim[i] == '\"')
+			word_tmp = de_quote(delim, &i, word_tmp, delim[i]);
+		else
+			word_tmp = no_quote(delim, &i, word_tmp);
+	}
+	free(delim);
+	return (word_tmp);
+}
+
 static void	write_heredoc(char *delim, char *filename)
 {
 	char	*str;
@@ -76,13 +104,13 @@ static void	write_heredoc(char *delim, char *filename)
 	int		len_s;
 	int		fd;
 
-	sig_heredoc_mode();
+	delim = delim_expand_quote(delim);
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		error_redir(delim);
 	len_d = ft_strlen(delim);
 	while (TRUE)
-	{	
+	{
 		str = readline("> ");
 		if (str)
 			len_s = ft_strlen(str);
