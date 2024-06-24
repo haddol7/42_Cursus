@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   e_redir_here_doc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
 /*   Updated: 2024/06/25 03:21:05 by jungslee         ###   ########.fr       */
@@ -18,11 +18,11 @@ static void	write_heredoc(char *delim, char *filename);
 static char	*name_tmp_file(void);
 static char	*delim_expand_quote(char *delim);
 
-extern int	g_status;
+extern int	g_signal;
 
 void	exec_here_doc(t_node *node)
 {
-	if (g_status == 128 + SIGINT)
+	if (g_signal == 128 + SIGINT)
 		return ;
 	if (node == NULL || node->type == N_CMD)
 		return ;
@@ -48,12 +48,12 @@ static void	proc_here_doc(char **cmd)
 	{
 		sig_heredoc_parent();
 		waitpid(pid, status, 0);
-		if (g_status == 128 + SIGINT)
+		if (g_signal == 128 + SIGINT)
 			kill(pid, SIGINT);
 		if (WIFEXITED(*status))
 			set_status(WEXITSTATUS(*status));
 		if (WIFSIGNALED(*status))
-			set_status(1);//TODO ㅇㅣ부분 확인
+			set_status(1);
 		free(cmd[0]);
 		cmd[0] = filename;
 	}

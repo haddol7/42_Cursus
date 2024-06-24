@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:27:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 23:57:19 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/25 03:19:49 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	exec_redir(t_node *node, t_stat *stat)
 {
 	if (expansion_and_check_error(node, stat))
 		make_fd_error(node, stat);
-	else if (stat->fd[INPUT] != -1 && stat->fd[OUTPUT] != -1)
+	if (stat->fd[INPUT] != -1 && stat->fd[OUTPUT] != -1)
 	{
 		close_before_redir(node, stat);
 		if (node->type == N_INPUT)
@@ -67,14 +67,16 @@ static t_bool	expansion_and_check_error(t_node *node, t_stat *stat)
 
 static void	make_fd_error(t_node *node, t_stat *stat)
 {
-	if (stat->fd[INPUT] != STDIN_FILENO && is_redir_in(node->type))
-	{
-		close(stat->fd[INPUT]);
+	if (is_redir_in(node->type))
+	{	
+		if (stat->fd[INPUT] != STDIN_FILENO)
+			close(stat->fd[INPUT]);
 		stat->fd[INPUT] = -1;
 	}
-	else if (stat->fd[OUTPUT] != STDOUT_FILENO && !is_redir_in(node->type))
-	{
-		close(stat->fd[OUTPUT]);
+	else
+	{	
+		if (stat->fd[OUTPUT] != STDOUT_FILENO)
+			close(stat->fd[OUTPUT]);
 		stat->fd[OUTPUT] = -1;
 	}
 }
