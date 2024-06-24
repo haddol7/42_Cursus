@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   e_redir.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:27:02 by daeha             #+#    #+#             */
 /*   Updated: 2024/06/24 23:57:19 by jungslee         ###   ########.fr       */
@@ -16,6 +16,7 @@
 static t_bool	is_redir_in(t_node_type type);
 static t_bool	expansion_and_check_error(t_node *node, t_stat *stat);
 static void		make_fd_error(t_node *node, t_stat *stat);
+static void		close_before_redir(t_node *node, t_stat *stat);
 
 void	exec_redir(t_node *node, t_stat *stat)
 {
@@ -23,10 +24,7 @@ void	exec_redir(t_node *node, t_stat *stat)
 		make_fd_error(node, stat);
 	else if (stat->fd[INPUT] != -1 && stat->fd[OUTPUT] != -1)
 	{
-		if (stat->fd[INPUT] != STDIN_FILENO && is_redir_in(node->type))
-			close(stat->fd[INPUT]);
-		else if (stat->fd[OUTPUT] != STDOUT_FILENO && !is_redir_in(node->type))
-			close(stat->fd[OUTPUT]);
+		close_before_redir(node, stat);
 		if (node->type == N_INPUT)
 			stat->fd[INPUT] = input(node->right->cmd[0]);
 		else if (node->type == N_HERE_DOC)
@@ -78,5 +76,23 @@ static void	make_fd_error(t_node *node, t_stat *stat)
 	{
 		close(stat->fd[OUTPUT]);
 		stat->fd[OUTPUT] = -1;
+	}
+}
+
+static void	close_before_redir(t_node *node, t_stat *stat)
+{
+	if (stat->fd[INPUT] != STDIN_FILENO && is_redir_in(node->type))
+	{
+		if (stat->fd[INPUT] == stat->fd_pipe)
+			push_pipe_list(stat->fd[INPUT], stat);
+		else
+			close(stat->fd[INPUT]);
+	}
+	else if (stat->fd[OUTPUT] != STDOUT_FILENO && !is_redir_in(node->type))
+	{
+		if (stat->fd[OUTPUT] == stat->fd_pipe)
+			push_pipe_list(stat->fd[INPUT], stat);
+		else
+			close(stat->fd[OUTPUT]);
 	}
 }

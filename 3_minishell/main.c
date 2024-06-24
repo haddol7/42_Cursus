@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
 /*   Updated: 2024/06/25 00:39:14 by jungslee         ###   ########.fr       */
@@ -48,6 +48,7 @@ static void	loop_prompt(t_minishell *ms)
 			ms->ast = parser(ms->token);
 			exec_here_doc(ms->ast);
 			execution_no_sig(ms->ast, &ms->stat);
+			close_all_fds(&ms->stat);
 			wait_pid_list(&ms->stat);
 			free_all_nodes(ms);
 			g_status = 0;

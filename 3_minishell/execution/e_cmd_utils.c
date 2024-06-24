@@ -79,6 +79,7 @@ void	close_dump_fds(t_stat *stat)
 		}
 		i++;
 	}
+	stat->n_dump = 0;
 }
 
 void	if_not_executable_then_exit(char *file, char *cmd)
