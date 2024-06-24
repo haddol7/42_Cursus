@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:06:05 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/25 01:01:28 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/25 02:54:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-extern int	g_status;
 static t_bool	is_node_redir(t_node_type type);
 
 void	execution(t_node *node, t_stat *stat)

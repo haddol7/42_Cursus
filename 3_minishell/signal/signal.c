@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 20:16:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 21:10:16 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/25 02:50:55 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "signals.h"
+#include "minishell.h"
 
-extern int	g_status;
+extern int	g_signal;
 
 void	show_new_prompt(int signal)
 {
@@ -21,12 +22,13 @@ void	show_new_prompt(int signal)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	g_status = 1;
+	g_signal = 1;
+	set_status(g_signal);
 }
 
 void	kill_child(int signal)
 {
-	g_status = 128 + signal;
+	g_signal = 128 + signal;
 }
 
 void	exit_heredoc(int signal)

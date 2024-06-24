@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 18:26:30 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/24 23:36:07 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/25 02:49:53 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern int	g_status;
+extern int	g_signal;
 
 void	free_all_nodes(t_minishell *ms)
 {
@@ -20,15 +20,9 @@ void	free_all_nodes(t_minishell *ms)
 	free_all_tree(&ms->ast);
 }
 
-// void	save_status(int *pre_status)
-// {
-// 	*pre_status = g_status;
-// 	g_status = 0;
-// }
-
 void	execution_no_sig(t_node *node, t_stat *stat)
 {
-	if (g_status != 128 + SIGINT)
+	if (g_signal != 128 + SIGINT)
 		execution(node, stat);
 }
 

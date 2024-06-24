@@ -6,13 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/25 00:39:14 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/25 02:52:40 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_status;
+int	g_signal;
 
 static void	init_stat(t_stat *stat);
 static void	display_title(int argc, char **argv);
@@ -32,8 +32,7 @@ int	main(int argc, char **argv, char **envp)
 
 static void	loop_prompt(t_minishell *ms)
 {
-	char			*input;
-	// static int		pre_status;
+	char	*input;
 
 	input = "";
 	while (input)
@@ -51,7 +50,6 @@ static void	loop_prompt(t_minishell *ms)
 			close_all_fds(&ms->stat);
 			wait_pid_list(&ms->stat);
 			free_all_nodes(ms);
-			g_status = 0;
 			close_all_fds(&ms->stat);
 			free(input);
 		}
@@ -61,7 +59,8 @@ static void	loop_prompt(t_minishell *ms)
 }
 
 static void	init_stat(t_stat *stat)
-{
+{	
+	g_signal = 0;
 	stat->fd[INPUT] = STDIN_FILENO;
 	stat->fd[OUTPUT] = STDOUT_FILENO;
 	stat->n_pid = 0;
