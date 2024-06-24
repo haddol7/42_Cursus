@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 20:02:12 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/23 17:11:37 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 18:42:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ void	exec_cmd(t_node *node, t_stat *stat)
 		exec_proc(node->cmd, stat);
 	else
 	{
-		if (stat->fd[INPUT] != STDIN_FILENO)
+		if (stat->fd[INPUT] != STDIN_FILENO && stat->fd[INPUT] != stat->fd_pipe)
 			close(stat->fd[INPUT]);
-		if (stat->fd[OUTPUT] != STDOUT_FILENO)
+		if (stat->fd[OUTPUT] != STDOUT_FILENO && stat->fd[OUTPUT] != stat->fd_pipe)
 			close(stat->fd[OUTPUT]);
 		push_pid_list(pid, stat);
 	}

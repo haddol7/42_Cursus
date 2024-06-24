@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 22:47:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 18:38:45 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,11 @@ void	close_pipe_fds(t_stat *stat)
 	int	i;
 
 	i = 0;
-	while (i < stat->n_pipe)
+	while (i < stat->n_dump)
 	{
-		if (stat->pipe[i] != stat->fd[INPUT] \
-			&& stat->pipe[i] != stat->fd[OUTPUT])
-			close(stat->pipe[i]);
+		if (stat->fd_dump[i] != stat->fd[INPUT] \
+			&& stat->fd_dump[i] != stat->fd[OUTPUT])
+			close(stat->fd_dump[i]);
 		i++;
 	}
 }

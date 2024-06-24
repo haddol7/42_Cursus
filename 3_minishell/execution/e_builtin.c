@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:40:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 22:39:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/24 18:47:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	exec_builtin(t_node *node, t_stat *stat)
 {
 	int		fd[2];
 
-	if (stat->is_pipe)
+	if (stat->fd_pipe != -1)
 		exec_forked_builtin(node, stat);
 	else
 	{	
