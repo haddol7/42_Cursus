@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_redir.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 14:27:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 20:28:17 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/24 23:24:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@ void	exec_redir(t_node *node, t_stat *stat)
 		make_fd_error(node, stat);
 	else if (stat->fd[INPUT] != -1 && stat->fd[OUTPUT] != -1)
 	{
-		if (stat->fd[INPUT] != STDIN_FILENO && is_redir_in(node->type))
+		if (stat->fd[INPUT] != stat->fd_pipe \
+			&& stat->fd[INPUT] != 0 && is_redir_in(node->type))
 			close(stat->fd[INPUT]);
-		else if (stat->fd[OUTPUT] != STDOUT_FILENO && !is_redir_in(node->type))
+		else if (stat->fd[OUTPUT] != stat->fd_pipe \
+				&& stat->fd[OUTPUT] != 1 && !is_redir_in(node->type))
 			close(stat->fd[OUTPUT]);
 		if (node->type == N_INPUT)
 			stat->fd[INPUT] = input(node->right->cmd[0]);
