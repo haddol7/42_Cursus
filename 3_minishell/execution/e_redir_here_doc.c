@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_redir_here_doc.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/25 03:21:05 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/26 16:24:34 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ extern int	g_signal;
 
 void	exec_here_doc(t_node *node)
 {
-	if (g_signal == 128 + SIGINT)
+	if (g_signal == SIGINT)
 		return ;
 	if (node == NULL || node->type == N_CMD)
 		return ;
@@ -48,7 +48,7 @@ static void	proc_here_doc(char **cmd)
 	{
 		sig_heredoc_parent();
 		waitpid(pid, status, 0);
-		if (g_signal == 128 + SIGINT)
+		if (g_signal == SIGINT)
 			kill(pid, SIGINT);
 		if (WIFEXITED(*status))
 			set_status(WEXITSTATUS(*status));

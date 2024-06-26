@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 20:16:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/25 02:50:55 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 16:24:56 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,12 @@ void	show_new_prompt(int signal)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	g_signal = 1;
-	set_status(g_signal);
+	set_status(1);
 }
 
 void	kill_child(int signal)
 {
-	g_signal = 128 + signal;
+	g_signal = signal;
 }
 
 void	exit_heredoc(int signal)
