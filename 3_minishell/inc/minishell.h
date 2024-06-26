@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 23:35:20 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/26 21:02:48 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,10 @@ typedef struct s_minishell
 
 void	free_all_nodes(t_minishell *ms);
 void	save_status(int *pre_status);
-void	execution_no_sig(t_node *node, t_stat *stat);
+void	execution_with_sig_check(t_node *node, t_stat *stat);
 void	add_history_if_not_null(char *input);
 int		*get_status(void);
 void	set_status(int status);
+void	del_here_doc_tmp_file(t_node *node);
 
 #endif
