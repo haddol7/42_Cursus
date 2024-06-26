@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 16:48:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/18 19:59:32 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 17:04:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_node	*parser(t_token *token)
 
 	ast = NULL;
 	head = token;
-	if (head == NULL)
+	if (head == NULL || head->type == T_EOF)
 		return (NULL);
 	set_parser_error(FALSE);
 	ast = list(&token);
