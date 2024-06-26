@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_cmd_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 23:57:01 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/26 21:35:15 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void	close_dump_fds(t_stat *stat)
 		{
 			close(stat->fd_dump[i]);
 		}
+		stat->fd_dump[i] = 0;
 		i++;
 	}
 	stat->n_dump = 0;

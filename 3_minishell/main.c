@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/26 20:56:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 21:33:49 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ static void	loop_prompt(t_minishell *ms)
 			execution_with_sig_check(ms->ast, &ms->stat);
 			close_all_fds(&ms->stat);
 			wait_pid_list(&ms->stat);
+			close_dump_fds(&ms->stat);
 			free_all_nodes(ms);
-			close_all_fds(&ms->stat);
 			free(input);
 		}
 	}
@@ -59,7 +59,7 @@ static void	loop_prompt(t_minishell *ms)
 }
 
 static void	init_stat(t_stat *stat)
-{	
+{
 	g_signal = 0;
 	stat->fd[INPUT] = STDIN_FILENO;
 	stat->fd[OUTPUT] = STDOUT_FILENO;
