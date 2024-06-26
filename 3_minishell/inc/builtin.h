@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:42:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/26 14:56:31 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 16:28:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		ms_cd(char **arg, t_env *env);
 void	ms_env(char **arg, t_env *env);
 void	ms_pwd(void);
 void	ms_echo(char **arg);
-void	ms_exit(char **arg);
+void	ms_exit(char **arg, t_bool is_forked);
 void	ms_unset(char **arg, t_env *env);
 void	ms_export(char **arg, t_env *env);
 
