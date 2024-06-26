@@ -117,6 +117,7 @@ SIGNAL_BONUS		:= bonus/signal/signal_bonus.c \
 				  	bonus/signal/signal_utils_bonus.c
 
 SRC_BONUS			:=  bonus/main_bonus.c \
+					bonus/main_utils_bonus.c \
 					$(TOKENIZER_BONUS) \
         		 	$(PARSER_BONUS) \
         			$(EXPANSION_BONUS) \

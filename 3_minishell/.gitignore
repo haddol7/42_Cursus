@@ -3,7 +3,8 @@ minishell
 test.c
 test.sh
 testcase
-
+README.md
+/grammar
 
 .vscode
 *.o
