@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 17:55:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 21:00:15 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 17:32:17 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include "../libft/libft.h"
 
 # define ERR_TOK "minishell: unexpected EOF while looking for matching quote\n"
+# define ERR_AND_IF "minishell: syntax error near unexpected token `&'\n"
+# define ERR_OR_IF "minishell: syntax error near unexpected token `|'\n"
 
 typedef enum e_token_type
 {
@@ -51,8 +53,8 @@ int		input_quotation(t_token **head, char *input, int *idx);
 void	input_pipe(t_token **head, int *idx);
 void	input_redirection(t_token **head, char *input, int *idx);
 void	input_paren(t_token **head, char input, int *idx);
-void	input_and_if(t_token **head, int *idx);
-void	input_or_if(t_token **head, int *idx);
+int		input_and_if(t_token **head, char *input, int *idx);
+int		input_or_if(t_token **head, char *input, int *idx);
 int		input_word(t_token **head, char *input, int *idx);
 int		free_all_token(t_token **head);
 void	eof_node(t_token **head);
