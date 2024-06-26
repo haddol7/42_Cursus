@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 22:32:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/26 16:14:56 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 17:32:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static char	*get_path(char **arg, t_env *env, t_bool *target_malloc)
 {	
 	char	*target;
 	char	*file;
-	
+
 	*target_malloc = FALSE;
 	file = arg[1];
 	if (!file || !ft_strcmp(file, "~"))
