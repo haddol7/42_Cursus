@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 22:32:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 23:57:41 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/26 13:17:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "execution.h"
 #include "minishell.h"
 
-static int	error_enoent(char *arg);
+static int	error_enoent(char *arg, char *target, t_bool target_malloc);
 static char	*get_absolute_path(char *arg, t_bool *malloc);
 static int	home_err(void);
 
@@ -39,7 +39,7 @@ int	ms_cd(char **arg, t_env *env)
 	else
 		target = file;
 	if (chdir(target) == -1)
-		return (error_enoent(file));
+		return (error_enoent(file, target, target_malloc));
 	if (target_malloc)
 		free(target);
 	old_pwd = env_update_pwd(&env);
@@ -48,13 +48,15 @@ int	ms_cd(char **arg, t_env *env)
 	return (0);
 }
 
-static int	error_enoent(char *arg)
+static int	error_enoent(char *arg, char *target, t_bool target_malloc)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(arg, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	ft_putendl_fd(strerror(2), STDERR_FILENO);
 	set_status(EXIT_FAILURE);
+	if (target_malloc)
+		free(target);
 	return (0);
 }
 
