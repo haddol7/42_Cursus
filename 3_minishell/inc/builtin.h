@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:42:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/19 20:59:14 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 14:56:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ void	ms_echo(char **arg);
 void	ms_exit(char **arg);
 void	ms_unset(char **arg, t_env *env);
 void	ms_export(char **arg, t_env *env);
+
+//cd_utils.c
+int		error_cd_home(char *keyword);
+int		error_cd_enoent(char *file, char *target, t_bool target_malloc);
 
 //export_utils.c
 void	display_declare_list(t_env *env);
