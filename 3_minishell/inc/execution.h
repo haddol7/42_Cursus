@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/25 01:53:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 23:03:08 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include "parser.h"
 # include "expansion.h"
 
-# define MAX_PIPE 2048
+# define MAX_PIPE 1024
 # define MAX_PID 512
 
 # define READ 0
@@ -35,6 +35,8 @@
 # define EACCES 13
 # define EISDIR 21
 # define EVALUE 1
+
+# define PROC_EXCEED -1
 
 typedef struct s_stat
 {

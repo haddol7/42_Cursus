@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 20:06:05 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/25 02:54:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 22:46:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static t_bool	is_node_redir(t_node_type type);
 
 void	execution(t_node *node, t_stat *stat)
 {
-	if (node == NULL)
+	if (node == NULL || stat->n_pid == PROC_EXCEED)
 		return ;
 	if (node->type == N_AND || node->type == N_OR)
 		exec_and_or_if(node, stat);
