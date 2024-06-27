@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/26 21:33:49 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 22:46:11 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	loop_prompt(t_minishell *ms)
 			add_history_if_not_null(input);
 			ms->token = tokenizer(input);
 			ms->ast = parser(ms->token);
-			exec_here_doc(ms->ast);
+			exec_here_doc(ms->ast, ms->stat.envp);
 			execution_with_sig_check(ms->ast, &ms->stat);
 			close_all_fds(&ms->stat);
 			wait_pid_list(&ms->stat);

@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 10:07:51 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/17 18:09:17 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/26 15:02:55 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,26 +72,25 @@ t_new_cmd	*expand_wild_card(t_new_cmd *node, t_wild_card star_list)
 	DIR				*p_dir;
 	struct dirent	*dir_ent;
 	t_new_cmd		*sub_list;
-	int				cmd_len;
 
 	sub_list = NULL;
-	cmd_len = ms_strlen(node->cmd);
 	delete_quote(node);
 	ft_memset(path, 0, 256);
 	getcwd(path, 256);
 	p_dir = opendir(path);
-	while (1)
+	while (p_dir != NULL)
 	{
 		dir_ent = readdir(p_dir);
 		if (dir_ent == NULL)
 			break ;
 		if (node->cmd[0] != '.' && dir_ent->d_name[0] == '.')
 			continue ;
-		if (cmd_len == star_list.len || \
+		if (ms_strlen(node->cmd) == star_list.len || \
 			is_match_cmd(dir_ent->d_name, node->cmd, star_list) == 1)
 			cmd_add_back(&sub_list, ft_strdup(dir_ent->d_name));
 	}
-	closedir(p_dir);
+	if (p_dir != NULL)
+		closedir(p_dir);
 	return (sub_list);
 }
 

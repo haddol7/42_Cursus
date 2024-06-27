@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/26 21:02:48 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 22:44:23 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	execution_with_sig_check(t_node *node, t_stat *stat);
 void	add_history_if_not_null(char *input);
 int		*get_status(void);
 void	set_status(int status);
+char	*expand_dollar_here_doc(char *str, struct s_env *envp);
 void	del_here_doc_tmp_file(t_node *node);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 17:15:23 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/19 21:59:55 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 21:14:21 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,7 @@ char		*env_update_pwd(t_env **env);
 void		env_update_oldpwd(t_env **env, char *old_pwd);
 char		*env_find_value(char *key, t_env *envp);
 t_env		*env_find_pointer(char *key, t_env *envp);
+char		*return_value(char *dollar_start, t_env *env);
+char		*replace_cmd(char *origin, char **value, int *dollar_idx);
 
 #endif

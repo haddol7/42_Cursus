@@ -6,11 +6,14 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 20:53:08 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/25 00:17:27 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/26 15:51:47 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "signals.h"
+#include "minishell.h"
+
+extern int	g_signal;
 
 void	sig_prompt_mode(void)
 {

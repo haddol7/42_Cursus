@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 18:26:30 by jungslee          #+#    #+#             */
-/*   Updated: 2024/06/26 21:13:00 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 16:24:16 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	free_all_nodes(t_minishell *ms)
 
 void	execution_with_sig_check(t_node *node, t_stat *stat)
 {
-	if (g_signal != 128 + SIGINT)
+	if (g_signal != SIGINT)
 		execution(node, stat);
 	else
 		del_here_doc_tmp_file(node);

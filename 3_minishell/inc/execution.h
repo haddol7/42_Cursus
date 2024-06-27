@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:26:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/26 23:03:08 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 22:45:18 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	push_pipe_list(int fd, t_stat *stat);
 void	exec_redir(t_node *node, t_stat *stat);
 
 //e_redir_here_doc.c
-void	exec_here_doc(t_node *node);
+void	exec_here_doc(t_node *node, t_env *envp);
 
 //e_redir_utils.c
 void	error_redir(char *name);
