@@ -6,10 +6,11 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:03:01 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/25 01:54:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 22:53:28 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include "execution.h"
 
 static void	fd_copy(int origin[2], t_stat *stat);
@@ -45,15 +46,16 @@ void	exec_pipe(t_node *node, t_stat *stat)
 
 void	push_pipe_list(int fd, t_stat *stat)
 {
-	if (stat->n_pid == MAX_PID)
+	stat->fd_dump[stat->n_dump++] = fd;
+	if (stat->n_dump == MAX_PIPE)
 	{	
 		ft_putendl_fd("minishell : maximum number of pipe exceeded", \
 					STDERR_FILENO);
 		wait_pid_list(stat);
-		ft_putendl_fd("exit...", STDERR_FILENO);
-		exit(EXIT_FAILURE);
+		stat->n_pid = PROC_EXCEED;
+		set_status(EXIT_FAILURE);
+		return ;
 	}
-	stat->fd_dump[stat->n_dump++] = fd;
 }
 
 static void	fd_copy(int origin[2], t_stat *stat)

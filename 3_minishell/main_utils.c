@@ -20,10 +20,12 @@ void	free_all_nodes(t_minishell *ms)
 	free_all_tree(&ms->ast);
 }
 
-void	execution_no_sig(t_node *node, t_stat *stat)
+void	execution_with_sig_check(t_node *node, t_stat *stat)
 {
 	if (g_signal != SIGINT)
 		execution(node, stat);
+	else
+		del_here_doc_tmp_file(node);
 }
 
 void	add_history_if_not_null(char *input)

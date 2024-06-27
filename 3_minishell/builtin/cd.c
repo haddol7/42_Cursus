@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 22:32:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/26 13:17:44 by daeha            ###   ########.fr       */
+/*   Updated: 2024/06/26 17:32:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,22 @@
 #include "execution.h"
 #include "minishell.h"
 
-static int	error_enoent(char *arg, char *target, t_bool target_malloc);
+static char	*get_path(char **arg, t_env *env, t_bool *target_malloc);
 static char	*get_absolute_path(char *arg, t_bool *malloc);
-static int	home_err(void);
+static int	check_valid_path(t_env *env);
 
 int	ms_cd(char **arg, t_env *env)
 {
 	t_bool	target_malloc;
 	char	*target;
-	char	*file;
 	char	*old_pwd;
 
-	file = arg[1];
-	target_malloc = FALSE;
-	if (!file || !ft_strcmp(file, "~"))
-	{
-		target = env_find_value("HOME", env);
-		if (target == NULL)
-			return (home_err());
-	}
-	else if (*file != '.' && *file != '/')
-		target = get_absolute_path(file, &target_malloc);
-	else
-		target = file;
+	target = get_path(arg, env, &target_malloc);
+	if (target == NULL)
+		return (0);
 	if (chdir(target) == -1)
-		return (error_enoent(file, target, target_malloc));
+		return (error_cd_enoent(arg[1], target, target_malloc));
+	check_valid_path(env);
 	if (target_malloc)
 		free(target);
 	old_pwd = env_update_pwd(&env);
@@ -48,16 +39,30 @@ int	ms_cd(char **arg, t_env *env)
 	return (0);
 }
 
-static int	error_enoent(char *arg, char *target, t_bool target_malloc)
-{
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(arg, STDERR_FILENO);
-	ft_putstr_fd(": ", STDERR_FILENO);
-	ft_putendl_fd(strerror(2), STDERR_FILENO);
-	set_status(EXIT_FAILURE);
-	if (target_malloc)
-		free(target);
-	return (0);
+static char	*get_path(char **arg, t_env *env, t_bool *target_malloc)
+{	
+	char	*target;
+	char	*file;
+
+	*target_malloc = FALSE;
+	file = arg[1];
+	if (!file || !ft_strcmp(file, "~"))
+	{
+		target = env_find_value("HOME", env);
+		if (target == NULL)
+			error_cd_home("HOME");
+	}
+	else if (!ft_strcmp(file, "-"))
+	{
+		target = env_find_value("OLDPWD", env);
+		if (target == NULL)
+			error_cd_home("OLDPWD");
+	}
+	else if (*file != '.' && *file != '/')
+		target = get_absolute_path(file, target_malloc);
+	else
+		target = file;
+	return (target);
 }
 
 static char	*get_absolute_path(char *arg, t_bool *malloc)
@@ -74,9 +79,23 @@ static char	*get_absolute_path(char *arg, t_bool *malloc)
 	return (target);
 }
 
-static int	home_err(void)
+static int	check_valid_path(t_env *env)
 {
-	ft_putendl_fd("bash: cd: HOME not set", STDERR_FILENO);
-	set_status(EXIT_FAILURE);
+	char	*pwd;
+	char	*home;
+
+	pwd = getcwd(NULL, 0);
+	if (pwd == NULL)
+	{
+		ft_putendl_fd("cd: error retrieving current directory", STDERR_FILENO);
+		home = env_find_value("HOME", env);
+		if (home == NULL || chdir(home) == -1)
+		{
+			chdir("/");
+			return (error_cd_home("HOME"));
+		}
+	}
+	else
+		free(pwd);
 	return (0);
 }

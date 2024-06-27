@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:04:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/27 16:01:54 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/26 22:51:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,16 @@
 
 void	push_pid_list(pid_t pid, t_stat *stat)
 {
+	stat->pid[stat->n_pid++] = pid;
 	if (stat->n_pid == MAX_PID)
 	{	
 		ft_putendl_fd("minishell : maximum number of process exceeded", \
 					STDERR_FILENO);
 		wait_pid_list(stat);
-		ft_putendl_fd("exit...", STDERR_FILENO);
-		exit(EXIT_FAILURE);
+		stat->n_pid = PROC_EXCEED;
+		set_status(EXIT_FAILURE);
+		return ;
 	}
-	stat->pid[stat->n_pid++] = pid;
 }
 
 void	wait_pid_list(t_stat *stat)
@@ -76,4 +77,14 @@ char	*expand_dollar_here_doc(char *str, t_env *envp)
 	}
 	free(str);
 	return (new_str);
+}
+
+void	del_here_doc_tmp_file(t_node *node)
+{
+	if (node == NULL || node->type == N_CMD)
+		return ;
+	if (node->type == N_HERE_DOC)
+		unlink(node->right->cmd[0]);
+	del_here_doc_tmp_file(node->left);
+	del_here_doc_tmp_file(node->right);
 }

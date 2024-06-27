@@ -21,6 +21,7 @@ PARSER			:=	parser/parser.c \
 					parser/p_syntax_error.c \
 
 BUILTIN			:=	builtin/cd.c \
+					builtin/cd_utils.c \
 					builtin/echo.c \
 					builtin/env.c \
 					builtin/exit.c \

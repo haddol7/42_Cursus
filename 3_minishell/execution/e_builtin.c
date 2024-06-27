@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 17:40:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/25 01:38:40 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/26 16:28:24 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "minishell.h"
 
 static void	exec_forked_builtin(t_node *node, t_stat *stat);
-static void	exec_builtin_func(t_node *node, t_stat *stat);
+static void	exec_builtin_func(t_node *node, t_stat *stat, t_bool is_fokred);
 
 t_bool	is_builtin(char *arg)
 {
@@ -53,7 +53,7 @@ void	exec_builtin(t_node *node, t_stat *stat)
 		std[INPUT] = dup(STDIN_FILENO);
 		std[OUTPUT] = dup(STDOUT_FILENO);
 		if (redirect_to_cmd(stat, FALSE))
-			exec_builtin_func(node, stat);
+			exec_builtin_func(node, stat, FALSE);
 		dup2(std[INPUT], STDIN_FILENO);
 		dup2(std[OUTPUT], STDOUT_FILENO);
 		close(std[INPUT]);
@@ -72,7 +72,7 @@ static void	exec_forked_builtin(t_node *node, t_stat *stat)
 	{	
 		close_dump_fds(stat);
 		redirect_to_cmd(stat, TRUE);
-		exec_builtin_func(node, stat);
+		exec_builtin_func(node, stat, TRUE);
 		status = get_status();
 		exit(*status);
 	}
@@ -83,7 +83,7 @@ static void	exec_forked_builtin(t_node *node, t_stat *stat)
 	}
 }
 
-static void	exec_builtin_func(t_node *node, t_stat *stat)
+static void	exec_builtin_func(t_node *node, t_stat *stat, t_bool is_forked)
 {	
 	char	*file;
 	size_t	len;
@@ -99,7 +99,7 @@ static void	exec_builtin_func(t_node *node, t_stat *stat)
 	else if (len == 4 && !ft_strncmp(file, "echo", 4))
 		ms_echo(node->cmd);
 	else if (len == 4 && !ft_strncmp(file, "exit", 4))
-		ms_exit(node->cmd);
+		ms_exit(node->cmd, is_forked);
 	else if (len == 5 && !ft_strncmp(file, "unset", 5))
 		ms_unset(node->cmd, stat->envp);
 	else

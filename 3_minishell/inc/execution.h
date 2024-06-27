@@ -22,7 +22,7 @@
 # include "parser.h"
 # include "expansion.h"
 
-# define MAX_PIPE 2048
+# define MAX_PIPE 1024
 # define MAX_PID 512
 
 # define READ 0
@@ -35,6 +35,8 @@
 # define EACCES 13
 # define EISDIR 21
 # define EVALUE 1
+
+# define PROC_EXCEED -1
 
 typedef struct s_stat
 {

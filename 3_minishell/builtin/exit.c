@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 23:58:42 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/26 16:29:04 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@
 static int	exit_atoi(char *str);
 static void	error_exit(char *str);
 
-void	ms_exit(char **arg)
+void	ms_exit(char **arg, t_bool is_forked)
 {
 	int		status;
 	char	*nbr;
 
 	nbr = arg[1];
-	ft_putendl_fd("exit", STDOUT_FILENO);
+	if (!is_forked)
+		ft_putendl_fd("exit", STDOUT_FILENO);
 	if (nbr == NULL)
 		exit(*get_status());
 	status = exit_atoi(nbr);
