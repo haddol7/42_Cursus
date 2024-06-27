@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   e_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:04:44 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/24 23:57:27 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/27 16:01:54 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,29 @@ void	wait_pid_list(t_stat *stat)
 			write(1, "Quit: 3", 7);
 		write(1, "\n", 1);
 	}
+}
+
+char	*expand_dollar_here_doc(char *str, t_env *envp)
+{
+	char	*new_str;
+	char	*word_tmp;
+	int		i;
+
+	i = 0;
+	word_tmp = NULL;
+	if (str == NULL)
+		return (ft_strdup(""));
+	new_str = ft_strdup(str);
+	while (new_str[i] != '\0')
+	{
+		if (new_str[i] == '$')
+		{
+			word_tmp = return_value(new_str + i, envp);
+			if (word_tmp != NULL)
+				new_str = replace_cmd(new_str, &word_tmp, &i);
+		}
+		i++;
+	}
+	free(str);
+	return (new_str);
 }

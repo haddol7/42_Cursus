@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/26 15:52:39 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/26 22:46:11 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void	loop_prompt(t_minishell *ms)
 			add_history_if_not_null(input);
 			ms->token = tokenizer(input);
 			ms->ast = parser(ms->token);
-			exec_here_doc(ms->ast);
+			exec_here_doc(ms->ast, ms->stat.envp);
 			execution_no_sig(ms->ast, &ms->stat);
 			close_all_fds(&ms->stat);
 			wait_pid_list(&ms->stat);

@@ -6,33 +6,33 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:50:09 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/26 16:24:34 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/06/27 16:03:15 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 #include "minishell.h"
 
-static void	proc_here_doc(char **cmd);
-static void	write_heredoc(char *delim, char *filename);
+static void	proc_here_doc(char **cmd, t_env *envp);
+static void	write_heredoc(char *delim, char *filename, t_env *envp);
 static char	*name_tmp_file(void);
 static char	*delim_expand_quote(char *delim);
 
 extern int	g_signal;
 
-void	exec_here_doc(t_node *node)
+void	exec_here_doc(t_node *node, t_env *envp)
 {
 	if (g_signal == SIGINT)
 		return ;
 	if (node == NULL || node->type == N_CMD)
 		return ;
 	if (node->type == N_HERE_DOC)
-		proc_here_doc(node->right->cmd);
-	exec_here_doc(node->left);
-	exec_here_doc(node->right);
+		proc_here_doc(node->right->cmd, envp);
+	exec_here_doc(node->left, envp);
+	exec_here_doc(node->right, envp);
 }
 
-static void	proc_here_doc(char **cmd)
+static void	proc_here_doc(char **cmd, t_env *envp)
 {
 	pid_t	pid;
 	char	*filename;
@@ -43,7 +43,7 @@ static void	proc_here_doc(char **cmd)
 	sig_heredoc_mode();
 	pid = fork();
 	if (!pid)
-		write_heredoc(cmd[0], filename);
+		write_heredoc(cmd[0], filename, envp);
 	else
 	{
 		sig_heredoc_parent();
@@ -97,7 +97,7 @@ static char	*delim_expand_quote(char *delim)
 	return (word_tmp);
 }
 
-static void	write_heredoc(char *delim, char *filename)
+static void	write_heredoc(char *delim, char *filename, t_env *envp)
 {
 	char	*str;
 	int		len_d;
@@ -116,6 +116,7 @@ static void	write_heredoc(char *delim, char *filename)
 			len_s = ft_strlen(str);
 		if (!str || (len_s == len_d && !ft_strncmp(str, delim, len_d)))
 			break ;
+		str = expand_dollar_here_doc(str, envp);
 		ft_putendl_fd(str, fd);
 		free(str);
 	}
