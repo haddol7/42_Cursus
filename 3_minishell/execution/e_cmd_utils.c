@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 17:10:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/26 21:35:15 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/01 22:26:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_bool	redirect_to_cmd(t_stat *stat, t_bool is_forked)
 	{
 		if (stat->fd[INPUT] != -1 && stat->fd[INPUT] != STDIN_FILENO)
 			close(stat->fd[INPUT]);
-		if (stat->fd[OUTPUT] != -1 && stat->fd[INPUT] != STDOUT_FILENO)
+		if (stat->fd[OUTPUT] != -1 && stat->fd[OUTPUT] != STDOUT_FILENO)
 			close(stat->fd[OUTPUT]);
 		if (is_forked)
 			exit(EXIT_FAILURE);
