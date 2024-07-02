@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:03:01 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/02 17:03:32 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/02 17:20:02 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	fd_copy(int origin[2], t_stat *stat)
 
 static void	ft_pipe(int fd[2])
 {
-	if(pipe(fd) == -1)
+	if (pipe(fd) == -1)
 	{
 		fd[INPUT] = -1;
 		fd[OUTPUT] = -1;
