@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 20:41:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/26 16:29:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/02 17:16:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include "minishell.h"
 
 static int	exit_atoi(char *str);
-static void	error_exit(char *str);
+static void	error_exit(char *str, char *trimed_str);
+static int	long_min_exception(char *trimed_str);
 
 void	ms_exit(char **arg, t_bool is_forked)
 {
@@ -66,25 +67,34 @@ static int	exit_atoi(char *str)
 	sign = 1;
 	result = 0;
 	trimed_str = ft_strtrim(str, " ");
+	if (!ft_strcmp(trimed_str, "-9223372036854775808"))
+		return (long_min_exception(trimed_str));
 	nbr = move_to_num(trimed_str, &sign);
 	while (*nbr >= '0' && *nbr <= '9')
 	{
 		result *= 10;
 		result += *nbr - '0';
 		if (result < 0)
-			error_exit(str);
+			error_exit(str, trimed_str);
 		nbr++;
 	}
 	if (*nbr != '\0')
-		error_exit(str);
+		error_exit(str, trimed_str);
 	free(trimed_str);
 	return ((int)(sign * result));
 }
 
-static void	error_exit(char *str)
+static void	error_exit(char *str, char *trimed_str)
 {
 	ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 	ft_putstr_fd(str, STDERR_FILENO);
 	ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+	free(trimed_str);
 	exit(255);
+}
+
+static int	long_min_exception(char *trimed_str)
+{
+	free(trimed_str);
+	return (0);
 }
