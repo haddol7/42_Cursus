@@ -6,13 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 21:03:01 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/26 22:53:28 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/02 17:03:32 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "execution.h"
 
+static void	ft_pipe(int fd[2]);
 static void	fd_copy(int origin[2], t_stat *stat);
 
 void	exec_pipe(t_node *node, t_stat *stat)
@@ -20,7 +21,7 @@ void	exec_pipe(t_node *node, t_stat *stat)
 	int	fd[2];
 	int	origin[2];
 
-	pipe(fd);
+	ft_pipe(fd);
 	fd_copy(origin, stat);
 	if (stat->fd_pipe != -1 && stat->fd_pipe != 1 && stat->fd_pipe != 0)
 		push_pipe_list(stat->fd_pipe, stat);
@@ -62,4 +63,13 @@ static void	fd_copy(int origin[2], t_stat *stat)
 {
 	origin[INPUT] = stat->fd[INPUT];
 	origin[OUTPUT] = stat->fd[OUTPUT];
+}
+
+static void	ft_pipe(int fd[2])
+{
+	if(pipe(fd) == -1)
+	{
+		fd[INPUT] = -1;
+		fd[OUTPUT] = -1;
+	}
 }
