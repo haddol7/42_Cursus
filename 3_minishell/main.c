@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 18:27:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/06/26 22:46:11 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/07/02 16:06:21 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ static void	loop_prompt(t_minishell *ms)
 {
 	char	*input;
 
-	input = "";
-	while (input)
+	while (TRUE)
 	{	
 		sig_prompt_mode();
 		input = readline("minishell$ ");
@@ -53,6 +52,8 @@ static void	loop_prompt(t_minishell *ms)
 			free_all_nodes(ms);
 			free(input);
 		}
+		else
+			return ;
 	}
 	clear_history();
 	write(STDOUT_FILENO, "exit\n", 5);
