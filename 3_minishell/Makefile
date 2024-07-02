@@ -81,6 +81,7 @@ PARSER_BONUS		:=	bonus/parser/parser_bonus.c \
 					bonus/parser/p_syntax_error_bonus.c \
 
 BUILTIN_BONUS		:=	bonus/builtin/cd_bonus.c \
+					bonus/builtin/cd_utils_bonus.c \
 					bonus/builtin/echo_bonus.c \
 					bonus/builtin/env_bonus.c \
 					bonus/builtin/exit_bonus.c \
