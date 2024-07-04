@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:40:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/04 21:37:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/04 21:42:21 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,8 @@ static void	init_philo(t_stat *stat)
 		philo = &stat->philos[i];
 		philo->thread = NULL;
 		philo->name = i + 1;
-		philo->birth_time = get_time();
-		philo->last_meal = get_time();
+		philo->birth_time = ft_gettime();
+		philo->last_meal = ft_gettime();
 		philo->time_to_die = stat->time_to_die;
 		philo->time_to_eat = stat->time_to_eat;
 		philo->time_to_sleep = stat->time_to_sleep;

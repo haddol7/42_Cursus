@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/04 21:36:29 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/04 21:42:21 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ typedef struct s_stat
 } t_stat;
 
 //utils.c
-size_t	get_time(void);
+size_t	ft_gettime(void);
 int		ft_usleep(size_t ms);
 int		ft_atoi(const char *str);
 void	free_resource(t_stat *stat);

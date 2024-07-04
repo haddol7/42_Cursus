@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:18:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/04 21:36:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/04 21:42:37 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static const char	*move_to_num(const char *str, int *sign);
 
-size_t	get_time(void)
+size_t	ft_gettime(void)
 {
 	struct timeval	time;
 
@@ -26,12 +26,9 @@ int	ft_usleep(size_t ms)
 {
 	size_t	start;
 
-	start = get_time();
-	while (get_time() - start < ms)
-	{
-		printf("%zu\n", get_time() - start);
-		usleep(800);
-	}
+	start = ft_gettime();
+	while (ft_gettime() - start < ms)
+		usleep(500);
 	return (0);
 }
 
