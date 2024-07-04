@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:40:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/04 21:42:21 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/04 21:48:52 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	validate_args(int argc, char **argv, t_stat *stat)
 	int	i;
 
 	if (argc != 5 && argc != 6)
-		return (write(2, "Argument is not enough.\n", 25));
+		return (write(2, "Argument is not invalid.\n", 26));
 	i = 0;
 	while (++i < argc)
 	{

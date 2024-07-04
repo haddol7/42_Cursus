@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:46:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/04 21:40:24 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/04 21:46:27 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 {
 	t_stat	stat;
 	
-	atexit(leaks);
+	//atexit(leaks);
 	if(!init(argc, argv, &stat))
 		return (1);
 	free_resource(&stat);
