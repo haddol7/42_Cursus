@@ -2,9 +2,9 @@ NAME := philo
 SRC_DIR := src/
 OBJ_DIR := obj/
 CC := cc
-CFLAGS := -Wall -Werror -Wextra
+CFLAGS := 
 
-SRC_FILE	= main
+SRC_FILE	= main init utils
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILE)))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILE)))

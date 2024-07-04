@@ -5,14 +5,19 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/03 00:39:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/03 00:40:27 by daeha            ###   ########.fr       */
+/*   Created: 2024/07/04 18:46:31 by daeha             #+#    #+#             */
+/*   Updated: 2024/07/04 20:28:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include "philo.h"
 
-int main()
+int main(int argc, char **argv)
 {
-	printf("MAN : test for make\n");
+	t_stat	stat;
+	
+	if(!init(argc, argv, &stat))
+		return (1);
+	//free_resource(&stat);
+	return (0);
 }
