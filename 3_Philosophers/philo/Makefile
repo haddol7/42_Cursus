@@ -2,7 +2,7 @@ NAME := philo
 SRC_DIR := src/
 OBJ_DIR := obj/
 CC := cc
-CFLAGS := 
+CFLAGS := -fsanitize=address 
 
 SRC_FILE	= main init utils
 
