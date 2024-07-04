@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/04 20:32:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/04 21:36:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define PHILO_H
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <pthread.h>
 #include <sys/time.h>
@@ -21,10 +23,13 @@
 # define ARG_ERR	-1
 # define OPTION_OFF -2
 
+# define TRUE 1
+# define FALSE 0
+
 typedef struct	s_philo
 {
 	pthread_t		thread;
-	int				tid;
+	int				name;
 	size_t			birth_time;
 	size_t			last_meal;
 	size_t			time_to_die;
@@ -57,6 +62,7 @@ typedef struct s_stat
 size_t	get_time(void);
 int		ft_usleep(size_t ms);
 int		ft_atoi(const char *str);
+void	free_resource(t_stat *stat);
 
 int		init(int argc, char **argv, t_stat *stat);
 
