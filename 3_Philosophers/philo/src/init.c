@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:40:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/04 21:48:52 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/05 18:02:46 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ static int	validate_args(int argc, char **argv, t_stat *stat)
 		if (ft_atoi(argv[i]) == ARG_ERR)
 			return (write(2, "Argument is not formatted.\n", 27));
 	}
-	stat->is_dead = FALSE;
+	stat->flag_dead = FALSE;
 	stat->num_philos = ft_atoi(argv[1]);
-	stat->time_to_eat = ft_atoi(argv[2]);
-	stat->time_to_die = ft_atoi(argv[3]);
+	stat->time_to_die = ft_atoi(argv[2]);
+	stat->time_to_eat = ft_atoi(argv[3]);
 	stat->time_to_sleep = ft_atoi(argv[4]);
 	if (argv[5])
 		stat->num_to_eat = ft_atoi(argv[5]);
@@ -86,20 +86,23 @@ static int	validate_args(int argc, char **argv, t_stat *stat)
 static void	init_philo(t_stat *stat)
 {
 	int		i;
+	size_t	birth;
 	t_philo *philo;
 
 	i = 0;
 	while (i < stat->num_philos)
 	{	
+		birth = ft_gettime();
 		philo = &stat->philos[i];
 		philo->thread = NULL;
 		philo->name = i + 1;
-		philo->birth_time = ft_gettime();
-		philo->last_meal = ft_gettime();
+		philo->count_meal = 0;
+		philo->birth_time = birth;
+		philo->last_meal = birth;
 		philo->time_to_die = stat->time_to_die;
 		philo->time_to_eat = stat->time_to_eat;
 		philo->time_to_sleep = stat->time_to_sleep;
-		philo->is_dead = FALSE;
+		philo->flag_dead = &stat->flag_dead;
 		philo->r_fork = &stat->forks[i];
 		philo->l_fork = &stat->forks[(i + 1) % stat->num_philos];
 		philo->write = &stat->write;

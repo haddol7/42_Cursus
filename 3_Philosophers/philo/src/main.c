@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 18:46:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/04 21:46:27 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/05 17:58:13 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,18 @@ int main(int argc, char **argv)
 	//atexit(leaks);
 	if(!init(argc, argv, &stat))
 		return (1);
-	free_resource(&stat);
+	//create_monitor_thread(&stat);
+	create_philos_threads(&stat);
+	while (1)
+	{
+
+	}
+	//join_threads(&stat);
+	free_resources(&stat);
 	return (0);
 }
+
+// void join_threads(t_stat *stat)
+// {
+	
+// }

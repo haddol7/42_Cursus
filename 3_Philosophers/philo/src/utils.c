@@ -6,13 +6,41 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:18:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/04 21:42:37 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/05 18:03:35 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static const char	*move_to_num(const char *str, int *sign);
+int	ft_atoi(const char *str)
+{
+	long	result;
+
+	result = 0;
+	while (*str != 0 && (*str == '\t' || *str == '\n' || *str == ' ' || \
+	*str == '\v' || *str == '\f' || *str == '\r'))
+		str++;
+	if (*str == '+')
+		str++;
+	while (*str >= '0' && *str <= '9')
+	{
+		result *= 10;
+		result += *str - '0';
+		if (result < 0)
+			return (-1);
+		str++;
+	}
+	if (*str != '\0' || (int)(result) != result)
+		return (-1);
+	return ((int)(result));
+}
+
+void	ft_print_mutex(char *msg, t_philo *philo)
+{
+	pthread_mutex_lock(philo->write);
+	printf("%zu %d %s\n", ft_gettime() - philo->birth_time, philo->name, msg);
+	pthread_mutex_unlock(philo->write);
+}
 
 size_t	ft_gettime(void)
 {
@@ -32,30 +60,7 @@ int	ft_usleep(size_t ms)
 	return (0);
 }
 
-int	ft_atoi(const char *str)
-{
-	long	result;
-	int		sign;
-
-	sign = 1;
-	result = 0;
-	str = move_to_num(str, &sign);
-	if (sign == -1)
-		return (-1);
-	while (*str >= '0' && *str <= '9')
-	{
-		result *= 10;
-		result += *str - '0';
-		if (result < 0)
-			return (-1);
-		str++;
-	}
-	if (*str != '\0')
-		return (-1);
-	return ((int)(sign * result));
-}
-
-void	free_resource(t_stat *stat)
+void	free_resources(t_stat *stat)
 {
 	int	i;
 	
@@ -72,20 +77,4 @@ void	free_resource(t_stat *stat)
 	free(stat->philos);
 	free(stat->forks);
 	memset(stat, 0, sizeof(t_stat));
-}
-
-static const char	*move_to_num(const char *str, int *sign)
-{
-	while (*str != 0 && \
-	(*str == '\t' || *str == '\n' || *str == ' ' || \
-	*str == '\v' || *str == '\f' || *str == '\r'))
-		str++;
-	if (*str == '-')
-	{
-		*sign = -1;
-		return (++str);
-	}
-	else if (*str == '+')
-		return (++str);
-	return (str);
 }

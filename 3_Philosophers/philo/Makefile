@@ -2,9 +2,9 @@ NAME := philo
 SRC_DIR := src/
 OBJ_DIR := obj/
 CC := cc
-CFLAGS :=
+CFLAGS := -fsanitize=address
 
-SRC_FILE	= main init utils
+SRC_FILE	= main init utils thread thread_philo
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILE)))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILE)))

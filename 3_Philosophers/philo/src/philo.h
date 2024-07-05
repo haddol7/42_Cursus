@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/04 21:42:21 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/05 18:03:10 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ typedef struct	s_philo
 	size_t			time_to_die;
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
-	int				*is_dead;
+	int				count_meal;
+	int				*flag_dead;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*write;
@@ -45,7 +46,7 @@ typedef struct	s_philo
 
 typedef struct s_stat
 {
-	int				is_dead;
+	int				flag_dead;
 	int				num_philos;
 	int				time_to_die;
 	int				time_to_eat;
@@ -58,12 +59,20 @@ typedef struct s_stat
 	pthread_mutex_t	eat;
 } t_stat;
 
+//thread_philo.c
+void	create_philos_threads(t_stat *stat);
+
+//thread.c
+void	create_monitor_thread(t_stat *stat);
+
 //utils.c
+int		ft_atoi(const char *str);
 size_t	ft_gettime(void);
 int		ft_usleep(size_t ms);
-int		ft_atoi(const char *str);
-void	free_resource(t_stat *stat);
+void	ft_print_mutex(char *msg, t_philo *philo);
+void	free_resources(t_stat *stat);
 
+//init.c
 int		init(int argc, char **argv, t_stat *stat);
 
 #endif
