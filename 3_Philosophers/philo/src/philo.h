@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/09 00:04:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/09 01:17:07 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int		is_philo_terminated(t_philo *philo);
 //utils.c
 int		ft_atoi(const char *str);
 size_t	ft_gettime(void);
-int		ft_usleep(size_t ms);
+int		ft_usleep(size_t ms, t_philo *philo);
 void	ft_print_mutex(char *msg, t_philo *philo);
 void	free_resources(t_stat *stat);
 

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:18:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/09 00:05:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/09 01:15:56 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,17 @@ size_t	ft_gettime(void)
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-int	ft_usleep(size_t ms)
+int	ft_usleep(size_t ms, t_philo *philo)
 {
 	size_t	start;
 
 	start = ft_gettime();
 	while (ft_gettime() - start < ms)
+	{
+		if (is_philo_terminated(philo))
+			break;
 		usleep(500);
+	}
 	return (0);
 }
 
