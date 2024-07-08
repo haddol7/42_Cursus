@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:18:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/08 21:46:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/08 21:57:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ int	ft_usleep(size_t ms)
 
 void	ft_print_mutex(char *msg, t_philo *philo)
 {	
-	//pthread_mutex_lock(philo->write);
 	if (is_philo_done(philo))
 		return ;
+	pthread_mutex_lock(philo->write);
 	printf("%zu %d %s\n", ft_gettime() - philo->birth_time, philo->name, msg);
-	//pthread_mutex_unlock(philo->write);
+	pthread_mutex_unlock(philo->write);
 }
 
 void	free_resources(t_stat *stat)
