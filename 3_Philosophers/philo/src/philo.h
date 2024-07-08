@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/08 21:54:33 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/09 00:04:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	*monitoring(void *arg);
 
 //thread_philo.c
 void	*eat_think_sleep(void *arg);
-int		is_philo_done(t_philo *philo);
+int		is_philo_terminated(t_philo *philo);
 
 //utils.c
 int		ft_atoi(const char *str);

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:40:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/05 21:21:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/08 23:35:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int	validate_args(int argc, char **argv, t_stat *stat)
 	i = 0;
 	while (++i < argc)
 	{
-		if (ft_atoi(argv[i]) == ARG_ERR)
+		if (ft_atoi(argv[i]) == ARG_ERR || (i == 1 && !ft_atoi(argv[1])))
 			return (write(2, "Argument is not formatted.\n", 27));
 	}
 	stat->terminate = FALSE;
@@ -85,8 +85,8 @@ static int	validate_args(int argc, char **argv, t_stat *stat)
 
 static void	init_philo(t_stat *stat)
 {
-	int		i;
 	t_philo *philo;
+	int		i;
 
 	i = -1;
 	while (++i < stat->num_philos)

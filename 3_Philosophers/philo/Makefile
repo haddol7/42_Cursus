@@ -18,10 +18,10 @@ PURPLE = \033[1;35m
 all:
 	@mkdir -p obj
 	@make $(NAME)
-	@echo "$(GREEN)🍴 philosophers : make done!$(WHITE)"
 
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $^ -o $@
+	@echo "$(GREEN)🍴 philosophers : make done!$(WHITE)"
 
 $(OBJ_DIR)%.o : $(SRC_DIR)%.c
 	$(CC) $(CFLAGS) -MMD -c $< -o $@
