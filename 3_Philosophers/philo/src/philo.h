@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/05 18:03:10 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/05 21:32:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ typedef struct	s_philo
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
 	int				count_meal;
-	int				*flag_dead;
+	int				current_meal;
+	int				is_eating;
+	int				*terminate;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*write;
@@ -46,21 +48,22 @@ typedef struct	s_philo
 
 typedef struct s_stat
 {
-	int				flag_dead;
+	int				terminate;
 	int				num_philos;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-	int				num_to_eat;
+	int				count_meal;
 	t_philo 		*philos;
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	dead;
 	pthread_mutex_t	write;
+	pthread_mutex_t	dead;
 	pthread_mutex_t	eat;
 } t_stat;
 
 //thread_philo.c
 void	create_philos_threads(t_stat *stat);
+int		mutex_is_terminate(t_philo *philo);
 
 //thread.c
 void	create_monitor_thread(t_stat *stat);
