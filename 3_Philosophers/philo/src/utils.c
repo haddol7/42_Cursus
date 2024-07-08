@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:18:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/08 18:43:38 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/08 21:46:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,6 @@ int	ft_atoi(const char *str)
 	return ((int)(result));
 }
 
-void	ft_print_mutex(char *msg, t_philo *philo)
-{	
-	//pthread_mutex_lock(philo->write);
-	if (mutex_is_terminate(philo))
-		return ;
-	printf("%zu %d %s\n", ft_gettime() - philo->birth_time, philo->name, msg);
-	//pthread_mutex_unlock(philo->write);
-}
-
 size_t	ft_gettime(void)
 {
 	struct timeval	time;
@@ -58,8 +49,17 @@ int	ft_usleep(size_t ms)
 
 	start = ft_gettime();
 	while (ft_gettime() - start < ms)
-		usleep(200);
+		usleep(500);
 	return (0);
+}
+
+void	ft_print_mutex(char *msg, t_philo *philo)
+{	
+	//pthread_mutex_lock(philo->write);
+	if (is_philo_done(philo))
+		return ;
+	printf("%zu %d %s\n", ft_gettime() - philo->birth_time, philo->name, msg);
+	//pthread_mutex_unlock(philo->write);
 }
 
 void	free_resources(t_stat *stat)

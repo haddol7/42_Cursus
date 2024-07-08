@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/05 21:32:09 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/08 21:54:33 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,18 @@ typedef struct s_stat
 	pthread_mutex_t	eat;
 } t_stat;
 
-//thread_philo.c
-void	create_philos_threads(t_stat *stat);
-int		mutex_is_terminate(t_philo *philo);
+//init.c
+int		init(int argc, char **argv, t_stat *stat);
 
 //thread.c
-void	create_monitor_thread(t_stat *stat);
+void	control_threads(t_stat *stat);
+
+//thread_monitor.c
+void	*monitoring(void *arg);
+
+//thread_philo.c
+void	*eat_think_sleep(void *arg);
+int		is_philo_done(t_philo *philo);
 
 //utils.c
 int		ft_atoi(const char *str);
@@ -74,8 +80,5 @@ size_t	ft_gettime(void);
 int		ft_usleep(size_t ms);
 void	ft_print_mutex(char *msg, t_philo *philo);
 void	free_resources(t_stat *stat);
-
-//init.c
-int		init(int argc, char **argv, t_stat *stat);
 
 #endif

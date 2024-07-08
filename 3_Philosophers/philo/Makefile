@@ -4,7 +4,7 @@ OBJ_DIR := obj/
 CC := cc
 CFLAGS :=
 
-SRC_FILE	= main init utils thread
+SRC_FILE	= main init utils thread thread_monitor thread_philo
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILE)))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILE)))
