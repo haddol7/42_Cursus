@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:18:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/08 18:35:37 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/08 18:43:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	ft_usleep(size_t ms)
 
 	start = ft_gettime();
 	while (ft_gettime() - start < ms)
-		usleep(1000);
+		usleep(200);
 	return (0);
 }
 
