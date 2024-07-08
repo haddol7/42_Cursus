@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:18:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/09 01:54:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/09 02:08:35 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	ft_usleep(size_t ms, t_philo *philo)
 	while (ft_gettime() - start < ms)
 	{
 		if (is_philo_terminated(philo))
-			break;
+			break ;
 		usleep(500);
 	}
 	return (0);
@@ -72,7 +72,7 @@ void	ft_print_mutex(char *msg, t_philo *philo)
 void	free_resources(t_stat *stat)
 {
 	int	i;
-	
+
 	pthread_mutex_destroy(&stat->dead);
 	pthread_mutex_destroy(&stat->write);
 	pthread_mutex_destroy(&stat->eat);

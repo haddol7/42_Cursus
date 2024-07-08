@@ -6,19 +6,19 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/09 01:17:07 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/09 02:09:13 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <sys/time.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
+# include <pthread.h>
+# include <sys/time.h>
 
 # define ARG_ERR	-1
 # define OPTION_OFF -2
@@ -26,7 +26,7 @@
 # define TRUE 1
 # define FALSE 0
 
-typedef struct	s_philo
+typedef struct s_philo
 {
 	pthread_t		thread;
 	int				name;
@@ -44,7 +44,7 @@ typedef struct	s_philo
 	pthread_mutex_t	*write;
 	pthread_mutex_t	*dead;
 	pthread_mutex_t	*eat;
-} t_philo;
+}	t_philo;
 
 typedef struct s_stat
 {
@@ -54,12 +54,12 @@ typedef struct s_stat
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				count_meal;
-	t_philo 		*philos;
+	t_philo			*philos;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	write;
 	pthread_mutex_t	dead;
 	pthread_mutex_t	eat;
-} t_stat;
+}	t_stat;
 
 //init.c
 int		init(int argc, char **argv, t_stat *stat);

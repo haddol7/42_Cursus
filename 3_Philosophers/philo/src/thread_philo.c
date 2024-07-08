@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/09 01:52:22 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/09 02:08:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	*eat_think_sleep(void *arg)
 		ft_usleep(1, philo);
 	while (!is_philo_terminated(philo))
 	{	
-		if (philo->count_meal != OPTION_OFF && philo->current_meal >= philo->count_meal)
+		if (philo->count_meal != OPTION_OFF && \
+			philo->current_meal >= philo->count_meal)
 			break ;
 		p_eat(philo);
 		p_sleep(philo);
@@ -57,7 +58,7 @@ static void	p_sleep(t_philo *philo)
 	ft_usleep(philo->time_to_sleep, philo);
 }
 
-static void p_eat(t_philo *philo)
+static void	p_eat(t_philo *philo)
 {
 	pthread_mutex_lock(philo->r_fork);
 	ft_print_mutex("has taken a fork", philo);
