@@ -2,7 +2,7 @@ NAME := philo
 SRC_DIR := src/
 OBJ_DIR := obj/
 CC := cc
-CFLAGS :=
+CFLAGS := -Werror -Wall -Wextra
 
 SRC_FILE	= main init utils thread thread_monitor thread_philo
 

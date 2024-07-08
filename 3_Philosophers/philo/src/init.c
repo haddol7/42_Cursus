@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:40:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/08 23:35:59 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/09 01:57:53 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static int	validate_args(int argc, char **argv, t_stat *stat)
 
 static void	init_philo(t_stat *stat)
 {
-	t_philo *philo;
+	t_philo	*philo;
 	int		i;
 
 	i = -1;

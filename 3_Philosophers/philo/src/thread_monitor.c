@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/09 00:41:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/09 01:54:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	*monitoring(void *arg)
 			if (stat->philos[i].count_meal == OPTION_OFF || stat->philos[i].current_meal < stat->philos[i].count_meal)
 				all_eat = FALSE;
 			pthread_mutex_unlock(&stat->eat);
-			if (monitor_one_philo(stat, i))
+			if (!all_eat && monitor_one_philo(stat, i))
 			{
 				loop = FALSE;
 				break ;
