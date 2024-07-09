@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:18:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/09 04:45:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/09 20:02:09 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void	free_resources(t_stat *stat)
 	sem_unlink("forks");
 	sem_unlink("write");
 	sem_unlink("eat");
-	sem_unlink("dead");
 	free(stat->pids);
 	memset(&stat->philo, 0, sizeof(t_philo));
 	memset(stat, 0, sizeof(t_stat));
