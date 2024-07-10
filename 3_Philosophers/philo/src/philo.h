@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/10 21:09:47 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/10 21:21:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ typedef struct s_philo
 	pthread_mutex_t	*dead;
 	pthread_mutex_t	*eat;
 }	t_philo;
-
 
 //init.c
 int		init(int argc, char **argv, t_stat *stat);
