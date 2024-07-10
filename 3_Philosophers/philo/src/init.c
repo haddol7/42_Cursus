@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:40:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/10 21:14:17 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/10 22:25:06 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	validate_args(int argc, char **argv, t_stat *stat)
 	i = 0;
 	while (++i < argc)
 	{
-		if (ft_atoi(argv[i]) == ARG_ERR || (i == 1 && !ft_atoi(argv[1])))
+		if (ft_atoi(argv[i]) == ARG_ERR || !ft_atoi(argv[i]))
 			return (write(2, "Argument is not formatted.\n", 27));
 	}
 	stat->terminate = FALSE;
