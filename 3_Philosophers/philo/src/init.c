@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:40:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/10 19:26:38 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/10 21:14:17 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,37 +26,6 @@ int	init(int argc, char **argv, t_stat *stat)
 	init_mutex(stat);
 	init_philo(stat);
 	return (1);
-}
-
-static void	init_mutex(t_stat *stat)
-{
-	int	i;
-
-	pthread_mutex_init(&stat->dead, NULL);
-	pthread_mutex_init(&stat->write, NULL);
-	pthread_mutex_init(&stat->eat, NULL);
-	i = 0;
-	while (i < stat->num_philos)
-	{	
-		pthread_mutex_init(&stat->forks[i], NULL);
-		i++;
-	}
-}
-
-static int	alloc_fork_and_philo(t_stat *stat)
-{
-	stat->philos = malloc(sizeof(t_philo) * stat->num_philos);
-	stat->forks = malloc(sizeof(pthread_mutex_t) * stat->num_philos);
-	if (!stat->philos || !stat->forks)
-	{
-		write(2, "Malloc error occured\n", 22);
-		if (stat->philos)
-			free(stat->philos);
-		if (stat->forks)
-			free(stat->forks);
-		return (1);
-	}
-	return (0);
 }
 
 static int	validate_args(int argc, char **argv, t_stat *stat)
@@ -83,6 +52,37 @@ static int	validate_args(int argc, char **argv, t_stat *stat)
 	return (0);
 }
 
+static int	alloc_fork_and_philo(t_stat *stat)
+{
+	stat->philos = malloc(sizeof(t_philo) * stat->num_philos);
+	stat->forks = malloc(sizeof(pthread_mutex_t) * stat->num_philos);
+	if (!stat->philos || !stat->forks)
+	{
+		write(2, "Malloc error occured\n", 22);
+		if (stat->philos)
+			free(stat->philos);
+		if (stat->forks)
+			free(stat->forks);
+		return (1);
+	}
+	return (0);
+}
+
+static void	init_mutex(t_stat *stat)
+{
+	int	i;
+
+	pthread_mutex_init(&stat->dead, NULL);
+	pthread_mutex_init(&stat->write, NULL);
+	pthread_mutex_init(&stat->eat, NULL);
+	i = 0;
+	while (i < stat->num_philos)
+	{	
+		pthread_mutex_init(&stat->forks[i], NULL);
+		i++;
+	}
+}
+
 static void	init_philo(t_stat *stat)
 {
 	t_philo	*philo;
@@ -95,7 +95,7 @@ static void	init_philo(t_stat *stat)
 		philo->thread = NULL;
 		philo->name = i + 1;
 		philo->birth_time = ft_gettime();
-		philo->last_meal = ft_gettime();
+		philo->last_meal = philo->birth_time;
 		philo->time_to_die = stat->time_to_die;
 		philo->time_to_eat = stat->time_to_eat;
 		philo->time_to_sleep = stat->time_to_sleep;

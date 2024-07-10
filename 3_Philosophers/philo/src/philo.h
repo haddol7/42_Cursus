@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/10 19:26:25 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/10 21:09:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,21 @@
 
 # define TRUE 1
 # define FALSE 0
+
+typedef struct s_stat
+{
+	int				terminate;
+	int				num_philos;
+	size_t			time_to_die;
+	size_t			time_to_eat;
+	size_t			time_to_sleep;
+	int				count_meal;
+	struct s_philo	*philos;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	write;
+	pthread_mutex_t	dead;
+	pthread_mutex_t	eat;
+}	t_stat;
 
 typedef struct s_philo
 {
@@ -45,20 +60,6 @@ typedef struct s_philo
 	pthread_mutex_t	*eat;
 }	t_philo;
 
-typedef struct s_stat
-{
-	int				terminate;
-	int				num_philos;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				count_meal;
-	t_philo			*philos;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	write;
-	pthread_mutex_t	dead;
-	pthread_mutex_t	eat;
-}	t_stat;
 
 //init.c
 int		init(int argc, char **argv, t_stat *stat);
