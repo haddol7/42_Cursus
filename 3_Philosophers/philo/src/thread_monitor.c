@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/10 20:36:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/10 20:59:57 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,35 +55,31 @@ static int	monitor_one_philo_starvation(t_stat *stat, int i)
 
 static int	is_philo_starving(t_stat *stat, int i)
 {
-	size_t	last_meal;
-	int		current_meal;
-
 	pthread_mutex_lock(&stat->eat);
-	last_meal = stat->philos[i].last_meal;
-	current_meal = stat->philos[i].current_meal;
-	pthread_mutex_unlock(&stat->eat);
-	if (ft_gettime() - last_meal > stat->time_to_die)
+	if (ft_gettime() - stat->philos[i].last_meal > stat->time_to_die && \
+		stat->count_meal != stat->philos[i].current_meal)
 	{
-		if (current_meal == stat->count_meal)
-			return (FALSE);
+		pthread_mutex_unlock(&stat->eat);
 		return (TRUE);
 	}
+	pthread_mutex_unlock(&stat->eat);
 	return (FALSE);
 }
 
 static int	is_all_philos_full(t_stat *stat)
 {
 	int	i;
-	int	current_eat;
 
 	i = 0;
 	while (i < stat->num_philos)
 	{	
 		pthread_mutex_lock(&stat->eat);
-		current_eat = stat->philos[i].current_meal;
-		pthread_mutex_unlock(&stat->eat);
-		if (stat->count_meal > current_eat)
+		if (stat->count_meal > stat->philos[i].current_meal)
+		{
+			pthread_mutex_unlock(&stat->eat);
 			return (FALSE);
+		}
+		pthread_mutex_unlock(&stat->eat);
 		i++;
 	}
 	pthread_mutex_lock(&stat->dead);
