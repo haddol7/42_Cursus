@@ -6,48 +6,38 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/10 19:39:03 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/10 20:36:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	monitor_one_philo(t_stat *stat, int i);
+static int	monitor_one_philo_starvation(t_stat *stat, int i);
 static int	is_philo_starving(t_stat *stat, int i);
-static void	*terminate(t_stat *stat, void *arg);
+static int	is_all_philos_full(t_stat *stat);
 
 void	*monitoring(void *arg)
 {
 	t_stat	*stat;
-	int		all_philo_eat;
 	int		i;
 
 	stat = (t_stat *)arg;
 	while (TRUE)
 	{
-		i = -1;
-		all_philo_eat = TRUE;
-		while (++i < stat->num_philos)
+		i = 0;
+		while (i < stat->num_philos)
 		{	
-			if (stat->philos[i].count_meal != OPTION_OFF)
-			{
-				pthread_mutex_lock(&stat->eat);
-				if (stat->philos[i].current_meal < stat->philos[i].count_meal)
-					all_philo_eat = FALSE;
-				pthread_mutex_unlock(&stat->eat);
-			}
-			else
-				all_philo_eat = FALSE;
-			if (!all_philo_eat && monitor_one_philo(stat, i))
+			if (monitor_one_philo_starvation(stat, i))
 				return (arg);
+			i++;
 		}
-		if (all_philo_eat)
-			return (terminate(stat, arg));
+		if (stat->count_meal != OPTION_OFF && is_all_philos_full(stat))
+			return (arg);
 	}
 	return (arg);
 }
 
-static int	monitor_one_philo(t_stat *stat, int i)
+static int	monitor_one_philo_starvation(t_stat *stat, int i)
 {
 	if (is_philo_starving(stat, i))
 	{	
@@ -65,23 +55,39 @@ static int	monitor_one_philo(t_stat *stat, int i)
 
 static int	is_philo_starving(t_stat *stat, int i)
 {
-	t_philo	philo;
+	size_t	last_meal;
+	int		current_meal;
 
-	philo = stat->philos[i];
 	pthread_mutex_lock(&stat->eat);
-	if (ft_gettime() - philo.last_meal > philo.time_to_die)
+	last_meal = stat->philos[i].last_meal;
+	current_meal = stat->philos[i].current_meal;
+	pthread_mutex_unlock(&stat->eat);
+	if (ft_gettime() - last_meal > stat->time_to_die)
 	{
-		pthread_mutex_unlock(&stat->eat);
+		if (current_meal == stat->count_meal)
+			return (FALSE);
 		return (TRUE);
 	}
-	pthread_mutex_unlock(&stat->eat);
 	return (FALSE);
 }
 
-static void	*terminate(t_stat *stat, void *arg)
+static int	is_all_philos_full(t_stat *stat)
 {
+	int	i;
+	int	current_eat;
+
+	i = 0;
+	while (i < stat->num_philos)
+	{	
+		pthread_mutex_lock(&stat->eat);
+		current_eat = stat->philos[i].current_meal;
+		pthread_mutex_unlock(&stat->eat);
+		if (stat->count_meal > current_eat)
+			return (FALSE);
+		i++;
+	}
 	pthread_mutex_lock(&stat->dead);
 	stat->terminate = TRUE;
 	pthread_mutex_unlock(&stat->dead);
-	return (arg);
+	return (TRUE);
 }
