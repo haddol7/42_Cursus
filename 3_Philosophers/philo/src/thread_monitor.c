@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/10 19:37:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/10 19:39:03 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ static int	monitor_one_philo(t_stat *stat, int i)
 {
 	if (is_philo_starving(stat, i))
 	{	
-		pthread_mutex_lock(&stat->write);
 		pthread_mutex_lock(&stat->dead);
+		stat->terminate = TRUE;
+		pthread_mutex_unlock(&stat->dead);
+		pthread_mutex_lock(&stat->write);
 		printf("%zu %d died\n", \
 			ft_gettime() - stat->philos[i].birth_time, stat->philos[i].name);
-		stat->terminate = TRUE;
 		pthread_mutex_unlock(&stat->write);
-		pthread_mutex_unlock(&stat->dead);
 		return (TRUE);
 	}
 	return (FALSE);
