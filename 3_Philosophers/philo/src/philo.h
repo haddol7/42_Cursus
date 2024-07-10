@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/09 02:09:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/10 19:26:25 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef struct s_philo
 	size_t			time_to_sleep;
 	int				count_meal;
 	int				current_meal;
-	int				is_eating;
 	int				*terminate;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*l_fork;

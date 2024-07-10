@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/09 02:07:45 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/10 19:26:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,7 @@ static int	is_philo_starving(t_stat *stat, int i)
 
 	philo = stat->philos[i];
 	pthread_mutex_lock(&stat->eat);
-	if (philo.is_eating == FALSE && \
-		ft_gettime() - philo.last_meal >= philo.time_to_die)
+	if (ft_gettime() - philo.last_meal >= philo.time_to_die)
 	{
 		pthread_mutex_unlock(&stat->eat);
 		return (TRUE);

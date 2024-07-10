@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:40:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/09 03:45:07 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/10 19:26:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ static void	init_philo(t_stat *stat)
 		philo->time_to_sleep = stat->time_to_sleep;
 		philo->count_meal = stat->count_meal;
 		philo->current_meal = 0;
-		philo->is_eating = FALSE;
 		philo->terminate = &stat->terminate;
 		philo->r_fork = &stat->forks[i];
 		philo->l_fork = &stat->forks[(i + 1) % stat->num_philos];
