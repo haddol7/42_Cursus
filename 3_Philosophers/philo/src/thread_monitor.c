@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/10 19:26:44 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/10 19:32:59 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,29 @@ static void	*terminate(t_stat *stat, void *arg);
 void	*monitoring(void *arg)
 {
 	t_stat	*stat;
-	int		all_eat;
+	int		all_philo_eat;
 	int		i;
 
 	stat = (t_stat *)arg;
 	while (TRUE)
 	{
 		i = -1;
-		all_eat = TRUE;
+		all_philo_eat = TRUE;
 		while (++i < stat->num_philos)
 		{	
-			pthread_mutex_lock(&stat->eat);
-			if (stat->philos[i].count_meal == OPTION_OFF || \
-				stat->philos[i].current_meal < stat->philos[i].count_meal)
-				all_eat = FALSE;
-			pthread_mutex_unlock(&stat->eat);
-			if (!all_eat && monitor_one_philo(stat, i))
+			if (stat->philos[i].count_meal != OPTION_OFF)
+			{
+				pthread_mutex_lock(&stat->eat);
+				if (stat->philos[i].current_meal < stat->philos[i].count_meal)
+					all_philo_eat = FALSE;
+				pthread_mutex_unlock(&stat->eat);
+			}
+			else
+				all_philo_eat = FALSE;
+			if (!all_philo_eat && monitor_one_philo(stat, i))
 				return (arg);
 		}
-		if (all_eat)
+		if (all_philo_eat)
 			return (terminate(stat, arg));
 	}
 	return (arg);
