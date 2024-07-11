@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:40:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/11 20:14:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/11 21:12:13 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ static void	init_semaphore(t_stat *stat)
 static void	init_philo(t_stat *stat)
 {	
 	stat->philo.name = 0;
-	stat->philo.birth_time = 0;
-	stat->philo.last_meal = 0;
+	stat->philo.birth_time = ft_gettime();
+	stat->philo.last_meal = stat->philo.birth_time;
 	stat->philo.time_to_die = stat->time_to_die;
 	stat->philo.time_to_eat = stat->time_to_eat;
 	stat->philo.time_to_sleep = stat->time_to_sleep;
