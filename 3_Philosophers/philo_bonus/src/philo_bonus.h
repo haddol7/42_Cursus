@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/11 20:24:24 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/11 20:47:18 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,6 @@
 # define TRUE 1
 # define FALSE 0
 
-typedef struct s_stat
-{	
-	int				num_philos;
-	size_t			time_to_die;
-	size_t			time_to_eat;
-	size_t			time_to_sleep;
-	int				count_meal;
-	struct s_philo	philo;
-	sem_t			*forks;
-	sem_t			*write;
-	sem_t			*eat;
-	pid_t			*pids;
-}	t_stat;
-
 typedef struct s_philo
 {
 	int				name;
@@ -57,6 +43,20 @@ typedef struct s_philo
 	sem_t			*write;
 	sem_t			*eat;
 }	t_philo;
+
+typedef struct s_stat
+{	
+	int				num_philos;
+	size_t			time_to_die;
+	size_t			time_to_eat;
+	size_t			time_to_sleep;
+	int				count_meal;
+	sem_t			*forks;
+	sem_t			*write;
+	sem_t			*eat;
+	pid_t			*pids;
+	t_philo			philo;
+}	t_stat;
 
 //init_bonus.c
 int		init(int argc, char **argv, t_stat *stat);
