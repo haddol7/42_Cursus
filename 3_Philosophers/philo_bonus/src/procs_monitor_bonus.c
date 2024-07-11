@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/09 20:47:38 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/11 20:25:27 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*monitoring(void *arg)
 	stat = (t_stat *)arg;
 	while (TRUE)
 	{
-		if (stat->philo.count_meal != -2)
+		if (stat->philo.count_meal != OPTION_OFF)
 		{
 			sem_wait(stat->philo.eat);
 			if (stat->philo.current_meal >= stat->philo.count_meal)
@@ -42,7 +42,8 @@ static void	check_starving_exit(t_stat *stat)
 	if (is_philo_starving(stat))
 	{	
 		sem_wait(stat->write);
-		printf("%zu %d died\n", ft_gettime() - stat->philo.birth_time, stat->philo.name);
+		printf("%zu %d died\n", \
+				ft_gettime() - stat->philo.birth_time, stat->philo.name);
 		exit(EXIT_FAILURE);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/10 19:55:25 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/11 20:26:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static void	p_think(t_philo *philo);
 static void	p_sleep(t_philo *philo);
-static void	p_eat(t_philo *philo);
+static void	p_eat_odd(t_philo *philo);
+static void	p_eat_even(t_philo *philo);
 
 void	*eat_think_sleep(void *arg)
 {
@@ -22,29 +23,21 @@ void	*eat_think_sleep(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->name % 2 == 0)
-		usleep(100);
+		usleep(200);
 	while (!is_philo_terminated(philo))
 	{	
 		if (philo->count_meal != OPTION_OFF && \
 			philo->current_meal >= philo->count_meal)
 			break ;
-		p_eat(philo);
+		if (philo->name % 2)
+			p_eat_odd(philo);
+		else
+			p_eat_even(philo);
 		p_sleep(philo);
 		p_think(philo);
+		usleep(200);
 	}
 	return (arg);
-}
-
-int	is_philo_terminated(t_philo *philo)
-{	
-	pthread_mutex_lock(philo->dead);
-	if (*philo->terminate)
-	{
-		pthread_mutex_unlock(philo->dead);
-		return (TRUE);
-	}
-	pthread_mutex_unlock(philo->dead);
-	return (FALSE);
 }
 
 static void	p_think(t_philo *philo)
@@ -58,17 +51,36 @@ static void	p_sleep(t_philo *philo)
 	ft_usleep(philo->time_to_sleep, philo);
 }
 
-static void	p_eat(t_philo *philo)
+static void	p_eat_odd(t_philo *philo)
 {
 	pthread_mutex_lock(philo->r_fork);
 	ft_print_mutex("has taken a fork", philo);
 	if (philo->l_fork == philo->r_fork)
 	{	
 		ft_usleep(philo->time_to_die, philo);
+		ft_usleep(philo->time_to_die, philo);
 		pthread_mutex_unlock(philo->r_fork);
 		return ;
 	}
 	pthread_mutex_lock(philo->l_fork);
+	ft_print_mutex("has taken a fork", philo);
+	ft_print_mutex("is eating", philo);
+	pthread_mutex_lock(philo->eat);
+	philo->last_meal = ft_gettime();
+	pthread_mutex_unlock(philo->eat);
+	ft_usleep(philo->time_to_eat, philo);
+	pthread_mutex_lock(philo->eat);
+	philo->current_meal++;
+	pthread_mutex_unlock(philo->eat);
+	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(philo->r_fork);
+}
+
+static void	p_eat_even(t_philo *philo)
+{
+	pthread_mutex_lock(philo->l_fork);
+	ft_print_mutex("has taken a fork", philo);
+	pthread_mutex_lock(philo->r_fork);
 	ft_print_mutex("has taken a fork", philo);
 	ft_print_mutex("is eating", philo);
 	pthread_mutex_lock(philo->eat);

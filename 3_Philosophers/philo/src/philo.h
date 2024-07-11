@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/10 21:21:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/11 20:26:32 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,13 @@ int		init(int argc, char **argv, t_stat *stat);
 
 //thread.c
 void	control_threads(t_stat *stat);
+int		is_philo_terminated(t_philo *philo);
 
 //thread_monitor.c
 void	*monitoring(void *arg);
 
 //thread_philo.c
 void	*eat_think_sleep(void *arg);
-int		is_philo_terminated(t_philo *philo);
 
 //utils.c
 int		ft_atoi(const char *str);

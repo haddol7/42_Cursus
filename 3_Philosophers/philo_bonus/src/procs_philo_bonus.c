@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/09 21:16:52 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/11 20:25:45 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,16 @@ static void	eat_think_sleep(t_stat *stat)
 
 	philo = &stat->philo;
 	if (philo->name % 2 == 0)
-		ft_usleep(1);
+		usleep(200);
 	while (TRUE)
 	{
-		if (philo->count_meal != -2 && philo->current_meal >= philo->count_meal)
-			break;
+		if (philo->count_meal != OPTION_OFF && \
+			philo->current_meal >= philo->count_meal)
+			break ;
 		p_eat(philo, stat->num_philos);
 		p_sleep(philo);
 		p_think(philo);
+		usleep(200);
 	}
 }
 
@@ -67,6 +69,7 @@ static void	p_eat(t_philo *philo, int num_philos)
 	ft_print_semaphore("has taken a fork", philo);
 	if (num_philos == 1)
 	{	
+		ft_usleep(philo->time_to_die);
 		ft_usleep(philo->time_to_die);
 		sem_post(philo->forks);
 		return ;

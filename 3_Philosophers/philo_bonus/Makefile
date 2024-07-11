@@ -2,7 +2,7 @@ NAME := philo_bonus
 SRC_DIR := src/
 OBJ_DIR := obj/
 CC := cc
-CFLAGS := -Werror -Wall -Wextra -g
+CFLAGS := -Werror -Wall -Wextra
 
 SRC_FILE = main_bonus init_bonus procs_bonus procs_monitor_bonus procs_philo_bonus utils_bonus
 

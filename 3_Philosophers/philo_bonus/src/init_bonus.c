@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:40:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/09 20:01:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/11 20:14:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	validate_args(int argc, char **argv, t_stat *stat)
 	i = 0;
 	while (++i < argc)
 	{
-		if (ft_atoi(argv[i]) == ARG_ERR || (i == 1 && !ft_atoi(argv[1])))
+		if (ft_atoi(argv[i]) == ARG_ERR || !ft_atoi(argv[i]))
 			return (write(2, "Argument is not formatted.\n", 27));
 	}
 	stat->num_philos = ft_atoi(argv[1]);
@@ -58,8 +58,14 @@ static void	init_semaphore(t_stat *stat)
 	stat->eat = sem_open("eat", O_CREAT, 0644, 1);
 	stat->pids = malloc(sizeof(pid_t) * stat->num_philos);
 	if (stat->pids == NULL)
-	{
+	{	
 		write(2, "Malloc error\n", 14);
+		sem_close(stat->forks);
+		sem_close(stat->write);
+		sem_close(stat->eat);
+		sem_unlink("forks");
+		sem_unlink("write");
+		sem_unlink("eat");
 		exit(EXIT_FAILURE);
 	}
 }
