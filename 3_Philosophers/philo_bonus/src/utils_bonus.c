@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:18:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/09 20:02:09 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/11 21:21:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	ft_usleep(size_t ms)
 
 	start = ft_gettime();
 	while (ft_gettime() - start < ms)
-		usleep(500);
+		usleep(250);
 	return (0);
 }
 
@@ -62,6 +62,9 @@ void	ft_print_semaphore(char *msg, t_philo *philo)
 
 void	free_resources(t_stat *stat)
 {
+	sem_close(stat->forks);
+	sem_close(stat->write);
+	sem_close(stat->eat);
 	sem_unlink("forks");
 	sem_unlink("write");
 	sem_unlink("eat");
