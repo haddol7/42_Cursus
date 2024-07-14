@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:18:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/11 20:36:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/14 20:44:24 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	free_resources(t_stat *stat)
 	pthread_mutex_destroy(&stat->dead);
 	pthread_mutex_destroy(&stat->write);
 	pthread_mutex_destroy(&stat->eat);
+	pthread_mutex_destroy(&stat->start);
 	i = 0;
 	while (i < stat->num_philos)
 	{	

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/11 20:26:32 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/14 13:54:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_stat
 	pthread_mutex_t	write;
 	pthread_mutex_t	dead;
 	pthread_mutex_t	eat;
+	pthread_mutex_t	start;
 }	t_stat;
 
 typedef struct s_philo
@@ -58,6 +59,7 @@ typedef struct s_philo
 	pthread_mutex_t	*write;
 	pthread_mutex_t	*dead;
 	pthread_mutex_t	*eat;
+	pthread_mutex_t	*start;
 }	t_philo;
 
 //init.c

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:40:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/10 22:25:06 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/14 20:34:53 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ static void	init_mutex(t_stat *stat)
 	pthread_mutex_init(&stat->dead, NULL);
 	pthread_mutex_init(&stat->write, NULL);
 	pthread_mutex_init(&stat->eat, NULL);
+	pthread_mutex_init(&stat->start, NULL);
 	i = 0;
 	while (i < stat->num_philos)
 	{	
@@ -94,8 +95,6 @@ static void	init_philo(t_stat *stat)
 		philo = &stat->philos[i];
 		philo->thread = NULL;
 		philo->name = i + 1;
-		philo->birth_time = ft_gettime();
-		philo->last_meal = philo->birth_time;
 		philo->time_to_die = stat->time_to_die;
 		philo->time_to_eat = stat->time_to_eat;
 		philo->time_to_sleep = stat->time_to_sleep;
@@ -107,5 +106,6 @@ static void	init_philo(t_stat *stat)
 		philo->write = &stat->write;
 		philo->dead = &stat->dead;
 		philo->eat = &stat->eat;
+		philo->start = &stat->start;
 	}
 }

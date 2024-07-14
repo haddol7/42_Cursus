@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/11 20:26:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/14 22:01:58 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,11 @@ void	*eat_think_sleep(void *arg)
 	philo = (t_philo *)arg;
 	if (philo->name % 2 == 0)
 		usleep(200);
+	pthread_mutex_lock(philo->start);
+	pthread_mutex_unlock(philo->start);
 	while (!is_philo_terminated(philo))
-	{	
-		if (philo->count_meal != OPTION_OFF && \
-			philo->current_meal >= philo->count_meal)
+	{
+		if (philo->current_meal == philo->count_meal)
 			break ;
 		if (philo->name % 2)
 			p_eat_odd(philo);

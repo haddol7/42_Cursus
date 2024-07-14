@@ -1,12 +1,11 @@
 NAME := philo
-SRC_DIR := src/
 OBJ_DIR := obj/
 CC := cc
 CFLAGS := -Werror -Wall -Wextra
 
 SRC_FILE	= main init utils thread thread_monitor thread_philo
 
-SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILE)))
+SRC = $(addsuffix .c, $(SRC_FILE))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILE)))
 DEP = $(addprefix $(OBJ_DIR), $(addsuffix .d, $(SRC_FILE)))
 
