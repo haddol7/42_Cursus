@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/14 22:01:58 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/16 18:38:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,18 @@ void	*eat_think_sleep(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->name % 2 == 0)
+	if (~philo->name & 1)
 		usleep(200);
 	pthread_mutex_lock(philo->start);
 	pthread_mutex_unlock(philo->start);
 	while (!is_philo_terminated(philo))
 	{
-		if (philo->current_meal == philo->count_meal)
-			break ;
-		if (philo->name % 2)
+		if (~philo->name & 1)
 			p_eat_odd(philo);
 		else
 			p_eat_even(philo);
+		if (philo->current_meal == philo->count_meal)
+			break ;
 		p_sleep(philo);
 		p_think(philo);
 		usleep(200);
@@ -58,8 +58,7 @@ static void	p_eat_odd(t_philo *philo)
 	ft_print_mutex("has taken a fork", philo);
 	if (philo->l_fork == philo->r_fork)
 	{	
-		ft_usleep(philo->time_to_die, philo);
-		ft_usleep(philo->time_to_die, philo);
+		ft_usleep(philo->time_to_die + 100, philo);
 		pthread_mutex_unlock(philo->r_fork);
 		return ;
 	}
@@ -68,14 +67,37 @@ static void	p_eat_odd(t_philo *philo)
 	ft_print_mutex("is eating", philo);
 	pthread_mutex_lock(philo->eat);
 	philo->last_meal = ft_gettime();
-	pthread_mutex_unlock(philo->eat);
-	ft_usleep(philo->time_to_eat, philo);
-	pthread_mutex_lock(philo->eat);
 	philo->current_meal++;
 	pthread_mutex_unlock(philo->eat);
+	ft_usleep(philo->time_to_eat, philo);
 	pthread_mutex_unlock(philo->l_fork);
 	pthread_mutex_unlock(philo->r_fork);
 }
+
+// ./philo 3 610 200 100 연산은 최대한 간단하게
+// philo busy waiting
+// bool	put_fork(t_fork *fork)
+// {
+// 	while (TRUE)
+// 	{ 	
+//		pthread_mutex_lock(fork.mutex);
+// 		if (fork.is_used == FALSE)
+// 		{
+// 			fork.is_use = TRUE;
+// 			pthread_mutex_unlock(fork.mutex);
+
+// 			return (TRUE);
+// 		}
+// 		pthread_mutex_unlock(fork.mutex);
+// 		usleep(100);
+// 		if (info.philo_num == 1)
+// 		{
+// 			while (!is_dead(info.dead.data))
+// 				usleep(100);
+// 			return (FALSE);
+// 		}
+// 	}
+// }
 
 static void	p_eat_even(t_philo *philo)
 {
@@ -86,11 +108,9 @@ static void	p_eat_even(t_philo *philo)
 	ft_print_mutex("is eating", philo);
 	pthread_mutex_lock(philo->eat);
 	philo->last_meal = ft_gettime();
-	pthread_mutex_unlock(philo->eat);
-	ft_usleep(philo->time_to_eat, philo);
-	pthread_mutex_lock(philo->eat);
 	philo->current_meal++;
 	pthread_mutex_unlock(philo->eat);
+	ft_usleep(philo->time_to_eat, philo);
 	pthread_mutex_unlock(philo->r_fork);
 	pthread_mutex_unlock(philo->l_fork);
 }
