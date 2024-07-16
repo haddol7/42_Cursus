@@ -6,13 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/11 20:25:27 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/16 16:45:39 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-static void	check_starving_exit(t_stat *stat);
 static int	is_philo_starving(t_stat *stat);
 
 void	*monitoring(void *arg)
@@ -22,30 +21,21 @@ void	*monitoring(void *arg)
 	stat = (t_stat *)arg;
 	while (TRUE)
 	{
-		if (stat->philo.count_meal != OPTION_OFF)
-		{
-			sem_wait(stat->philo.eat);
-			if (stat->philo.current_meal >= stat->philo.count_meal)
-			{
-				sem_post(stat->philo.eat);
-				return (arg);
-			}
-			sem_post(stat->philo.eat);
+		if (is_philo_starving(stat))
+		{	
+			sem_wait(stat->write);
+			printf("%zu %d died\n", \
+					ft_gettime() - stat->philo.birth_time, stat->philo.name);
+			sem_close(stat->forks);
+			sem_close(stat->philo.unique_eat);
+			sem_unlink(stat->philo.str_name);
+			free(stat->philo.str_name);
+			free(stat->pids);
+			exit(EXIT_FAILURE);
 		}
-		check_starving_exit(stat);
+		usleep(500);
 	}
 	return (arg);
-}
-
-static void	check_starving_exit(t_stat *stat)
-{
-	if (is_philo_starving(stat))
-	{	
-		sem_wait(stat->write);
-		printf("%zu %d died\n", \
-				ft_gettime() - stat->philo.birth_time, stat->philo.name);
-		exit(EXIT_FAILURE);
-	}
 }
 
 static int	is_philo_starving(t_stat *stat)
@@ -53,12 +43,12 @@ static int	is_philo_starving(t_stat *stat)
 	t_philo	philo;
 
 	philo = stat->philo;
-	sem_wait(stat->eat);
+	sem_wait(philo.unique_eat);
 	if (ft_gettime() - philo.last_meal >= philo.time_to_die)
 	{
-		sem_post(stat->eat);
+		sem_post(philo.unique_eat);
 		return (TRUE);
 	}
-	sem_post(stat->eat);
+	sem_post(philo.unique_eat);
 	return (FALSE);
 }
