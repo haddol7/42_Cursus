@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/16 16:34:00 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/16 17:26:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ static void	eat_think_sleep(t_stat *stat)
 	philo = &stat->philo;
 	while (TRUE)
 	{
+		p_eat(philo, stat->num_philos);
 		if (philo->current_meal == philo->count_meal)
 			break ;
-		p_eat(philo, stat->num_philos);
 		p_sleep(philo);
 		p_think(philo);
 		usleep(200);
