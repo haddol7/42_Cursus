@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:18:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/15 18:18:24 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/16 16:59:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*ft_itoa(int n)
 	}
 	str = (char *)malloc((len + 1) * sizeof(char));
 	if (str == NULL)
-		exit(1);
+		exit(EXIT_FAILURE);
 	str[len--] = '\0';
 	while (l_n != 0 && len >= 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/16 16:43:06 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/16 17:08:41 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@
 
 # define TRUE 1
 # define FALSE 0
+
+# define ERR_FORK 1
+# define ERR_SEM 0
 
 typedef struct s_philo
 {

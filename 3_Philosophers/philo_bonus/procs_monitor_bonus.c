@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/16 16:45:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/16 16:46:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*monitoring(void *arg)
 	while (TRUE)
 	{
 		if (is_philo_starving(stat))
-		{	
+		{
 			sem_wait(stat->write);
 			printf("%zu %d died\n", \
 					ft_gettime() - stat->philo.birth_time, stat->philo.name);
