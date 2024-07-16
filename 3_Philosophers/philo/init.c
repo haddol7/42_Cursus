@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:40:48 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/14 20:34:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/16 20:47:17 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	validate_args(int argc, char **argv, t_stat *stat)
 static int	alloc_fork_and_philo(t_stat *stat)
 {
 	stat->philos = malloc(sizeof(t_philo) * stat->num_philos);
-	stat->forks = malloc(sizeof(pthread_mutex_t) * stat->num_philos);
+	stat->forks = malloc(sizeof(t_fork) * stat->num_philos);
 	if (!stat->philos || !stat->forks)
 	{
 		write(2, "Malloc error occured\n", 22);
@@ -79,7 +79,8 @@ static void	init_mutex(t_stat *stat)
 	i = 0;
 	while (i < stat->num_philos)
 	{	
-		pthread_mutex_init(&stat->forks[i], NULL);
+		pthread_mutex_init(&stat->forks[i].mutex, NULL);
+		stat->forks[i].status = NOT_USING;
 		i++;
 	}
 }
@@ -107,5 +108,6 @@ static void	init_philo(t_stat *stat)
 		philo->dead = &stat->dead;
 		philo->eat = &stat->eat;
 		philo->start = &stat->start;
+		philo->is_all_philo = stat->num_philos % 2;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:18:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/14 20:44:24 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/16 21:01:40 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	ft_usleep(size_t ms, t_philo *philo)
 }
 
 void	ft_print_mutex(char *msg, t_philo *philo)
-{	
+{
 	pthread_mutex_lock(philo->write);
 	if (is_philo_terminated(philo))
 	{
@@ -69,22 +69,14 @@ void	ft_print_mutex(char *msg, t_philo *philo)
 	pthread_mutex_unlock(philo->write);
 }
 
-void	free_resources(t_stat *stat)
-{
-	int	i;
-
-	pthread_mutex_destroy(&stat->dead);
-	pthread_mutex_destroy(&stat->write);
-	pthread_mutex_destroy(&stat->eat);
-	pthread_mutex_destroy(&stat->start);
-	i = 0;
-	while (i < stat->num_philos)
-	{	
-		memset(&stat->philos[i], 0, sizeof(t_philo));
-		pthread_mutex_destroy(&stat->forks[i]);
-		i++;
+int	is_philo_terminated(t_philo *philo)
+{	
+	pthread_mutex_lock(philo->dead);
+	if (*philo->terminate)
+	{
+		pthread_mutex_unlock(philo->dead);
+		return (TRUE);
 	}
-	free(stat->philos);
-	free(stat->forks);
-	memset(stat, 0, sizeof(t_stat));
+	pthread_mutex_unlock(philo->dead);
+	return (FALSE);
 }

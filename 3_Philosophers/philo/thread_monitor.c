@@ -6,13 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/16 17:54:57 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/16 20:49:55 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	monitor_one_philo_starvation(t_stat *stat, int i, size_t time_to_die);
+static int	monitor_starvation(t_stat *stat, int i, size_t time_to_die);
 static int	is_philo_starving(t_stat *stat, int i, size_t time_to_die);
 static int	is_all_philos_full(t_stat *stat);
 
@@ -31,7 +31,7 @@ void	*monitoring(void *arg)
 		i = 0;
 		while (i < stat->num_philos)
 		{	
-			if (monitor_one_philo_starvation(stat, i, time_to_die))
+			if (monitor_starvation(stat, i, time_to_die))
 				return (arg);
 			i++;
 		}
@@ -39,7 +39,7 @@ void	*monitoring(void *arg)
 	return (arg);
 }
 
-static int	monitor_one_philo_starvation(t_stat *stat, int i, size_t time_to_die)
+static int	monitor_starvation(t_stat *stat, int i, size_t time_to_die)
 {
 	if (is_philo_starving(stat, i, time_to_die))
 	{

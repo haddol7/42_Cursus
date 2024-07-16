@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 16:21:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/14 20:23:45 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/16 18:54:08 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,4 @@ void	control_threads(t_stat *stat)
 	pthread_join(monitor, NULL);
 	while (++i < stat->num_philos)
 		pthread_join(stat->philos[i].thread, NULL);
-}
-
-int	is_philo_terminated(t_philo *philo)
-{	
-	pthread_mutex_lock(philo->dead);
-	if (*philo->terminate)
-	{
-		pthread_mutex_unlock(philo->dead);
-		return (TRUE);
-	}
-	pthread_mutex_unlock(philo->dead);
-	return (FALSE);
 }

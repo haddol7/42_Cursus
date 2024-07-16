@@ -3,7 +3,7 @@ OBJ_DIR := obj/
 CC := cc
 CFLAGS := -Werror -Wall -Wextra
 
-SRC_FILE	= main init utils thread thread_monitor thread_philo
+SRC_FILE	= main init utils thread thread_monitor thread_philo thread_philo_utils
 
 SRC = $(addsuffix .c, $(SRC_FILE))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILE)))
