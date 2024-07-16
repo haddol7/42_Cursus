@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:18:16 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/11 21:21:44 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/15 18:18:24 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,32 @@ int	ft_atoi(const char *str)
 	return ((int)(result));
 }
 
+char	*ft_itoa(int n)
+{
+	char	*str;
+	long	l_n;
+	size_t	len;
+
+	l_n = (long)n;
+	len = 0;
+	while (n != 0)
+	{
+		n /= 10;
+		len++;
+	}
+	str = (char *)malloc((len + 1) * sizeof(char));
+	if (str == NULL)
+		exit(1);
+	str[len--] = '\0';
+	while (l_n != 0 && len >= 0)
+	{
+		str[len] = l_n % 10 + '0';
+		l_n /= 10;
+		len--;
+	}
+	return (str);
+}
+
 size_t	ft_gettime(void)
 {
 	struct timeval	time;
@@ -58,17 +84,4 @@ void	ft_print_semaphore(char *msg, t_philo *philo)
 	sem_wait(philo->write);
 	printf("%zu %d %s\n", ft_gettime() - philo->birth_time, philo->name, msg);
 	sem_post(philo->write);
-}
-
-void	free_resources(t_stat *stat)
-{
-	sem_close(stat->forks);
-	sem_close(stat->write);
-	sem_close(stat->eat);
-	sem_unlink("forks");
-	sem_unlink("write");
-	sem_unlink("eat");
-	free(stat->pids);
-	memset(&stat->philo, 0, sizeof(t_philo));
-	memset(stat, 0, sizeof(t_stat));
 }
