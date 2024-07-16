@@ -6,22 +6,24 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 21:40:30 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/14 22:00:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/16 17:54:57 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	monitor_one_philo_starvation(t_stat *stat, int i);
-static int	is_philo_starving(t_stat *stat, int i);
+static int	monitor_one_philo_starvation(t_stat *stat, int i, size_t time_to_die);
+static int	is_philo_starving(t_stat *stat, int i, size_t time_to_die);
 static int	is_all_philos_full(t_stat *stat);
 
 void	*monitoring(void *arg)
 {
 	t_stat	*stat;
+	size_t	time_to_die;
 	int		i;
 
 	stat = (t_stat *)arg;
+	time_to_die = stat->time_to_die;
 	pthread_mutex_lock(&stat->start);
 	pthread_mutex_unlock(&stat->start);
 	while (TRUE)
@@ -29,7 +31,7 @@ void	*monitoring(void *arg)
 		i = 0;
 		while (i < stat->num_philos)
 		{	
-			if (monitor_one_philo_starvation(stat, i))
+			if (monitor_one_philo_starvation(stat, i, time_to_die))
 				return (arg);
 			i++;
 		}
@@ -37,9 +39,9 @@ void	*monitoring(void *arg)
 	return (arg);
 }
 
-static int	monitor_one_philo_starvation(t_stat *stat, int i)
+static int	monitor_one_philo_starvation(t_stat *stat, int i, size_t time_to_die)
 {
-	if (is_philo_starving(stat, i))
+	if (is_philo_starving(stat, i, time_to_die))
 	{
 		pthread_mutex_lock(&stat->dead);
 		stat->terminate = TRUE;
@@ -55,10 +57,10 @@ static int	monitor_one_philo_starvation(t_stat *stat, int i)
 	return (FALSE);
 }
 
-static int	is_philo_starving(t_stat *stat, int i)
+static int	is_philo_starving(t_stat *stat, int i, size_t time_to_die)
 {
 	pthread_mutex_lock(&stat->eat);
-	if (ft_gettime() - stat->philos[i].last_meal > stat->time_to_die)
+	if (ft_gettime() - stat->philos[i].last_meal > time_to_die)
 	{
 		pthread_mutex_unlock(&stat->eat);
 		return (TRUE);
