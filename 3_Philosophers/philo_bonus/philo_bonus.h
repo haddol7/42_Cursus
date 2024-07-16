@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 19:17:02 by daeha             #+#    #+#             */
-/*   Updated: 2024/07/11 20:47:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/07/16 16:43:06 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 typedef struct s_philo
 {
 	int				name;
+	char			*str_name;
 	size_t			birth_time;
 	size_t			last_meal;
 	size_t			time_to_die;
@@ -39,9 +40,10 @@ typedef struct s_philo
 	size_t			time_to_sleep;
 	int				count_meal;
 	int				current_meal;
+	sem_t			*start;
 	sem_t			*forks;
 	sem_t			*write;
-	sem_t			*eat;
+	sem_t			*unique_eat;
 }	t_philo;
 
 typedef struct s_stat
@@ -51,9 +53,9 @@ typedef struct s_stat
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
 	int				count_meal;
+	sem_t			*start;
 	sem_t			*forks;
 	sem_t			*write;
-	sem_t			*eat;
 	pid_t			*pids;
 	t_philo			philo;
 }	t_stat;
@@ -72,9 +74,9 @@ void	proc_philos(t_stat *stat);
 
 //utils_bonus.c
 int		ft_atoi(const char *str);
+char	*ft_itoa(int n);
 size_t	ft_gettime(void);
 int		ft_usleep(size_t ms);
 void	ft_print_semaphore(char *msg, t_philo *philo);
-void	free_resources(t_stat *stat);
 
 #endif
