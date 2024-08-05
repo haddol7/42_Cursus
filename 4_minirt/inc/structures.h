@@ -2,6 +2,7 @@
 # define STRUCTURES_H
 
 # include <stdlib.h>
+# include <mlx.h>
 
 typedef struct s_vec3 t_vec3;
 typedef struct s_vec3 t_point3;
@@ -17,17 +18,28 @@ typedef struct s_hit_record t_hit_record;
 typedef struct s_object t_object;
 typedef struct s_sphere t_sphere;
 typedef struct s_light	t_light;
-
+typedef struct s_img	t_img;
+typedef struct s_mlx	t_mlx;
 
 typedef int	t_bool;
-# define FALSE 0
-# define TRUE 1
-typedef int	t_object_type;
-# define SP 0
-# define LIGHT_POINT 1
-# define LUMEN 3
 
-# define EPSILON 1e-6 //0.000001
+# define FALSE 			0
+# define TRUE 			1
+
+typedef int	t_object_type;
+
+# define SP 			0
+# define LIGHT_POINT	1
+# define LUMEN 			3
+
+# define EPSILON 		1e-6 //0.000001
+
+# define WINDOW_W		1080
+# define WINDOW_H		900
+# define ANTI_SAMPLE	1
+
+# define ERR_MLC		12
+# define ERR_MLX		42
 
 struct s_vec3
 {
@@ -97,13 +109,28 @@ struct s_light
 	double		bright_ratio;
 };
 
-
 struct s_object
 {
 	t_object_type	type;
 	void			*element;
 	void			*next;
 	t_color3		albedo;
+};
+
+struct s_img
+{
+	void	*id;
+	void	*addr;
+	int		bits_per_pixel;
+	int		line_size;
+	int		endian;
+};
+
+struct s_mlx
+{
+	void	*mlx;
+	void	*win;
+	t_img	*img;
 };
 
 #endif
