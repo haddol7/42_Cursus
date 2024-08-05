@@ -26,6 +26,6 @@ t_camera    camera(t_canvas *canvas, t_point3 orig)
     cam.vertical = vec3(0, cam.viewport_h, 0);
     cam.left_bottom = vminus(vminus(vminus(cam.orig, vdivide(cam.horizontal, 2)),
                                 vdivide(cam.vertical, 2)), vec3(0, 0, focal_len));
-	cam.samples_per_pixel = 100;
+	cam.samples_per_pixel = ANTI_SAMPLE;
     return (cam);
 }
