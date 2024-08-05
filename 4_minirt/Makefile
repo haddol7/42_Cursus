@@ -35,6 +35,7 @@ SRCS =			$(SRCS_PRINT) \
 				src/main.c
 
 OBJS = $(SRCS:.c=.o)
+DEPS = $(SRCS:.c=.d)
 
 GREEN = \033[0;92m
 BLUE = \033[0;94m
@@ -56,21 +57,23 @@ bonus:
 	@$(MAKE) all
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@ $(HEADER)
+	$(CC) $(CFLAGS) -MMD -c $< -o $@ $(HEADER)
 	
 clean:
-	rm -f $(OBJS)
+	rm -f $(OBJS) $(DEPS)
 	@echo "$(BLUE)🌏 minirt : clean done!$(WHITE)"
 
 fclean:
 	@make clean -C $(MLX_DIR)
 	@make fclean -C $(LIBFT_DIR)
+	rm -f $(OBJS) $(DEPS)
 	rm -f $(NAME)
-	rm -f $(OBJS)
 	@echo "$(BLUE)🌏 minirt : fclean done!$(WHITE)"
 
 re: fclean
 	@$(MAKE)
+
+-include $(DEPS)
 
 .PHONY: all clean fclean re
 
