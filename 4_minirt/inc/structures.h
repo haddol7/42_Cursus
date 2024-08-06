@@ -20,6 +20,7 @@ typedef struct s_sphere t_sphere;
 typedef struct s_light	t_light;
 typedef struct s_img	t_img;
 typedef struct s_mlx	t_mlx;
+typedef struct s_data	t_data;
 
 typedef int	t_bool;
 
@@ -34,12 +35,9 @@ typedef int	t_object_type;
 
 # define EPSILON 		1e-6 //0.000001
 
-# define WINDOW_W		1080
-# define WINDOW_H		900
+# define WINDOW_W		500
+# define WINDOW_H		400
 # define ANTI_SAMPLE	1
-
-# define ERR_MLC		12
-# define ERR_MLX		42
 
 struct s_vec3
 {
@@ -64,6 +62,13 @@ struct s_camera
 	double		focal_len;
 	t_point3	left_bottom;
 	int			samples_per_pixel;
+	double		vfov;
+	t_point3	lookfrom;
+	t_point3	lookat;
+	t_vec3		vup;
+	t_vec3		u;
+	t_vec3		v;
+	t_vec3		w;
 };
 
 struct s_canvas
@@ -131,6 +136,12 @@ struct s_mlx
 	void	*mlx;
 	void	*win;
 	t_img	*img;
+};
+
+struct s_data
+{
+	t_mlx	*engine;
+	t_scene	*scene;
 };
 
 #endif
