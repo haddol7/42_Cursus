@@ -22,8 +22,6 @@ t_ray	ray_primary(t_camera *cam, double u, double v)
 	t_ray ray;
 
 	ray.orig = cam->orig;
-	// left_bottom + u * horizontal + v * vertical - origin 의 단위 벡터.
-	//dprintf(2, "u : %f v : %f\n", u, v);
 	ray.dir = vunit(vminus(vplus(vplus(cam->left_bottom, vmult(cam->horizontal, u)), vmult(cam->vertical, v)), cam->orig));
 	return (ray);
 }
@@ -39,7 +37,7 @@ t_hit_record record_init(void)
 
 t_color3    ray_color(t_scene *scene, t_color3 color)
 {
-    double          t;
+    double	t;
 	
     scene->rec = record_init();
     if (hit(scene->world, &scene->ray, &scene->rec))

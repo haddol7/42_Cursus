@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "engine.h"
 #include "structures.h"
 #include "print.h"
 #include "utils.h"
@@ -16,7 +17,7 @@ t_scene *scene_init(void)
     if(!(scene = (t_scene *)malloc(sizeof(t_scene))))
         exit(12);
     scene->canvas = canvas(WINDOW_W, WINDOW_H);
-    scene->camera = camera(&scene->canvas, point3(0, 0, 0));
+    scene->camera = camera(&scene->canvas, point3(0, 0, 10));
     world = object(SP, sphere(point3(-2, 0, -5), 2), color3(0.5, 0, 0));
     oadd(&world, object(SP, sphere(point3(0, -1000, 0), 995), color3(1, 1, 1)));
     oadd(&world, object(SP, sphere(point3(2, 0, -5), 2), color3(0, 0.5, 0)));
@@ -88,14 +89,56 @@ void	draw_ray(t_scene *scene, t_mlx *engine)
 	mlx_put_image_to_window(engine->mlx, engine->win, engine->img->id, 0, 0);
 }
 
-int     main(void)
+int	terminate(void *data_addr)
 {
-    t_scene     *scene;
-	t_mlx		*engine;
+	t_data	*data;
 
-	engine = engine_init();
-    scene = scene_init();
-	draw_ray(scene, engine);
-	mlx_loop(engine->mlx);
+	data = (t_data *)data_addr;
+	mlx_destroy_image(data->engine->mlx, data->engine->img->id);
+	mlx_destroy_window(data->engine->mlx, data->engine->win);
+	printf("\033[0;92mProgram closed!\n");
+	exit(0);
+}
+
+int	key_hook(int keycode, void *data_addr)
+{	
+	t_data	*data;
+	t_sphere *sp;
+
+	data = (t_data *)data_addr;
+	sp = (t_sphere *)data->scene->world->element;
+	if (keycode == KEY_A)
+		sp->center = vplus_(sp->center, 0.1, 0, 0);
+	else if (keycode == KEY_D)
+		sp->center = vplus_(sp->center, -0.1, 0, 0);
+	// else if (keycode == KEY_W)
+	// 	data->map.angular.x -= 5;
+	// else if (keycode == KEY_S)
+	// 	data->map.angular.x += 5;
+	// else if (keycode == KEY_Q)
+	// 	data->map.angular.y -= 5;
+	// else if (keycode == KEY_E)
+	// 	data->map.angular.y += 5;
+	// else if (keycode == KEY_C)
+	// 	center_map(data);
+	else if (keycode == KEY_ESC)
+		terminate((void *)data);
+	draw_ray(data->scene, data->engine);
+	return (0);
+}
+
+int     main(void)
+{	
+	t_data		data;
+
+	data.engine = engine_init();
+   	data.scene = scene_init();
+	draw_ray(data.scene, data.engine);
+	mlx_hook(data.engine->win, 2, 0, key_hook, &data);
+	//mlx_hook(data.engine->win, 4, 0, mouse_press_hook, &data);
+	//mlx_hook(data.engine->win, 5, 0, mouse_release_hook, &data);
+	//mlx_hook(data.engine->win, 6, 0, mouse_drag_hook, &data);
+	mlx_hook(data.engine->win, 17, 0, terminate, &data);
+	mlx_loop(data.engine->mlx);
     return (0);
 }
