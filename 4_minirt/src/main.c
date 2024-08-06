@@ -6,8 +6,9 @@
 
 #include "scene.h"
 #include "trace.h"
+#include "map.h"
 
-t_scene *scene_init(void)
+t_scene *scene_init(int fd)
 {
     t_scene     *scene;
     t_object    *world;
@@ -19,8 +20,9 @@ t_scene *scene_init(void)
     scene->canvas = canvas(WINDOW_W, WINDOW_H);
     scene->camera = camera(&scene->canvas, point3(0, 0, 10));
     world = object(SP, sphere(point3(-2, 0, -5), 2), color3(0.5, 0, 0));
-    oadd(&world, object(SP, sphere(point3(0, -1000, 0), 995), color3(1, 1, 1)));
-    oadd(&world, object(SP, sphere(point3(2, 0, -5), 2), color3(0, 0.5, 0)));
+	map_validity(fd);
+    // oadd(&world, object(SP, sphere(point3(0, -1000, 0), 995), color3(1, 1, 1)));
+    // oadd(&world, object(SP, sphere(point3(2, 0, -5), 2), color3(0, 0.5, 0)));
     scene->world = world;
     lights = object(LIGHT_POINT, light_point(point3(0, 5, 0), color3(1, 1, 1), 0.5), color3(0, 0, 0));
     scene->light = lights;
@@ -127,12 +129,14 @@ int	key_hook(int keycode, void *data_addr)
 	return (0);
 }
 
-int     main(void)
+int     main(int argc, char *argv[])
 {	
+	int			fd;
 	t_data		data;
 
 	data.engine = engine_init();
-   	data.scene = scene_init();
+	fd = argument_validity(argc, argv[1]);
+   	data.scene = scene_init(fd);
 	draw_ray(data.scene, data.engine);
 	mlx_hook(data.engine->win, 2, 0, key_hook, &data);
 	//mlx_hook(data.engine->win, 4, 0, mouse_press_hook, &data);
