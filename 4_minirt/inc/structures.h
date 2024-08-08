@@ -17,6 +17,8 @@ typedef struct s_scene t_scene;
 typedef struct s_hit_record t_hit_record;
 typedef struct s_object t_object;
 typedef struct s_sphere t_sphere;
+typedef struct s_cylinder	t_cylinder;
+typedef struct s_plane	t_plane;
 typedef struct s_light	t_light;
 typedef struct s_img	t_img;
 typedef struct s_mlx	t_mlx;
@@ -30,6 +32,12 @@ typedef int	t_bool;
 typedef int	t_object_type;
 
 # define SP 			0
+# define CY 			1
+# define PL				2
+# define LIGHT			3
+# define AMBIENT		4
+# define CAMERA			5
+
 # define LIGHT_POINT	1
 # define LUMEN 			3
 
@@ -105,6 +113,21 @@ struct s_sphere
 	t_point3	center;
 	double		radius;
 	double		radius2;
+};
+
+struct s_cylinder
+{
+	t_point3	center;
+	double		radius;
+	double		radius2;
+	double		height;
+	t_vec3		normal;
+};
+
+struct s_plane
+{
+	t_point3	center;
+	t_vec3		normal;
 };
 
 struct s_light

@@ -54,3 +54,7 @@ dkms.conf
 .DS_Store
 README.md
 lib/mlx/*
+
+mlx_image.swiftsourceinfo
+mlx_init.swiftsourceinfo
+mlx_window.swiftsourceinfo 

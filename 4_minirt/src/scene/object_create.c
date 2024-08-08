@@ -25,6 +25,31 @@ t_sphere *sphere(t_point3 center, double radius)
 	return (sp);
 }
 
+t_cylinder	*cylinder(t_point3 center, t_vec3 normal, double radius, double height)
+{
+	t_cylinder	*cy;
+
+	if (!(cy = (t_cylinder *)malloc(sizeof(t_cylinder))))
+		return (NULL);
+	cy->center = center;
+	cy->height = height;
+	cy->normal = normal;
+	cy->radius = radius;
+	cy->radius2 = radius * radius;
+	return (cy);
+}
+
+t_plane		*plane(t_point3 center, t_vec3 normal)
+{
+	t_plane	*pl;
+
+	if (!(pl = (t_plane *)malloc(sizeof(t_plane))))
+		return (NULL);
+	pl->center = center;
+	pl->normal = normal;
+	return (pl);
+}
+
 t_light     *light_point(t_point3 light_origin, t_color3 light_color, double bright_ratio)
 {
     t_light *light;

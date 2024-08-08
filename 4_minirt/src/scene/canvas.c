@@ -18,7 +18,7 @@ t_camera    camera(t_canvas *canvas, t_point3 orig)
 
 	cam.lookfrom = orig;
 	//cam.lookat = vminus(cam.lookfrom, point3(0, 0, -1));
-	cam.lookat = point3(0, 0, -1);
+	cam.lookat = point3(0, 0, 0);
 	cam.vup = vec3(0, 1, 0);
     cam.focal_len = vlength(vminus(cam.lookfrom, cam.lookat));
 	

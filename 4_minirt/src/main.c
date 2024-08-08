@@ -11,23 +11,27 @@
 t_scene *scene_init(int fd)
 {
     t_scene     *scene;
-    t_object    *world;
-    t_object    *lights;
-    double      ka;
+    // t_object    *world;
+    // t_object    *lights;
+    // double      ka;
 
+
+// world 부터 하나씩 유효성 검사하면서 추가, -> 에러 났을 때 exit
+// 맵 스케일 이미지 검증
+// ㄴㅋ포ㅟㅐㅇ고 타.ㅋ로
     if(!(scene = (t_scene *)malloc(sizeof(t_scene))))
         exit(12);
-    scene->canvas = canvas(WINDOW_W, WINDOW_H);
-    scene->camera = camera(&scene->canvas, point3(0, 0, 10));
-    world = object(SP, sphere(point3(-2, 0, -5), 2), color3(0.5, 0, 0));
-	map_validity(fd);
+	map_validity(fd, scene);
+    // scene->canvas = canvas(WINDOW_W, WINDOW_H);
+    // scene->camera = camera(&scene->canvas, point3(0, 0, 10));
+    // world = object(SP, sphere(point3(-2, 0, -5), 2), color3(0.5, 0, 0));
     // oadd(&world, object(SP, sphere(point3(0, -1000, 0), 995), color3(1, 1, 1)));
     // oadd(&world, object(SP, sphere(point3(2, 0, -5), 2), color3(0, 0.5, 0)));
-    scene->world = world;
-    lights = object(LIGHT_POINT, light_point(point3(0, 5, 0), color3(1, 1, 1), 0.5), color3(0, 0, 0));
-    scene->light = lights;
-    ka = 0.1;
-    scene->ambient = vmult(color3(1,1,1), ka);
+    // scene->world = world;
+    // lights = object(LIGHT_POINT, light_point(point3(0, 5, 0), color3(1, 1, 1), 0.5), color3(0, 0, 0));
+    // scene->light = lights;
+    // ka = 0.1;
+    // scene->ambient = vmult(color3(1,1,1), ka);
     return (scene);
 }
 
@@ -137,12 +141,12 @@ int     main(int argc, char *argv[])
 	data.engine = engine_init();
 	fd = argument_validity(argc, argv[1]);
    	data.scene = scene_init(fd);
-	draw_ray(data.scene, data.engine);
-	mlx_hook(data.engine->win, 2, 0, key_hook, &data);
-	//mlx_hook(data.engine->win, 4, 0, mouse_press_hook, &data);
-	//mlx_hook(data.engine->win, 5, 0, mouse_release_hook, &data);
-	//mlx_hook(data.engine->win, 6, 0, mouse_drag_hook, &data);
-	mlx_hook(data.engine->win, 17, 0, terminate, &data);
-	mlx_loop(data.engine->mlx);
+	// draw_ray(data.scene, data.engine);
+	// mlx_hook(data.engine->win, 2, 0, key_hook, &data);
+	// //mlx_hook(data.engine->win, 4, 0, mouse_press_hook, &data);
+	// //mlx_hook(data.engine->win, 5, 0, mouse_release_hook, &data);
+	// //mlx_hook(data.engine->win, 6, 0, mouse_drag_hook, &data);
+	// mlx_hook(data.engine->win, 17, 0, terminate, &data);
+	// mlx_loop(data.engine->mlx);
     return (0);
 }

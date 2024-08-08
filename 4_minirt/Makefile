@@ -2,7 +2,8 @@ NAME := minirt
 
 SRC_DIR := src/
 CC := cc
-CFLAGS := -Wall -Werror -Wextra
+# CFLAGS := -Wall -Werror -Wextra
+CFLAGS :=
 
 LIB := lib/
 LIBFT_DIR := $(LIB)libft/
@@ -28,10 +29,13 @@ SRCS_TRACE =	src/trace/hit/hit_sphere.c \
 SRCS_UTILS = 	src/utils/objects_utils.c \
 				src/utils/utils.c
 
+SRCS_MAP = src/map/validity.c
+
 SRCS =			$(SRCS_PRINT) \
 				$(SRCS_SCENE) \
 				$(SRCS_TRACE) \
 				$(SRCS_UTILS) \
+				$(SRCS_MAP) \
 				src/main.c
 
 OBJS = $(SRCS:.c=.o)
