@@ -6,12 +6,11 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 21:08:04 by jungslee          #+#    #+#             */
-/*   Updated: 2024/08/08 22:30:40 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/09 19:54:42 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "map.h"
-#include <stdio.h>
 
 int    argument_validity(int argc, char *file_name)
 {
@@ -25,39 +24,40 @@ int    argument_validity(int argc, char *file_name)
     return (fd);
 }
 
-int what_type(char *type)
+int what_type(char **split)
 {
     int len;
     static int  num_A = 0;
     static int  num_C = 0;
     static int  num_L = 0;//TODO 일단
 
-    len = ft_strlen(type);
-    if (!ft_strncmp(type, "sp", len) && !ft_strncmp(type, "sp", 2))
-        return (SP);
-    else if (!ft_strncmp(type, "cy", len) && !ft_strncmp(type, "cy", 2))
-        return (CY);
-    else if (!ft_strncmp(type, "pl", len) && !ft_strncmp(type, "pl", 2))
-        return (PL);
-    else if (!ft_strncmp(type, "A", len) && !ft_strncmp(type, "A", 1))
-        return (AMBIENT);
-    else if (!ft_strncmp(type, "C", len) && !ft_strncmp(type, "C", 1))
-        return (CAMERA);
-    else if (!ft_strncmp(type, "L", len) && !ft_strncmp(type, "L", 1))
-        return (LIGHT);
+    len = ft_strlen(split[0]);
+    if (!ft_strncmp(split[0], "sp", len) && !ft_strncmp(split[0], "sp", 2))
+        return (is_valid_sp(split));
+    else if (!ft_strncmp(split[0], "cy", len) && !ft_strncmp(split[0], "cy", 2))
+        return (is_valid_cy(split));
+    else if (!ft_strncmp(split[0], "pl", len) && !ft_strncmp(split[0], "pl", 2))
+        return (is_valid_pl(split));
+    else if (!ft_strncmp(split[0], "A", len) && !ft_strncmp(split[0], "A", 1))
+        return (is_valid_A(split));
+    else if (!ft_strncmp(split[0], "C", len) && !ft_strncmp(split[0], "C", 1))
+        return (is_valid_C(split));
+    else if (!ft_strncmp(split[0], "L", len) && !ft_strncmp(split[0], "L", 1))
+        return (is_valid_L(split));
     else
         error_exit();
 }
 
-void	*detect_element(char *line)
+void	*create_object(char *line)
 {
 	int	i;
     char    **split;
+    t_object    *new_object;
     // t_object_type type;
 
 	i = 0;
     split = ft_split(line, ' ');
-    type = what_type(split[0])// 여기서 검증 먼저 하자.
+    new_object = what_type(split);// 여기서 검증 먼저 하자.
     // if ()
     //free!!!
     // for (int i = 0; split[i] != NULL; i++)
@@ -83,6 +83,7 @@ void    map_validity(int fd, t_scene *scene)
     char	*line;
     t_object    *world;
     t_object    *light;
+    t_object    *new_object;
     double      ka;
 
     line = NULL;
@@ -91,8 +92,10 @@ void    map_validity(int fd, t_scene *scene)
         line = get_next_line(fd);
 		if (line == 0)
 			break ;
-		detect_element(line);
-		free(line);
+        new_object = create_object(line);
+// oadd(&world, object(SP, sphere(point3(2, 0, -5), 2), color3(0, 0.5, 0)));
+		oadd(&world, new_object);
+        free(line);
     }
 }
 
