@@ -132,20 +132,21 @@ int	key_hook(int keycode, void *data_addr)
 	draw_ray(data->scene, data->engine);
 	return (0);
 }
-
+#include <stdio.h>
 int     main(int argc, char *argv[])
 {	
 	int			fd;
 	t_data		data;
 
 	data.engine = engine_init();
+	printf("%s\n", argv[1]);
 	fd = argument_validity(argc, argv[1]);
    	data.scene = scene_init(fd);
 	// draw_ray(data.scene, data.engine);
 	// mlx_hook(data.engine->win, 2, 0, key_hook, &data);
 	// //mlx_hook(data.engine->win, 4, 0, mouse_press_hook, &data);
 	// //mlx_hook(data.engine->win, 5, 0, mouse_release_hook, &data);
-	// //mlx_hook(data.engine->win, 6, 0, mouse_drag_hook, &data);
+	// //mlx_hook(data.engine->win, 6, 0, mouse_drag_hook, &data); 
 	// mlx_hook(data.engine->win, 17, 0, terminate, &data);
 	// mlx_loop(data.engine->mlx);
     return (0);

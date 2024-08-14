@@ -19,6 +19,13 @@
         "ratio": "c",
         "tuple": "c",
         "utility": "c",
-        "sstream": "c"
+        "sstream": "c",
+        "libft.h": "c",
+        "scene.h": "c",
+        "float.h": "c",
+        "limits.h": "c",
+        "__locale": "c",
+        "utils.h": "c",
+        "stdio.h": "c"
     }
 }

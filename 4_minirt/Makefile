@@ -1,7 +1,7 @@
 NAME := minirt
 
 SRC_DIR := src/
-CC := cc
+CC := cc -g
 # CFLAGS := -Wall -Werror -Wextra
 CFLAGS :=
 
@@ -29,7 +29,9 @@ SRCS_TRACE =	src/trace/hit/hit_sphere.c \
 SRCS_UTILS = 	src/utils/objects_utils.c \
 				src/utils/utils.c
 
-SRCS_MAP = src/parsing/validity.c
+SRCS_MAP = 		src/parsing/validity.c \
+				src/parsing/atof.c \
+				src/parsing/element.c
 
 SRCS =			$(SRCS_PRINT) \
 				$(SRCS_SCENE) \

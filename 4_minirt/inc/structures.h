@@ -104,6 +104,7 @@ struct s_scene
 	t_object		*world;
 	t_object		*light;
 	t_color3		ambient;
+	double			ka;
 	t_ray			ray;
 	t_hit_record	rec;
 };
