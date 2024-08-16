@@ -1,6 +1,64 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hit_sphere.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/14 15:30:07 by daeha             #+#    #+#             */
+/*   Updated: 2024/08/16 15:31:53 by daeha            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "libft.h"
 #include "structures.h"
 #include "utils.h"
 #include "trace.h"
+
+t_color3	texture(t_point3 p, t_sphere *sp, t_texture texture)
+{
+	t_point3	o;
+	double	theta;
+	double	phi;
+	int		u;
+	int		v;
+	void	*img_addr;
+	int		img_color;
+
+	o.x = p.x - sp->center.x;
+	o.y = p.y - sp->center.y;
+	o.z = p.z - sp->center.z;
+
+	theta = acos(-o.y / sp->radius);
+	phi = atan2(-o.z, o.x) + M_PI;
+
+	u = (phi / (2 * M_PI)) * texture.width;
+	v = (1 - (theta / (M_PI))) * texture.height;
+	img_addr = texture.img.addr + texture.img.bits_per_pixel / 8 * u + texture.img.line_size * v;
+	img_color = *(unsigned int *)img_addr;
+	return (vec3((double)((img_color & 0xff0000) >> 16 ) / 255.999, (double)((img_color & 0x00ff00) >> 8) / 255.999, (double)(img_color & 0x0000ff) / 255.999));
+}
+
+t_color3	texture_checkerboard(t_point3 p, t_sphere *sp)
+{
+	t_point3	o;
+	double	theta;
+	double	phi;
+	double	u;
+	double	v;
+
+	o.x = p.x - sp->center.x;
+	o.y = p.y - sp->center.y;
+	o.z = p.z - sp->center.z;
+	theta = acos(-o.y / sp->radius);
+	phi = atan2(-o.z, o.x) + M_PI;
+	u = phi / (2 * M_PI);
+	v = theta / (M_PI);
+	if (((int)(floor(u * 10)) + (int)floor(v * 10)) % 2 == 0)
+		return vec3(0, 0, 0);
+	else
+		return vec3(1, 1, 1);
+}
 
 t_bool hit_sphere(t_object *sp_obj, t_ray *ray, t_hit_record *rec)
 {
@@ -34,7 +92,14 @@ t_bool hit_sphere(t_object *sp_obj, t_ray *ray, t_hit_record *rec)
 	rec->p = ray_at(ray, root);
 	rec->normal = vdivide(vminus(rec->p, sp->center), sp->radius);
 	set_face_normal(ray, rec);
-	rec->albedo = sp_obj->albedo;
+
+	if (sp_obj->is_checker)
+		rec->albedo = texture_checkerboard(rec->p, sp);
+	else if (sp_obj->texture.img.id)
+		rec->albedo = texture(rec->p, sp, sp_obj->texture);
+	else
+		rec->albedo = sp_obj->albedo;
 	return (TRUE);
 }
+
 
