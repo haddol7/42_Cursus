@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:22 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/16 15:36:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/16 15:59:08 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void rotation(t_vec3 *v, t_vec3 axis, double theta)
 	t_vec3	y;
 	t_vec3	z;
 
-	cosine = cos(theta * (3.141592) / 180);
-	sine = sin(theta * (3.141592) / 180);
+	cosine = cos(theta * (M_PI) / 180);
+	sine = sin(theta * (M_PI) / 180);
 	onecos = 1 - cosine;
 	x.x = cosine + axis.x * axis.x * onecos;
 	x.y = axis.x * axis.y * onecos - axis.z * sine;
@@ -64,7 +64,7 @@ t_camera    camera(t_canvas *canvas, t_mlx engine)
 	
 	cam.vfov = engine.fov;
 
-	theta = cam.vfov * (3.141592) / 180;
+	theta = cam.vfov * (M_PI) / 180;
     viewport_height = tan(theta / 2) * 2 * cam.focal_len;
     cam.viewport_w = viewport_height * canvas->aspect_ratio;
     cam.viewport_h = viewport_height;
