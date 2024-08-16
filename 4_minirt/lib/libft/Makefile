@@ -16,6 +16,7 @@ SRCS := ft_isalpha.c\
 		ft_memchr.c\
 		ft_memcmp.c\
 		ft_strlcpy.c\
+		ft_strcmp.c\
 		ft_strlcat.c\
 		ft_strnstr.c\
 		ft_atoi.c\
