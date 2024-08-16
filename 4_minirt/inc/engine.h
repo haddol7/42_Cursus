@@ -10,9 +10,12 @@
 # define KEY_S		1
 # define KEY_D		2
 # define KEY_C		8
-
+# define KEY_Z 		6
 # define KEY_P		35
 # define KEY_I		34
+# define KEY_LEFT	123
+# define KEY_RIGHT	124
+
 
 # define MOUSE_LEFT		1
 # define MOUSE_RIGHT	2
