@@ -6,30 +6,29 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:35 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/16 15:36:41 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/16 16:42:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "trace.h"
 
-t_bool	hit(t_object *world, t_ray *ray, t_hit_record *rec)
+t_object	*hit(t_object *world, t_ray *ray, t_hit_record *rec)
 {
-	t_bool			hit_anything;
 	t_hit_record	temp_rec;
 
 	temp_rec = *rec;
-	hit_anything = FALSE;
+	temp_rec.object = NULL;
 	while (world)
 	{
 		if (hit_obj(world, ray, &temp_rec))
 		{
-			hit_anything = TRUE;
 			temp_rec.tmax = temp_rec.t;
+			temp_rec.object = world;
 			*rec = temp_rec;
 		}
 		world = world->next;
 	}
-	return (hit_anything);
+	return (temp_rec.object);
 }
 
 t_bool	hit_obj(t_object *world, t_ray *ray, t_hit_record *rec)
