@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:37:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/16 15:37:20 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/16 18:36:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,14 @@ t_scene *scene_init(t_mlx engine)
 
     if(!(scene = (t_scene *)malloc(sizeof(t_scene))))
         exit(12);
+	ft_memset(scene, 0, sizeof(t_scene));
     scene->canvas = canvas(WINDOW_W, WINDOW_H);
     scene->camera = camera(&scene->canvas, engine); 
-    world = object(SP, sphere(point3(0, 0, -2000), 995), color3(1, 1, 1),"./rt/texture/earth_diffuse.xpm", engine.mlx);
-    //oadd(&world, object(SP, sphere(point3(-2, 0, -5), 2), color3(0.5, 0, 0), "./rt/texture/earth_diffuse.xpm", engine.mlx));
-    //oadd(&world, object(SP, sphere(point3(4, 0, -5), 4), color3(0, 0.5, 0), "CHECKER", engine.mlx));
-    //oadd(&world, object(SP, sphere(point3(0, 100, -1000), 500), color3(1, 0, 0), NULL, engine.mlx));
+    //world = object(SP, sphere(point3(0, 0, -2000), 995), color3(1, 1, 1),"./rt/texture/earth_diffuse.xpm", engine.mlx);
+    //world = object(SP, sphere(point3(-2, 0, -5), 2), color3(0.5, 0, 0),"./rt/texture/earth_diffuse.xpm", engine.mlx);
+    world = object(SP, sphere(point3(-4, 0, -5), 2), color3(0.5, 0, 0),"./rt/texture/earth_diffuse.xpm", engine.mlx);
+    oadd(&world, object(SP, sphere(point3(4, 0, -5), 4), color3(0, 0.5, 0), "CHECKER", engine.mlx));
+    oadd(&world, object(SP, sphere(point3(0, 100, -1000), 500), color3(1, 0, 0), NULL, engine.mlx));
     scene->world = world;
     lights = object(LIGHT_POINT, light_point(point3(0, 0, 0), color3(1, 1, 1), 0.5), color3(0, 0, 0), NULL, engine.mlx);
     //oadd(&lights, object(LIGHT_POINT, light_point(point3(-2, 5, 3), color3(0, 1, 0), 0.5), color3(0, 0, 0), NULL, engine.mlx));
@@ -158,11 +160,25 @@ int	mouse_press_hook(int keycode, int x, int y, void *data_addr)
 	t_data	*data;
 
 	data = data_addr;
-	if (keycode == MOUSE_RIGHT)
+	data->engine->mouse.x = x;
+	data->engine->mouse.y = y;
+	data->engine->mouse.z = keycode;
+	if (keycode == MOUSE_LEFT)
 	{
-		data->engine->mouse.x = x;
-		data->engine->mouse.y = y;
-		data->engine->mouse.z = MOUSE_RIGHT;
+		t_scene		*scene;
+		t_object	*selected_obj;
+		
+		scene = data->scene;
+		scene->rec = record_init();
+		scene->ray = ray_primary(&scene->camera, ((double)x) / (scene->canvas.width - 1), ((double)y) / (scene->canvas.height - 1));
+		selected_obj = hit(scene->world, &scene->ray, &scene->rec);
+		if (selected_obj)
+		{
+			dprintf(2, "OK!\n");
+		}
+		else
+			dprintf(2, "NO!\n");
+		scene->selected_obj = selected_obj;
 	}
 	return (0);
 }

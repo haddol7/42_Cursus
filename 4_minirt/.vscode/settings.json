@@ -6,6 +6,7 @@
 		"string": "c",
 		"string_view": "c",
 		"__locale": "c",
-		"utils.h": "c"
+		"utils.h": "c",
+		"trace.h": "c"
 	}
 }

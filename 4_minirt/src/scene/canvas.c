@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:22 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/16 15:59:08 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/16 16:00:07 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_camera    camera(t_canvas *canvas, t_mlx engine)
 	cam.lookat = vplus(engine.trans, point3(0, 0, -1));
 	cam.vup = vec3(0, 1, 0);
     cam.focal_len = vlength(vminus(cam.lookfrom, cam.lookat));
-	
+
 	cam.vfov = engine.fov;
 
 	theta = cam.vfov * (M_PI) / 180;

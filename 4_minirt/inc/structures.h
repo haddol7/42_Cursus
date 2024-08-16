@@ -99,7 +99,7 @@ struct s_scene
 	t_camera		camera;
 	t_object		*world;
 	t_object		*light;
-	t_object		*selected;
+	t_object		*selected_obj;
 	t_color3		ambient;
 	t_ray			ray;
 	t_hit_record	rec;
