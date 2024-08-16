@@ -6,11 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:37:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/16 15:37:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/16 16:27:48 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "trace.h"
+#include "libft.h"
 
 t_ray	ray(t_point3 orig, t_vec3 dir)
 {
@@ -42,6 +43,7 @@ t_hit_record record_init(void)
 {
 	t_hit_record record;
 
+	ft_memset(&record, 0, sizeof(t_hit_record));
 	record.tmin = EPSILON;
 	record.tmax = INFINITY;
 	return (record);
