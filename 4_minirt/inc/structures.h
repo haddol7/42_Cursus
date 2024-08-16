@@ -81,6 +81,7 @@ struct s_canvas
 
 struct s_hit_record
 {
+	t_object	*object;
 	t_point3	p;
 	t_vec3		normal;
 	double		tmin;
@@ -98,6 +99,7 @@ struct s_scene
 	t_camera		camera;
 	t_object		*world;
 	t_object		*light;
+	t_object		*selected;
 	t_color3		ambient;
 	t_ray			ray;
 	t_hit_record	rec;
