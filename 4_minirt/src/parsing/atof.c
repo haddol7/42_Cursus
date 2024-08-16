@@ -51,7 +51,7 @@ static void	add_num(double *res, char *num, int i, t_num *info)
 	}
 	*res = result;
 }
-#include <stdio.h>
+// #include <stdio.h>
 double	ft_atof(char *num)
 {
 	double	result;
@@ -60,9 +60,9 @@ double	ft_atof(char *num)
 
 	init_var(&info, &result, &i);
 	is_neg(num, &info, &i);
-	while (num[i] != '\0')
+	while (!(num[i] == '\0' || num[i] == '\n'))
 	{
-		printf("%f\n", result);
+		// printf("%f\n", result);
 		if (!(ft_isdigit(num[i]) || num[i] == '.'))
 			error_exit("ft_atof : not a digit");//TODO .ㅇㅣ 없는 정수값에서 뭔가 이상이 생긴다.
 		add_num(&result, num, i, &info);
@@ -70,6 +70,7 @@ double	ft_atof(char *num)
 			error_exit("ft_atof : too big");
 		i++;
 	}
+	// printf("%f :::: last\n", result);
 	return (result * info.sign);
 }
 

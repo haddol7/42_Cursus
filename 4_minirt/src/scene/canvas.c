@@ -17,10 +17,10 @@ t_camera    camera(t_canvas *canvas, t_point3 orig)
 	double		theta;
 
 	cam.lookfrom = orig;
-	//cam.lookat = vminus(cam.lookfrom, point3(0, 0, -1));
+	cam.lookat = vminus(cam.lookfrom, point3(0, 0, -1));
 	cam.lookat = point3(0, 0, 0);
 	cam.vup = vec3(0, 1, 0);
-    cam.focal_len = vlength(vminus(cam.lookfrom, cam.lookat));
+    cam.focal_len = 1;
 	
 	cam.vfov = 90;
 	theta = cam.vfov * (3.141592) / 180;
@@ -35,7 +35,7 @@ t_camera    camera(t_canvas *canvas, t_point3 orig)
     cam.orig = cam.lookfrom;
     cam.horizontal = vmult(cam.u, cam.viewport_w);
     cam.vertical = vmult(cam.v, cam.viewport_h);
-	//center - (focal_len * w) - (viewport_u / 2 + viewport_v / 2)
+	// center - (focal_len * w) - (viewport_u / 2 + viewport_v / 2)
     cam.left_bottom = vminus(vminus(cam.orig, vmult(cam.w, cam.focal_len)), vplus(vdivide(cam.vertical, 2), vdivide(cam.horizontal, 2)));
 	cam.samples_per_pixel = ANTI_SAMPLE;
 

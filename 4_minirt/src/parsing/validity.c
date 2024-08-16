@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 21:08:04 by jungslee          #+#    #+#             */
-/*   Updated: 2024/08/14 21:27:57 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:47:42 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ t_object	*what_type(char **split, t_scene *scene)
 		return (is_valid_C(split, scene));
 	else if (!ft_strncmp(split[0], "L", len) && !ft_strncmp(split[0], "L", 1))
 		return (is_valid_L(split, scene));
-	else if (split[0][0] == '\n')
-		return (0);
 	else
 		error_exit("what_type\n");
 	return (0);
@@ -59,22 +57,29 @@ void	*create_object(char *line, t_scene *scene)
 	return (new_object);
 }
 
-void    map_validity(int fd, t_scene *scene)
+void    map_validity(int fd, t_scene *scene, int *capital_ob)
 {
 	char		*line;
 	t_object    *world;
 	t_object    *new_object;
 
 	line = NULL;
-	scene->canvas = canvas(WINDOW_W, WINDOW_H);
+	world = NULL;
 	while (1)
 	{
 		line = get_next_line(fd);
 		if (line == 0)
 			break ;
+		if (*line == '\n')
+		{
+			free(line);
+			continue ;
+		}
 		new_object = create_object(line, scene);
 		if (new_object != NULL)
 			oadd(&world, new_object);
+		else
+			(*capital_ob)++;
 		free(line);
 	}
 	scene->world = world;

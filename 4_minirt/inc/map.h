@@ -22,7 +22,7 @@ typedef struct s_num
 
 void	error_exit(char *str);
 int		argument_validity(int argc, char *file_name);
-void    map_validity(int fd, t_scene *scene);
+void    map_validity(int fd, t_scene *scene, int *capital_ob);
 double	ft_atof(char *num);
 void	free_split(char **split);
 t_object	*is_valid_sp(char **split);

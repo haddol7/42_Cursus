@@ -8,20 +8,58 @@
 #include "trace.h"
 #include "map.h"
 
+void	print_vec(struct s_vec3 vec)
+{
+	printf("%f, %f, %f\n", vec.x, vec.y, vec.z);
+}
+
+void	print_camera(t_camera cam)
+{
+	printf("orig :");
+	print_vec(cam.orig);
+	printf("view_point_h : %f\n", cam.viewport_h);
+	printf("view_point_w : %f\n", cam.viewport_w);
+	printf("vertical : ");
+	print_vec(cam.vertical);
+	printf("horizontal : ");
+	print_vec(cam.horizontal);
+	printf("focal_len : %f\n", cam.focal_len);
+	printf("left_bottom : ");
+	print_vec(cam.left_bottom);
+	printf("samples_per_pixel : %d\n", cam.samples_per_pixel);
+	printf("vfov : %f\n", cam.vfov);
+	printf("lookfrom : ");
+	print_vec(cam.lookfrom);
+	printf("lookat : ");
+	print_vec(cam.lookat);
+	printf("vup : ");
+	print_vec(cam.vup);
+	printf("u : ");
+	print_vec(cam.u);
+	printf("v : ");
+	print_vec(cam.v);
+	printf("w : ");
+	print_vec(cam.w);
+}
+
 t_scene *scene_init(int fd)
 {
     t_scene     *scene;
-    // t_object    *world;
-    // t_object    *lights;
-    // double      ka;
+	int			capital_ob;
+    t_object    *world;
+    t_object    *lights;
+    double      ka;
 
-
-// world 부터 하나씩 유효성 검사하면서 추가, -> 에러 났을 때 exit
-// 맵 스케일 이미지 검증
-// ㄴㅋ포ㅟㅐㅇ고 타.ㅋ로
+	capital_ob = 0;
     if(!(scene = (t_scene *)malloc(sizeof(t_scene))))
         exit(12);
-	map_validity(fd, scene);
+	scene->canvas = canvas(WINDOW_W, WINDOW_H);
+    scene->camera = camera(&scene->canvas, point3(0, 0, 10));
+	map_validity(fd, scene, &capital_ob);
+	if (capital_ob != 3)
+		error_exit("too many capital object");
+
+	// print_camera(scene->camera);
     // scene->canvas = canvas(WINDOW_W, WINDOW_H);
     // scene->camera = camera(&scene->canvas, point3(0, 0, 10));
     // world = object(SP, sphere(point3(-2, 0, -5), 2), color3(0.5, 0, 0));
@@ -32,6 +70,9 @@ t_scene *scene_init(int fd)
     // scene->light = lights;
     // ka = 0.1;
     // scene->ambient = vmult(color3(1,1,1), ka);
+
+	print_camera(scene->camera);
+
     return (scene);
 }
 
@@ -139,15 +180,15 @@ int     main(int argc, char *argv[])
 	t_data		data;
 
 	data.engine = engine_init();
-	printf("%s\n", argv[1]);
+	// printf("%s\n", argv[1]);
 	fd = argument_validity(argc, argv[1]);
    	data.scene = scene_init(fd);
-	// draw_ray(data.scene, data.engine);
-	// mlx_hook(data.engine->win, 2, 0, key_hook, &data);
-	// //mlx_hook(data.engine->win, 4, 0, mouse_press_hook, &data);
-	// //mlx_hook(data.engine->win, 5, 0, mouse_release_hook, &data);
-	// //mlx_hook(data.engine->win, 6, 0, mouse_drag_hook, &data); 
-	// mlx_hook(data.engine->win, 17, 0, terminate, &data);
-	// mlx_loop(data.engine->mlx);
+	draw_ray(data.scene, data.engine);
+	mlx_hook(data.engine->win, 2, 0, key_hook, &data);
+	//mlx_hook(data.engine->win, 4, 0, mouse_press_hook, &data);
+	//mlx_hook(data.engine->win, 5, 0, mouse_release_hook, &data);
+	//mlx_hook(data.engine->win, 6, 0, mouse_drag_hook, &data); 
+	mlx_hook(data.engine->win, 17, 0, terminate, &data);
+	mlx_loop(data.engine->mlx);
     return (0);
 }

@@ -1,7 +1,7 @@
 NAME := minirt
 
 SRC_DIR := src/
-CC := cc -g
+CC := cc -g -fsanitize=address
 # CFLAGS := -Wall -Werror -Wextra
 CFLAGS :=
 
