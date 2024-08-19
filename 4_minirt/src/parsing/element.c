@@ -206,23 +206,28 @@ t_object	*is_valid_C(char **split, t_scene *scene)
 	double		theta;
 	double      viewport_height;
 
+	scene->camera.lookat = point3(0, 0, -1);
 	scene->camera.lookfrom = check_coordinate(split[1]);
 	scene->camera.w = check_normalize_vector(split[2]);
 	scene->camera.vfov = ft_atof(split[3]);
-	scene->camera.lookat = point3(0, 0, 0);
 	scene->camera.vup = vec3(0, 1, 0);
     scene->camera.focal_len = 1;
-	theta = scene->camera.vfov * (3.141592) / 180;
+
+	theta = scene->camera.vfov * (M_PI) / 180;
     viewport_height = tan(theta / 2) * 2 * scene->camera.focal_len;
-    scene->camera.viewport_w = viewport_height * scene->canvas.aspect_ratio;
+    
+	scene->camera.viewport_w = viewport_height * scene->canvas.aspect_ratio;
     scene->camera.viewport_h = viewport_height;
+	
 	scene->camera.u = vunit(vcross(scene->camera.vup, scene->camera.w));
+	dprintf(2, "1\n");
 	scene->camera.v = vcross(scene->camera.w, scene->camera.u);
     scene->camera.orig = scene->camera.lookfrom;
     scene->camera.horizontal = vmult(scene->camera.u, scene->camera.viewport_w);
     scene->camera.vertical = vmult(scene->camera.v, scene->camera.viewport_h);
 	scene->camera.left_bottom = vminus(vminus(scene->camera.orig, vmult(scene->camera.w, scene->camera.focal_len)), vplus(vdivide(scene->camera.vertical, 2), vdivide(scene->camera.horizontal, 2)));
 	scene->camera.samples_per_pixel = ANTI_SAMPLE;
+	
 	if (split[4] != NULL || count != 0)
 		error_exit("is_valild_c\n");
 	count++;

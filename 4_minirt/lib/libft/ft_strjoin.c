@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 15:21:49 by daeha             #+#    #+#             */
-/*   Updated: 2023/11/20 17:41:24 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/19 18:10:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
-	str = (char *)malloc((s1_len + s2_len + 1) * sizeof(char));
+	str = (char *)ft_malloc((s1_len + s2_len + 1) * sizeof(char));
 	if (str == 0)
 		return (0);
 	ft_memmove(str, s1, s1_len);

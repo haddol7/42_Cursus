@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validity.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 21:08:04 by jungslee          #+#    #+#             */
-/*   Updated: 2024/08/17 20:05:18 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:06:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void    map_validity(int fd, t_scene *scene, int *capital_ob, t_mlx engine)
 
 void    error_exit(char *str)
 {
-    write(1, "Error\n", 6);
-	write(1, str, ft_strlen(str));
+    write(STDERR_FILENO, "Error\n", 6);
+	write(STDERR_FILENO, str, ft_strlen(str));
     exit(1);
 }

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 13:29:01 by daeha             #+#    #+#             */
-/*   Updated: 2023/11/20 17:53:16 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/19 18:10:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		s_sub_len = s_len - start;
 	else
 		s_sub_len = len;
-	s_sub = (char *)malloc((s_sub_len + 1) * sizeof(char));
+	s_sub = (char *)ft_malloc((s_sub_len + 1) * sizeof(char));
 	if (s_sub == NULL)
 		return (NULL);
 	if (s_sub_len == 0)

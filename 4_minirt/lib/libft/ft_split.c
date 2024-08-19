@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 16:51:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/14 21:24:20 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:10:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	*my_make_word(char const *s, char c, size_t *offset)
 	while (s[i] != '\0' && s[i] != c)
 		i++;
 	*offset += i;
-	word = (char *)malloc((i + 1) * sizeof(char));
+	word = (char *)ft_malloc((i + 1) * sizeof(char));
 	if (word == NULL)
 		return (NULL);
 	ft_strlcpy(word, s, i + 1);
@@ -70,7 +70,7 @@ char	**ft_split(char const *s, char c)
 	i = 0;
 	offset = 0;
 	word = my_count_word(s, c);
-	word_set = (char **)malloc((word + 1) * sizeof(char *));
+	word_set = (char **)ft_malloc((word + 1) * sizeof(char *));
 	if (word_set == NULL)
 		return (0);
 	while (i < word)

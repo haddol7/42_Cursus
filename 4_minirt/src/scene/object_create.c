@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_create.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:27 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/16 20:22:17 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/19 18:15:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ t_object *object_default(t_object_type type, void *element, t_color3 albedo)
 {
 	t_object *new;
 
-	if (!(new = (t_object *)malloc(sizeof(t_object))))
-		return (NULL);
+	new = (t_object *)ft_malloc(sizeof(t_object));
 	ft_memset(new, 0, sizeof(t_object));
 	new->type = type;
 	new->element = element;
@@ -33,8 +32,7 @@ t_object	*object_texture(t_object_type type, void *element, char *texture, void 
 {
 	t_object *new;
 
-	if (!(new = (t_object *)malloc(sizeof(t_object))))
-		return (NULL);
+	new = (t_object *)ft_malloc(sizeof(t_object));
 	ft_memset(new, 0, sizeof(t_object));
 	new->type = type;
 	new->element = element;
@@ -71,8 +69,7 @@ t_sphere *sphere(t_point3 center, double radius)
 {
 	t_sphere *sp;
 
-	if (!(sp = (t_sphere *)malloc(sizeof(t_sphere))))
-		return (NULL);
+	sp = (t_sphere *)ft_malloc(sizeof(t_sphere));
 	sp->center = center;
 	sp->radius = radius;
 	sp->radius2 = radius * radius;
@@ -83,8 +80,7 @@ t_cylinder	*cylinder(t_point3 center, t_vec3 normal, double radius, double heigh
 {
 	t_cylinder	*cy;
 
-	if (!(cy = (t_cylinder *)malloc(sizeof(t_cylinder))))
-		return (NULL);
+	cy = (t_cylinder *)ft_malloc(sizeof(t_cylinder));
 	cy->center = center;
 	cy->height = height;
 	cy->normal = normal;
@@ -97,8 +93,7 @@ t_plane		*plane(t_point3 center, t_vec3 normal)
 {
 	t_plane	*pl;
 
-	if (!(pl = (t_plane *)malloc(sizeof(t_plane))))
-		return (NULL);
+	pl = (t_plane *)ft_malloc(sizeof(t_plane));
 	pl->center = center;
 	pl->normal = normal;
 	return (pl);
@@ -108,8 +103,7 @@ t_light     *light_point(t_point3 light_origin, t_color3 light_color, double bri
 {
     t_light *light;
 
-    if(!(light = (t_light *)malloc(sizeof(t_light))))
-        return (NULL);
+    light = (t_light *)ft_malloc(sizeof(t_light));
     light->origin = light_origin;
     light->light_color = light_color;
     light->bright_ratio = bright_ratio;

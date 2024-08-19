@@ -60,6 +60,7 @@ double	ft_atof(char *num)
 
 	init_var(&info, &result, &i);
 	is_neg(num, &info, &i);
+	dprintf(2, "%s\n", num);
 	while (!(num[i] == '\0' || num[i] == '\n'))
 	{
 		// printf("%f\n", result);
