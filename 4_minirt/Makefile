@@ -1,9 +1,8 @@
 NAME := minirt
 
 SRC_DIR := src/
-CC := cc -g -fsanitize=address
-# CFLAGS := -Wall -Werror -Wextra
-CFLAGS :=
+CC := cc
+CFLAGS := -Wall -Wextra -Werror
 
 LIB := lib/
 LIBFT_DIR := $(LIB)libft/

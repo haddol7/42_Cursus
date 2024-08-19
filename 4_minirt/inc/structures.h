@@ -44,8 +44,8 @@ typedef int	t_object_type;
 
 # define EPSILON 		1e-6 //0.000001
 
-# define WINDOW_W		500
-# define WINDOW_H		400
+# define WINDOW_W		1080
+# define WINDOW_H		800
 # define ANTI_SAMPLE	1
 
 struct s_vec3
@@ -177,8 +177,10 @@ struct s_mlx
 	void		*win;
 	t_img		*img;
 	t_vec3		mouse;
+	t_vec3		mouse_delta;
 	t_point3	trans;
 	t_vec3		rotate;
+	int		press_count;
 	double		fov;
 };
 

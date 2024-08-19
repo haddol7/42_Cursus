@@ -43,11 +43,14 @@ t_object	*object_texture(t_object_type type, void *element, char *texture, void 
 		new->is_checker = TRUE;
 	else if (texture)
 	{
+		new->bump.img.id = mlx_xpm_file_to_image(mlx, "./brick_normal.xpm", &new->bump.width, &new->bump.height);
+		new->bump.img.addr = mlx_get_data_addr(new->bump.img.id, &new->bump.img.bits_per_pixel, &new->bump.img.line_size, &new->bump.img.endian);
+		
 		new->texture.img.id = mlx_xpm_file_to_image(mlx, texture, &new->texture.width, &new->texture.height);
 		if (new->texture.img.id == NULL)
 		{
 			write(STDERR_FILENO, "image file error\n", 18);
-			new->is_checker = TRUE;
+			//new->is_checker = TRUE;
 		} 
 		else
 			new->texture.img.addr = mlx_get_data_addr(new->texture.img.id, &new->texture.img.bits_per_pixel, \
