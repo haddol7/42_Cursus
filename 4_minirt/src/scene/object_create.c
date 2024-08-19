@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:27 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/19 18:15:00 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/19 18:21:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ t_object *object_default(t_object_type type, void *element, t_color3 albedo)
 	t_object *new;
 
 	new = (t_object *)ft_malloc(sizeof(t_object));
-	ft_memset(new, 0, sizeof(t_object));
 	new->type = type;
 	new->element = element;
 	new->next = NULL;
@@ -33,7 +32,6 @@ t_object	*object_texture(t_object_type type, void *element, char *texture, void 
 	t_object *new;
 
 	new = (t_object *)ft_malloc(sizeof(t_object));
-	ft_memset(new, 0, sizeof(t_object));
 	new->type = type;
 	new->element = element;
 	new->next = NULL;
