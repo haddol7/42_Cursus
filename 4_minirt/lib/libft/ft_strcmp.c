@@ -1,37 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   objects_utils.c                                    :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/16 15:37:06 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/16 15:37:07 by daeha            ###   ########.fr       */
+/*   Created: 2024/08/14 15:33:22 by daeha             #+#    #+#             */
+/*   Updated: 2024/08/14 16:54:06 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
+#include "libft.h"
 
-void	oadd(t_object **list, t_object *new)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	t_object *cur;
-
-	if (*list == NULL)
+	while (*s1 && *s2 && *s1 == *s2)
 	{
-		*list = new;
-		return ;
+		s1++;
+		s2++;
 	}
-	cur = *list;
-	while (cur->next != NULL)
-		cur = cur->next;
-	cur->next = new;
-}
-
-t_object	*olast(t_object *list)
-{
-	if (list == NULL)
-		return (NULL);
-	while (list->next)
-		list = list->next;
-	return (list);
+	return ((unsigned char)*s1 - (unsigned char) *s2);
 }

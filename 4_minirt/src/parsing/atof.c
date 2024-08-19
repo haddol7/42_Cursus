@@ -46,7 +46,7 @@ static void	add_num(double *res, char *num, int i, t_num *info)
 	else
 	{
 		result += (num[i] - '0') * pow(0.1, info->mult++);
-		if (info->mult > 3)
+		if (info->mult > 10)
 			error_exit("add_num\n");
 	}
 	*res = result;

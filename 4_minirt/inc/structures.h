@@ -15,6 +15,7 @@ typedef struct s_canvas t_canvas;
 typedef struct s_scene t_scene;
 
 typedef struct s_hit_record t_hit_record;
+typedef struct s_texture t_texture;
 typedef struct s_object t_object;
 typedef struct s_sphere t_sphere;
 typedef struct s_cylinder	t_cylinder;
@@ -88,6 +89,7 @@ struct s_canvas
 
 struct s_hit_record
 {
+	t_object	*object;
 	t_point3	p;
 	t_vec3		normal;
 	double		tmin;
@@ -95,6 +97,8 @@ struct s_hit_record
 	double		t;
 	t_bool		front_face;
 	t_color3	albedo;
+	double		u;
+	double		v;
 };
 
 struct s_scene
@@ -103,6 +107,7 @@ struct s_scene
 	t_camera		camera;
 	t_object		*world;
 	t_object		*light;
+	t_object		*selected_obj;
 	t_color3		ambient;
 	double			ka;
 	t_ray			ray;
@@ -138,14 +143,6 @@ struct s_light
 	double		bright_ratio;
 };
 
-struct s_object
-{
-	t_object_type	type;
-	void			*element;
-	void			*next;
-	t_color3		albedo;
-};
-
 struct s_img
 {
 	void	*id;
@@ -155,17 +152,40 @@ struct s_img
 	int		endian;
 };
 
+struct s_texture
+{	
+	int		type;
+	t_img	img;
+	int		width;
+	int		height;
+};
+
+struct s_object
+{
+	t_object_type	type;
+	void			*element;
+	void			*next;
+	t_bool			is_checker;
+	t_texture		texture;
+	t_texture		bump;
+	t_color3		albedo;
+};
+
 struct s_mlx
 {
-	void	*mlx;
-	void	*win;
-	t_img	*img;
+	void		*mlx;
+	void		*win;
+	t_img		*img;
+	t_vec3		mouse;
+	t_point3	trans;
+	t_vec3		rotate;
+	double		fov;
 };
 
 struct s_data
 {
-	t_mlx	*engine;
-	t_scene	*scene;
+	t_mlx		*engine;
+	t_scene		*scene;
 };
 
 #endif
