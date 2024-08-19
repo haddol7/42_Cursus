@@ -14,7 +14,11 @@ MLXFLAGS := -L$(MLX_DIR) -framework OpenGL -framework AppKit
 
 HEADER  := -I$(LIBFT_DIR) -I$(MLX_DIR) -Iinc/
 
-SRCS_PRINT =	src/print/print.c
+SRCS_ENGINE =	src/engine/key_hook.c \
+				src/engine/mouse_hook.c
+
+SRCS_PRINT =	src/print/print.c \
+				src/print/print_image.c
 
 SRCS_SCENE =	src/scene/canvas.c \
 				src/scene/object_create.c
@@ -25,14 +29,19 @@ SRCS_TRACE =	src/trace/hit/hit_sphere.c \
 				src/trace/ray/phong_lighting.c \
 				src/trace/ray/ray.c
 
-SRCS_UTILS = 	src/utils/objects_utils.c \
+SRCS_UTILS = 	src/utils/vector/vector.c\
+				src/utils/vector/vector_2.c\
+				src/utils/vector/vector_3.c\
+				src/utils/vector/vector_4.c\
+				src/utils/objects_utils.c \
 				src/utils/utils.c
 
 SRCS_MAP = 		src/parsing/validity.c \
 				src/parsing/atof.c \
 				src/parsing/element.c
 
-SRCS =			$(SRCS_PRINT) \
+SRCS =			$(SRCS_ENGINE) \
+				$(SRCS_PRINT) \
 				$(SRCS_SCENE) \
 				$(SRCS_TRACE) \
 				$(SRCS_UTILS) \

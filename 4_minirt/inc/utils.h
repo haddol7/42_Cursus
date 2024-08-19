@@ -25,8 +25,8 @@ t_vec3		vunit(t_vec3 vec);
 t_vec3		vmin(t_vec3 vec, t_vec3 vec2);
 void		oadd(t_object **list, t_object *new);
 t_object	*olast(t_object *list);
-double		random_double(void);
-double		random_double_(double min, double max);
-double		clamp(double x, double min, double max);
+double		drandom(void);
+double		drandom_(double min, double max);
 t_vec3		sample_square(void);
+int			terminate(void *data_addr);
 #endif
