@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:22 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/16 16:00:07 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/19 16:43:53 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,9 @@ t_camera    camera(t_canvas *canvas, t_mlx engine)
 
 	cam.w = vunit(vminus(cam.lookfrom, cam.lookat));
 	rotation(&cam.vup, vec3(0, 0, -1), engine.rotate.z);
-	rotation(&cam.w, vunit(vcross(cam.vup, cam.w)), engine.rotate.x);
-	rotation(&cam.w, vec3(0, -1, 0), engine.rotate.y);
+	rotation(&cam.w, vunit(vcross(cam.vup, cam.w)), engine.rotate.x + engine.mouse_delta.y);
+	rotation(&cam.w, vec3(0, -1, 0), engine.rotate.y + engine.mouse_delta.x);
+	
 	cam.u = vunit(vcross(cam.vup, cam.w));
 	cam.v = vcross(cam.w, cam.u);
     cam.orig = cam.lookfrom;

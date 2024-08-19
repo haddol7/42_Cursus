@@ -2,7 +2,7 @@ NAME := minirt
 
 SRC_DIR := src/
 CC := cc
-CFLAGS := -Wall -Werror -Wextra
+CFLAGS := -Wall -Wextra -Werror
 
 LIB := lib/
 LIBFT_DIR := $(LIB)libft/

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:54 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/16 15:36:55 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/17 18:08:50 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_color3        phong_lighting(t_scene *scene)
     lights = scene->light;
     while (lights)
     {
-        if (lights->type == LIGHT_POINT)
+		if (lights->type == LIGHT_POINT)
             light_color = vplus(light_color, point_light_get(scene, lights->element));
         lights = lights->next;
     }
