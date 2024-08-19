@@ -6,74 +6,69 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:54 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/17 18:08:50 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/19 19:32:56 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "trace.h"
 
-t_color3        phong_lighting(t_scene *scene)
-{
-    t_color3    light_color;
-    t_object    *lights;
+static t_vec3	reflect(t_vec3 v, t_vec3 n);
+static t_bool	in_shadow(t_scene *scene, t_vec3 d);
 
-    light_color = color3(0, 0, 0);
-    lights = scene->light;
-    while (lights)
-    {
+t_color3	phong_lighting(t_scene *scene)
+{
+	t_color3	ret;
+	t_object	*lights;
+
+	ret = color3(0, 0, 0);
+	lights = scene->light;
+	while (lights)
+	{
 		if (lights->type == LIGHT_POINT)
-            light_color = vplus(light_color, point_light_get(scene, lights->element));
-        lights = lights->next;
-    }
-    light_color = vplus(light_color, scene->ambient);
-    return (vmin(vmult_(light_color, scene->rec.albedo), color3(1, 1, 1)));
-}
-
-t_vec3	reflect(t_vec3 v, t_vec3 n)
-{
-	return (vminus(v, vmult(n, vdot(v, n) * 2)));
+			ret = vplus(ret, point_light_get(scene, lights->element));
+		lights = lights->next;
+	}
+	ret = vplus(ret, scene->ambient);
+	return (vmin(vmult_(ret, scene->rec.albedo), color3(1, 1, 1)));
 }
 
 t_color3	point_light_get(t_scene *scene, t_light *light)
 {
-	t_color3	diffuse;
 	t_vec3		light_dir;
-	double		light_len;
-	t_ray		light_ray;
 	double		kd;
+	t_color3	diffuse;
 	t_color3	specular;
 	t_vec3		view_dir;
-	t_vec3		reflect_dir;
-	double		spec;
-	double		ksn;
-	double		ks;
-	double		brightness;
 
 	light_dir = vminus(light->origin, scene->rec.p);
-	light_len = vlength(light_dir);
-	light_ray = ray(vplus(scene->rec.p, vmult(scene->rec.normal, EPSILON)), light_dir);
-	if (in_shadow(scene->world, light_ray, light_len))
-		return (color3(0,0,0));
+	if (in_shadow(scene, light_dir))
+		return (color3(0, 0, 0));
 	light_dir = vunit(light_dir);
 	view_dir = vunit(vmult(scene->ray.dir, -1));
 	kd = fmax(vdot(scene->rec.normal, light_dir), 0.0);
 	diffuse = vmult(light->light_color, kd);
-	reflect_dir = reflect(vmult(light_dir, -1), scene->rec.normal);
-	ksn = 64;
-	ks = 0.5;
-	spec = pow(fmax(vdot(view_dir, reflect_dir), 0.0), ksn);
-	specular = vmult(vmult(light->light_color, ks), spec);
-	brightness = light->bright_ratio * LUMEN;
-	return (vmult(vplus(diffuse, specular), brightness));
+	light_dir = reflect(vmult(light_dir, -1), scene->rec.normal);
+	specular = vmult(vmult(light->light_color, KS), \
+					pow(fmax(vdot(view_dir, light_dir), 0.0), KSN));
+	return (vmult(vplus(diffuse, specular), light->bright_ratio * LUMEN));
 }
 
-t_bool	in_shadow(t_object *objs, t_ray light_ray, double light_len)
+static t_vec3	reflect(t_vec3 v, t_vec3 n)
 {
-	t_hit_record rec;
+	return (vminus(v, vmult(n, vdot(v, n) * 2)));
+}
 
+static t_bool	in_shadow(t_scene *scene, t_vec3 d)
+{
+	t_hit_record	rec;
+	t_ray			light_ray;
+	double			light_len;
+
+	light_len = vlength(d);
+	light_ray = ray(vplus(scene->rec.p, vmult(scene->rec.normal, EPSILON)), d);
 	rec.tmin = 0;
 	rec.tmax = light_len;
-	if (hit(objs, &light_ray, &rec))
+	if (hit(scene->world, &light_ray, &rec))
 		return (TRUE);
 	return (FALSE);
 }
