@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:37:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/19 16:51:06 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/16 20:49:13 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,32 +17,67 @@
 #include "utils.h"
 #include "scene.h"
 #include "trace.h"
-#include "libft.h"
+#include "map.h"
 
-t_scene *scene_init(t_mlx engine)
+void	print_vec(struct s_vec3 vec)
+{
+	printf("%f, %f, %f\n", vec.x, vec.y, vec.z);
+}
+
+void	print_camera(t_camera cam)
+{
+	printf("orig :");
+	print_vec(cam.orig);
+	printf("view_point_h : %f\n", cam.viewport_h);
+	printf("view_point_w : %f\n", cam.viewport_w);
+	printf("vertical : ");
+	print_vec(cam.vertical);
+	printf("horizontal : ");
+	print_vec(cam.horizontal);
+	printf("focal_len : %f\n", cam.focal_len);
+	printf("left_bottom : ");
+	print_vec(cam.left_bottom);
+	printf("samples_per_pixel : %d\n", cam.samples_per_pixel);
+	printf("vfov : %f\n", cam.vfov);
+	printf("lookfrom : ");
+	print_vec(cam.lookfrom);
+	printf("lookat : ");
+	print_vec(cam.lookat);
+	printf("vup : ");
+	print_vec(cam.vup);
+	printf("u : ");
+	print_vec(cam.u);
+	printf("v : ");
+	print_vec(cam.v);
+	printf("w : ");
+	print_vec(cam.w);
+}
+
+t_scene *scene_init(int fd, t_mlx engine)
 {
     t_scene     *scene;
+	int			capital_ob;
     t_object    *world;
     t_object    *lights;
     double      ka;
 
+	capital_ob = 0;
     if(!(scene = (t_scene *)malloc(sizeof(t_scene))))
         exit(12);
-	ft_memset(scene, 0, sizeof(t_scene));
     scene->canvas = canvas(WINDOW_W, WINDOW_H);
-    scene->camera = camera(&scene->canvas, engine); 
-    //world = object(SP, sphere(point3(0, 0, -2000), 995), color3(1, 1, 1),"./rt/texture/earth_diffuse.xpm", engine.mlx);
-    //world = object(SP, sphere(point3(-2, 0, -5), 2), color3(0.5, 0, 0),"./rt/texture/earth_diffuse.xpm", engine.mlx);
-    world = object(SP, sphere(point3(0, 0, -100), 30), color3(1, 1, 1),"./brick_diffuse.xpm", engine.mlx);
-    //oadd(&world, object(SP, sphere(point3(4, 0, -5), 4), color3(0, 0.5, 0), "CHECKER", engine.mlx));
-    //oadd(&world, object(SP, sphere(point3(0, 100, -2000), 500), color3(1, 0, 0), NULL, engine.mlx));
-    scene->world = world;
-    lights = object(LIGHT_POINT, light_point(point3(0, 0, 0), color3(1, 1, 1), 0.5), color3(0, 0, 0), NULL, engine.mlx);
-    //oadd(&lights, object(LIGHT_POINT, light_point(point3(-2, 5, 3), color3(0, 1, 0), 0.5), color3(0, 0, 0), NULL, engine.mlx));
-	//oadd(&lights, object(LIGHT_POINT, light_point(point3(0, 5, 0), color3(0, 0, 1), 0.), color3(0, 0, 0), NULL, engine.mlx));
-	scene->light = lights;
-    ka = 0.1;
-    scene->ambient = vmult(color3(1,1,1), ka);
+    //scene->camera = camera(&scene->canvas, point3(0, 0, 10));
+	// scene->camera = camera(&scene->canvas, engine); 
+    // world = object(SP, sphere(point3(-2, 0, -5), 2), color3(0.5, 0, 0));
+    // oadd(&world, object(SP, sphere(point3(0, -1000, 0), 995), color3(1, 1, 1)));
+    // oadd(&world, object(SP, sphere(point3(2, 0, -5), 2), color3(0, 0.5, 0)));
+    // scene->world = world;
+    // lights = object(LIGHT_POINT, light_point(point3(0, 5, 0), color3(1, 1, 1), 0.5), color3(0, 0, 0));
+    // scene->light = lights;
+    // ka = 0.1;
+    // scene->ambient = vmult(color3(1,1,1), ka);
+	map_validity(fd, scene, &capital_ob, engine);
+	if (capital_ob != 3)
+		error_exit("too many capital object");
     return (scene);
 }
 
@@ -302,11 +337,13 @@ int	mouse_release_hook(int keycode, int x, int y, void *data_addr)
 		data->engine->press_count = 0;
 	return (0);
 }
-
-int     main(void)
+#include <stdio.h>
+int     main(int argc, char *argv[])
 {	
+	int			fd;
 	t_data		data;
 
+	fd = argument_validity(argc, argv[1]);
 	data.engine = engine_init();
    	data.scene = scene_init(*data.engine);
 	draw_ray_high_resolution(data.scene, data.engine);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 21:08:47 by daeha             #+#    #+#             */
-/*   Updated: 2023/11/08 17:37:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/08 22:17:39 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 // 	const char *s2 = (const char *)argv[2];
 // 	size_t n = (size_t)atoi(argv[3]);
 
-// 	printf("%d %d",strncmp(s1, s2, n),ft_strncmp(s1, s2, n));
+// 	printf("%d",ft_strncmp("SP", "SPL", 3));
 // 	return (0);
 // }

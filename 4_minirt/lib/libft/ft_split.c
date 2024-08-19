@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 16:51:15 by daeha             #+#    #+#             */
-/*   Updated: 2023/11/20 17:57:33 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/14 21:24:20 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ char	**ft_split(char const *s, char c)
 // int	main(int argc, char **argv)
 // {
 // 	char	**word_set;
-// 	word_set = ft_split(NULL, '^');
+
+// 	word_set = ft_split("255,255,255\n", ',');
 // 	while (*word_set != 0)
 // 	{
 // 		printf("%s\n", *word_set);

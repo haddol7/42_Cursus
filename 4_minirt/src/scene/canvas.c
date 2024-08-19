@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   canvas.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:22 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/19 16:43:53 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/16 19:52:38 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ t_camera    camera(t_canvas *canvas, t_mlx engine)
     t_camera    cam;
     double      viewport_height;
 	double		theta;
+
 
 	cam.lookfrom = engine.trans;
 	cam.lookat = vplus(engine.trans, point3(0, 0, -1));

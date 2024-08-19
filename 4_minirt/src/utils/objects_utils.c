@@ -22,7 +22,7 @@ void	oadd(t_object **list, t_object *new)
 		return ;
 	}
 	cur = *list;
-	while (cur->next)
+	while (cur->next != NULL)
 		cur = cur->next;
 	cur->next = new;
 }

@@ -1,4 +1,36 @@
 {
+<<<<<<< HEAD
+    "files.associations": {
+        "map.h": "c",
+        "structures.h": "c",
+        "stdlib.h": "c",
+        "__functional_base": "c",
+        "__functional_base_03": "c",
+        "__hash_table": "c",
+        "__tree": "c",
+        "__tuple": "c",
+        "algorithm": "c",
+        "array": "c",
+        "chrono": "c",
+        "type_traits": "c",
+        "functional": "c",
+        "iterator": "c",
+        "limits": "c",
+        "memory": "c",
+        "ratio": "c",
+        "tuple": "c",
+        "utility": "c",
+        "sstream": "c",
+        "libft.h": "c",
+        "scene.h": "c",
+        "float.h": "c",
+        "limits.h": "c",
+        "__locale": "c",
+        "utils.h": "c",
+        "stdio.h": "c"
+    }
+}
+=======
 	"files.associations": {
 		"__bit_reference": "c",
 		"__string": "c",
@@ -10,3 +42,4 @@
 		"trace.h": "c"
 	}
 }
+>>>>>>> main

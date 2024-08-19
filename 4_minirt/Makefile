@@ -28,10 +28,15 @@ SRCS_TRACE =	src/trace/hit/hit_sphere.c \
 SRCS_UTILS = 	src/utils/objects_utils.c \
 				src/utils/utils.c
 
+SRCS_MAP = 		src/parsing/validity.c \
+				src/parsing/atof.c \
+				src/parsing/element.c
+
 SRCS =			$(SRCS_PRINT) \
 				$(SRCS_SCENE) \
 				$(SRCS_TRACE) \
 				$(SRCS_UTILS) \
+				$(SRCS_MAP) \
 				src/main.c
 
 OBJS = $(SRCS:.c=.o)
