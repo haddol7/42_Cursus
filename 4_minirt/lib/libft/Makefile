@@ -44,7 +44,8 @@ SRCS := ft_isalpha.c\
 		ft_lstiter_bonus.c\
 		ft_lstmap_bonus.c \
 		get_next_line_utils.c\
-		get_next_line.c
+		get_next_line.c \
+		ft_malloc.c
 
 OBJS := $(SRCS:.c=.o)
 
