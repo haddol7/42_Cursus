@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 23:36:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 23:43:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/21 03:22:22 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,31 @@ void	handle_sphere(int keycode, t_data *data)
 		sp->center = vplus_(sp->center, 0, 1, 0);
 	else if (keycode == KEY_E)
 		sp->center = vplus_(sp->center, 0, -1, 0);
+	else if (keycode == KEY_ESC)
+		data->scene->selected_obj = NULL;
+	else if (keycode == KEY_L)
+		data->scene->selected_obj = data->scene->light;
+}
+
+void	handle_cylinder(int keycode, t_data *data)
+{
+	t_cylinder	*cy;
+	t_camera	*cam;
+
+	cam = &data->scene->camera;
+	cy = (t_cylinder *)data->scene->selected_obj->element;
+	if (keycode == KEY_A)
+		cy->center = vplus_(cy->center, -cam->u.x, 0, -cam->u.z);
+	else if (keycode == KEY_D)
+		cy->center = vplus_(cy->center, cam->u.x, 0, cam->u.z);
+	else if (keycode == KEY_W)
+		cy->center = vplus_(cy->center, -cam->w.x, 0, -cam->w.z);
+	else if (keycode == KEY_S)
+		cy->center = vplus_(cy->center, cam->w.x, 0, cam->w.z);
+	else if (keycode == KEY_Q)
+		cy->center = vplus_(cy->center, 0, 1, 0);
+	else if (keycode == KEY_E)
+		cy->center = vplus_(cy->center, 0, -1, 0);
 	else if (keycode == KEY_ESC)
 		data->scene->selected_obj = NULL;
 	else if (keycode == KEY_L)
