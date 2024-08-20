@@ -1,7 +1,7 @@
 NAME := minirt
 
 SRC_DIR := src/
-CC := cc
+CC := cc -g
 CFLAGS := -Wall -Wextra -Werror
 
 LIB := lib/
@@ -25,6 +25,8 @@ SRCS_SCENE =	src/scene/canvas.c \
 				src/scene/object_create.c
 
 SRCS_TRACE =	src/trace/hit/hit_sphere.c \
+				src/trace/hit/hit_cylinder.c \
+				src/trace/hit/hit_plane.c \
 				src/trace/hit/hit.c \
 				src/trace/hit/normal.c \
 				src/trace/ray/phong_lighting.c \

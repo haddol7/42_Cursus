@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_create.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:27 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 16:08:41 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/20 22:28:53 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_sphere	*sphere(t_point3 center, double radius)
 }
 
 t_cylinder	*cylinder(t_point3 center, t_vec3 normal, \
-						double radius, double height)
+						double diameter, double height)
 {
 	t_cylinder	*cy;
 
@@ -74,8 +74,8 @@ t_cylinder	*cylinder(t_point3 center, t_vec3 normal, \
 	cy->center = center;
 	cy->height = height;
 	cy->normal = normal;
-	cy->radius = radius;
-	cy->radius2 = radius * radius;
+	cy->radius = diameter / 2;
+	cy->radius2 = cy->radius * cy->radius;
 	return (cy);
 }
 

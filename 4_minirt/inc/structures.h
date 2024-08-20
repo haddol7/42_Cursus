@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structures.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:27:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 23:16:40 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/21 03:09:35 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,30 @@
 # include <stdlib.h>
 # include <mlx.h>
 
-typedef int					t_bool;
-typedef int					t_object_type;
+typedef int						t_bool;
+typedef int						t_object_type;
 
-typedef struct s_vec3		t_vec3;
-typedef struct s_vec3		t_point3;
-typedef struct s_vec3		t_color3;
+typedef struct s_vec3			t_vec3;
+typedef struct s_vec3			t_point3;
+typedef struct s_vec3			t_color3;
 
-typedef struct s_ray		t_ray;
+typedef struct s_ray			t_ray;
 
-typedef struct s_camera		t_camera;
-typedef struct s_canvas		t_canvas;
-typedef struct s_scene		t_scene;
+typedef struct s_camera			t_camera;
+typedef struct s_canvas			t_canvas;
+typedef struct s_scene			t_scene;
 
-typedef struct s_hit_record	t_hit_record;
-typedef struct s_texture	t_texture;
-typedef struct s_object		t_object;
-typedef struct s_sphere		t_sphere;
-typedef struct s_cylinder	t_cylinder;
-typedef struct s_plane		t_plane;
-typedef struct s_light		t_light;
-typedef struct s_img		t_img;
-typedef struct s_mlx		t_mlx;
-typedef struct s_data		t_data;
+typedef struct s_hit_record		t_hit_record;
+typedef struct s_texture		t_texture;
+typedef struct s_object			t_object;
+typedef struct s_sphere			t_sphere;
+typedef struct s_cylinder		t_cylinder;
+typedef struct s_plane			t_plane;
+typedef struct s_light			t_light;
+typedef struct s_img			t_img;
+typedef struct s_mlx			t_mlx;
+typedef struct s_data			t_data;
+typedef struct s_discriminant	t_discriminant;
 
 # define FALSE 			0
 # define TRUE 			1
@@ -196,5 +197,15 @@ struct s_data
 	t_mlx		*engine;
 	t_scene		*scene;
 };
+
+struct s_discriminant
+{
+	double	a;
+	double	half_b;
+	double	c;
+	double	discriminant;
+	double	sqrtd;
+};
+
 
 #endif
