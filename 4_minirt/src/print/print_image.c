@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:53:25 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/21 01:00:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/21 01:07:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ void	draw_ray_chunk(t_scene *scene, t_mlx *engine)
 		}
 		j -= chunk_size;
 	}
-	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, engine->img->id);
+	mlx_sync(1, engine->img->id);
 	mlx_put_image_to_window(engine->mlx, engine->win, engine->img->id, 0, 0);
 	write_selection_mode(scene, engine);
-	mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, engine->win);
+	mlx_sync(3, engine->win);
 }
 
 void	draw_ray_orig(t_scene *scene, t_mlx *engine)
@@ -60,10 +60,10 @@ void	draw_ray_orig(t_scene *scene, t_mlx *engine)
 		}
 		--j;
 	}
-	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, engine->img->id);
+	mlx_sync(1, engine->img->id);
 	mlx_put_image_to_window(engine->mlx, engine->win, engine->img->id, 0, 0);
 	write_selection_mode(scene, engine);
-	mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, engine->win);
+	mlx_sync(3, engine->win);
 }
 
 static t_color3	calculate_ray_color(int i, int j, t_scene *scene)
