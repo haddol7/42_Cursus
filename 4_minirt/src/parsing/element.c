@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   element.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:21:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 16:27:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/21 02:33:06 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ t_object	*is_valid_cy(char **split, t_mlx engine)
 
 	cy = NULL;
 	center = check_coordinate(split[1]);
-	normalize = check_normalize_vector(split[2]);
+	normalize = vunit(check_normalize_vector(split[2]));
 	color = check_color(split[5]);
 	if (split[6] != NULL && split[6][0] != '\n')
 	{
@@ -204,7 +204,7 @@ t_object	*is_valid_pl(char **split, t_mlx engine)
 
 	pl = NULL;
 	center = check_coordinate(split[1]);
-	normalize = check_normalize_vector(split[2]);
+	normalize = vunit(check_normalize_vector(split[2]));
 	color = check_color(split[3]);
 	if (split[4] != NULL &&  split[4][0] != '\n')
 	{

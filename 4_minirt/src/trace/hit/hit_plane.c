@@ -19,5 +19,7 @@ t_bool hit_plane(t_object *pl_obj, t_ray *ray, t_hit_record *rec)
 	rec->normal = pl->normal;
 	set_face_normal(ray, rec);
 	rec->albedo = pl_obj->albedo;
+	if (rec->t < rec->tmin || rec->t > rec->tmax)
+		return (FALSE);
 	return (TRUE);
 }
