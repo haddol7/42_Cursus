@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:08:32 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 15:10:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/21 03:44:07 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,7 @@ t_sphere	*sphere(t_point3 center, double radius);
 t_cylinder	*cylinder(t_point3 center, t_vec3 normal, double radius, double h);
 t_plane		*plane(t_point3 center, t_vec3 normal);
 t_light		*light_point(t_point3 origin, t_color3 color, double bright_ratio);
+
+void	rotation(t_vec3 *v, t_vec3 axis, double theta);
 
 #endif
