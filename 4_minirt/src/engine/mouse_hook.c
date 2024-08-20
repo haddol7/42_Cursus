@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 19:01:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 17:51:55 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/20 23:40:27 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,15 @@ int	mouse_press_hook(int keycode, int x, int y, void *data_addr)
 	data->engine->mouse.x = x;
 	data->engine->mouse.y = y;
 	data->engine->mouse.z = keycode;
-	data->engine->press_count++;
 	if (keycode == MOUSE_LEFT)
 	{
 		scene = data->scene;
-		scene->rec = record_init();
 		scene->camera = camera(scene, *data->engine);
-		scene->ray = ray_primary(&scene->camera, ((double)x) / (scene->canvas.w - 1), ((double)y) / (scene->canvas.h - 1));
+		scene->rec = record_init();
+		scene->ray = ray_primary(&scene->camera, \
+					((double)x) / (scene->canvas.w - 1), \
+					(scene->canvas.h - (double)y) / (scene->canvas.h - 1));
 		selected_obj = hit(scene->world, &scene->ray, &scene->rec);
-		if (selected_obj)
-		{
-			dprintf(2, "%f %f OK!\n", ((double)x) / (scene->canvas.w - 1), ((double)y) / (scene->canvas.h - 1));
-		}
-		else
-			dprintf(2, "%f %f NO!\n", ((double)x) / (scene->canvas.w - 1), ((double)y) / (scene->canvas.h - 1));
 		scene->selected_obj = selected_obj;
 	}
 	return (0);
@@ -78,11 +73,6 @@ int	mouse_release_hook(int keycode, int x, int y, void *data_addr)
 		data->engine->mouse_delta.y = 0;
 	}
 	*cam = camera(data->scene, *data->engine);
-	if (--data->engine->press_count > 0)
-		draw_ray_chunk(data->scene, data->engine);
-	else
-		draw_ray_orig(data->scene, data->engine);
-	if (data->engine->press_count < 0)
-		data->engine->press_count = 0;
+	draw_ray_chunk(data->scene, data->engine);
 	return (0);
 }
