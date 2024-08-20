@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:27:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 15:27:29 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/20 23:16:40 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct s_data		t_data;
 # define AMBIENT		4
 # define CAMERA			5
 
-# define LIGHT_POINT	1
+# define LIGHT_POINT	6
 # define LUMEN 			3
 
 # define EPSILON 		1e-6
@@ -188,7 +188,6 @@ struct s_mlx
 	t_vec3		mouse_delta;
 	t_point3	trans;
 	t_vec3		rotate;
-	int			press_count;
 	double		fov;
 };
 
