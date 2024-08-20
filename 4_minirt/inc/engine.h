@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   engine.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/19 19:03:55 by daeha             #+#    #+#             */
+/*   Updated: 2024/08/20 15:01:55 by daeha            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ENGINE_H
 # define ENGINE_H
 
@@ -16,7 +28,6 @@
 # define KEY_LEFT	123
 # define KEY_RIGHT	124
 
-
 # define MOUSE_LEFT		1
 # define MOUSE_RIGHT	2
 # define MOUSE_MID		3
@@ -25,5 +36,11 @@
 
 # define ERR_MLC		12
 # define ERR_MLX		42
+
+int	key_hook(int keycode, void *data_addr);
+int	key_release_hook(int keycode, void *data_addr);
+int	mouse_press_hook(int keycode, int x, int y, void *data_addr);
+int	mouse_drag_hook(int x, int y, void *data_addr);
+int	mouse_release_hook(int keycode, int x, int y, void *data_addr);
 
 #endif

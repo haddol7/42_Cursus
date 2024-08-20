@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:36:03 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/19 21:38:15 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/19 23:15:00 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include "utils.h"
 
 # define U 0
-# define V 0
+# define V 1
 # define KSN 64
 # define KS  0.5
 
