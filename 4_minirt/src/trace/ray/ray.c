@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:37:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/19 19:38:30 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/19 22:50:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,7 @@ t_hit_record	record_init(void)
 
 t_color3	ray_color(t_scene *scene, t_color3 color)
 {
-	t_bool		is_outline;
-
 	scene->rec = record_init();
-	is_outline = FALSE;
 	if (hit(scene->world, &scene->ray, &scene->rec))
 		return (vplus(phong_lighting(scene), color));
 	else
