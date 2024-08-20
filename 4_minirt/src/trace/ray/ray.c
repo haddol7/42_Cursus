@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:37:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/19 22:50:51 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/20 18:04:18 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,5 @@ t_color3	ray_color(t_scene *scene, t_color3 color)
 	if (hit(scene->world, &scene->ray, &scene->rec))
 		return (vplus(phong_lighting(scene), color));
 	else
-		return (vec3(0, 0, 0));
+		return (vec3(0.2, 0.2, 0.2));
 }

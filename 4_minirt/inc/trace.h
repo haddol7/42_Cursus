@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trace.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:36:03 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/19 23:15:00 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/20 16:48:19 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,7 @@ void			uv_mapping_sp(int u[2], t_point3 p, t_sphere *s, t_texture *t);
 t_color3		texture(t_point3 p, t_sphere *sp, t_texture texture);
 t_color3		texture_checkerboard(t_point3 p, t_sphere *sp);
 t_vec3			bump_mapping(t_hit_record *rec, t_sphere *sp, t_texture bump);
+t_bool			hit_cylinder(t_object *cy_obj, t_ray *ray, t_hit_record *rec);
+t_bool hit_plane(t_object *pl_obj, t_ray *ray, t_hit_record *rec);
 
 #endif

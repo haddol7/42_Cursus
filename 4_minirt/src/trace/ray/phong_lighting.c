@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   phong_lighting.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:54 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/19 19:32:56 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/20 17:21:03 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ t_color3	point_light_get(t_scene *scene, t_light *light)
 	t_color3	specular;
 	t_vec3		view_dir;
 
+	// dprintf(2, "%f %f %f\n", scene->rec.p.x, scene->rec.p.y, scene->rec.p.z);
 	light_dir = vminus(light->origin, scene->rec.p);
 	if (in_shadow(scene, light_dir))
 		return (color3(0, 0, 0));
