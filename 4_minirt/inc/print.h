@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:58:01 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/19 18:58:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/21 00:47:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "stdio.h"
 # include "structures.h"
+
+# define CHUNK_DIV 100
 
 void	draw_ray_chunk(t_scene *scene, t_mlx *engine);
 void	draw_ray_orig(t_scene *scene, t_mlx *engine);
