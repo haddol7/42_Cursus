@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 19:01:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 23:40:27 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/21 03:03:58 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,17 @@ int	mouse_drag_hook(int x, int y, void *data_addr)
 {
 	t_data		*data;
 	t_camera	*cam;
+	double		temp_y;
 
 	data = (t_data *)data_addr;
 	cam = &data->scene->camera;
 	if (data->engine->mouse.z == MOUSE_RIGHT)
 	{
 		data->engine->mouse_delta.x = ((double)x - data->engine->mouse.x);
-		data->engine->mouse_delta.y = -((double)y - data->engine->mouse.y);
+		temp_y = -((double)y - data->engine->mouse.y);
+		if (temp_y + data->engine->rotate.x <= 90 && \
+			temp_y + data->engine->rotate.x >= -90)
+			data->engine->mouse_delta.y = temp_y;
 	}
 	else
 		return (0);
@@ -67,6 +71,10 @@ int	mouse_release_hook(int keycode, int x, int y, void *data_addr)
 	if (keycode == MOUSE_RIGHT)
 	{
 		data->engine->rotate.x += -((double)y - data->engine->mouse.y);
+		if (data->engine->rotate.x > 90)
+			data->engine->rotate.x = 90;
+		else if (data->engine->rotate.x < -90)
+			data->engine->rotate.x = -90;
 		data->engine->rotate.y += ((double)x - data->engine->mouse.x);
 		data->engine->mouse.z = 0;
 		data->engine->mouse_delta.x = 0;
