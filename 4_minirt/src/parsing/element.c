@@ -1,4 +1,16 @@
-#include "../../inc/map.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   element.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/20 15:21:37 by daeha             #+#    #+#             */
+/*   Updated: 2024/08/20 15:22:46 by daeha            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "map.h"
 
 void	free_split(char **split)
 {
@@ -73,11 +85,11 @@ t_vec3	check_normalize_vector(char *coor)
 
 int	is_color_in_valid_range(double r, double g, double b)
 {
-	if (!(0.0 <= r && r <= 255.0))
+	if (!(0.0 <= r && r <= 1.0))
 		return (0);
-	if (!(0.0 <= g && g <= 255.0))
+	if (!(0.0 <= g && g <= 1.0))
 		return (0);
-	if (!(0.0 <= b && b <= 255.0))
+	if (!(0.0 <= b && b <= 1.0))
 		return (0);
 	return (1);
 }
@@ -99,9 +111,9 @@ t_color3	check_color(char *color)
 	split = ft_split(color, ',');
 	if (count_split_words(split) != 3)
 		error_exit("not complete rgb\n");
-	r = ft_atof(split[0]);
-	g = ft_atof(split[1]);
-	b = ft_atof(split[2]);
+	r = ft_atof(split[0]) / 255;
+	g = ft_atof(split[1]) / 255;
+	b = ft_atof(split[2]) / 255;
 	if (is_color_in_valid_range(r, g, b) == 0)
 		error_exit("not valid RGB range\n");
 	// if (split[3] != NULL)
@@ -191,7 +203,7 @@ t_object	*is_valid_A(char **split, t_scene *scene)
 	static int	count = 0;
 	
 	scene->ka = ft_atof(split[1]);
-	scene->ambient = vmult(check_color(split[2]), scene->ka);
+	scene->ambient = vmult(check_color(split[2]), scene->ka / 255);
 	if (is_valid_ratio_range(scene->ka) == 0)
 		error_exit("not_valid_ratio : ka");
 	if (split[3] != NULL || count != 0)
@@ -200,36 +212,29 @@ t_object	*is_valid_A(char **split, t_scene *scene)
 	return (0);
 }
 
-t_object	*is_valid_C(char **split, t_scene *scene)
+t_object	*is_valid_C(char **split, t_scene *scene, t_mlx *engine)
 {
 	static int	count = 0;
+	t_vec3		rotated_vec;
+	t_vec3		axis;
 	double		theta;
-	double      viewport_height;
 
-	scene->camera.lookat = point3(0, 0, -1);
-	scene->camera.lookfrom = check_coordinate(split[1]);
-	scene->camera.w = check_normalize_vector(split[2]);
-	scene->camera.vfov = ft_atof(split[3]);
-	scene->camera.vup = vec3(0, 1, 0);
-    scene->camera.focal_len = 1;
-
-	theta = scene->camera.vfov * (M_PI) / 180;
-    viewport_height = tan(theta / 2) * 2 * scene->camera.focal_len;
-    
-	scene->camera.viewport_w = viewport_height * scene->canvas.aspect_ratio;
-    scene->camera.viewport_h = viewport_height;
-	
-	scene->camera.u = vunit(vcross(scene->camera.vup, scene->camera.w));
-	dprintf(2, "1\n");
-	scene->camera.v = vcross(scene->camera.w, scene->camera.u);
-    scene->camera.orig = scene->camera.lookfrom;
-    scene->camera.horizontal = vmult(scene->camera.u, scene->camera.viewport_w);
-    scene->camera.vertical = vmult(scene->camera.v, scene->camera.viewport_h);
-	scene->camera.left_bottom = vminus(vminus(scene->camera.orig, vmult(scene->camera.w, scene->camera.focal_len)), vplus(vdivide(scene->camera.vertical, 2), vdivide(scene->camera.horizontal, 2)));
-	scene->camera.samples_per_pixel = ANTI_SAMPLE;
-	
+	engine->trans = check_coordinate(split[1]);
+	rotated_vec = vunit(check_normalize_vector(split[2]));
+	axis = vcross(vec3(0, 0, -1), rotated_vec);
+	if (vlength2(axis) != 0)
+	{	
+		rotated_vec = vunit(rotated_vec);
+		theta = acos(vdot(vec3(0, 0, 1), rotated_vec));
+		engine->rotate.x = theta * rotated_vec.y * 180 / M_PI;
+		engine->rotate.y = theta * rotated_vec.x * 180 / M_PI;
+	}
+	else
+		ft_memset(&engine->rotate, 0, sizeof(t_vec3));
+	engine->fov = ft_atof(split[3]);
 	if (split[4] != NULL || count != 0)
 		error_exit("is_valild_c\n");
+	scene->camera = camera(scene, *engine);
 	count++;
 	return (0);
 }

@@ -6,39 +6,39 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 21:08:04 by jungslee          #+#    #+#             */
-/*   Updated: 2024/08/19 18:06:36 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/20 15:21:49 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/map.h"
+#include "map.h"
 
-int    argument_validity(int argc, char *file_name)
+int	argument_validity(int argc, char *file_name)
 {
-    int fd;
+	int	fd;
 
-    if (argc != 2)
-        error_exit("argument_validity : 1\n");
-    fd = open(file_name, O_RDONLY);
-    if (fd < 0)
-        error_exit("argment_validity : 2\n");
-    return (fd);
+	if (argc != 2)
+		error_exit("argument_validity : 1\n");
+	fd = open(file_name, O_RDONLY);
+	if (fd < 0)
+		error_exit("argment_validity : 2\n");
+	return (fd);
 }
 
-t_object	*what_type(char **split, t_scene *scene, t_mlx engine)
+t_object	*what_type(char **split, t_scene *scene, t_mlx *engine)
 {
-	int len;
+	int	len;
 
 	len = ft_strlen(split[0]);
 	if (!ft_strncmp(split[0], "sp", len) && !ft_strncmp(split[0], "sp", 2))
-		return (is_valid_sp(split, engine));
+		return (is_valid_sp(split, *engine));
 	else if (!ft_strncmp(split[0], "cy", len) && !ft_strncmp(split[0], "cy", 2))
-		return (is_valid_cy(split, engine));
+		return (is_valid_cy(split, *engine));
 	else if (!ft_strncmp(split[0], "pl", len) && !ft_strncmp(split[0], "pl", 2))
-		return (is_valid_pl(split, engine));
+		return (is_valid_pl(split, *engine));
 	else if (!ft_strncmp(split[0], "A", len) && !ft_strncmp(split[0], "A", 1))
 		return (is_valid_A(split, scene));
 	else if (!ft_strncmp(split[0], "C", len) && !ft_strncmp(split[0], "C", 1))
-		return (is_valid_C(split, scene));
+		return (is_valid_C(split, scene, engine));
 	else if (!ft_strncmp(split[0], "L", len) && !ft_strncmp(split[0], "L", 1))
 		return (is_valid_L(split, scene));
 	else
@@ -46,13 +46,13 @@ t_object	*what_type(char **split, t_scene *scene, t_mlx engine)
 	return (0);
 }
 
-void	*create_object(char *line, t_scene *scene, t_mlx engine, int *none)
+void	*create_object(char *line, t_scene *scene, t_mlx *engine, int *none)
 {
-    char    **split;
-    t_object    *new_object;
+	t_object	*new_object;
+	char		**split;
 
 	new_object = 0;
-    split = ft_split(line, ' ');
+	split = ft_split(line, ' ');
 	if (split[0] == NULL || split[0][0] == '\0' || split[0][0] == '\n')
 		*none = 1;
 	else
@@ -61,11 +61,11 @@ void	*create_object(char *line, t_scene *scene, t_mlx engine, int *none)
 	return (new_object);
 }
 
-void    map_validity(int fd, t_scene *scene, int *capital_ob, t_mlx engine)
+void	map_validity(int fd, t_scene *scene, int *capital_ob, t_mlx *engine)
 {
+	t_object	*world;
+	t_object	*new_object;
 	char		*line;
-	t_object    *world;
-	t_object    *new_object;
 	int			none;
 
 	line = NULL;
@@ -86,9 +86,9 @@ void    map_validity(int fd, t_scene *scene, int *capital_ob, t_mlx engine)
 	scene->world = world;
 }
 
-void    error_exit(char *str)
+void	error_exit(char *str)
 {
-    write(STDERR_FILENO, "Error\n", 6);
+	write(STDERR_FILENO, "Error\n", 6);
 	write(STDERR_FILENO, str, ft_strlen(str));
-    exit(1);
+	exit(EXIT_FAILURE);
 }

@@ -1,17 +1,16 @@
-#include "../../inc/map.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   atof.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/20 15:21:57 by daeha             #+#    #+#             */
+/*   Updated: 2024/08/20 15:22:24 by daeha            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// int	ft_isdigit(int c)
-// {
-// 	if (c >= '0' && c <= '9')
-// 		return (1);
-// 	return (0);
-// }
-
-// void    error_exit(void)
-// {
-//     write(1, "Error\n", 6);
-//     exit(1);
-// }
+#include "map.h"
 
 static void	init_var(t_num *info, double *result, int *i)
 {
@@ -34,7 +33,7 @@ static void	is_neg(char *num, t_num *info, int *i)
 static void	add_num(double *res, char *num, int i, t_num *info)
 {
 	double	result;
-	
+
 	result = *res;
 	if (num[i] == '.')
 		info->dot_flag = 1;
@@ -51,7 +50,7 @@ static void	add_num(double *res, char *num, int i, t_num *info)
 	}
 	*res = result;
 }
-// #include <stdio.h>
+
 double	ft_atof(char *num)
 {
 	double	result;
@@ -60,10 +59,8 @@ double	ft_atof(char *num)
 
 	init_var(&info, &result, &i);
 	is_neg(num, &info, &i);
-	dprintf(2, "%s\n", num);
 	while (!(num[i] == '\0' || num[i] == '\n'))
 	{
-		// printf("%f\n", result);
 		if (!(ft_isdigit(num[i]) || num[i] == '.'))
 			error_exit("ft_atof : not a digit");//TODO .ㅇㅣ 없는 정수값에서 뭔가 이상이 생긴다.
 		add_num(&result, num, i, &info);
@@ -71,16 +68,5 @@ double	ft_atof(char *num)
 			error_exit("ft_atof : too big");
 		i++;
 	}
-	// printf("%f :::: last\n", result);
 	return (result * info.sign);
 }
-
-// int main(void)
-// {
-//     double num;
-
-//     num = ft_atof("0.0");
-//     printf("%f\n", num);
-//     num = ft_atof("2147483648");
-//     printf("%f\n", num);
-// }
