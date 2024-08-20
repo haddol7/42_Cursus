@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:37:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 14:38:38 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/20 21:50:32 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int	main(int argc, char *argv[])
 	data.scene = scene_init(fd, data.engine);
 	draw_ray_orig(data.scene, data.engine);
 	mlx_hook(data.engine->win, 2, 0, key_hook, &data);
-	mlx_hook(data.engine->win, 3, 0, key_release_hook, &data);
 	mlx_hook(data.engine->win, 4, 0, mouse_press_hook, &data);
 	mlx_hook(data.engine->win, 5, 0, mouse_release_hook, &data);
 	mlx_hook(data.engine->win, 6, 0, mouse_drag_hook, &data);
