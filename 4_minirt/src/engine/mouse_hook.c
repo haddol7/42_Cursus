@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 19:01:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/19 21:58:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/20 17:51:55 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	mouse_press_hook(int keycode, int x, int y, void *data_addr)
 	{
 		scene = data->scene;
 		scene->rec = record_init();
+		scene->camera = camera(scene, *data->engine);
 		scene->ray = ray_primary(&scene->camera, ((double)x) / (scene->canvas.w - 1), ((double)y) / (scene->canvas.h - 1));
 		selected_obj = hit(scene->world, &scene->ray, &scene->rec);
 		if (selected_obj)
