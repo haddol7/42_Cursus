@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:53:25 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/19 18:57:28 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/20 23:53:18 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,12 @@ void	draw_ray_chunk(t_scene *scene, t_mlx *engine)
 	}
 	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, engine->img->id);
 	mlx_put_image_to_window(engine->mlx, engine->win, engine->img->id, 0, 0);
+	if (scene->selected_obj && scene->selected_obj->type == LIGHT_POINT)
+		mlx_string_put(engine->mlx, engine->win, 0, 20, 0xffffff, "MODE : LIGHT");
+	else if (scene->selected_obj)
+		mlx_string_put(engine->mlx, engine->win, 0, 20, 0xffffff, "MODE : OBJECT");
+	else
+		mlx_string_put(engine->mlx, engine->win, 0, 20, 0xffffff, "MODE : CAMERA");
 	mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, engine->win);
 }
 
@@ -60,6 +66,10 @@ void	draw_ray_orig(t_scene *scene, t_mlx *engine)
 	}
 	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, engine->img->id);
 	mlx_put_image_to_window(engine->mlx, engine->win, engine->img->id, 0, 0);
+	if (scene->selected_obj)
+		mlx_string_put(engine->mlx, engine->win, 0, 20, 0xffffff, "MODE : TRANSLATION");
+	else
+		mlx_string_put(engine->mlx, engine->win, 0, 20, 0xffffff, "MODE : CAMERA");
 	mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, engine->win);
 }
 
