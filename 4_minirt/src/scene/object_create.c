@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:27 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 15:15:49 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/20 16:08:41 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ t_object	*object_texture(t_object_type type, \
 		new->is_checker = TRUE;
 	else if (texture)
 	{
-		new->bump.img.id = mlx_xpm_file_to_image(mlx, "./brick_normal.xpm", &new->bump.width, &new->bump.height);
-		new->bump.img.addr = mlx_get_data_addr(new->bump.img.id, &new->bump.img.bits_per_pixel, &new->bump.img.line_size, &new->bump.img.endian);
-		new->texture.img.id = mlx_xpm_file_to_image(mlx, texture, &new->texture.width, &new->texture.height);
+		new->texture.img.id = mlx_xpm_file_to_image(mlx, texture, \
+							&new->texture.width, &new->texture.height);
 		if (new->texture.img.id == NULL)
 		{
-			write(STDERR_FILENO, "image file error\n", 18);
+			write(STDERR_FILENO, texture, ft_strlen(texture));
+			write(STDERR_FILENO, " <- image file error\n", 22);
 			new->is_checker = TRUE;
 		}
 		else

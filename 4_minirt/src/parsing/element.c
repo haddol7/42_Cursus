@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:21:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 15:22:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/20 16:27:23 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,25 @@ t_color3	check_color(char *color)
 	return (color3(r, g, b));
 }
 
+void	object_normal(t_object *object, char *str, t_mlx engine)
+{
+	char	*path;
+
+	path = ft_strtrim(str, "\n");
+	object->bump.img.id = mlx_xpm_file_to_image(engine.mlx, path, \
+							&object->bump.width, &object->bump.height);
+	if (object->bump.img.id == NULL)
+	{
+		write(STDERR_FILENO, path, ft_strlen(path));
+		write(STDERR_FILENO, " <- Bump file error\n", 21);
+	}
+	else
+		object->bump.img.addr = mlx_get_data_addr(object->bump.img.id, \
+		&object->bump.img.bits_per_pixel, \
+		&object->bump.img.line_size, &object->bump.img.endian);
+	free(path);
+}
+
 t_object	*is_valid_sp(char **split, t_mlx engine)
 {
 	t_object	*sp;
@@ -136,6 +155,8 @@ t_object	*is_valid_sp(char **split, t_mlx engine)
 	{
 		texture = ft_strtrim(split[4], "\n");
 		sp = object_texture(SP, sphere(center, ft_atof(split[2])), texture, engine.mlx);
+		if (split[5] != NULL && *split[5] != '\n' && sp->texture.img.id != NULL)
+			object_normal(sp, split[5], engine);
 		free(texture);
 	}
 	else if (split[4] == NULL || (split[4][0] == '\n' && split[5] == NULL))
@@ -143,6 +164,7 @@ t_object	*is_valid_sp(char **split, t_mlx engine)
 	else
 		error_exit("check_is_valid_sp\n");
 		//TODO 이미지 파일 검증 추가
+	sp->albedo = color;
 	return (sp);
 }
 

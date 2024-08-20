@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:31:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/19 21:33:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/20 16:26:48 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,22 @@ t_color3	texture(t_point3 p, t_sphere *sp, t_texture texture)
 
 t_color3	texture_checkerboard(t_point3 p, t_sphere *sp)
 {
-	int			uv[2];
+	double		uv[2];
+	t_point3	o;
+	double		theta;
+	double		phi;
 
-	uv_mapping_sp(uv, p, sp, NULL);
+	o.x = p.x - sp->center.x;
+	o.y = p.y - sp->center.y;
+	o.z = p.z - sp->center.z;
+	theta = acos(-o.y / sp->radius);
+	phi = atan2(-o.z, o.x) + M_PI;
+	uv[U] = (phi / (2 * M_PI));
+	uv[V] = (1 - (theta / (M_PI)));
 	if (((int)(floor(uv[U] * 10)) + (int)floor(uv[V] * 10)) % 2 == 0)
-		return (vec3(0, 0, 0));
+		return (vec3(0, 1, 0));
 	else
-		return (vec3(1, 1, 1));
+		return (vec3(1, 0, 1));
 }
 
 t_vec3	bump_mapping(t_hit_record *rec, t_sphere *sp, t_texture bump)
