@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:21:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/21 02:33:06 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/21 11:32:10 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,4 +279,33 @@ t_object	*is_valid_L(char **split, t_scene *scene)
 	light = object_default(LIGHT_POINT, light_point(point, color, ratio), color);
 	scene->light = light;
 	return (0);
+}
+
+t_object	*is_valid_co(char **split, t_mlx engine)
+{
+	//중점, 교차점, 축, 지름, 색깔
+	t_object	*co;
+	char		*texture;
+	t_point3	center;
+	t_point3	cross;
+	t_vec3		normalize;
+
+	co = NULL;
+	center = check_coordinate(split[1]);
+	cross = check_coordinate(split[2]);
+	normalize = vunit(check_normalize_vector(split[3]));
+	if (split[6] != NULL &&  split[6][0] != '\n')
+	{
+		texture = ft_strtrim(split[4], "\n");
+		co = object_texture(CO, cone(center, normalize, ft_atof(split[4]), cross), \
+							texture, engine.mlx);
+		free(texture);
+	}
+	else if (split[6] == NULL || (split[6][0] == '\n' && split[7] == NULL))
+		co = object_default(CO, cone(center, normalize, ft_atof(split[4]), cross), \
+				check_color(split[5]));
+	else
+		error_exit("is_valid_co\n");
+				//TODO 이미지 파일 검증 추가
+	return (co);
 }

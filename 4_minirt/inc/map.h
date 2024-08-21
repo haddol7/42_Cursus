@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:27:39 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 15:27:40 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/21 11:32:23 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,6 @@ t_object	*is_valid_pl(char **split, t_mlx engine);
 t_object	*is_valid_A(char **split, t_scene *scene);
 t_object	*is_valid_C(char **split, t_scene *scene, t_mlx *engine);
 t_object	*is_valid_L(char **split, t_scene *scene);
+t_object	*is_valid_co(char **split, t_mlx engine);
 
 #endif

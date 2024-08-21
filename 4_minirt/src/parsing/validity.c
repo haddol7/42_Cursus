@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validity.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 21:08:04 by jungslee          #+#    #+#             */
-/*   Updated: 2024/08/20 15:21:49 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/21 11:19:45 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ t_object	*what_type(char **split, t_scene *scene, t_mlx *engine)
 		return (is_valid_C(split, scene, engine));
 	else if (!ft_strncmp(split[0], "L", len) && !ft_strncmp(split[0], "L", 1))
 		return (is_valid_L(split, scene));
+	else if (!ft_strncmp(split[0], "co", len) && !ft_strncmp(split[0] ,"co", 2))
+		return (is_valid_co(split, *engine));
 	else
 		error_exit("what_type\n");
 	return (0);

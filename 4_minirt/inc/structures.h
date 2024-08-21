@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:27:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 16:45:35 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/21 11:27:34 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_sphere			t_sphere;
 typedef struct s_cylinder		t_cylinder;
 typedef struct s_plane			t_plane;
 typedef struct s_light			t_light;
+typedef struct s_cone			t_cone;
 typedef struct s_img			t_img;
 typedef struct s_mlx			t_mlx;
 typedef struct s_data			t_data;
@@ -50,6 +51,7 @@ typedef struct s_discriminant	t_discriminant;
 # define LIGHT			3
 # define AMBIENT		4
 # define CAMERA			5
+# define CO				6
 
 # define LIGHT_POINT	1
 # define LUMEN 			3
@@ -138,6 +140,16 @@ struct s_cylinder
 	double		height;
 	t_vec3		normal;
 };
+
+struct s_cone
+{
+	t_point3	center;
+	double		radius;
+	double		radius2;
+	t_point3	cross;
+	t_vec3		normalize;
+};
+
 
 struct s_plane
 {
