@@ -3,10 +3,10 @@
 #include "utils.h"
 #include "trace.h"
 
-void	debug(char *str, t_vec3 vec)
-{
-	dprintf(2, "%s -> %f %f %f\n", str, vec.x, vec.y, vec.z);
-}
+// void	debug(char *str, t_vec3 vec)
+// {
+// 	dprintf(2, "%s -> %f %f %f\n", str, vec.x, vec.y, vec.z);
+// }
 
 t_discriminant cal_discriminant(t_cylinder *cy, t_ray *ray)
 {
@@ -36,8 +36,10 @@ t_bool is_root_valid(t_hit_record *rec, t_ray *ray, t_object *cy_obj, double roo
 	rec_tmp.t = root;
 	rec_tmp.p = ray_at(ray, root);
 	dot_len = vdot(vminus(rec_tmp.p, cy->center), cy->normal);
-	if (dot_len >= 0 && dot_len <= cy->height)
+	if (dot_len > 0 && dot_len < cy->height)
 	{
+		if (root <= rec->tmin || root >= rec->tmax)
+			return (FALSE);
 		*rec = rec_tmp;
 		rec->normal = vunit(vminus(vminus(rec->p, cy->center), vmult(cy->normal, dot_len)));
 		set_face_normal(ray, rec);
@@ -65,7 +67,7 @@ t_bool	hit_cylinder_cap(t_object *cy_obj, t_ray *ray, t_hit_record *rec, t_point
 	rec_tmp.t = root;
 	rec_tmp.p = ray_at(ray, root);
 	r = vlength2(vminus(rec_tmp.p, center));
-	if (0 < r && r < cy->radius2)
+	if (0 <= r && r <= cy->radius2)
 	{
 		*rec = rec_tmp;
 		rec->normal = cy->normal;
@@ -89,9 +91,6 @@ t_bool hit_cylinder_side(t_object *cy_obj, t_ray *ray, t_hit_record *rec)
 		return (FALSE);
 	root[0] = ((-dis.half_b) - dis.sqrtd) / dis.a;
 	root[1] = ((-dis.half_b) + dis.sqrtd) / dis.a;
-	if ((root[0] < rec->tmin || root[0] > rec->tmax) && \
-			(root[1] < rec->tmin || root[1] > rec->tmax))
-		return (FALSE);
 	if (is_root_valid(rec, ray, cy_obj, root[0]) == TRUE)
 	{
 		rec->tmax = root[0];
@@ -112,11 +111,11 @@ t_bool	hit_cylinder(t_object *cy_obj, t_ray *ray, t_hit_record *rec)
 
 	cy = cy_obj->element;
 	hit = 0;
-	if (hit_cylinder_side(cy_obj, ray, rec))
-		hit++;
 	if (hit_cylinder_cap(cy_obj, ray, rec, cy->center))
 		hit++;
 	if (hit_cylinder_cap(cy_obj, ray, rec, vplus(cy->center, vmult(cy->normal, cy->height))))
+		hit++;
+	if (hit_cylinder_side(cy_obj, ray, rec))
 		hit++;
 	if (hit != 0)
 		return (TRUE);

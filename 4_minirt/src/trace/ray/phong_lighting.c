@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:54 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 17:21:03 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/24 23:33:33 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,16 @@ t_color3	phong_lighting(t_scene *scene)
 		lights = lights->next;
 	}
 	ret = vplus(ret, scene->ambient);
+	// print_rec(scene->rec);
 	return (vmin(vmult_(ret, scene->rec.albedo), color3(1, 1, 1)));
 }
+
+
+void	debug(char *str, t_vec3 vec)
+{
+	printf("%s -> %f %f %f\n", str, vec.x, vec.y, vec.z);
+}
+
 
 t_color3	point_light_get(t_scene *scene, t_light *light)
 {
@@ -39,6 +47,7 @@ t_color3	point_light_get(t_scene *scene, t_light *light)
 	t_color3	diffuse;
 	t_color3	specular;
 	t_vec3		view_dir;
+	// static int	i = 0;
 
 	// dprintf(2, "%f %f %f\n", scene->rec.p.x, scene->rec.p.y, scene->rec.p.z);
 	light_dir = vminus(light->origin, scene->rec.p);
@@ -51,6 +60,15 @@ t_color3	point_light_get(t_scene *scene, t_light *light)
 	light_dir = reflect(vmult(light_dir, -1), scene->rec.normal);
 	specular = vmult(vmult(light->light_color, KS), \
 					pow(fmax(vdot(view_dir, light_dir), 0.0), KSN));
+	// dprintf(2, "rec->normal  %f %f %f\n", scene->rec.normal.x, scene->rec.normal.y, scene->rec.normal.z);
+
+	// i++;
+	// printf("i : %d -----------\n", i);
+	// debug("diffuse : ", diffuse);
+	// debug("specular : ", specular);
+	// debug("light_dir : ", light_dir);
+	// debug("view_dir : ", view_dir);
+	// printf("kd : %f\n", kd);
 	return (vmult(vplus(diffuse, specular), light->bright_ratio * LUMEN));
 }
 

@@ -15,6 +15,7 @@ MLXFLAGS := -L$(MLX_DIR) -framework OpenGL -framework AppKit
 HEADER  := -I$(LIBFT_DIR) -I$(MLX_DIR) -Iinc/
 
 SRCS_ENGINE =	src/engine/key_hook.c \
+				src/engine/key_hook_object.c \
 				src/engine/mouse_hook.c
 
 SRCS_PRINT =	src/print/print.c \

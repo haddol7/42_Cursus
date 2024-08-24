@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:27:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/21 11:27:34 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/24 16:19:14 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef struct s_discriminant	t_discriminant;
 # define CAMERA			5
 # define CO				6
 
-# define LIGHT_POINT	1
+# define LIGHT_POINT	6
 # define LUMEN 			3
 
 # define EPSILON 		1e-6
@@ -201,7 +201,6 @@ struct s_mlx
 	t_vec3		mouse_delta;
 	t_point3	trans;
 	t_vec3		rotate;
-	int			press_count;
 	double		fov;
 };
 

@@ -6,68 +6,40 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 19:01:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 15:18:12 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/20 23:47:16 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
+static void	handle_object(int keycode, t_data *data);
+
 int	key_hook(int keycode, void *data_addr)
-{	
-	static int	last_keycode = -1;
+{
 	t_data		*data;
-	t_camera	*cam;
 
 	data = (t_data *)data_addr;
-	cam = &data->scene->camera;
-	if (last_keycode != keycode)
-	{
-		data->engine->press_count++;
-		last_keycode = keycode;
-	}
-	if (keycode == KEY_A)
-		data->engine->trans = vplus_(data->engine->trans, -cam->u.x, 0, -cam->u.z);
-	else if (keycode == KEY_D)
-		data->engine->trans = vplus_(data->engine->trans, cam->u.x, 0, cam->u.z);
-	else if (keycode == KEY_W)
-		data->engine->trans = vplus_(data->engine->trans, -cam->w.x, 0, -cam->w.z);
-	else if (keycode == KEY_S)
-		data->engine->trans = vplus_(data->engine->trans, cam->w.x, 0, cam->w.z);
-	else if (keycode == KEY_Q)
-		data->engine->trans = vplus_(data->engine->trans, 0, 1, 0);
-	else if (keycode == KEY_E)
-		data->engine->trans = vplus_(data->engine->trans, 0, -1, 0);
-	else if (keycode == KEY_C && data->engine->fov > 5)
-		data->engine->fov -= 5;
-	else if (keycode == KEY_Z && data->engine->fov < 175)
-		data->engine->fov += 5;
-	else if (keycode == KEY_LEFT && data->engine->rotate.z < 90)
-		data->engine->rotate.z += 5;
-	else if (keycode == KEY_RIGHT && data->engine->rotate.z > -90)
-		data->engine->rotate.z -= 5;
-	else if (keycode == KEY_ESC)
-		terminate((void *)data);
+	handle_object(keycode, data);
+	data->scene->camera = camera(data->scene, *data->engine);
+	if (keycode == KEY_O)
+		draw_ray_orig(data->scene, data->engine);
 	else
-		data->engine->press_count--;
-	*cam = camera(data->scene, *data->engine);
-	draw_ray_chunk(data->scene, data->engine);
+		draw_ray_chunk(data->scene, data->engine);
 	return (0);
 }
 
-int	key_release_hook(int keycode, void *data_addr)
-{	
-	t_data		*data;
-	t_camera	*cam;
+static void	handle_object(int keycode, t_data *data)
+{
+	t_object_type	type;
 
-	keycode = 0;
-	data = (t_data *)data_addr;
-	cam = &data->scene->camera;
-	*cam = camera(data->scene, *data->engine);
-	if (--data->engine->press_count > 0)
-		draw_ray_chunk(data->scene, data->engine);
+	if (data->scene->selected_obj)
+	{
+		type = data->scene->selected_obj->type;
+		if (type == SP)
+			handle_sphere(keycode, data);
+		else if (type == LIGHT_POINT)
+			handle_light(keycode, data);
+	}
 	else
-		draw_ray_orig(data->scene, data->engine);
-	if (data->engine->press_count < 0)
-		data->engine->press_count = 0;
-	return (0);
+		handle_camera(keycode, data);
 }
