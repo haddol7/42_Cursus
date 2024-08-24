@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:27:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/24 16:19:14 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/24 23:42:17 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,6 @@ struct s_cone
 	t_vec3		normalize;
 };
 
-
 struct s_plane
 {
 	t_point3	center;
@@ -218,6 +217,5 @@ struct s_discriminant
 	double	discriminant;
 	double	sqrtd;
 };
-
 
 #endif

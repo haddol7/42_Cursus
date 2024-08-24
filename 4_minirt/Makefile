@@ -22,7 +22,8 @@ SRCS_PRINT =	src/print/print.c \
 				src/print/print_image.c
 
 SRCS_SCENE =	src/scene/canvas.c \
-				src/scene/object_create.c
+				src/scene/object_create.c \
+				src/scene/object_utils.c
 
 SRCS_TRACE =	src/trace/hit/hit_sphere.c \
 				src/trace/hit/hit_cylinder.c \
@@ -42,7 +43,10 @@ SRCS_UTILS = 	src/utils/vector/vector.c\
 
 SRCS_MAP = 		src/parsing/validity.c \
 				src/parsing/atof.c \
-				src/parsing/element.c
+				src/parsing/element.c \
+				src/parsing/element_capital.c \
+				src/parsing/element_utils.c \
+				src/parsing/element_utils_2.c
 
 SRCS =			$(SRCS_ENGINE) \
 				$(SRCS_PRINT) \

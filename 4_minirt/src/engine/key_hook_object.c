@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 23:36:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/24 21:44:56 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/24 23:44:20 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,6 @@ void	handle_sphere(int keycode, t_data *data)
 		data->scene->selected_obj = data->scene->light;
 }
 
-// void	debug(char *str, t_vec3 vec)
-// {
-// 	dprintf(2, "%s -> %f %f %f\n", str, vec.x, vec.y, vec.z);
-// }
-
 void	handle_light(int keycode, t_data *data)
 {
 	t_camera	*cam;
@@ -69,9 +64,6 @@ void	handle_light(int keycode, t_data *data)
 		light->bright_ratio += 0.1;
 	else if (keycode == KEY_ESC)
 		data->scene->selected_obj = NULL;
-	// debug("light dir -> ", vminus(light->origin, data->scene->rec.p));
-	// debug("rec normal -> ", data->scene->rec.normal);
-
 }
 
 void	handle_camera(int keycode, t_data *data)
