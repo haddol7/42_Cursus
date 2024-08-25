@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hit_plane.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/24 23:40:07 by daeha             #+#    #+#             */
+/*   Updated: 2024/08/25 14:41:05 by daeha            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "structures.h"
 #include "utils.h"
 #include "trace.h"
 
-t_bool hit_plane(t_object *pl_obj, t_ray *ray, t_hit_record *rec)
+t_bool	hit_plane(t_object *pl_obj, t_ray *ray, t_hit_record *rec)
 {
-	t_plane *pl;
-	t_vec3  oc;
-	double  root;
+	t_plane	*pl;
+	t_vec3	oc;
+	double	root;
 
 	pl = pl_obj->element;
 	oc = pl->center;
@@ -18,7 +30,14 @@ t_bool hit_plane(t_object *pl_obj, t_ray *ray, t_hit_record *rec)
 	rec->p = ray_at(ray, root);
 	rec->normal = pl->normal;
 	set_face_normal(ray, rec);
-	rec->albedo = pl_obj->albedo;
+	if (pl_obj->bump.img.id)
+		rec->normal = bump(pl_obj, &pl_obj->bump, rec);
+	if (pl_obj->texture.img.id)
+		rec->albedo = texture(pl_obj, &pl_obj->texture, rec);
+	else if (pl_obj->is_checker == TRUE)
+		rec->albedo = checkerboard(pl_obj, rec);
+	else
+		rec->albedo = pl_obj->albedo;
 	if (rec->t < rec->tmin || rec->t > rec->tmax)
 		return (FALSE);
 	return (TRUE);
