@@ -6,53 +6,12 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:27 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 22:28:53 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/25 00:06:46 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "structures.h"
 #include "libft.h"
-
-t_object	*object_default(t_object_type type, void *element, t_color3 albedo)
-{
-	t_object	*new;
-
-	new = (t_object *)ft_malloc(sizeof(t_object));
-	new->type = type;
-	new->element = element;
-	new->next = NULL;
-	new->albedo = albedo;
-	return (new);
-}
-
-t_object	*object_texture(t_object_type type, \
-							void *element, char *texture, void *mlx)
-{
-	t_object	*new;
-
-	new = (t_object *)ft_malloc(sizeof(t_object));
-	new->type = type;
-	new->element = element;
-	new->next = NULL;
-	if (texture && ft_strcmp(texture, "CHECKER") == 0)
-		new->is_checker = TRUE;
-	else if (texture)
-	{
-		new->texture.img.id = mlx_xpm_file_to_image(mlx, texture, \
-							&new->texture.width, &new->texture.height);
-		if (new->texture.img.id == NULL)
-		{
-			write(STDERR_FILENO, texture, ft_strlen(texture));
-			write(STDERR_FILENO, " <- image file error\n", 22);
-			new->is_checker = TRUE;
-		}
-		else
-			new->texture.img.addr = mlx_get_data_addr(new->texture.img.id, \
-			&new->texture.img.bits_per_pixel, \
-			&new->texture.img.line_size, &new->texture.img.endian);
-	}
-	return (new);
-}
 
 t_sphere	*sphere(t_point3 center, double radius)
 {
@@ -99,4 +58,18 @@ t_light	*light_point(t_point3 light_origin, \
 	light->light_color = light_color;
 	light->bright_ratio = bright_ratio;
 	return (light);
+}
+
+t_cone	*cone(t_point3 center, t_vec3 normalize, \
+				double diameter, t_point3 cross)
+{
+	t_cone	*cone;
+
+	cone = (t_cone *)ft_malloc(sizeof(t_cone));
+	cone->center = center;
+	cone->cross = cross;
+	cone->radius = diameter / 2;
+	cone->radius2 = cone->radius * cone->radius;
+	cone->normalize = normalize;
+	return (cone);
 }

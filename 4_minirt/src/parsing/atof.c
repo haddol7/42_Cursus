@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   atof.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:21:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 15:22:24 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/24 23:45:25 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ double	ft_atof(char *num)
 	while (!(num[i] == '\0' || num[i] == '\n'))
 	{
 		if (!(ft_isdigit(num[i]) || num[i] == '.'))
-			error_exit("ft_atof : not a digit");//TODO .ㅇㅣ 없는 정수값에서 뭔가 이상이 생긴다.
+			error_exit("ft_atof : not a digit");
 		add_num(&result, num, i, &info);
 		if (result > INT_MAX || result < INT_MIN)
 			error_exit("ft_atof : too big");

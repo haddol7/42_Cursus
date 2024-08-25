@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validity.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 21:08:04 by jungslee          #+#    #+#             */
-/*   Updated: 2024/08/20 15:21:49 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/25 00:05:13 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,13 @@ t_object	*what_type(char **split, t_scene *scene, t_mlx *engine)
 	else if (!ft_strncmp(split[0], "pl", len) && !ft_strncmp(split[0], "pl", 2))
 		return (is_valid_pl(split, *engine));
 	else if (!ft_strncmp(split[0], "A", len) && !ft_strncmp(split[0], "A", 1))
-		return (is_valid_A(split, scene));
+		return (is_valid_a(split, scene));
 	else if (!ft_strncmp(split[0], "C", len) && !ft_strncmp(split[0], "C", 1))
-		return (is_valid_C(split, scene, engine));
+		return (is_valid_c(split, scene, engine));
 	else if (!ft_strncmp(split[0], "L", len) && !ft_strncmp(split[0], "L", 1))
-		return (is_valid_L(split, scene));
+		return (is_valid_l(split, scene));
+	else if (!ft_strncmp(split[0], "co", len) && !ft_strncmp(split[0], "co", 2))
+		return (is_valid_co(split, *engine));
 	else
 		error_exit("what_type\n");
 	return (0);
@@ -56,7 +58,7 @@ void	*create_object(char *line, t_scene *scene, t_mlx *engine, int *none)
 	if (split[0] == NULL || split[0][0] == '\0' || split[0][0] == '\n')
 		*none = 1;
 	else
-		new_object = what_type(split, scene, engine);// 여기서 검증 먼저 하자.
+		new_object = what_type(split, scene, engine);
 	free_split(split);
 	return (new_object);
 }
