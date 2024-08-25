@@ -4,7 +4,9 @@ C 0,0,100 0,0,1 90
 L 0,0,10 0.7 255,255,255
 sp 30,0,-40 30 255,255,255 rt/texture/earth_diffuse.xpm rt/texture/earth_normal.xpm
 sp -30,0,-40 30 255,255,255 rt/texture/brick_diffuse.xpm rt/texture/brick_normal.xpm
-sp 0,30,-40 30 255,255,255
+sp 0,30,-40 30 255,255,255 
 sp 0,-30,-40 30 255,255,255
-sp 0,0,-40 20 30,255,0
-
+sp 0,0,-40 20 30,255,0 CHECKER
+pl 0,-30,0 0,1,0 255,255,255 CHECKER
+pl 0,0,-100 0,0,1 255,255,255 rt/texture/minecraft.xpm
+ 
