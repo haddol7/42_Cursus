@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:53:25 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/21 01:07:31 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/21 04:13:23 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static void	write_color_chunk(t_vec3 c, t_color3 p, t_scene *s, t_mlx *mlx)
 	int	x;
 	int	y;
 
-	step = s->canvas.h / 100;
+	step = s->canvas.h / CHUNK_DIV;
 	x = - (step / 2);
 	while (x < (step / 2))
 	{

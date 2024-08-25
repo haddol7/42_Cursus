@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 19:03:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 23:42:56 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/21 04:09:45 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,12 @@ int		mouse_press_hook(int keycode, int x, int y, void *data_addr);
 int		mouse_drag_hook(int x, int y, void *data_addr);
 int		mouse_release_hook(int keycode, int x, int y, void *data_addr);
 
+void	object_translation(int keycode, t_vec3 *center, t_data *data);
+void	object_rotation(int keycode, t_vec3 *normal);
+
 void	handle_sphere(int keycode, t_data *data);
+void	handle_plane(int keycode, t_data *data);
+void	handle_cylinder(int keycode, t_data *data);
 void	handle_light(int keycode, t_data *data);
 void	handle_camera(int keycode, t_data *data);
 

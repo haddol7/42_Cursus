@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   phong_lighting.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:54 by daeha             #+#    #+#             */
 /*   Updated: 2024/08/25 15:00:46 by jungslee         ###   ########.fr       */

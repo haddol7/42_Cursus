@@ -16,6 +16,7 @@ HEADER  := -I$(LIBFT_DIR) -I$(MLX_DIR) -Iinc/
 
 SRCS_ENGINE =	src/engine/key_hook.c \
 				src/engine/key_hook_object.c \
+				src/engine/key_hook_object_2.c \
 				src/engine/mouse_hook.c
 
 SRCS_PRINT =	src/print/print.c \
@@ -32,7 +33,8 @@ SRCS_TRACE =	src/trace/hit/hit_sphere.c \
 				src/trace/hit/normal.c \
 				src/trace/ray/phong_lighting.c \
 				src/trace/ray/ray.c \
-				src/trace/texture/uv_mapping.c
+				src/trace/texture/uv_mapping.c \
+				src/trace/texture/texture.c
 
 SRCS_UTILS = 	src/utils/vector/vector.c\
 				src/utils/vector/vector_2.c\

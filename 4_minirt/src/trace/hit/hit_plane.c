@@ -31,7 +31,14 @@ t_bool	hit_plane(t_object *pl_obj, t_ray *ray, t_hit_record *rec)
 	rec->p = ray_at(ray, root);
 	rec->normal = pl->normal;
 	set_face_normal(ray, rec);
-	rec->albedo = pl_obj->albedo;
+	if (pl_obj->bump.img.id)
+		rec->normal = bump(pl_obj, &pl_obj->bump, rec);
+	if (pl_obj->texture.img.id)
+		rec->albedo = texture(pl_obj, &pl_obj->texture, rec);
+	else if (pl_obj->is_checker == TRUE)
+		rec->albedo = checkerboard(pl_obj, rec);
+	else
+		rec->albedo = pl_obj->albedo;
 	if (rec->t < rec->tmin || rec->t > rec->tmax)
 		return (FALSE);
 	return (TRUE);

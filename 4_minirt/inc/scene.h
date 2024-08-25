@@ -31,4 +31,6 @@ t_light		*light_point(t_point3 origin, t_color3 color, double bright_ratio);
 t_cone		*cone(t_point3 center, t_vec3 normalize, double diameter, \
 					t_point3 cross);
 
+void	rotation(t_vec3 *v, t_vec3 axis, double theta);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 15:30:07 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 16:19:51 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/24 23:39:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,11 @@ t_bool	hit_sphere(t_object *sp_obj, t_ray *ray, t_hit_record *rec)
 	rec->normal = vdivide(vminus(rec->p, sp->center), sp->radius);
 	set_face_normal(ray, rec);
 	if (sp_obj->bump.img.id)
-		rec->normal = bump_mapping(rec, sp, sp_obj->bump);
+		rec->normal = bump(sp_obj, &sp_obj->bump, rec);
 	if (sp_obj->is_checker)
-		rec->albedo = texture_checkerboard(rec->p, sp);
+		rec->albedo = checkerboard(sp_obj, rec);
 	else if (sp_obj->texture.img.id)
-		rec->albedo = texture(rec->p, sp, sp_obj->texture);
+		rec->albedo = texture(sp_obj, &sp_obj->texture, rec);
 	else
 		rec->albedo = sp_obj->albedo;
 	return (TRUE);
