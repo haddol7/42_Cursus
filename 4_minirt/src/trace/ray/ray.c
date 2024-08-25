@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:37:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/24 21:40:28 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/25 15:01:43 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,34 +51,11 @@ t_hit_record	record_init(void)
 	return (record);
 }
 
-
-// void	debug(char *str, t_vec3 vec)
-// {
-// 	dprintf(2, "%s -> %f %f %f\n", str, vec.x, vec.y, vec.z);
-// }
-
-// void	print_rec(t_hit_record rec)
-// {
-// 	debug("p : ", rec.p);
-// 	debug("normal : ", rec.normal);
-// 	printf("tmin : %f\n", rec.tmin);
-// 	printf("tmax : %f\n", rec.tmax);
-// 	printf("t : %f\n", rec.t);
-// 	debug("albedo :\n", rec.albedo);
-// }
-
 t_color3	ray_color(t_scene *scene, t_color3 color)
 {
 	scene->rec = record_init();
-	t_light	*light;
-
-	light = scene->light->element;
 	if (hit(scene->world, &scene->ray, &scene->rec))
-	{
-		// print_rec(scene->rec);
-		// debug("light dir -> ", vminus(light->origin, scene->rec.p));
 		return (vplus(phong_lighting(scene), color));
-	}
 	else
 		return (vec3(0.2, 0.2, 0.2));
 }

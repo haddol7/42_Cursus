@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hit_cone.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/25 14:55:57 by jungslee          #+#    #+#             */
+/*   Updated: 2024/08/25 14:58:44 by jungslee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "structures.h"
 #include "utils.h"
@@ -8,28 +20,31 @@
 // 	dprintf(2, "%s -> %f %f %f\n", str, vec.x, vec.y, vec.z);
 // }
 
-t_discriminant cal_discriminant(t_cone *co, t_ray *ray)
+t_discriminant	cal_discriminant(t_cone *co, t_ray *ray)
 {
-	t_discriminant dis;
+	t_discriminant	dis;
 	t_point3		oc;
 
 	ft_memset(&dis, 0, sizeof(t_discriminant));
 	oc = vminus(ray->orig, co->center);
-	dis.a = vdot(ray->dir, ray->dir) - (vdot(ray->dir, co->normalize) * vdot(ray->dir, co->normalize));
-	dis.half_b = vdot(ray->dir, oc) - vdot(ray->dir, co->normalize) * vdot(oc, co->normalize);
-	dis.c = vdot(oc, oc) - (vdot(oc, co->normalize) * vdot(oc, co->normalize)) - co->radius2;
-	dis.discriminant = (dis.half_b * dis.half_b )- (dis.a * dis.c);
+	dis.a = vdot(ray->dir, ray->dir) - (vdot(ray->dir, co->normalize) \
+				* vdot(ray->dir, co->normalize));
+	dis.half_b = vdot(ray->dir, oc) - vdot(ray->dir, co->normalize) * \
+				vdot(oc, co->normalize);
+	dis.c = vdot(oc, oc) - (vdot(oc, co->normalize) * \
+				vdot(oc, co->normalize)) - co->radius2;
+	dis.discriminant = (dis.half_b * dis.half_b) - (dis.a * dis.c);
 	if (dis.discriminant >= 0)
 		dis.sqrtd = sqrt(dis.discriminant);
 	return (dis);
 }
 
-t_bool is_root_valid(t_hit_record *rec, t_ray *ray, t_object *cy_obj, double root)
-{//TODO ㅅㅐㅇ가ㄱ해보니까 height가 -이면 안되는 조건도 파싱에 포함해야..]
-//TODO 파싱에서 파일 확장자도 확인
-	double  dot_len;
-	t_cylinder  *cy;
-	t_hit_record rec_tmp;
+t_bool	is_root_valid(t_hit_record *rec, t_ray *ray, \
+		t_object *cy_obj, double root)
+{
+	double			dot_len;
+	t_cylinder		*cy;
+	t_hit_record	rec_tmp;
 
 	cy = cy_obj->element;
 	rec_tmp = *rec;
@@ -39,7 +54,8 @@ t_bool is_root_valid(t_hit_record *rec, t_ray *ray, t_object *cy_obj, double roo
 	if (dot_len >= 0 && dot_len <= cy->height)
 	{
 		*rec = rec_tmp;
-		rec->normal = vunit(vminus(vminus(rec->p, cy->center), vmult(cy->normal, dot_len)));
+		rec->normal = vunit(vminus(vminus(rec->p, cy->center), \
+				vmult(cy->normal, dot_len)));
 		set_face_normal(ray, rec);
 		rec->albedo = cy_obj->albedo;
 		return (TRUE);
@@ -48,12 +64,12 @@ t_bool is_root_valid(t_hit_record *rec, t_ray *ray, t_object *cy_obj, double roo
 		return (FALSE);
 }
 
-t_bool hit_cone_side(t_object *co_obj, t_ray *ray, t_hit_record *rec)
+t_bool	hit_cone_side(t_object *co_obj, t_ray *ray, t_hit_record *rec)
 {
-	t_cone	*co;
-	t_discriminant  dis;
-	double  root[2];
-	
+	t_cone			*co;
+	t_discriminant	dis;
+	double			root[2];
+
 	co = co_obj->element;
 	dis = cal_discriminant(co, ray);
 	if (dis.discriminant < 0)
@@ -76,7 +92,8 @@ t_bool hit_cone_side(t_object *co_obj, t_ray *ray, t_hit_record *rec)
 	return (FALSE);
 }
 
-t_bool	hit_cone_cap(t_object *co_obj, t_ray *ray, t_hit_record *rec, t_point3 center)
+t_bool	hit_cone_cap(t_object *co_obj, t_ray *ray, \
+			t_hit_record *rec, t_point3 center)
 {
 	t_cone			*co;
 	t_hit_record	rec_tmp;
@@ -86,14 +103,14 @@ t_bool	hit_cone_cap(t_object *co_obj, t_ray *ray, t_hit_record *rec, t_point3 ce
 	co = co_obj->element;
 	if (vdot(co->normalize, ray->dir) == 0)
 		return (FALSE);
-	root = vdot(vminus(center, ray->orig), co->normalize) / vdot(co->normalize, ray->dir);
-	if (root < rec->tmin || root > rec->tmax || root < 0)
-		return (FALSE);
+	root = vdot(vminus(center, ray->orig), co->normalize) \
+				/ vdot(co->normalize, ray->dir);
 	rec_tmp = *rec;
 	rec_tmp.t = root;
 	rec_tmp.p = ray_at(ray, root);
 	r = vlength2(vminus(rec_tmp.p, center));
-	if (0 <= r && r <= co->radius2)
+	if (!(root < rec->tmin || root > rec->tmax || root < 0) \
+			&& (0 <= r && r <= co->radius2))
 	{
 		*rec = rec_tmp;
 		rec->normal = co->normalize;
