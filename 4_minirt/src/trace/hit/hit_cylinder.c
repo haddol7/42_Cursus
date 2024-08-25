@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hit_cylinder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 14:42:40 by jungslee          #+#    #+#             */
-/*   Updated: 2024/08/25 14:47:50 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/25 17:51:02 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,18 @@ t_bool	hit_cylinder(t_object *cy_obj, t_ray *ray, t_hit_record *rec)
 			vplus(cy->center, vmult(cy->normal, cy->height))))
 		hit++;
 	if (hit_cylinder_side(cy_obj, ray, rec))
+	{
+		if (cy_obj->bump.img.id)
+			rec->normal = bump(cy_obj, &cy_obj->bump, rec);
+		if (cy_obj->texture.img.id)
+			rec->albedo = texture(cy_obj, &cy_obj->texture, rec);
+		else if (cy_obj->is_checker == TRUE)
+			rec->albedo = checkerboard(cy_obj, rec);
+		else
+			rec->albedo = cy_obj->albedo;
 		hit++;
-	if (hit != 0)
-		return (TRUE);
-	return (FALSE);
+	}
+	if (hit == 0)
+		return (FALSE);
+	return (TRUE);
 }
