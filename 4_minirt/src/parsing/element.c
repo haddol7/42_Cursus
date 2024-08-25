@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   element.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:21:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/21 02:33:06 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/21 04:32:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,12 +185,15 @@ t_object	*is_valid_cy(char **split, t_mlx engine)
 		texture = ft_strtrim(split[6], "\n");
 		cy = object_texture(CY, cylinder(center, normalize, \
 				ft_atof(split[3]), ft_atof(split[4])), texture, engine.mlx);
+		if (split[7] != NULL && *split[7] != '\n' && cy->texture.img.id != NULL)
+			object_normal(cy, split[7], engine);
 		free(texture);
 	}
 	else if (split[6] == NULL || (split[6][0] == '\n' && split[7] == NULL))
 		cy = object_default(CY, cylinder(center, normalize, ft_atof(split[3]), ft_atof(split[4])), color);
 	else
 		error_exit("check_is_valid_sp\n");
+	cy->albedo = color;
 	return (cy);
 }
 
@@ -210,6 +213,8 @@ t_object	*is_valid_pl(char **split, t_mlx engine)
 	{
 		texture = ft_strtrim(split[4], "\n");
 		pl = object_texture(PL, plane(center, normalize), texture, engine.mlx);
+		if (split[5] != NULL && *split[5] != '\n' && pl->texture.img.id != NULL)
+			object_normal(pl, split[5], engine);
 		free(texture);
 	}
 	else if (split[4] == NULL || (split[4][0] == '\n' && split[5] == NULL))
@@ -217,6 +222,7 @@ t_object	*is_valid_pl(char **split, t_mlx engine)
 	else
 		error_exit("is_valid_pl\n");
 				//TODO 이미지 파일 검증 추가
+	pl->albedo = color;
 	return (pl);
 }
 
