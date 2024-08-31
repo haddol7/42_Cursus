@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 19:01:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/21 03:35:42 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/31 23:54:58 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ static void	handle_object(int keycode, t_data *data)
 			handle_cylinder(keycode, data);
 		else if (type == PL)
 			handle_plane(keycode, data);
+		else if (type == CO)
+			handle_cone(keycode, data);
 		else if (type == LIGHT_POINT)
 			handle_light(keycode, data);
 	}

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 19:03:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/21 04:09:45 by daeha            ###   ########.fr       */
+/*   Updated: 2024/08/31 23:56:04 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	object_rotation(int keycode, t_vec3 *normal);
 void	handle_sphere(int keycode, t_data *data);
 void	handle_plane(int keycode, t_data *data);
 void	handle_cylinder(int keycode, t_data *data);
+void	handle_cone(int keycode, t_data *data);
 void	handle_light(int keycode, t_data *data);
 void	handle_camera(int keycode, t_data *data);
 

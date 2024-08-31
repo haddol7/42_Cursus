@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   object_create.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:27 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/25 16:57:59 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/31 23:08:25 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "structures.h"
 #include "libft.h"
+#include "utils.h"
 
 t_sphere	*sphere(t_point3 center, double radius)
 {
@@ -70,6 +71,6 @@ t_cone	*cone(t_point3 center, t_vec3 normalize, \
 	cone->height = height;
 	cone->radius = diameter / 2;
 	cone->radius2 = cone->radius * cone->radius;
-	cone->normalize = normalize;
+	cone->normalize = vmult(normalize, -1);
 	return (cone);
 }

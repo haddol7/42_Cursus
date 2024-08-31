@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structures.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:27:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/25 16:56:40 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/31 23:58:33 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef struct s_discriminant	t_discriminant;
 # define CAMERA			5
 # define CO				6
 
-# define LIGHT_POINT	6
+# define LIGHT_POINT	7
 # define LUMEN 			3
 
 # define EPSILON 		1e-6
