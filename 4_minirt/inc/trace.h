@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trace.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:36:03 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/24 23:42:27 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/25 17:16:41 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@ t_color3		point_light_get(t_scene *scene, t_light *light);
 
 t_bool			hit_cylinder(t_object *cy_obj, t_ray *ray, t_hit_record *rec);
 t_bool			hit_plane(t_object *pl_obj, t_ray *ray, t_hit_record *rec);
+t_bool			hit_cone(t_object *co_obj, t_ray *ray, t_hit_record *rec);
 
-t_color3	texture(t_object *obj, t_texture *tex, t_hit_record *rec);
-t_vec3		bump(t_object *obj, t_texture *bump, t_hit_record *rec);
-t_color3	checkerboard(t_object *obj, t_hit_record *rec);
-void		uv_mapping(double uv[2], t_object *obj, t_texture *tex, t_hit_record *rec);
+t_color3		texture(t_object *obj, t_texture *tex, t_hit_record *rec);
+t_vec3			bump(t_object *obj, t_texture *bump, t_hit_record *rec);
+t_color3		checkerboard(t_object *obj, t_hit_record *rec);
+void			uv_mapping(double uv[2], t_object *obj, t_texture *tex, t_hit_record *rec);
 #endif

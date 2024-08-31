@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   element.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:21:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/25 00:02:49 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/31 15:45:56 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,23 +102,23 @@ t_object	*is_valid_co(char **split, t_mlx engine)
 	t_object	*co;
 	char		*texture;
 	t_point3	center;
-	t_point3	cross;
+	double		height;
 	t_vec3		normalize;
 
 	co = NULL;
 	center = check_coordinate(split[1]);
-	cross = check_coordinate(split[2]);
+	height = ft_atof(split[2]);
 	normalize = vunit(check_normalize_vector(split[3]));
 	if (split[6] != NULL && split[6][0] != '\n')
 	{
-		texture = ft_strtrim(split[4], "\n");
+		texture = ft_strtrim(split[6], "\n");
 		co = object_texture(CO, cone(center, normalize, \
-				ft_atof(split[4]), cross), texture, engine.mlx);
+				ft_atof(split[4]), height), texture, engine.mlx);
 		free(texture);
 	}
 	else if (split[6] == NULL || (split[6][0] == '\n' && split[7] == NULL))
 		co = object_default(CO, cone(center, normalize, \
-			ft_atof(split[4]), cross), check_color(split[5]));
+			ft_atof(split[4]), height), check_color(split[5]));
 	else
 		error_exit("is_valid_co\n");
 	return (co);

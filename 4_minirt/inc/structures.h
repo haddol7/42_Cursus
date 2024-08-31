@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:27:28 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/24 23:42:17 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/25 16:56:40 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ struct s_cone
 	t_point3	center;
 	double		radius;
 	double		radius2;
-	t_point3	cross;
+	double		height;
 	t_vec3		normalize;
 };
 

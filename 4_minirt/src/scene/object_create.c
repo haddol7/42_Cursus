@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:27 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/25 00:06:46 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/25 16:57:59 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,13 @@ t_light	*light_point(t_point3 light_origin, \
 }
 
 t_cone	*cone(t_point3 center, t_vec3 normalize, \
-				double diameter, t_point3 cross)
+				double diameter, double height)
 {
 	t_cone	*cone;
 
 	cone = (t_cone *)ft_malloc(sizeof(t_cone));
 	cone->center = center;
-	cone->cross = cross;
+	cone->height = height;
 	cone->radius = diameter / 2;
 	cone->radius2 = cone->radius * cone->radius;
 	cone->normalize = normalize;

@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:08:32 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/21 11:18:58 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/08/25 16:58:33 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ t_sphere	*sphere(t_point3 center, double radius);
 t_cylinder	*cylinder(t_point3 center, t_vec3 normal, double radius, double h);
 t_plane		*plane(t_point3 center, t_vec3 normal);
 t_light		*light_point(t_point3 origin, t_color3 color, double bright_ratio);
-t_cone		*cone(t_point3 center, t_vec3 normalize, double diameter, \
-					t_point3 cross);
+t_cone		*cone(t_point3 center, t_vec3 normalize, \
+				double diameter, double height);
 
 void	rotation(t_vec3 *v, t_vec3 axis, double theta);
 
