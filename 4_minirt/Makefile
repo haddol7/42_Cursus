@@ -29,6 +29,7 @@ SRCS_SCENE =	src/scene/canvas.c \
 SRCS_TRACE =	src/trace/hit/hit_sphere.c \
 				src/trace/hit/hit_cylinder.c \
 				src/trace/hit/hit_plane.c \
+				src/trace/hit/hit_cone.c \
 				src/trace/hit/hit.c \
 				src/trace/hit/normal.c \
 				src/trace/ray/phong_lighting.c \
