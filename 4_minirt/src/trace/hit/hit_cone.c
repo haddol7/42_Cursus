@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 14:55:57 by jungslee          #+#    #+#             */
-/*   Updated: 2024/09/02 22:12:19 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/09/02 22:21:05 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,14 @@ t_bool	hit_cone(t_object *co_obj, t_ray *ray, t_hit_record *rec)
 			vmult(co->normalize, co->height))))
 		hit++;
 	if (hit != 0)
+	{
+		if (co_obj->bump.img.id)
+			rec->normal = bump(co_obj, &co_obj->bump, rec);
+		if (co_obj->texture.img.id)
+			rec->albedo = texture(co_obj, &co_obj->texture, rec);
+		else if (co_obj->is_checker == TRUE)
+			rec->albedo = checkerboard(co_obj, rec);
 		return (TRUE);
+	}
 	return (FALSE);
 }

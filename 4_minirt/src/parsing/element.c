@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:21:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/02 21:59:16 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/09/02 22:14:14 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ t_object	*is_valid_co(char **split, t_mlx engine)
 		texture = ft_strtrim(split[6], "\n");
 		co = object_texture(CO, cone(center, normalize, \
 				positive_atof(split[4]), height), texture, engine.mlx);
+		if (split[7] != NULL && *split[7] != '\n' && co->texture.img.id != NULL)
+			object_normal(co, split[7], engine);
 		free(texture);
 	}
 	else if (split[6] == NULL || (split[6][0] == '\n' && split[7] == NULL))
