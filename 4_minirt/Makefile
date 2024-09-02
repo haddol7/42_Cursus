@@ -17,6 +17,7 @@ HEADER  := -I$(LIBFT_DIR) -I$(MLX_DIR) -Iinc/
 SRCS_ENGINE =	src/engine/key_hook.c \
 				src/engine/key_hook_object.c \
 				src/engine/key_hook_object_2.c \
+				src/engine/key_hook_object_3.c \
 				src/engine/mouse_hook.c
 
 SRCS_PRINT =	src/print/print.c \

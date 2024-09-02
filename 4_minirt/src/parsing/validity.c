@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 21:08:04 by jungslee          #+#    #+#             */
-/*   Updated: 2024/08/25 00:05:13 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/09/02 21:59:50 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,17 @@
 int	argument_validity(int argc, char *file_name)
 {
 	int	fd;
+	int	i;
 
+	i = 0;
 	if (argc != 2)
 		error_exit("argument_validity : 1\n");
+	while (file_name[i] != '.')
+		i++;
+	i++;
+	if (ft_strncmp(file_name + i, "rt", ft_strlen(file_name + i)) \
+			|| ft_strncmp(file_name + i, "rt", 2))
+		error_exit("file extension error\n");
 	fd = open(file_name, O_RDONLY);
 	if (fd < 0)
 		error_exit("argment_validity : 2\n");

@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:35 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/25 17:15:59 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/09/02 22:01:16 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,6 @@ t_bool	hit_obj(t_object *world, t_ray *ray, t_hit_record *rec)
 	if (world->type == PL)
 		hit_result = hit_plane(world, ray, rec);
 	if (world->type == CO)
-		hit_result = hit_cone(world ,ray, rec);
+		hit_result = hit_cone(world, ray, rec);
 	return (hit_result);
 }

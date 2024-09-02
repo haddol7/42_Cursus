@@ -6,7 +6,7 @@
 /*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 23:50:57 by jungslee          #+#    #+#             */
-/*   Updated: 2024/08/25 00:03:54 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/09/02 21:23:08 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ t_vec3	check_normalize_vector(char *coor)
 	x = ft_atof(split[0]);
 	y = ft_atof(split[1]);
 	z = ft_atof(split[2]);
+	if (x == 0 && y == 0 && z == 0)
+		error_exit("not_valid_normalize_vector : all 0\n");
 	if (is_in_valid_normalize_range(x, y, z) == 0)
 		error_exit("not_valid_normalize_vector\n");
 	free_split(split);

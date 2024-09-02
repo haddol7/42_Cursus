@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_hook_object_2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 04:08:59 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/31 23:56:22 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/02 21:51:45 by jungslee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,25 +60,4 @@ void	handle_light(int keycode, t_data *data)
 		light->bright_ratio += 0.1;
 	else
 		object_translation(keycode, &light->origin, data);
-}
-
-void	handle_camera(int keycode, t_data *data)
-{
-	t_camera	*cam;
-	t_mlx		*engine;	
-
-	cam = &data->scene->camera;
-	engine = data->engine;
-	if (keycode == KEY_ESC)
-		terminate((void *)data);
-	else if (keycode == KEY_C && engine->fov > 5)
-		engine->fov -= 5;
-	else if (keycode == KEY_Z && engine->fov < 175)
-		engine->fov += 5;
-	else if (keycode == KEY_LEFT && engine->rotate.z < 90)
-		engine->rotate.z += 5;
-	else if (keycode == KEY_RIGHT && engine->rotate.z > -90)
-		engine->rotate.z -= 5;
-	else
-		object_translation(keycode, &engine->trans, data);
 }
