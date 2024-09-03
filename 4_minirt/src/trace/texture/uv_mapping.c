@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   uv_mapping.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:31:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/02 22:17:11 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/09/03 22:15:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,7 @@ static void	uv_mapping_co(double uv[2], t_hit_record *rec, \
 	{
 		uv[U] *= t->width;
 		uv[V] *= t->height;
+		if (uv[V] >= t->height)
+			uv[V] = t->height - 1;
 	}
 }
