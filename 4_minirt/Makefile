@@ -36,6 +36,7 @@ SRCS_TRACE =	src/trace/hit/hit_sphere.c \
 				src/trace/ray/phong_lighting.c \
 				src/trace/ray/ray.c \
 				src/trace/texture/uv_mapping.c \
+				src/trace/texture/uv_axis_mapping.c \
 				src/trace/texture/texture.c
 
 SRCS_UTILS = 	src/utils/vector/vector.c\

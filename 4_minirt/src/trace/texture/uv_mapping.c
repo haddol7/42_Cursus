@@ -6,11 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:31:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/03 22:15:01 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/07 15:43:38 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "scene.h"
 #include "structures.h"
 #include "utils.h"
 #include "trace.h"
@@ -63,9 +64,7 @@ static void	uv_mapping_pl(double uv[2], t_hit_record *rec, \
 {
 	t_point3	o;
 
-	o.x = rec->p.x - pl->center.x;
-	o.y = rec->p.y - pl->center.y;
-	o.z = rec->p.z - pl->center.z;
+	o = uv_axis_mapping(pl->center, pl->normal, rec);
 	if (t)
 	{
 		uv[U] = (int)fabs(o.x) % t->width;
@@ -83,13 +82,11 @@ static void	uv_mapping_cy(double uv[2], t_hit_record *rec, \
 {
 	t_point3	o;
 	double		phi;
-
-	o.x = rec->p.x - cy->center.x;
-	o.y = rec->p.y - cy->center.y;
-	o.z = rec->p.z - cy->center.z;
+	
+	o = uv_axis_mapping(cy->center, cy->normal, rec);
 	phi = atan2(-o.z, o.x) + M_PI;
 	uv[U] = (phi / (2 * M_PI));
-	uv[V] = fabs(o.y / cy->height);
+	uv[V] = fabs((cy->height - o.y) / cy->height);
 	if (t)
 	{
 		uv[U] *= t->width;
@@ -103,9 +100,7 @@ static void	uv_mapping_co(double uv[2], t_hit_record *rec, \
 	t_point3	o;
 	double		phi;
 
-	o.x = rec->p.x - co->center.x;
-	o.y = rec->p.y - co->center.y;
-	o.z = rec->p.z - co->center.z;
+	o = uv_axis_mapping(co->center, co->normalize, rec);
 	phi = atan2(-o.z, o.x) + M_PI;
 	uv[U] = (phi / (2 * M_PI));
 	uv[V] = fabs(o.y / co->height);

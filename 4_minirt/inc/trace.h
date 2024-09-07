@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   trace.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:36:03 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/25 17:16:41 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/09/07 15:44:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,5 @@ t_color3		texture(t_object *obj, t_texture *tex, t_hit_record *rec);
 t_vec3			bump(t_object *obj, t_texture *bump, t_hit_record *rec);
 t_color3		checkerboard(t_object *obj, t_hit_record *rec);
 void			uv_mapping(double uv[2], t_object *obj, t_texture *tex, t_hit_record *rec);
+t_vec3			uv_axis_mapping(t_point3 center, t_vec3 normal, t_hit_record *rec);
 #endif
