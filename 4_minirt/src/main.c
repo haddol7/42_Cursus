@@ -6,14 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:37:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/20 21:50:32 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/07 15:56:46 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 //TODO: capital_ob
-//TODO: rand() 수정
 t_scene	*scene_init(int fd, t_mlx *engine)
 {
 	t_scene	*scene;

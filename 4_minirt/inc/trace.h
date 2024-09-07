@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:36:03 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/07 15:44:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/07 15:47:14 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ t_bool			hit_cone(t_object *co_obj, t_ray *ray, t_hit_record *rec);
 t_color3		texture(t_object *obj, t_texture *tex, t_hit_record *rec);
 t_vec3			bump(t_object *obj, t_texture *bump, t_hit_record *rec);
 t_color3		checkerboard(t_object *obj, t_hit_record *rec);
-void			uv_mapping(double uv[2], t_object *obj, t_texture *tex, t_hit_record *rec);
-t_vec3			uv_axis_mapping(t_point3 center, t_vec3 normal, t_hit_record *rec);
+void			uv_mapping(double uv[2], t_object *obj, \
+							t_texture *tex, t_hit_record *rec);
+t_vec3			uv_axis_mapping(t_point3 center, t_vec3 normal, \
+								t_hit_record *rec);
 #endif

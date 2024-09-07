@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:08:32 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/25 16:58:33 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/09/07 15:46:47 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,6 @@ t_light		*light_point(t_point3 origin, t_color3 color, double bright_ratio);
 t_cone		*cone(t_point3 center, t_vec3 normalize, \
 				double diameter, double height);
 
-void	rotation(t_vec3 *v, t_vec3 axis, double theta);
+void		rotation(t_vec3 *v, t_vec3 axis, double theta);
 
 #endif

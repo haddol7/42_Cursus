@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 21:31:49 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/07 15:43:38 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/07 15:48:01 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static void	uv_mapping_cy(double uv[2], t_hit_record *rec, \
 {
 	t_point3	o;
 	double		phi;
-	
+
 	o = uv_axis_mapping(cy->center, cy->normal, rec);
 	phi = atan2(-o.z, o.x) + M_PI;
 	uv[U] = (phi / (2 * M_PI));
