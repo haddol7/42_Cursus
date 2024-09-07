@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 18:53:25 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/21 04:13:23 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/07 16:53:34 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	draw_ray_chunk(t_scene *scene, t_mlx *engine)
 	int			i;
 	int			j;
 
+	if (CHUNK_DIV > WINDOW_H / 2 || CHUNK_DIV > WINDOW_H / 2)
+		return (draw_ray_orig(scene, engine));
 	chunk_size = scene->canvas.h / CHUNK_DIV;
 	j = scene->canvas.h - (chunk_size / 2);
 	while (j >= 0)

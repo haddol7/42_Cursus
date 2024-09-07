@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   element_utils_2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 23:52:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/08/25 00:04:01 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/09/07 17:15:11 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ void	object_normal(t_object *object, char *str, t_mlx engine)
 							&object->bump.width, &object->bump.height);
 	if (object->bump.img.id == NULL)
 	{
+		write(STDERR_FILENO, "IMAGE ", 7);
 		write(STDERR_FILENO, path, ft_strlen(path));
-		write(STDERR_FILENO, " <- Bump file error\n", 21);
+		write(STDERR_FILENO, " invalid\n", 10);
 	}
 	else
 		object->bump.img.addr = mlx_get_data_addr(object->bump.img.id, \

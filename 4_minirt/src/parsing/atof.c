@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   atof.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:21:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/08/24 23:45:25 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/09/07 17:10:45 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ double	ft_atof(char *num)
 	while (!(num[i] == '\0' || num[i] == '\n'))
 	{
 		if (!(ft_isdigit(num[i]) || num[i] == '.'))
-			error_exit("ft_atof : not a digit");
+			error_exit("ft_atof : not a digit\n");
 		add_num(&result, num, i, &info);
 		if (result > INT_MAX || result < INT_MIN)
-			error_exit("ft_atof : too big");
+			error_exit("ft_atof : too big\n");
 		i++;
 	}
 	return (result * info.sign);

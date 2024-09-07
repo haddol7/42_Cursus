@@ -6,13 +6,25 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:37:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/07 15:56:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/07 18:00:44 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-//TODO: capital_ob
+t_bool	is_macro_valid(void)
+{
+	if (WINDOW_H < 0 || WINDOW_H < 0 || \
+		WINDOW_H > 16384 || WINDOW_W > 16384)
+	{
+		write(2, "MACRO WINDOW_* is invalid\n", 27);
+		return (FALSE);
+	}
+	if (WINDOW_H < CHUNK_DIV || WINDOW_W < CHUNK_DIV)
+		write(2, "MACRO WINDOW_* is smaller than CHUNK_DIV\n", 42);
+	return (TRUE);
+}
+
 t_scene	*scene_init(int fd, t_mlx *engine)
 {
 	t_scene	*scene;
@@ -23,7 +35,7 @@ t_scene	*scene_init(int fd, t_mlx *engine)
 	scene->canvas = canvas(WINDOW_W, WINDOW_H);
 	map_validity(fd, scene, &capital_ob, engine);
 	if (capital_ob != 3)
-		error_exit("too many capital object");
+		error_exit("too many capital object\n");
 	return (scene);
 }
 
@@ -54,6 +66,8 @@ int	main(int argc, char *argv[])
 	int			fd;
 	t_data		data;
 
+	if (is_macro_valid() == FALSE)
+		return (1);
 	fd = argument_validity(argc, argv[1]);
 	data.engine = engine_init();
 	data.scene = scene_init(fd, data.engine);

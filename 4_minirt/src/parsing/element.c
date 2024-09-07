@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   element.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:21:37 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/02 22:14:14 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/09/07 17:52:04 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ t_object	*is_valid_sp(char **split, t_mlx engine)
 	}
 	else if (split[4] == NULL || (split[4][0] == '\n' && split[5] == NULL))
 		sp = object_default(SP, sphere(center, positive_atof(split[2])), color);
-	else
-		error_exit("check_is_valid_sp\n");
+	if (split[4] && split[5] && split[6])
+		error_exit("SP : invalid\n");
 	sp->albedo = color;
 	return (sp);
 }
@@ -71,8 +71,8 @@ t_object	*is_valid_cy(char **split, t_mlx engine)
 	else if (split[6] == NULL || (split[6][0] == '\n' && split[7] == NULL))
 		cy = object_default(CY, cylinder(check_coordinate(split[1]), normalize, \
 			positive_atof(split[3]), positive_atof(split[4])), color);
-	else
-		error_exit("check_is_valid_sp\n");
+	if (split[6] && split[7] && split[8])
+		error_exit("CY : invalid\n");
 	cy->albedo = color;
 	return (cy);
 }
@@ -99,8 +99,8 @@ t_object	*is_valid_pl(char **split, t_mlx engine)
 	}
 	else if (split[4] == NULL || (split[4][0] == '\n' && split[5] == NULL))
 		pl = object_default(PL, plane(center, normalize), color);
-	else
-		error_exit("is_valid_pl\n");
+	if (split[4] && split[5] && split[6])
+		error_exit("PL : invalid\n");
 	pl->albedo = color;
 	return (pl);
 }
@@ -129,7 +129,7 @@ t_object	*is_valid_co(char **split, t_mlx engine)
 	else if (split[6] == NULL || (split[6][0] == '\n' && split[7] == NULL))
 		co = object_default(CO, cone(center, normalize, \
 			positive_atof(split[4]), height), check_color(split[5]));
-	else
-		error_exit("is_valid_co\n");
+	if (split[6] && split[7] && split[8])
+		error_exit("CO : invalid\n");
 	return (co);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   element_capital.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 23:53:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/08/25 00:03:34 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/09/07 17:11:27 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ t_object	*is_valid_a(char **split, t_scene *scene)
 	scene->ka = ft_atof(split[1]);
 	scene->ambient = vmult(check_color(split[2]), scene->ka / 255);
 	if (is_valid_ratio_range(scene->ka) == 0)
-		error_exit("not_valid_ratio : ka");
+		error_exit("A : ka is invalid\n");
 	if (split[3] != NULL || count != 0)
-		error_exit("is_valid_a\n");
+		error_exit("A : invalid\n");
 	count++;
 	return (0);
 }
@@ -47,7 +47,7 @@ t_object	*is_valid_c(char **split, t_scene *scene, t_mlx *engine)
 		ft_memset(&engine->rotate, 0, sizeof(t_vec3));
 	engine->fov = ft_atof(split[3]);
 	if (split[4] != NULL || count != 0)
-		error_exit("is_valild_c\n");
+		error_exit("C : invalid\n");
 	scene->camera = camera(scene, *engine);
 	count++;
 	return (0);
@@ -65,9 +65,9 @@ t_object	*is_valid_l(char **split, t_scene *scene)
 	ratio = ft_atof(split[2]);
 	color = check_color(split[3]);
 	if (is_valid_ratio_range(ratio) == 0)
-		error_exit("not_valid_ratio_range : light ratio");
+		error_exit("L : invalid light ratio\n");
 	if (split[4] != NULL || count != 0)
-		error_exit("is_valid_l\n");
+		error_exit("L : invalid\n");
 	light = object_default(LIGHT_POINT, \
 		light_point(point, color, ratio), color);
 	scene->light = light;

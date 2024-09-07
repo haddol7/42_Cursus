@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validity.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 21:08:04 by jungslee          #+#    #+#             */
-/*   Updated: 2024/09/02 21:59:50 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/09/07 17:13:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_object	*what_type(char **split, t_scene *scene, t_mlx *engine)
 	else if (!ft_strncmp(split[0], "co", len) && !ft_strncmp(split[0], "co", 2))
 		return (is_valid_co(split, *engine));
 	else
-		error_exit("what_type\n");
+		error_exit("Invalid type\n");
 	return (0);
 }
 
@@ -98,7 +98,7 @@ void	map_validity(int fd, t_scene *scene, int *capital_ob, t_mlx *engine)
 
 void	error_exit(char *str)
 {
-	write(STDERR_FILENO, "Error\n", 6);
+	write(STDERR_FILENO, ".RT file ", 10);
 	write(STDERR_FILENO, str, ft_strlen(str));
 	exit(EXIT_FAILURE);
 }

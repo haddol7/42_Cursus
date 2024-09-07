@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jungslee <jungslee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 00:06:22 by jungslee          #+#    #+#             */
-/*   Updated: 2024/08/25 00:07:23 by jungslee         ###   ########.fr       */
+/*   Updated: 2024/09/07 17:38:27 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,9 @@ t_object	*object_texture(t_object_type type, \
 							&new->texture.width, &new->texture.height);
 		if (new->texture.img.id == NULL)
 		{
+			write(STDERR_FILENO, "IMAGE ", 7);
 			write(STDERR_FILENO, texture, ft_strlen(texture));
-			write(STDERR_FILENO, " <- image file error\n", 22);
+			write(STDERR_FILENO, " invalid\n", 10);
 			new->is_checker = TRUE;
 		}
 		else
