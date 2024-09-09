@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 15:21:57 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/07 18:51:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/09 22:04:28 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,11 @@ static void	add_num(double *res, char *num, int i, t_num *info)
 
 	result = *res;
 	if (num[i] == '.')
+	{
+		if (info->dot_flag == 1)
+			error_exit("invalid value\n");
 		info->dot_flag = 1;
+	}
 	else if (info->dot_flag == 0)
 	{
 		result *= 10.0;
@@ -46,7 +50,7 @@ static void	add_num(double *res, char *num, int i, t_num *info)
 	{
 		result += (num[i] - '0') * pow(0.1, info->mult++);
 		if (info->mult > 10)
-			error_exit("add_num\n");
+			error_exit("ft_atof : too many points\n");
 	}
 	*res = result;
 }
