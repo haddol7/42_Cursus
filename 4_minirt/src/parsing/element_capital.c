@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 23:53:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/09/09 21:13:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/09 22:21:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_object	*is_valid_a(char **split, t_scene *scene)
 	static int	count = 0;
 
 	scene->ka = ft_atof(split[1]);
-	scene->ambient = vmult(check_color(split[2]), scene->ka / 255);
+	scene->ambient = vmult(check_color(split[2]), scene->ka);
 	if (is_valid_ratio_range(scene->ka) == 0)
 		error_exit("A : ka is invalid\n");
 	if (split[3] != NULL || count != 0)
