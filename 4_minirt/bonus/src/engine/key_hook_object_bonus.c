@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 23:36:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/09 21:36:29 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/09 21:39:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	object_rotation(int keycode, t_vec3 *normal)
 static t_object	*next_light_obj(t_data *data)
 {
 	t_object	*obj;
-	
+
 	obj = data->scene->selected_obj;
 	if (obj && obj->type == LIGHT)
 		return (obj->next);
