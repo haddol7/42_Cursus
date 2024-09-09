@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:37:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/07 18:46:42 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/09 21:01:02 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_scene	*scene_init(int fd, t_mlx *engine)
 	scene = (t_scene *)ft_malloc(sizeof(t_scene));
 	scene->canvas = canvas(WINDOW_W, WINDOW_H);
 	map_validity(fd, scene, &capital_ob, engine);
-	if (capital_ob != 3)
+	if (capital_ob < 3)
 		error_exit("the number of capital object is invalid\n");
 	return (scene);
 }

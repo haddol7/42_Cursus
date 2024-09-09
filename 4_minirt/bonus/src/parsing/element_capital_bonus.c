@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 23:53:14 by jungslee          #+#    #+#             */
-/*   Updated: 2024/09/07 18:51:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/09 21:03:31 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ t_object	*is_valid_c(char **split, t_scene *scene, t_mlx *engine)
 
 t_object	*is_valid_l(char **split, t_scene *scene)
 {
-	static int	count = 0;
 	t_point3	point;
 	t_color3	color;
 	double		ratio;
@@ -66,10 +65,13 @@ t_object	*is_valid_l(char **split, t_scene *scene)
 	color = check_color(split[3]);
 	if (is_valid_ratio_range(ratio) == 0)
 		error_exit("L : invalid light ratio\n");
-	if (split[4] != NULL || count != 0)
+	if (split[4] != NULL)
 		error_exit("L : invalid\n");
 	light = object_default(LIGHT_POINT, \
 		light_point(point, color, ratio), color);
-	scene->light = light;
+	if (scene->light != NULL)
+		oadd(&scene->light, light);
+	else
+		scene->light = light;
 	return (0);
 }
