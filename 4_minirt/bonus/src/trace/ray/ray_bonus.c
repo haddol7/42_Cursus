@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:37:00 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/09 20:22:48 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/09 22:14:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,5 @@ t_color3	ray_color(t_scene *scene, t_color3 color)
 	if (hit(scene->world, &scene->ray, &scene->rec))
 		return (vplus(phong_lighting(scene), color));
 	else
-		return (vec3(0.2, 0.2, 0.2));
+		return (vec3(0, 0, 0));
 }
