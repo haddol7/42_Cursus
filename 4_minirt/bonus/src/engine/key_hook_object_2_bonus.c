@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 04:08:59 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/07 18:51:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/10 02:54:56 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	handle_cylinder(int keycode, t_data *data)
 	cy = (t_cylinder *)data->scene->selected_obj->element;
 	object_translation(keycode, &cy->center, data);
 	object_rotation(keycode, &cy->normal);
+	cy->normal = vunit(cy->normal);
 }
 
 void	handle_plane(int keycode, t_data *data)
@@ -36,6 +37,7 @@ void	handle_plane(int keycode, t_data *data)
 	pl = (t_plane *)data->scene->selected_obj->element;
 	object_translation(keycode, &pl->center, data);
 	object_rotation(keycode, &pl->normal);
+	pl->normal = vunit(pl->normal);
 }
 
 void	handle_cone(int keycode, t_data *data)
@@ -45,6 +47,7 @@ void	handle_cone(int keycode, t_data *data)
 	co = (t_cone *)data->scene->selected_obj->element;
 	object_translation(keycode, &co->center, data);
 	object_rotation(keycode, &co->normalize);
+	co->normalize = vunit(co->normalize);
 }
 
 void	handle_light(int keycode, t_data *data)

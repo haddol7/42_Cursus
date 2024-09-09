@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:36:22 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/07 18:51:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/10 02:59:14 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	rotation(t_vec3 *v, t_vec3 axis, double theta)
 	ret.x = v->x * local[X].x + v->y * local[X].y + v->z * local[X].z;
 	ret.y = v->x * local[Y].x + v->y * local[Y].y + v->z * local[Y].z;
 	ret.z = v->x * local[Z].x + v->y * local[Z].y + v->z * local[Z].z;
-	*v = ret;
+	*v = vunit(ret);
 }
 
 t_camera	camera(t_scene *scene, t_mlx engine)
