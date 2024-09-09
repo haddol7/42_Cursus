@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/24 23:50:57 by jungslee          #+#    #+#             */
-/*   Updated: 2024/09/07 18:51:04 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/10 02:33:33 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ t_color3	check_color(char *color)
 	double	b;
 	char	**split;
 
+	if (color == NULL)
+		error_exit("imcomplete value\n");
 	split = ft_split(color, ',');
 	if (count_split_words(split) != 3)
 		error_exit("not complete rgb\n");
