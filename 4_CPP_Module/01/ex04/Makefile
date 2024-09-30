@@ -1,6 +1,6 @@
 NAME = ex04
 
-SRCS = main.cpp
+SRCS = main.cpp mySed.cpp
 OBJS = ${SRCS:.cpp=.o}
 
 CC = c++

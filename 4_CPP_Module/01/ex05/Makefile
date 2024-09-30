@@ -1,6 +1,6 @@
-NAME = megaphone
+NAME = ex05
 
-SRCS = megaphone.cpp
+SRCS = main.cpp Harl.cpp
 OBJS = ${SRCS:.cpp=.o}
 
 CC = c++

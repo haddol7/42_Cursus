@@ -1,34 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Harl.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/29 23:17:59 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/30 14:32:58 by daeha            ###   ########.fr       */
+/*   Created: 2024/09/30 14:38:56 by daeha             #+#    #+#             */
+/*   Updated: 2024/09/30 15:17:17 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mySed.hpp"
+#pragma once
 
-int main(int argc, char *argv[])
+#include <iostream>
+
+class Harl
 {
-	if (argc != 4)
-	{
-		std::cerr << "invalid arguments" << std::endl;
-		return (1);
-	}
-	try
-	{
-		mySed	file(argv[1]);
-		
-		file.replace(argv[2], argv[3]);
-	}
-	catch (const std::ios_base::failure& e)
-	{
-		std::cerr << "Error : " << e.what() << std::endl;
-		return (1);
-	}
-	return (0);
-}
+public:
+	Harl();
+	~Harl();
+	void complain(std::string level);
+	bool filter(const std::string& level);
+private:
+	void debug(void);
+	void info(void);
+	void warning(void);
+	void error(void);
+};
