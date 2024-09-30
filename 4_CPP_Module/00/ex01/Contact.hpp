@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 19:06:20 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/28 23:17:57 by daeha            ###   ########.fr       */
+/*   Updated: 2024/09/29 14:11:56 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,6 @@ private:
 	std::string mNickName;
 	std::string mPhoneNumber;
 	std::string mDarkestSecret;
+	void setStringIgnoreEOF(std::string &str) const;
+	void displayFormattedString(const std::string& str) const;
 };
