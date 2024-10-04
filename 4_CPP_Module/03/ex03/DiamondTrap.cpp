@@ -27,7 +27,9 @@ DiamondTrap::DiamondTrap(const std::string& name)
 }
 
 DiamondTrap::DiamondTrap(const DiamondTrap& copy)
-	: ClapTrap(copy.ClapTrap::mName, copy.mHitPoints, copy.mEnergyPoints, copy.mAttackDamage)
+	: ClapTrap(copy)
+	, FragTrap(copy)
+	, ScavTrap(copy)
 	, mName(copy.mName)
 {
 	std::cout << "DiamodTrap Constructor : " << mName << std::endl;

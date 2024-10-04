@@ -29,5 +29,5 @@ int main( void )
     ash.takeDamage( 10 );
     ash.beRepaired( 10 );
 
-    return EXIT_SUCCESS;
+    return 0;
 }
