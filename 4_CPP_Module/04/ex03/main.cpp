@@ -17,15 +17,8 @@
 #include "Ice.hpp"
 #include "Cure.hpp"
 
-void leaks(void)
-{
-	system("leaks ex03");
-}
-
 int main()
 {
-	atexit(leaks);
-	
 	IMateriaSource* src = new MateriaSource();
 	src->learnMateria(new Ice());
 	src->learnMateria(new Cure());

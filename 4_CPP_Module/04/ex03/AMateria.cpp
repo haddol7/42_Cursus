@@ -35,3 +35,8 @@ const std::string& AMateria::getType() const
 {
 	return (type);	
 }
+
+void AMateria::use(ICharacter& target)
+{
+	std::cout << target.getName() << ": It's Undefined Materia" << std::endl;
+}
