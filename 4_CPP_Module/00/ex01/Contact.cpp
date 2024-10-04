@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 19:03:42 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/29 14:47:11 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/05 01:19:49 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,22 @@ Contact::~Contact()
 {
 }
 
-void Contact::setStringIgnoreEOF(std::string &str) const
+void Contact::setStringIgnoreEOF(const std::string& msg, std::string &str) const
 {
-	getline(std::cin, str);
-	if (std::cin.eof() || std::cin.fail())
+	do
 	{
-		std::cin.clear();
-		std::clearerr(stdin);
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-	}
+		std::cout << msg << std::flush;
+		getline(std::cin, str);
+		if (std::cin.eof() || std::cin.fail())
+		{
+			std::cin.clear();
+			std::clearerr(stdin);
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			std::cout << std::endl;
+		}
+	} while (str.empty());
+	
+	
 }
 void Contact::displayFormattedString(const std::string& str) const
 {
@@ -44,16 +51,11 @@ void Contact::displayFormattedString(const std::string& str) const
 void Contact::setContactInfo(int index)
 {
 	mIndex = index;
-	std::cout << "First Name > ";
-	setStringIgnoreEOF(mFirstName);
-	std::cout << "Last Name > ";
-	setStringIgnoreEOF(mLastName);
-	std::cout << "Nickname > ";
-	setStringIgnoreEOF(mNickName);
-	std::cout << "Phone number > ";
-	setStringIgnoreEOF(mPhoneNumber);
-	std::cout << "Darkest secret > ";
-	setStringIgnoreEOF(mDarkestSecret);
+	setStringIgnoreEOF("First Name > ", mFirstName);
+	setStringIgnoreEOF("Last Name > ", mLastName);
+	setStringIgnoreEOF("Nickname > ", mNickName);
+	setStringIgnoreEOF("Phone number > ", mPhoneNumber);
+	setStringIgnoreEOF("Darkest secret > ", mDarkestSecret);
 };
 
 void Contact::displayContactInfo() const
@@ -66,3 +68,14 @@ void Contact::displayContactInfo() const
 	displayFormattedString(mNickName);
 	std::cout << std::endl;
 };
+
+void Contact::displayAllINFO() const
+{
+	std::cout << "============================" << std::endl;
+	std::cout << "First name : " << mFirstName << std::endl;
+	std::cout << "Last Name : " << mLastName << std::endl;
+	std::cout << "NickName : " << mNickName << std::endl;
+	std::cout << "Phone Number : " << mPhoneNumber << std::endl;
+	std::cout << "Darkest Secret : " << mDarkestSecret << std::endl;
+	std::cout << "============================" << std::endl;
+}

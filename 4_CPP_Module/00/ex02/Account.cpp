@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 15:12:08 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/29 16:25:22 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/05 01:44:33 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ void Account::makeDeposit(int deposit)
 	std::cout << "p_amount:" << _amount << ";";
 	std::cout << "deposit:" << deposit << ";";
 	_amount += deposit;
+	_totalAmount += deposit;
+	_totalNbDeposits++;
 	std::cout << "amount:" << _amount << ";";
 	std::cout << "nb_deposits:" << ++_nbDeposits << std::endl;
 }
@@ -111,8 +113,10 @@ bool Account::makeWithdrawal(int withdrawal)
 	}
 	std::cout << withdrawal << ";";
 	_amount -= withdrawal;
+	_totalAmount -= withdrawal;
+	_totalNbWithdrawals++;
 	std::cout << "amount:" << _amount << ";";
-	std::cout << "nb_deposits:" << ++_nbWithdrawals << std::endl;
+	std::cout << "nb_withdrawals:" << ++_nbWithdrawals << std::endl;
 	return (true);
 }
 
