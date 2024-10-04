@@ -41,11 +41,10 @@ Account::~Account()
 
 void	Account::_displayTimestamp()
 {
-	char		buffer[20];
-    std::time_t	now = std::time(NULL);
-	std::tm*	localTime = std::localtime(&now);
+	char	buffer[20];
+    time_t	ts;
 
-	std::strftime(buffer, sizeof(buffer), "%Y%m%d_%H%M%S", localTime);
+	strftime(buffer, sizeof(buffer), "%Y%m%d_%H%M%S", localtime(&ts));
 	std::cout << "[" << buffer << "] ";
 }
 
