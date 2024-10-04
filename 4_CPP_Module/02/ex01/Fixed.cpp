@@ -45,14 +45,6 @@ Fixed& Fixed::operator=(const Fixed &rhs)
 	return (*this);
 }
 
-Fixed& Fixed::operator=(const Fixed &rhs)
-{
-	std::cout << "Copy assignment operator called" << std::endl;
-	if (this != &rhs)
-		mValue = rhs.mValue;
-	return (*this);
-}
-
 Fixed::~Fixed()
 {
 	std::cout << "Destructor called" << std::endl;
