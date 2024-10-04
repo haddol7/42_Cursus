@@ -14,8 +14,11 @@
 
 mySed::mySed(const std::string& filename)
 {
-	fin.open(filename);
-	fout.open(filename + ".replace");
+	const char * cFileName = filename.c_str();
+	const char * cFileNameReplace = std::string(filename + ".replace").c_str();
+	
+	fin.open(cFileName);
+	fout.open(cFileNameReplace);
 	if (!fout.is_open() || !fin.is_open())
 		throw (std::ios_base::failure("file open failure"));
 }
