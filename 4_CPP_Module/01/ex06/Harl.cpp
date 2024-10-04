@@ -81,10 +81,13 @@ bool Harl::filter(const std::string& level)
 	{
 		case 0:
 			debug();
+			// FALLTHROUGH
 		case 1:
 			info();
+			// FALLTHROUGH
 		case 2:
 			warning();
+			// FALLTHROUGH
 		case 3:
 			error();
 	}
