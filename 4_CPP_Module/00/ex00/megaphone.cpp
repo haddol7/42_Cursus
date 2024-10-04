@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 		std::cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *";
 	for (int i = 1; i < argc; i++)
 	{
-		for (int ch = 0; ch < static_cast<int>(std::strlen(argv[i])); ch++)
+		for (int ch = 0; argv[i][ch] != '\0'; ch++)
 		{
 			std::cout << static_cast<char>(toupper(argv[i][ch]));
 		}

@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <cstdio>
+#include <limits>
 #include <iomanip>
 #include "Contact.hpp"
 

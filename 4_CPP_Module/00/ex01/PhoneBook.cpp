@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <cstdio>
+#include <limits>
 #include "PhoneBook.hpp"
 
 PhoneBook::PhoneBook() 
@@ -26,7 +28,7 @@ PhoneBook::~PhoneBook()
 //빈 문자열
 void PhoneBook::addContact()
 {
-	if (mIndex == INT_MAX)
+	if (mIndex == 2147483647)
 	{
 		mIndex = 7;
 	}
