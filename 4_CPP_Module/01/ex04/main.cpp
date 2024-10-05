@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 23:17:59 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/30 14:32:58 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 00:58:57 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int main(int argc, char *argv[])
 {
-	if (argc != 4)
+	if (argc != 4 || std::string(argv[2]).empty())
 	{
 		std::cerr << "invalid arguments" << std::endl;
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 13:31:25 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/30 14:36:26 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 00:55:34 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 mySed::mySed(const std::string& filename)
 {
+	std::string replaceString = filename + ".replace";
 	const char * cFileName = filename.c_str();
-	const char * cFileNameReplace = std::string(filename + ".replace").c_str();
+	const char * cFileNameReplace = replaceString.c_str();
 	
 	fin.open(cFileName);
 	fout.open(cFileNameReplace);

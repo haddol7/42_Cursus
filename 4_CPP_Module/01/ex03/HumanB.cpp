@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 22:49:35 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/29 23:14:29 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 00:44:12 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 HumanB::HumanB(std::string name)
 	: name(name)
+	, weapon(0)
 {
 }
 
@@ -33,6 +34,13 @@ void HumanB::setWeapon(Weapon& weapon)
 
 void HumanB::attack()
 {
-	std::cout << getName() << " attacks with their " << weapon->getType() << std::endl;
+	if (weapon != 0)
+	{
+		std::cout << getName() << " attacks with their " << weapon->getType() << std::endl;
+	}
+	else
+	{
+		std::cout << getName() << " doesn't have weapon" << std::endl;
+	}
 }
 

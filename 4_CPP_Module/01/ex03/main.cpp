@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 22:55:03 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/29 22:57:47 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 00:44:49 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,5 @@ int main()
 		club.setType("some other type of club");
 		jim.attack();
 	}
-
 	return 0;
 }
