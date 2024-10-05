@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:36:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/06 01:20:51 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 01:22:34 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ Fixed& Fixed::operator=(const Fixed &rhs)
 {
 	std::cout << "Copy assignment operator called" << std::endl;
 	if (this != &rhs)
+	{
 		mValue = rhs.mValue;
+	}
 	return (*this);
 }
 

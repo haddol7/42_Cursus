@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:36:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/06 01:20:58 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 01:27:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ Fixed::Fixed(const Fixed& copy)
 Fixed& Fixed::operator=(const Fixed &rhs)
 {
 	if (this != &rhs)
+	{
 		mValue = rhs.mValue;
+	}
 	return (*this);
 }
 
@@ -135,28 +137,36 @@ Fixed Fixed::operator--(int)
 Fixed& Fixed::min(Fixed &ref1, Fixed &ref2)
 {
 	if (ref1.mValue < ref2.mValue)
+	{
 		return (ref1);
+	}
 	return (ref2);
 }
 
 Fixed& Fixed::max(Fixed &ref1, Fixed &ref2)
 {
 	if (ref1.mValue > ref2.mValue)
+	{
 		return (ref1);
+	}
 	return (ref2);
 }
 
 const Fixed& Fixed::min(const Fixed &ref1, const Fixed &ref2)
 {
 	if (ref1.mValue < ref2.mValue)
+	{
 		return (ref1);
+	}
 	return (ref2);
 }
 
 const Fixed& Fixed::max(const Fixed &ref1, const Fixed &ref2)
 {
 	if (ref1.mValue > ref2.mValue)
+	{
 		return (ref1);
+	}
 	return (ref2);
 }
 
