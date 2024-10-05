@@ -6,12 +6,14 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:36:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/30 20:25:06 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 01:20:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cmath>
 #include "Fixed.hpp"
+
+const int Fixed::mBits = 8;
 
 Fixed::Fixed()
 	: mValue(0)

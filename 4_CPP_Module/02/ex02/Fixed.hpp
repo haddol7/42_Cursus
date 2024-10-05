@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:36:55 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/30 20:57:36 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 01:21:14 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ public:
 	int toInt(void) const;
 
 private:
-	static const int mBits = 8;
+	static const int mBits;
 	int	mValue;
 };
 

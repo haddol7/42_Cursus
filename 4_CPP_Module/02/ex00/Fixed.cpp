@@ -6,11 +6,13 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:36:52 by daeha             #+#    #+#             */
-/*   Updated: 2024/09/30 17:50:31 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 01:20:24 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Fixed.hpp"
+
+const int Fixed::mBits = 8;
 
 Fixed::Fixed()
 	: mValue(0)
@@ -28,7 +30,9 @@ Fixed& Fixed::operator=(const Fixed &rhs)
 {
 	std::cout << "Copy assignment operator called" << std::endl;
 	if (this != &rhs)
+	{
 		mValue = rhs.getRawBits();
+	}
 	return (*this);
 }
 
