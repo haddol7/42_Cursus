@@ -6,11 +6,12 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/28 19:03:42 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/05 01:19:49 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/05 23:49:51 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cstdio>
+#include <cctype>
 #include <limits>
 #include <iomanip>
 #include "Contact.hpp"
@@ -25,6 +26,7 @@ Contact::~Contact()
 
 void Contact::setStringIgnoreEOF(const std::string& msg, std::string &str) const
 {
+	bool	isWritable = false;
 	do
 	{
 		std::cout << msg << std::flush;
@@ -36,9 +38,22 @@ void Contact::setStringIgnoreEOF(const std::string& msg, std::string &str) const
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			std::cout << std::endl;
 		}
-	} while (str.empty());
-	
-	
+		else
+		{
+			for (std::size_t i = 0; i < str.length(); i++)
+			{
+				if (isprint(static_cast<unsigned char>(str[i])) &&
+					!isspace(static_cast<unsigned char>(str[i])))
+				{
+					isWritable = true;
+				}
+				if (str[i] == '\t')
+				{
+					str.replace(i, 1, " ");
+				}
+			}
+		}
+	} while (isWritable == false);
 }
 void Contact::displayFormattedString(const std::string& str) const
 {
