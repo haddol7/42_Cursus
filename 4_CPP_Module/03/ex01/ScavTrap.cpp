@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:42:41 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/02 19:29:13 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 02:02:49 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void ScavTrap::attack(const std::string& target)
 {
 	if (mHitPoints <= 0 || mEnergyPoints <= 0)
 	{
-		std::cout << mName << " is down ..." << std::endl;
 		return ;
 	}
 	std::cout << "ScavTrap " << mName << " attacks " << target << ", causing " << mAttackDamage << " points of damage!" << std::endl;
@@ -62,9 +61,7 @@ void ScavTrap::guardGate()
 {
 	if (mHitPoints <= 0 || mEnergyPoints <= 0)
 	{
-		std::cout << mName << " is down ..." << std::endl;
 		return ;
 	}
 	std::cout << "ScavTrap " << mName << " is on Guard mode" << std::endl;
-	mEnergyPoints--;
 }

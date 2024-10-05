@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 18:37:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/02 20:31:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 02:36:18 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,15 @@
 
 int main( void )
 {
-    DiamondTrap ash( "Ash" );
-    DiamondTrap ash2( ash );
-    DiamondTrap ash3(".");
+    DiamondTrap daeha("daeha");
 
-    ash.whoAmI();
-    ash2.whoAmI();
-    ash3 = ash;
-    ash3.whoAmI();
+	std::cout << "=============================" << std::endl;
+    daeha.whoAmI();
 
-    ash.attack( "the air" );
-    ash.takeDamage( 10 );
-    ash.beRepaired( 10 );
-
+    daeha.attack("CPP03");
+    daeha.takeDamage(10);
+    daeha.highFivesGuys();
+    daeha.guardGate();
+	std::cout << "=============================" << std::endl;
     return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 18:37:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/02 19:35:14 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 02:17:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 int main( void )
 {
-    ScavTrap ash( "Ash" );
-    ScavTrap ash2( ash );
+    ScavTrap daeha("daeha");
+    ScavTrap clone(daeha);
 
-    ash.attack( "the air" );
-    ash.takeDamage( 10 );
-    ash.beRepaired( 10 );
-    ash.guardGate();
+    daeha.attack("cpp 03");
+    daeha.beRepaired(10);
+    daeha.takeDamage(10);
+    daeha.guardGate();
 
     return (0);
 }

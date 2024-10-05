@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:42:41 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/02 18:43:38 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 01:57:06 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void ClapTrap::attack(const std::string& target)
 {
 	if (mHitPoints <= 0 || mEnergyPoints <= 0)
 	{
-		std::cout << mName << " is down ..." << std::endl;
 		return ;
 	}
 	std::cout << "ClapTrap " << mName << " attacks " << target << ", causing " << mAttackDamage << " points of damage!" << std::endl;
@@ -69,21 +68,18 @@ void ClapTrap::attack(const std::string& target)
 
 void ClapTrap::takeDamage(unsigned int amount)
 {
-	std::cout << "ClapTrap " << mName << " takes " << amount << " points of damage!" << std::endl;
-	if (mHitPoints <= amount)
+	if (mHitPoints <= 0 || mEnergyPoints <= 0)
 	{
-		std::cout << mName << " is down ..." << std::endl;
-		mHitPoints = 0;
+		return ;
 	}
-	else
-		mHitPoints -= amount;
+	std::cout << "ClapTrap " << mName << " takes " << amount << " points of damage!" << std::endl;
+	mHitPoints -= amount;
 }
 
 void ClapTrap::beRepaired(unsigned int amount)
 {
 	if (mHitPoints <= 0 || mEnergyPoints <= 0)
 	{
-		std::cout << mName << " is down ..." << std::endl;
 		return ;
 	}
 	std::cout << "ClapTrap " << mName << " repaires " << amount << " points of points by itself!" << std::endl;

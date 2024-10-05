@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 18:37:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/02 19:49:05 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 02:17:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 int main( void )
 {
-    FragTrap ash( "Ash" );
-    FragTrap ash2( ash );
+    FragTrap daeha("daeha");
 
-    ash.attack( "the air" );
-    ash.takeDamage( 10 );
-    ash.beRepaired( 10 );
-    ash.highFivesGuys();
+    daeha.attack("cpp 03");
+    daeha.takeDamage(10);
+    daeha.beRepaired(10);
+    daeha.highFivesGuys();
 
     return (0);
 }

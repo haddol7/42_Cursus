@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:42:41 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/02 19:48:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 02:06:36 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,7 @@ void FragTrap::highFivesGuys()
 {
 	if (mHitPoints <= 0 || mEnergyPoints <= 0)
 	{
-		std::cout << mName << " is down ..." << std::endl;
 		return ;
 	}
 	std::cout << "FragTrap " << mName << " suggests highfive!" << std::endl;
-	mEnergyPoints--;
 }

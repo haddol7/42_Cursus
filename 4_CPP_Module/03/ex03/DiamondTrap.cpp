@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 20:12:38 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/02 20:32:40 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/06 02:33:46 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,25 @@
 
 DiamondTrap::DiamondTrap()
 	: ClapTrap("defult_clap_name")
+	, FragTrap("default")
+	, ScavTrap("default")
 	, mName("default")
 {
+	FragTrap::mHitPoints = 100;
+    ScavTrap::mEnergyPoints = 50;
+    FragTrap::mAttackDamage = 30;
 	std::cout << "DiamodTrap Constructor : default" << std::endl;
 }
 
 DiamondTrap::DiamondTrap(const std::string& name)
 	: ClapTrap(name + "_clap_name")
+	, FragTrap(name)
+	, ScavTrap(name)
 	, mName(name)
 {
+	FragTrap::mHitPoints = 100;
+    ScavTrap::mEnergyPoints = 50;
+    FragTrap::mAttackDamage = 30;
 	std::cout << "DiamodTrap Constructor : " << mName << std::endl;
 }
 
@@ -55,5 +65,9 @@ DiamondTrap& DiamondTrap::operator=(const DiamondTrap& rhs)
 
 void DiamondTrap::whoAmI()
 {
+	if (mHitPoints <= 0 || mEnergyPoints <= 0)
+	{
+		return ;
+	}
 	std::cout << mName << " - " << ClapTrap::mName << std::endl;
 }
