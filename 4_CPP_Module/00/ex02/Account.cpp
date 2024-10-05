@@ -44,6 +44,7 @@ void	Account::_displayTimestamp()
 	char	buffer[20];
     time_t	ts;
 
+	ts = time(NULL);
 	strftime(buffer, sizeof(buffer), "%Y%m%d_%H%M%S", localtime(&ts));
 	std::cout << "[" << buffer << "] ";
 }
