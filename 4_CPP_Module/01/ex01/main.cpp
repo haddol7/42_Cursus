@@ -16,12 +16,9 @@
 int main(void)
 {
 	Zombie *daeha = zombieHorde(10, "daeha");
-	std::string	name;
 
 	for (int i = 0; i < 10; i++)
-	{	
-		name = std::to_string(i) + "-" + daeha[i].getName();
-		daeha[i].setName(name);
+	{
 		daeha[i].announce();
 	}
 	delete[] daeha;
