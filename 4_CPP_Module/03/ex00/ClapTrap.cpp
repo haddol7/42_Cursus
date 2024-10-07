@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:42:41 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/06 01:57:06 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/07 23:26:30 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ ClapTrap::ClapTrap()
 	, mHitPoints(10)
 	, mEnergyPoints(10)
 	, mAttackDamage(0)
+	, mMaxHitPoints(10)
 {
 	std::cout << "Constructor : default" << std::endl;
 }
@@ -26,6 +27,7 @@ ClapTrap::ClapTrap(const std::string& name)
 	, mHitPoints(10)
 	, mEnergyPoints(10)
 	, mAttackDamage(0)
+	, mMaxHitPoints(10)
 {
 	std::cout << "Constructor : " << name << std::endl;
 }
@@ -40,6 +42,7 @@ ClapTrap::ClapTrap(const ClapTrap& copy)
 	, mHitPoints(copy.mHitPoints)
 	, mEnergyPoints(copy.mEnergyPoints)
 	, mAttackDamage(copy.mAttackDamage)
+	, mMaxHitPoints(copy.mMaxHitPoints)
 {
 	std::cout << "Copy Constructor : " << mName << std::endl;
 }
@@ -83,5 +86,10 @@ void ClapTrap::beRepaired(unsigned int amount)
 		return ;
 	}
 	std::cout << "ClapTrap " << mName << " repaires " << amount << " points of points by itself!" << std::endl;
+	mHitPoints += amount;
 	mEnergyPoints--;
+	if (mHitPoints > mMaxHitPoints)
+	{
+		mHitPoints = mMaxHitPoints;
+	}
 }

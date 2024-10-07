@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:42:45 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/02 18:38:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/07 23:24:19 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,5 @@ private:
 	unsigned int	mHitPoints;
 	unsigned int	mEnergyPoints;
 	unsigned int	mAttackDamage;
+	unsigned int	mMaxHitPoints;
 };

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 18:37:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/02 18:38:22 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/07 23:29:08 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 int	main(void)
 {
-	ClapTrap a("A");
-	ClapTrap b("B");
+	ClapTrap daeha("daeha");
 
-	a.attack("B");
-	b.takeDamage(5);
-	b.beRepaired(3);
-	b.attack("A");
-	a.takeDamage(10);
-	a.beRepaired(10);
+	daeha.attack("CPP 03");
+	daeha.takeDamage(3); //7
+	daeha.beRepaired(10); //10
+	daeha.takeDamage(10); //0
+	daeha.takeDamage(10); //0
+	daeha.attack("Nothing"); //0
+	
 	return (0);
 }
