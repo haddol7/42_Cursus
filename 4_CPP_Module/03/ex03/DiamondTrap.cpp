@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 20:12:38 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/06 02:33:46 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/08 16:11:04 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,27 @@
 
 DiamondTrap::DiamondTrap()
 	: ClapTrap("defult_clap_name")
-	, FragTrap("default")
-	, ScavTrap("default")
+	, FragTrap("defult_clap_name")
+	, ScavTrap("defult_clap_name")
 	, mName("default")
 {
 	FragTrap::mHitPoints = 100;
-    ScavTrap::mEnergyPoints = 50;
-    FragTrap::mAttackDamage = 30;
+	ScavTrap::mEnergyPoints = 50;
+	FragTrap::mAttackDamage = 30;
+	FragTrap::mMaxHitPoints = 100;
 	std::cout << "DiamodTrap Constructor : default" << std::endl;
 }
 
 DiamondTrap::DiamondTrap(const std::string& name)
 	: ClapTrap(name + "_clap_name")
-	, FragTrap(name)
-	, ScavTrap(name)
+	, FragTrap(name + "_clap_name")
+	, ScavTrap(name + "_clap_name")
 	, mName(name)
 {
 	FragTrap::mHitPoints = 100;
-    ScavTrap::mEnergyPoints = 50;
-    FragTrap::mAttackDamage = 30;
+	ScavTrap::mEnergyPoints = 50;
+	FragTrap::mAttackDamage = 30;
+	FragTrap::mMaxHitPoints = 100;
 	std::cout << "DiamodTrap Constructor : " << mName << std::endl;
 }
 
@@ -42,6 +44,10 @@ DiamondTrap::DiamondTrap(const DiamondTrap& copy)
 	, ScavTrap(copy)
 	, mName(copy.mName)
 {
+	FragTrap::mHitPoints = copy.FragTrap::mHitPoints;
+	ScavTrap::mEnergyPoints = copy.ScavTrap::mEnergyPoints;
+	FragTrap::mAttackDamage = copy.FragTrap::mAttackDamage;
+	FragTrap::mMaxHitPoints = copy.FragTrap::mMaxHitPoints;
 	std::cout << "DiamodTrap Constructor : " << mName << std::endl;
 }
 
@@ -56,9 +62,10 @@ DiamondTrap& DiamondTrap::operator=(const DiamondTrap& rhs)
 	{
 		ClapTrap::mName = rhs.ClapTrap::mName;
 		mName = rhs.mName;
-		mHitPoints = rhs.mHitPoints;
-		mEnergyPoints = rhs.mEnergyPoints;
-		mAttackDamage = rhs.mAttackDamage;
+		FragTrap::mHitPoints = rhs.FragTrap::mHitPoints;
+		ScavTrap::mEnergyPoints = rhs.ScavTrap::mEnergyPoints;
+		FragTrap::mAttackDamage = rhs.FragTrap::mAttackDamage;
+		FragTrap::mMaxHitPoints = rhs.FragTrap::mMaxHitPoints;
 	}
 	return (*this);
 }

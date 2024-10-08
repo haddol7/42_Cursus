@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 18:37:46 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/06 02:36:18 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/08 16:18:02 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,28 @@ int main( void )
 {
     DiamondTrap daeha("daeha");
 
-	std::cout << "=============================" << std::endl;
-    daeha.whoAmI();
+	std::cout << "======================================================"<< std::endl;
+	daeha.whoAmI();
+	
+	daeha.attack("CPP03");
+	daeha.takeDamage(10);
+	daeha.highFivesGuys();
+	daeha.guardGate();
 
-    daeha.attack("CPP03");
-    daeha.takeDamage(10);
-    daeha.highFivesGuys();
-    daeha.guardGate();
-	std::cout << "=============================" << std::endl;
+	std::cout << "======================================================"<< std::endl;
+	DiamondTrap clone(daeha);
+	std::cout << "======================================================"<< std::endl;
+
+	clone.whoAmI();
+	
+	clone.attack("test");
+	clone.takeDamage(200);
+	clone.highFivesGuys();
+	
+	daeha = clone;
+	daeha.highFivesGuys();
+	daeha.guardGate();
+	std::cout << "======================================================"<< std::endl;
+
     return 0;
 }

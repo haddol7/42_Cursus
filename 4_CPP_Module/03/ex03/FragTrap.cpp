@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:42:41 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/06 02:06:36 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/08 15:53:15 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ FragTrap& FragTrap::operator=(const FragTrap& rhs)
 		mHitPoints = rhs.mHitPoints;
 		mEnergyPoints = rhs.mEnergyPoints;
 		mAttackDamage = rhs.mAttackDamage;
+		mMaxHitPoints = rhs.mMaxHitPoints;
 	}
 	return (*this);
 }
