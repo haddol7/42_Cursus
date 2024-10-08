@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:42:41 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/07 23:26:30 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/08 16:20:22 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ ClapTrap& ClapTrap::operator=(const ClapTrap& rhs)
 		mHitPoints = rhs.mHitPoints;
 		mEnergyPoints = rhs.mEnergyPoints;
 		mAttackDamage = rhs.mAttackDamage;
+		mMaxHitPoints = rhs.mMaxHitPoints;
 	}
 	return (*this);
 }
@@ -76,7 +77,14 @@ void ClapTrap::takeDamage(unsigned int amount)
 		return ;
 	}
 	std::cout << "ClapTrap " << mName << " takes " << amount << " points of damage!" << std::endl;
-	mHitPoints -= amount;
+	if (mHitPoints < amount)
+	{
+		mHitPoints = 0;
+	}
+	else
+	{
+		mHitPoints -= amount;
+	}
 }
 
 void ClapTrap::beRepaired(unsigned int amount)

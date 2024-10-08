@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:42:41 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/06 02:14:44 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/08 16:20:43 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ ClapTrap::ClapTrap()
 	, mHitPoints(10)
 	, mEnergyPoints(10)
 	, mAttackDamage(0)
+	, mMaxHitPoints(10)
 {
 	std::cout << "ClapTrap Constructor : default" << std::endl;
 }
@@ -26,14 +27,17 @@ ClapTrap::ClapTrap(const std::string& name)
 	, mHitPoints(10)
 	, mEnergyPoints(10)
 	, mAttackDamage(0)
+	, mMaxHitPoints(10)
 {
 	std::cout << "ClapTrap Constructor : " << name << std::endl;
 }
+
 ClapTrap::ClapTrap(const std::string& name, unsigned int hitPoints, unsigned int energyPoints, unsigned int attackDamage)
 	: mName(name)
 	, mHitPoints(hitPoints)
 	, mEnergyPoints(energyPoints)
 	, mAttackDamage(attackDamage)
+	, mMaxHitPoints(hitPoints)
 {
 	std::cout << "ClapTrap Constructor : " << name << std::endl;
 }
@@ -48,6 +52,7 @@ ClapTrap::ClapTrap(const ClapTrap& copy)
 	, mHitPoints(copy.mHitPoints)
 	, mEnergyPoints(copy.mEnergyPoints)
 	, mAttackDamage(copy.mAttackDamage)
+	, mMaxHitPoints(copy.mMaxHitPoints)
 {
 	std::cout << "ClapTrap Copy Constructor : " << mName << std::endl;
 }
@@ -60,6 +65,7 @@ ClapTrap& ClapTrap::operator=(const ClapTrap& rhs)
 		mHitPoints = rhs.mHitPoints;
 		mEnergyPoints = rhs.mEnergyPoints;
 		mAttackDamage = rhs.mAttackDamage;
+		mMaxHitPoints = rhs.mMaxHitPoints;
 	}
 	return (*this);
 }
@@ -81,7 +87,14 @@ void ClapTrap::takeDamage(unsigned int amount)
 		return ;
 	}
 	std::cout << "ClapTrap " << mName << " takes " << amount << " points of damage!" << std::endl;
-	mHitPoints -= amount;
+	if (mHitPoints < amount)
+	{
+		mHitPoints = 0;
+	}
+	else
+	{
+		mHitPoints -= amount;
+	}
 }
 
 void ClapTrap::beRepaired(unsigned int amount)
@@ -91,5 +104,10 @@ void ClapTrap::beRepaired(unsigned int amount)
 		return ;
 	}
 	std::cout << "ClapTrap " << mName << " repaires " << amount << " points of points by itself!" << std::endl;
+	mHitPoints += amount;
 	mEnergyPoints--;
+	if (mHitPoints > mMaxHitPoints)
+	{
+		mHitPoints = mMaxHitPoints;
+	}
 }
