@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:35:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/03 22:40:36 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 20:24:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ Brain::Brain(const Brain& copy)
 	}
 }
 
-Brain& Brain::operator=(const Brain& lhs)
+Brain& Brain::operator=(const Brain& rhs)
 {
-	if (this != &lhs)
+	if (this != &rhs)
 	{
 		for (int i = 0; i < 100; i++)
 		{
-			ideas[i] = lhs.ideas[i];
+			ideas[i] = rhs.ideas[i];
 		}
 	}
 	return (*this);

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 20:56:58 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/03 22:06:56 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 20:24:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 WrongAnimal::WrongAnimal()
 	: type("WrongAnimal")
 {
-	std::cout << "Constructor : WrongAnimal - " << getType() << std::endl;
+	std::cout << "Default Constructor : WrongAnimal" << std::endl;
 }
 
 WrongAnimal::WrongAnimal(const std::string& type)
 	: type(type)
 {
-	std::cout << "Constructor : WrongAnimal" << std::endl;
+	std::cout << "Constructor : WrongAnimal - " << getType() << std::endl;
 }
 
 WrongAnimal::WrongAnimal(const WrongAnimal& copy)
 	: type(copy.getType())
 {
-	std::cout << "Copy Constructor : WrongAnimal" << std::endl;
+	std::cout << "Copy Constructor : WrongAnimal - " << getType() << std::endl;
 }
 
 WrongAnimal::~WrongAnimal()
@@ -35,11 +35,11 @@ WrongAnimal::~WrongAnimal()
 	std::cout << "Destructor : WrongAnimal" << std::endl;
 }
 
-WrongAnimal& WrongAnimal::operator=(const WrongAnimal& lhs)
+WrongAnimal& WrongAnimal::operator=(const WrongAnimal& rhs)
 {
-	if (this != &lhs)
+	if (this != &rhs)
 	{
-		SetType(lhs.getType());
+		SetType(rhs.getType());
 	}
 	return (*this);
 }

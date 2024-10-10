@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 21:08:08 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/03 23:08:34 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 20:24:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 Cat::Cat()
 	: Animal("Cat")
 {
-	std::cout << "Constructor : Cat - " << getType() << std::endl;
+	std::cout << "Default Constructor : Cat" << std::endl;
 	mBrain = new Brain;
 }
 
@@ -23,23 +23,21 @@ Cat::~Cat()
 {
 	std::cout << "Destructor : Cat" << std::endl;
 	delete mBrain;
-	//std::cout << getType() << std::endl;
 }
 
 Cat::Cat(const Cat& copy)
 	: Animal(copy.getType())
 {
 	std::cout << "Copy Constructor : Cat " << getType() << std::endl;
-	mBrain = new Brain();
-	*mBrain = *copy.mBrain;
+	mBrain = new Brain(*copy.mBrain);
 }
 
-Cat& Cat::operator=(const Cat& lhs)
+Cat& Cat::operator=(const Cat& rhs)
 {
-	if (this != &lhs)
+	if (this != &rhs)
 	{
-		SetType(lhs.getType());
-		*mBrain = *lhs.mBrain;
+		SetType(rhs.getType());
+		*mBrain = *rhs.mBrain;
 	}
 	return (*this);
 }

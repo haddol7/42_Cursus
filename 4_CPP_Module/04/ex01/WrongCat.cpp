@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 21:08:08 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/03 22:15:07 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 20:24:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ WrongCat::WrongCat(const WrongCat& copy)
 	std::cout << "Copy Constructor : WrongCat " << getType() << std::endl;
 }
 
-WrongCat& WrongCat::operator=(const WrongCat& lhs)
+WrongCat& WrongCat::operator=(const WrongCat& rhs)
 {
-	if (this != &lhs)
+	if (this != &rhs)
 	{
-		SetType(lhs.getType());
+		SetType(rhs.getType());
 	}
 	return (*this);
 }
