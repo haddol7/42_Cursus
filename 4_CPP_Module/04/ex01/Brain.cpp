@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:35:15 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/10 20:24:42 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 22:01:26 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,23 @@ Brain& Brain::operator=(const Brain& rhs)
 Brain::~Brain()
 {
 	std::cout << "Destructor : Brain" << std::endl;
+}
+
+void Brain::setIdea(const int idx, const std::string& str)
+{
+	if (idx >= 0 && idx <= 99)
+	{
+		ideas[idx] = str;
+	}
+}
+
+const std::string& Brain::getIdea(const int idx) const
+{
+	static const std::string empty = "";
+	
+	if (idx >= 0 && idx <= 99)
+	{
+		return (ideas[idx]);
+	}
+	return (empty);
 }

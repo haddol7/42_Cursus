@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 21:08:08 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/03 23:21:02 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 22:11:29 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ Dog::Dog(const Dog& copy)
 	*mBrain = *copy.mBrain;
 }
 
-Dog& Dog::operator=(const Dog& lhs)
+Dog& Dog::operator=(const Dog& rhs)
 {
-	if (this != &lhs)
+	if (this != &rhs)
 	{
-		SetType(lhs.getType());
-		*mBrain = *lhs.mBrain;
+		SetType(rhs.getType());
+		*mBrain = *rhs.mBrain;
 	}
 	return (*this);
 }
@@ -47,4 +47,14 @@ Dog& Dog::operator=(const Dog& lhs)
 void Dog::makeSound() const
 {
 	std::cout << getType() << " - woof woof" << std::endl;
+}
+
+const std::string& Dog::getBrainIdea(const int idx) const
+{
+	return (mBrain->getIdea(idx));
+}
+
+void Dog::setBrainIdea(const int idx, const std::string& str)
+{
+	mBrain->setIdea(idx, str);
 }

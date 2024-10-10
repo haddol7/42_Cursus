@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 16:50:41 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/04 18:29:35 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 20:24:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ Ice::~Ice()
 {
 }
 
-Ice& Ice::operator=(const Ice& lhs)
+Ice& Ice::operator=(const Ice& rhs)
 {
-	if (this != &lhs)
+	if (this != &rhs)
 	{
-		type = lhs.getType();
+		type = rhs.getType();
 	}
 	return (*this);
 }

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:02:31 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/04 21:22:19 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 20:24:42 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,15 @@
 #include "ICharacter.hpp"
 #include "AMateria.hpp"
 
+#define NULLPTR (0)
+#define MAX_CAP (4)
 class Character : public ICharacter
 {
 public:
 	Character();
 	~Character();
 	Character(const Character& copy);
-	Character& operator=(const Character& lhs);
+	Character& operator=(const Character& rhs);
 
 	Character(const std::string& name);
 	const std::string& getName() const;
@@ -32,5 +34,6 @@ public:
 
 private:
 	AMateria*	mMaterias[4];
+	AMateria*	mFloor[4];
 	std::string	mName;
 };

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 21:08:08 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/10 20:24:42 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 21:42:40 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,14 @@ Cat& Cat::operator=(const Cat& rhs)
 void Cat::makeSound() const
 {
 	std::cout << getType() << " - meow meow" << std::endl;
+}
+
+const std::string& Cat::getBrainIdea(const int idx) const
+{
+	return (mBrain->getIdea(idx));
+}
+
+void Cat::setBrainIdea(const int idx, const std::string& str)
+{
+	mBrain->setIdea(idx, str);
 }

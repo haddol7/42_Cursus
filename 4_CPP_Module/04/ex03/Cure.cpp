@@ -26,11 +26,11 @@ Cure::~Cure()
 {
 }
 
-Cure& Cure::operator=(const Cure& lhs)
+Cure& Cure::operator=(const Cure& rhs)
 {
-	if (this != &lhs)
+	if (this != &rhs)
 	{
-		type = lhs.getType();
+		type = rhs.getType();
 	}
 	return (*this);
 }

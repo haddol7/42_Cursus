@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:01:19 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/04 21:32:52 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 22:39:33 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,11 @@ public:
 	MateriaSource();
 	~MateriaSource();
 	MateriaSource(const MateriaSource& copy);
-	MateriaSource& operator=(const MateriaSource& lhs);
+	MateriaSource& operator=(const MateriaSource& rhs);
 
 	void learnMateria(AMateria* m);
 	AMateria* createMateria(const std::string& type);
+
 private:
 	AMateria* mMaterias[4];
 };

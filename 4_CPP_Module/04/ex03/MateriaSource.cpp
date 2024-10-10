@@ -6,23 +6,24 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 18:01:23 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/04 21:53:39 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 22:38:18 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "MateriaSource.hpp"
+#include "Character.hpp" //MAX_CAP
 
 MateriaSource::MateriaSource()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < MAX_CAP; i++)
 	{
-		mMaterias[i] = NULL;
+		mMaterias[i] = NULLPTR;
 	}
 }
 
 MateriaSource::~MateriaSource()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < MAX_CAP; i++)
 	{
 		delete mMaterias[i];
 	}
@@ -30,20 +31,34 @@ MateriaSource::~MateriaSource()
 
 MateriaSource::MateriaSource(const MateriaSource& copy)
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < MAX_CAP; i++)
 	{
-		mMaterias[i] = copy.mMaterias[i]->clone();
+		if (copy.mMaterias[i] != NULLPTR)
+		{
+			mMaterias[i] = copy.mMaterias[i]->clone();
+		}
+		else
+		{
+			mMaterias[i] = NULLPTR;
+		}
 	}
 }
 
-MateriaSource& MateriaSource::operator=(const MateriaSource& lhs)
+MateriaSource& MateriaSource::operator=(const MateriaSource& rhs)
 {
-	if (this != &lhs)
+	if (this != &rhs)
 	{
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < MAX_CAP; i++)
 		{
 			delete mMaterias[i];
-			mMaterias[i] = lhs.mMaterias[i]->clone();		
+			if (rhs.mMaterias[i] != NULLPTR)
+			{
+				mMaterias[i] = rhs.mMaterias[i]->clone();		
+			}
+			else
+			{
+				mMaterias[i] = NULLPTR;
+			}
 		}
 	}
 	return (*this);
@@ -51,19 +66,20 @@ MateriaSource& MateriaSource::operator=(const MateriaSource& lhs)
 
 void MateriaSource::learnMateria(AMateria *m)
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < MAX_CAP; i++)
 	{
-		if (mMaterias[i] == NULL)
+		if (mMaterias[i] == NULLPTR)
 		{
 			mMaterias[i] = m;
 			return ;
 		}
 	}
+	delete m;
 }
 
 AMateria* MateriaSource::createMateria(std::string const & type)
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < MAX_CAP; i++)
 	{
 		if (mMaterias[i] && mMaterias[i]->getType() == type)
 		{

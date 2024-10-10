@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:16:32 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/04 17:20:29 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 22:22:27 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,15 @@ AMateria::AMateria(const std::string& type)
 
 AMateria::~AMateria()
 {
+}
+
+AMateria& AMateria::operator=(const AMateria& rhs)
+{
+	if (this != &rhs)
+	{
+		type = rhs.getType();
+	}
+	return (*this);
 }
 
 const std::string& AMateria::getType() const

@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 21:08:08 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/10 20:24:42 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 21:42:27 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,14 @@ Dog& Dog::operator=(const Dog& rhs)
 void Dog::makeSound() const
 {
 	std::cout << getType() << " - woof woof" << std::endl;
+}
+
+const std::string& Dog::getBrainIdea(const int idx) const
+{
+	return (mBrain->getIdea(idx));
+}
+
+void Dog::setBrainIdea(const int idx, const std::string& str)
+{
+	mBrain->setIdea(idx, str);
 }
