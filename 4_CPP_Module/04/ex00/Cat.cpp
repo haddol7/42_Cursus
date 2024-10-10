@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 21:08:08 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/03 22:06:27 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 21:14:49 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ Cat::Cat()
 Cat::~Cat()
 {
 	std::cout << "Destructor : Cat" << std::endl;
-	//std::cout << getType() << std::endl;
 }
 
 Cat::Cat(const Cat& copy)
@@ -30,11 +29,11 @@ Cat::Cat(const Cat& copy)
 	std::cout << "Copy Constructor : Cat " << getType() << std::endl;
 }
 
-Cat& Cat::operator=(const Cat& lhs)
+Cat& Cat::operator=(const Cat& rhs)
 {
-	if (this != &lhs)
+	if (this != &rhs)
 	{
-		SetType(lhs.getType());
+		SetType(rhs.getType());
 	}
 	return (*this);
 }
