@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:52:13 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/10 22:36:32 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 23:28:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ Character::~Character()
 	{
 		delete  mMaterias[i];
 	}
-	for (int i = 0; mFloor[i] != NULLPTR && i < MAX_CAP; i++)
+	for (int i = 0; i < MAX_CAP && mFloor[i] != NULLPTR; i++)
 	{
 		delete mFloor[i];
 	}
@@ -40,9 +40,8 @@ Character::~Character()
 Character::Character(const Character& copy)
 	: mName(copy.getName())
 {
-	for (int i = 0; mFloor[i] != NULLPTR && i < MAX_CAP; i++)
+	for (int i = 0; i < MAX_CAP; i++)
 	{
-		delete mFloor[i];
 		mFloor[i] = NULLPTR;
 	}
 	for (int i = 0; i < MAX_CAP; i++)
@@ -60,7 +59,7 @@ Character::Character(const Character& copy)
 
 Character& Character::operator=(const Character& rhs)
 {
-	for (int i = 0; mFloor[i] != NULLPTR && i < MAX_CAP; i++)
+	for (int i = 0; i < MAX_CAP && mFloor[i] != NULLPTR; i++)
 	{
 		delete mFloor[i];
 		mFloor[i] = NULLPTR;
@@ -108,7 +107,7 @@ void Character::equip(AMateria* m)
 		return ;
 	}
 	//쓰레기통에 모든 materia를 delete해준다.
-	for (int i = 0; mFloor[i] != NULLPTR && i < MAX_CAP; i++)
+	for (int i = 0; i < MAX_CAP && mFloor[i] != NULLPTR; i++)
 	{
 		delete mFloor[i];
 		mFloor[i] = NULLPTR;

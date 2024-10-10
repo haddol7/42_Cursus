@@ -6,7 +6,7 @@
 /*   By: daeha <daeha@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 17:01:42 by daeha             #+#    #+#             */
-/*   Updated: 2024/10/10 21:08:32 by daeha            ###   ########.fr       */
+/*   Updated: 2024/10/10 23:32:20 by daeha            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,14 @@ int main()
 // 	healer->equip(skill_tree->createMateria("ice"));
 
 // 	*healer = mage;
+// 	healer->unequip(0);
+// 	healer->unequip(1);
+// 	healer->unequip(2);
+// 	healer->equip(skill_tree->createMateria("cure"));
+// 	healer->equip(skill_tree->createMateria("cure"));
+// 	healer->equip(skill_tree->createMateria("cure"));
+// 	healer->equip(skill_tree->createMateria("ice"));
+// 	healer->equip(skill_tree->createMateria("ice"));
 // 	std::cout << "==========healer==========" << std::endl;
 // 	healer->use(0, mage);
 // 	healer->use(1, mage);
@@ -102,4 +110,5 @@ int main()
 	
 // 	delete healer;
 // 	delete skill_tree;
+// 	return (0);
 // }
