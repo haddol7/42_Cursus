@@ -1,6 +1,6 @@
 NAME = ex03
 
-SRCS = 
+SRCS = Form.cpp PresidentialPardonForm.cpp ShrubberyCreationForm.cpp Bureaucrat.cpp RobotomyRequestForm.cpp main.cpp Intern.cpp
 OBJS = ${SRCS:.cpp=.o}
 
 CC = c++
