@@ -10,25 +10,35 @@
 # remote repo에 다 잘 올라갔나요?
 # 과제 외의 파일들은 다 삭제했나요?
 
-# 인자가 없거나 잘못된 경우 메시지 출력
-if [ "$#" -ne 1 ] || { [ "$1" != "make" ] && [ "$1" != "clean" ]; }; then
-    echo "Usage: $0 make | clean"
-    exit 1
-fi
+GREEN="\033[0;32m"
+YELLOW="\033[0;33m"  
+RESET="\033[0m"      
 
 dirs=("ex00" "ex01" "ex02" "ex03" "ex04" "ex05" "ex06" "ex07" "ex08" "ex09")
 
-if [ "$1" == "make" ]; then
+if [ "$1" == "m" ] || [ "$1" == "make" ]; then
     command="make"
-else
+elif [ "$1" == "c" ] || [ "$1" == "clean" ]; then
     command="make fclean"
+elif [ "$1" == "e" ] || [ "$1" == "exec" ]; then
+    command="${dirs[@]}"
+else
+    echo -e "${YELLOW}Invalid argument. m, make | c, clean | e, exec${RESET}"
+    exit 1
 fi
 
 for dir in "${dirs[@]}"; do
     if [ -d "$dir" ]; then
-        echo "Entering directory: $dir"
+        echo -e "${GREEN}================== Entering directory: $dir ==================\n${RESET}"
         cd "$dir" || exit
-        $command
-        cd .. 
-    fi
+        if [ "$1" == "e" ] || [ "$1" == "exec" ]; then
+			./$dir
+        else
+            $command
+        fi
+        cd ..
+		echo -e ""
+	fi
 done
+
+echo -e "${GREEN}==================👻 DONE! 👻==================${RESET}"
