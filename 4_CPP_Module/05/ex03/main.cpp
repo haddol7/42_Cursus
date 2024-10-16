@@ -10,7 +10,7 @@ int main()
 	Form		*home;
 	Form		*robot;
 	Form		*presi;
-	Form		*invalidForm;
+	Form		*invalidForm = 0;
 	Bureaucrat	intern("Intern", 150);
 	Bureaucrat	junior("Junior", 130);
 	Bureaucrat	senior("Senior", 70);
@@ -28,7 +28,12 @@ int main()
 	{
 		std::cerr << e.what() << std::endl;
 	}
-	
+	//dummy code for compilation >:o
+	if (invalidForm != 0)
+	{
+		invalidForm->GetSign();
+	}	
+
 	std::cout << "==============FORM==============" << std::endl;
 	std::cout << *home << std::endl;
 	std::cout << *robot << std::endl;
