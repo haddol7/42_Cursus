@@ -10,10 +10,9 @@ int	main(int argc, char *argv[])
 		std::cerr << "Invalid arguments" << std::endl;
 		return (1);
 	}
-	
 	server = Server::GetServer();
 	server->InitServer(argv[1]);
-	server->ExecLoopServer();
+	server->ExecServerLoop();
 
 	return (0);
 }

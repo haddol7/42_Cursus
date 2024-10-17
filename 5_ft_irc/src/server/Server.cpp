@@ -11,6 +11,7 @@ Server* Server::mInstance = NULL;
 Server::Server()
 {
 	std::cout << "Server Init" << std::endl;
+	test_ClientFd.reserve(100);
 }
 
 Server* Server::GetServer()
@@ -28,7 +29,7 @@ void Server::InitServer(const char *port)
 	struct sockaddr_in	address;
 	struct epoll_event	event;
 	
-	mSocket = socket(PF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+	mSocket = socket(PF_INET, SOCK_STREAM, 0);
 	memset(&address, 0, sizeof(address));
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -43,77 +44,32 @@ void Server::InitServer(const char *port)
 	}
 	mEpfd = epoll_create(EPOLL_SIZE);
 	mEpollEvents = new struct epoll_event[EPOLL_SIZE];
-	event.events = EPOLLIN;
 	event.data.fd = mSocket;
+	event.events = EPOLLIN | EPOLLET;
 	epoll_ctl(mEpfd, EPOLL_CTL_ADD, mSocket, &event);
 }
 
-void Server::ExecLoopServer(void)
+void Server::ExecServerLoop(void)
 {
-	struct epoll_event	event;
-	struct sockaddr_in	client_address;
-	socklen_t			address_size;
-	int					event_count;
-	int					i_event;
-	int					client_sock;
-	int					str_len;
-
-
-	char buf[BUF_SIZE];
+	int		event_count;
+	int		i_event;
 
 	while (true)
-	{	
-		//TODO : -1 is blocking, 0 is non-blocking. choose until done!
+	{
 		event_count = epoll_wait(mEpfd, mEpollEvents, EPOLL_SIZE, -1);
 		if (event_count == -1)
-		{
+		{ 
 			//error here
 		}
 		for (i_event = 0; i_event < event_count; i_event++)
 		{
 			if (mEpollEvents[i_event].data.fd == mSocket)
 			{
-				address_size = sizeof(client_address);
-				client_sock = accept(mSocket, reinterpret_cast<sockaddr *>(& client_address), &address_size);
-				event.events = EPOLLIN | EPOLLET;
-				event.data.fd = client_sock;
-				epoll_ctl(mEpfd, EPOLL_CTL_ADD, client_sock, &event);
-				
-				char ip_str[INET_ADDRSTRLEN]; // IPv4 주소를 위한 문자열 공간
-    			inet_ntop(AF_INET, &(client_address.sin_addr), ip_str, sizeof(ip_str)); // IP 주소 변환
-
-    			std::cout << "Client connected:" << std::endl;
-    			std::cout << "IP Address: " << ip_str << std::endl;
-    			std::cout << "Port: " << ntohs(client_address.sin_port) << std::endl; // 포트 번호 변환
-				
-				//add client class
+				registerClient();
 			}
 			else
 			{
-				while (true)
-				{
-					str_len = read(mEpollEvents[i_event].data.fd, buf, BUF_SIZE);
-					if (str_len == 0)
-					{
-						epoll_ctl(mEpfd, EPOLL_CTL_DEL, mEpollEvents[i_event].data.fd, NULL);
-						close(mEpollEvents[i_event].data.fd);
-
-						std::cout << "closed client" << mEpollEvents[i_event].data.fd;
-						break;
-					}
-					else if (str_len == -1)
-					{
-						if (errno == EAGAIN)
-						{
-							break ;
-						}
-					}
-					else
-					{
-						write(mEpollEvents[i_event].data.fd, buf, str_len);
-						write(1, buf, str_len);
-					}
-				}
+				readBufferFromClientLoop(i_event);
 			}
 		}
 	}
@@ -121,4 +77,63 @@ void Server::ExecLoopServer(void)
 	close(mEpfd);
 }
 
+void Server::registerClient()
+{	
+	struct epoll_event	event;
+	socklen_t			address_size;
+	int					socket;
+	struct sockaddr_in	address;
 
+	address_size = sizeof(address);
+	socket = accept(mSocket, reinterpret_cast<sockaddr *>(& address), &address_size);
+
+	event.data.fd = socket;
+	event.events = EPOLLIN | EPOLLET;
+	epoll_ctl(mEpfd, EPOLL_CTL_ADD, socket, &event);
+
+	// ###### Add client class here! #########
+	
+	//test code
+	char ip_str[INET_ADDRSTRLEN];
+	inet_ntop(AF_INET, &(address.sin_addr), ip_str, sizeof(ip_str));
+	std::cout << "IP Address: " << ip_str << std::endl;
+	std::cout << "Port: " << ntohs(address.sin_port) << std::endl;
+	//test for broadcasting
+	test_ClientFd.push_back(socket);
+}
+
+void Server::readBufferFromClientLoop(const int i_event)
+{
+	static char	buf[BUF_SIZE];
+	int			len_buf;
+
+	memset(buf, 0, sizeof(buf));
+	while (true)
+	{
+		len_buf = read(mEpollEvents[i_event].data.fd, buf, BUF_SIZE);
+		if (len_buf == 0)
+		{
+			epoll_ctl(mEpfd, EPOLL_CTL_DEL, mEpollEvents[i_event].data.fd, NULL);
+			close(mEpollEvents[i_event].data.fd);
+			break;
+		}
+		else if (len_buf < 0)
+		{
+			if (errno == EAGAIN)
+			{
+				break ;
+			}
+		}
+		else
+		{
+			//test for broadcasting
+			for (std::vector<int>::iterator it = test_ClientFd.begin() ; it != test_ClientFd.end(); ++it)
+			{
+				if (*it != mEpollEvents[i_event].data.fd)
+				{
+					write(*it, buf, len_buf);
+				}
+			}
+		}
+	}	
+}
