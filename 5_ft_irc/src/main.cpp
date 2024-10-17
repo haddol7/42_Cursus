@@ -1,11 +1,19 @@
+#include <iostream>
 #include "ft_irc.hpp"
 
 int	main(int argc, char *argv[])
 {
-	Server project_init;
+	Server *server;
+
+	if (argc != 2)
+	{
+		std::cerr << "Invalid arguments" << std::endl;
+		return (1);
+	}
 	
-	argc = 42;
-	(void) argv;
+	server = Server::GetServer();
+	server->InitServer(argv[1]);
+	server->ExecLoopServer();
 
 	return (0);
 }
