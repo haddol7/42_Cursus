@@ -4,7 +4,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
-#include "Message.hpp"
+#include "message.hpp"
 
 class Client
 {
