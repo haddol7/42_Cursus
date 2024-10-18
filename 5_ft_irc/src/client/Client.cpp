@@ -53,19 +53,9 @@ void				Client::SetUserName(const std::string &_userName)
 	mUserName = _userName;
 }
 
-void				Client::SetFd(unsigned int _fd)
-{
-	mFd = _fd;
-}
-
 void				Client::SetHostName(const std::string &_hostName)
 {
 	mHostName = _hostName;
-}
-
-void				Client::SetIpAddress(in_addr_t _ipAddress)
-{
-	mIpAddress = _ipAddress;
 }
 
 void	Client::AddBuffer(const std::string buff)
