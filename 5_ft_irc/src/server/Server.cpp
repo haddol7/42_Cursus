@@ -27,13 +27,13 @@ Server* Server::GetServer()
 void Server::InitServer(const char *port)
 {
 	struct sockaddr_in	address;
-	struct epoll_event	event;
 	
 	mSocket = socket(PF_INET, SOCK_STREAM, 0);
 	memset(&address, 0, sizeof(address));
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = htonl(INADDR_ANY);
 	address.sin_port = htons(atoi(port));
+
 	if (bind(mSocket, reinterpret_cast<sockaddr *>(& address), sizeof(address)) == -1)
 	{
 		//error here
@@ -42,17 +42,18 @@ void Server::InitServer(const char *port)
 	{
 		//error here
 	}
+
 	mEpfd = epoll_create(EPOLL_SIZE);
 	mEpollEvents = new struct epoll_event[EPOLL_SIZE];
-	event.data.fd = mSocket;
-	event.events = EPOLLIN | EPOLLET;
-	epoll_ctl(mEpfd, EPOLL_CTL_ADD, mSocket, &event);
+	controlClientEvent(mSocket, EPOLL_CTL_ADD, EPOLLIN);
 }
 
 void Server::ExecServerLoop(void)
 {
-	int		event_count;
-	int		i_event;
+	int	event_count;
+	int	i_event;
+	int	client_fd;
+	int epoll_mode;
 
 	while (true)
 	{
@@ -63,13 +64,19 @@ void Server::ExecServerLoop(void)
 		}
 		for (i_event = 0; i_event < event_count; i_event++)
 		{
-			if (mEpollEvents[i_event].data.fd == mSocket)
+			client_fd = mEpollEvents[i_event].data.fd;
+			epoll_mode = mEpollEvents[i_event].events;
+			if (client_fd == mSocket)
 			{
 				registerClient();
 			}
-			else
+			else if (epoll_mode & EPOLLIN)
 			{
-				readBufferFromClientLoop(i_event);
+				readBufferFromClient(client_fd);
+			}
+			else if (epoll_mode & EPOLLOUT)
+			{
+				writeBuffertoClient(client_fd);
 			}
 		}
 	}
@@ -88,7 +95,7 @@ void Server::registerClient()
 	socket = accept(mSocket, reinterpret_cast<sockaddr *>(& address), &address_size);
 
 	event.data.fd = socket;
-	event.events = EPOLLIN | EPOLLET;
+	event.events = EPOLLIN;
 	epoll_ctl(mEpfd, EPOLL_CTL_ADD, socket, &event);
 
 	// ###### Add client class here! #########
@@ -102,38 +109,60 @@ void Server::registerClient()
 	test_ClientFd.push_back(socket);
 }
 
-void Server::readBufferFromClientLoop(const int i_event)
+void Server::readBufferFromClient(const int client_fd)
 {
-	static char	buf[BUF_SIZE];
 	int			len_buf;
 
-	memset(buf, 0, sizeof(buf));
-	while (true)
+	memset(mBuffer, 0, sizeof(mBuffer));
+	len_buf = read(client_fd, mBuffer, BUF_SIZE);
+	if (len_buf == -1)
 	{
-		len_buf = read(mEpollEvents[i_event].data.fd, buf, BUF_SIZE);
-		if (len_buf == 0)
+		std::cerr << "readBufferFromClient : read error" << std::endl;
+		epoll_ctl(mEpfd, EPOLL_CTL_DEL, client_fd, NULL);
+		close(client_fd);
+	}
+	else if (len_buf == 0)
+	{
+		std::cerr << "client closed" << std::endl;
+		epoll_ctl(mEpfd, EPOLL_CTL_DEL, client_fd, NULL);
+		close(client_fd);
+	}
+	else
+	{
+		controlClientEvent(client_fd, EPOLL_CTL_MOD, EPOLLOUT);
+		//test for broadcasting
+		for (std::vector<int>::iterator it = test_ClientFd.begin() ; it != test_ClientFd.end(); ++it)
 		{
-			epoll_ctl(mEpfd, EPOLL_CTL_DEL, mEpollEvents[i_event].data.fd, NULL);
-			close(mEpollEvents[i_event].data.fd);
-			break;
-		}
-		else if (len_buf < 0)
-		{
-			if (errno == EAGAIN)
+			if (*it != client_fd)
 			{
-				break ;
+				write(*it, mBuffer, len_buf);
 			}
 		}
-		else
-		{
-			//test for broadcasting
-			for (std::vector<int>::iterator it = test_ClientFd.begin() ; it != test_ClientFd.end(); ++it)
-			{
-				if (*it != mEpollEvents[i_event].data.fd)
-				{
-					write(*it, buf, len_buf);
-				}
-			}
-		}
-	}	
+	}
+}
+
+void Server::writeBuffertoClient(const int client_fd)
+{
+	int	len_buf;
+
+	len_buf = write(client_fd, mBuffer, strlen(mBuffer));
+	if (len_buf == -1)
+	{
+		std::cerr << "writeBuffertoClient : write" << std::endl; 
+		epoll_ctl(mEpfd, EPOLL_CTL_DEL, client_fd, NULL);
+	}
+	else
+	{
+		controlClientEvent(client_fd, EPOLL_CTL_MOD, EPOLLIN);
+	}
+	memset(mBuffer, 0, sizeof(mBuffer));
+}
+
+void Server::controlClientEvent(const int client_fd, const int epoll_mode, const int mode)
+{
+	struct epoll_event	ev;
+
+	ev.events = mode;
+	ev.data.fd = client_fd;
+	epoll_ctl(mEpfd, epoll_mode, client_fd, &ev);
 }
