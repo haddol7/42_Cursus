@@ -8,9 +8,10 @@ OBJ_DIR := obj/
 #============== 소스 파일 ==============#
 SRC_SERVER	=	$(SRC_DIR)server/Server.cpp
 
-#SRC_CLIENT =	$(SRC_DIR)client/Client.cpp
+SRC_CLIENT =	$(SRC_DIR)client/Client.cpp
 
 SRCS =			$(SRC_SERVER) \
+				$(SRC_CLIENT) \
 				$(SRC_DIR)main.cpp \
 
 OBJS = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRCS))
