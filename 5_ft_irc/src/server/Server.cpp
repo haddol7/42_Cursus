@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cerrno>
 #include <cstdio>
 #include <unistd.h>
 #include <string.h>
@@ -11,7 +10,7 @@ Server* Server::mInstance = NULL;
 Server::Server()
 {
 	std::cout << "Server Init" << std::endl;
-	test_ClientFd.reserve(100);
+	mSendList.reserve(100);
 }
 
 Server* Server::GetServer()
@@ -23,7 +22,6 @@ Server* Server::GetServer()
 	return (mInstance);
 }
 
-//Init Server : make server listen to client socket and create epoll instance
 void Server::InitServer(const char *port)
 {
 	struct sockaddr_in	address;
@@ -33,7 +31,6 @@ void Server::InitServer(const char *port)
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = htonl(INADDR_ANY);
 	address.sin_port = htons(atoi(port));
-
 	if (bind(mSocket, reinterpret_cast<sockaddr *>(& address), sizeof(address)) == -1)
 	{
 		//error here
@@ -42,7 +39,6 @@ void Server::InitServer(const char *port)
 	{
 		//error here
 	}
-
 	mEpfd = epoll_create(EPOLL_SIZE);
 	mEpollEvents = new struct epoll_event[EPOLL_SIZE];
 	controlClientEvent(mSocket, EPOLL_CTL_ADD, EPOLLIN);
@@ -72,11 +68,11 @@ void Server::ExecServerLoop(void)
 			}
 			else if (epoll_mode & EPOLLIN)
 			{
-				readBufferFromClient(client_fd);
+				receiveFromClient(client_fd);
 			}
 			else if (epoll_mode & EPOLLOUT)
 			{
-				writeBuffertoClient(client_fd);
+				sendToClient(client_fd);
 			}
 		}
 	}
@@ -86,83 +82,94 @@ void Server::ExecServerLoop(void)
 
 void Server::registerClient()
 {	
-	struct epoll_event	event;
 	socklen_t			address_size;
 	int					socket;
 	struct sockaddr_in	address;
 
 	address_size = sizeof(address);
 	socket = accept(mSocket, reinterpret_cast<sockaddr *>(& address), &address_size);
+	controlClientEvent(socket, EPOLL_CTL_ADD, EPOLLIN);
+	mClientMap.insert(std::make_pair(socket, Client(socket, address)));
 
-	event.data.fd = socket;
-	event.events = EPOLLIN;
-	epoll_ctl(mEpfd, EPOLL_CTL_ADD, socket, &event);
-
-	// ###### Add client class here! #########
-	
-	//test code
-	char ip_str[INET_ADDRSTRLEN];
-	inet_ntop(AF_INET, &(address.sin_addr), ip_str, sizeof(ip_str));
-	std::cout << "IP Address: " << ip_str << std::endl;
-	std::cout << "Port: " << ntohs(address.sin_port) << std::endl;
-	//test for broadcasting
-	test_ClientFd.push_back(socket);
+	//debug
+	{
+		std::cout << socket << " | " << ntohs(address.sin_port) << " connected."<< std::endl;
+	}
 }
 
-void Server::readBufferFromClient(const int client_fd)
+void Server::receiveFromClient(const int client_fd)
 {
-	int			len_buf;
+	int	len_buf;
 
 	memset(mBuffer, 0, sizeof(mBuffer));
 	len_buf = read(client_fd, mBuffer, BUF_SIZE);
 	if (len_buf == -1)
 	{
-		std::cerr << "readBufferFromClient : read error" << std::endl;
-		epoll_ctl(mEpfd, EPOLL_CTL_DEL, client_fd, NULL);
-		close(client_fd);
+		unregisterClientSocket(client_fd, " <-- receiveFromClient : read error");
 	}
 	else if (len_buf == 0)
 	{
-		std::cerr << "client closed" << std::endl;
-		epoll_ctl(mEpfd, EPOLL_CTL_DEL, client_fd, NULL);
-		close(client_fd);
+		unregisterClientSocket(client_fd, " closed.");
 	}
 	else
 	{
 		controlClientEvent(client_fd, EPOLL_CTL_MOD, EPOLLOUT);
-		//test for broadcasting
-		for (std::vector<int>::iterator it = test_ClientFd.begin() ; it != test_ClientFd.end(); ++it)
-		{
-			if (*it != client_fd)
-			{
-				write(*it, mBuffer, len_buf);
-			}
-		}
 	}
 }
 
-void Server::writeBuffertoClient(const int client_fd)
+//TODO	Implimention client list for send
+//		현재는 본인을 제외한 모든 클라이언트에 메시지를 전달하지만,
+//		나중에 모드를 구현할 때 어떤 클라이언트에 전송할 지에 대한
+//		컨테이너가 필요할 것 같습니다.
+void Server::sendToClient(const int client_fd)
 {
 	int	len_buf;
+	int	it_fd;
 
-	len_buf = write(client_fd, mBuffer, strlen(mBuffer));
-	if (len_buf == -1)
-	{
-		std::cerr << "writeBuffertoClient : write" << std::endl; 
-		epoll_ctl(mEpfd, EPOLL_CTL_DEL, client_fd, NULL);
-	}
-	else
-	{
-		controlClientEvent(client_fd, EPOLL_CTL_MOD, EPOLLIN);
+	//test code for broadcasting
+	for (std::map<const int, Client>::iterator it = mClientMap.begin(); it != mClientMap.end(); ++it)
+	{	
+		it_fd = it->second.GetFd();
+		if (it_fd == client_fd)
+		{
+			controlClientEvent(it_fd, EPOLL_CTL_MOD, EPOLLIN);
+			continue;
+		}
+		//debug
+		{
+			char	fd[1];
+
+			fd[0] = '0' + client_fd;
+			write(it_fd, "Debug <", 8);
+			write(it_fd, fd, 1);
+			write(it_fd, "> ", 3);
+		}
+		len_buf = write(it_fd, mBuffer, strlen(mBuffer));
+		if (len_buf == -1)
+		{
+			unregisterClientSocket(it_fd, "sendToClient : write"); 
+		}
+		else
+		{
+			controlClientEvent(it_fd, EPOLL_CTL_MOD, EPOLLIN);
+		}
 	}
 	memset(mBuffer, 0, sizeof(mBuffer));
 }
 
-void Server::controlClientEvent(const int client_fd, const int epoll_mode, const int mode)
+void Server::controlClientEvent(const int client_fd, const int epoll_mode, const int event_mode)
 {
-	struct epoll_event	ev;
+	struct epoll_event	event;
 
-	ev.events = mode;
-	ev.data.fd = client_fd;
-	epoll_ctl(mEpfd, epoll_mode, client_fd, &ev);
+	event.events = event_mode;
+	event.data.fd = client_fd;
+	epoll_ctl(mEpfd, epoll_mode, client_fd, &event);
+}
+
+void Server::unregisterClientSocket(const int client_fd, const std::string& msg)
+{
+	std::cerr << client_fd << msg << std::endl;
+	epoll_ctl(mEpfd, EPOLL_CTL_DEL, client_fd, NULL);
+	mClientMap.erase(client_fd);
+	close(client_fd);
 }
