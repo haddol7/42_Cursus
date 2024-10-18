@@ -14,5 +14,6 @@ int	main(int argc, char *argv[])
 	server->InitServer(argv[1]);
 	server->ExecServerLoop();
 
+	delete server;
 	return (0);
 }
