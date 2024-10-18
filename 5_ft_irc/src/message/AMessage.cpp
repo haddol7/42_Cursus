@@ -1,5 +1,5 @@
-#include "AMessage.hpp"
-#include "MessageHeaders.hpp"
+#include "message/AMessage.hpp"
+#include "message.hpp"
 
 std::string	FindCommand(std::string msg) // to indicate command of a message
 {
