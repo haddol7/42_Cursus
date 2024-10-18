@@ -1,6 +1,6 @@
 NAME := ft_irc
 CC := c++
-CFLAGS := -Werror -Wall -Wextra -std=c++98 -Iinc/
+CFLAGS := -Werror -Wall -Wextra -std=c++98 -Iinc/ -Iinc/message/
 
 SRC_DIR := src/
 OBJ_DIR := obj/
@@ -8,11 +8,22 @@ OBJ_DIR := obj/
 #============== 소스 파일 ==============#
 SRC_SERVER	=	$(SRC_DIR)server/Server.cpp
 
-SRC_CLIENT =	$(SRC_DIR)client/Client.cpp
+SRC_CLIENT	=	$(SRC_DIR)client/Client.cpp
+
+SRC_MESSAGE =	$(SRC_DIR)message/AMessage.cpp \
+				$(SRC_DIR)message/CommandTemplate.cpp \
+				$(SRC_DIR)message/CommandTemplate.cpp \
+				$(SRC_DIR)message/nick.cpp \
+				$(SRC_DIR)message/NoCommend.cpp \
+				$(SRC_DIR)message/User.cpp
+
+SRC_CHANNEL = 	$(SRC_DIR)channel/Channel.cpp
 
 SRCS =			$(SRC_SERVER) \
 				$(SRC_CLIENT) \
-				$(SRC_DIR)main.cpp \
+				$(SRC_MESSAGE) \
+				$(SRC_CHANNEL) \
+				$(SRC_DIR)main.cpp
 
 OBJS = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRCS))
 DEPS = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.d, $(SRCS))
