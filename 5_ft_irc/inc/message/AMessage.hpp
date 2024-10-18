@@ -7,7 +7,7 @@ class AMessage
 	public:
 		static AMessage*	GetMessageObject(const std::string nick, const std::string msg);
 		const std::string&	GetOriginNick() const;
-		const std::string&	GetCommand()const;
+		const std::string&	GetCommand() const;
 		virtual void		ExecuteCommand() const = 0;
 		virtual ~AMessage();
 
