@@ -4,6 +4,8 @@
 Channel::Channel(const std::string &tag, const Client &channelCreater) \
 	: mTag(tag) \
 {
+	mOperators.reserve(10);
+	mUsers.reserve(50);
 	AddOperator(channelCreater);
 	AddUser(channelCreater);
 }
