@@ -9,10 +9,10 @@ class AMessage
 		const std::string&	GetOriginNick() const;
 		const std::string&	GetCommand()const;
 		virtual void		ExecuteCommand() const = 0;
+		virtual ~AMessage();
 
 	protected:
 		AMessage(const std::string nick, const std::string command, const std::string msg);
-		virtual ~AMessage();
 
 	private:
 		AMessage();

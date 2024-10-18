@@ -1,7 +1,7 @@
 #include "AMessage.hpp"
 #include "MessageHeaders.hpp"
 
-std::string&	FindCommand(std::string msg)
+std::string&	FindCommand(std::string msg) // to indicate command of a message
 {
 	std::string::size_type	pos;
 	std::string::size_type	end;
@@ -20,9 +20,9 @@ std::string&	FindCommand(std::string msg)
 
 AMessage*	AMessage::GetMessageObject(const std::string nick, const std::string msg)
 {
-	const char* commandList[] = {"NICK", "USER"};
+	const char* commandList[] = {"NICK", "USER"}; // set accepting commands
 
-	std::string cmd = FindCommand(msg);
+	std::string cmd = FindCommand(msg); // to indicate command of a message
 	int	index = 0;
 	for (; commandList[index]; ++index)
 	{
