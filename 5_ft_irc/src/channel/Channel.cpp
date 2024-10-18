@@ -4,30 +4,69 @@
 Channel::Channel(const std::string &tag, const Client &channelCreater) \
 	: mTag(tag) \
 {
-	mOperators.push_back(channelCreater.GetFd());
-	mUsers.push_back(&channelCreater);
+	AddOperator(channelCreater);
+	AddUser(channelCreater);
 }
 
 Channel::~Channel(){}
 
-// public member function(remove one in channel)
-void	Channel::removeOne(const Client &target)
+/* public member function */
+// remove one in channel
+void	Channel::RemoveOne(const Client &target)
 {
-	std::vector<unsigned int>::iterator		cursorOperators = \
-		std::find(mOperators.begin(), mOperators.end(), target.GetFd());
-	std::vector<const Client *>::iterator	cursorUsers		= \
-		std::find(mUsers.begin(), mUsers.end(), &target);
+	DemoteOperator(target);
 	
-	if (cursorOperators == mOperators.end())
+	std::vector<const Client *>::iterator	targetLocation = \
+		getUserIter(target);
+
+	if (targetLocation == mUsers.end())
 		return ;
 	else
-		mOperators.erase(cursorOperators);
-	
-	if (cursorUsers == mUsers.end())
+		mUsers.erase(targetLocation);
+}
+
+// demote operator to user
+void	Channel::DemoteOperator(const Client &target)
+{
+	std::vector<unsigned int>::iterator	targetLocation = \
+		getOperatorIter(target);
+
+	if (targetLocation == mOperators.end())
 		return ;
 	else
-		mUsers.erase(cursorUsers);
+		mOperators.erase(targetLocation);
+}
+
+// add user in channel
+void	Channel::AddUser(const Client &user)
+{	
+	if (getUserIter(user) == mUsers.end())
+		return ;
+	
+	mUsers.push_back(&user);
+}
+
+// add operator in channel
+void	Channel::AddOperator(const Client &oper)
+{
+	if (getOperatorIter(oper) == mOperators.end())
+		return ;
+	
+	mOperators.push_back(oper.GetFd());
 }
 
 // must not be called with default variable(instance need creater info)
 Channel::Channel(){}
+
+/* private member function */
+// get operator location in vector
+std::vector<unsigned int>::iterator		Channel::getOperatorIter(const Client &target)
+{
+	return (std::find(mOperators.begin(), mOperators.end(), target.GetFd()));
+}
+
+// get user location in vector
+std::vector<const Client *>::iterator	Channel::getUserIter(const Client &target)
+{
+	return (std::find(mUsers.begin(), mUsers.begin(), &target));
+}
