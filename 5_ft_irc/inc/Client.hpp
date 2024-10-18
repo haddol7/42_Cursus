@@ -29,9 +29,9 @@ private:
 	Client();
 
 	// private member variable
-	std::string		mNickName;
-	std::string		mUserName;
-	unsigned int	mFd;
-	std::string		mHostName;
-	in_addr_t		mIpAddress;
+	const unsigned int	mFd;
+	const in_addr_t		mIpAddress;
+	std::string			mHostName;
+	std::string			mNickName;
+	std::string			mUserName;
 };
