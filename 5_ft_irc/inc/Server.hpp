@@ -4,6 +4,8 @@
 #include <fcntl.h>
 #include <sys/epoll.h>
 #include <vector>
+#include <map>
+#include "Client.hpp"
 
 //TODO : 매크로 따로 옮기고 사이즈 설정 해야 함! 
 # define LISTEN_SIZE (5)
@@ -19,21 +21,21 @@ public:
 	void ExecServerLoop(void);
 
 private:
-	static Server* mInstance;
-	struct epoll_event *mEpollEvents;
+	static	Server* mInstance;
+	struct	epoll_event *mEpollEvents;
 	char	mBuffer[BUF_SIZE];
-	int	mEpfd;
-	int mSocket;
+	int		mEpfd;
+	int		mSocket;
 	
+	std::map<const int, Client> mClientMap;
+	std::vector<const int> mSendList;
 	//server name
 	//password
-	//map<nick <client>>
 	//map<tag, <channel>>
 	Server();
 	void registerClient();
-	void readBufferFromClient(const int i_event);
-	void writeBuffertoClient(const int i_event);
-	void controlClientEvent(const int client_fd, const int epoll_mode, const int mode);
-
-	std::vector<int> test_ClientFd;
+	void receiveFromClient(const int client_fd);
+	void sendToClient(const int client_fd);
+	void controlClientEvent(const int client_fd, const int epoll_mode, const int event_mode);
+	void unregisterClientSocket(const int client_fd, const std::string& msg);
 };
