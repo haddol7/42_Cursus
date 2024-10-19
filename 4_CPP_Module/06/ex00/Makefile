@@ -1,6 +1,6 @@
-NAME = ex00
+NAME = convert
 
-SRCS = 
+SRCS = main.cpp ScalarConverter.cpp
 OBJS = ${SRCS:.cpp=.o}
 
 CC = c++
