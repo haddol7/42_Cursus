@@ -37,10 +37,18 @@ int main(void)
 		delete str;
 
 		str2[9] = "9 : CPP Module 07 ex02";
+		Array<std::string> str3(str2);
 		for (int i = 0; i < str2.size(); i++)
 		{
 			std::cout << str2[i] << std::endl;
+			std::cout << str3[i] << std::endl;
 		}
+	}
+	std::cout << std::endl;
+	{
+		const Array<int> ary(10);
+
+		std::cout << ary[0] << std::endl; 
 	}
 	return (0);
 }

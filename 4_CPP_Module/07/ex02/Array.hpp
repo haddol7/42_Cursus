@@ -15,6 +15,7 @@ public:
 	
 	int	size() const;
 	T&	operator[](int n);
+	const T& operator[](int n) const;
 
 private:
 	T	*mArray;
@@ -76,6 +77,16 @@ int Array<T>::size() const
 
 template <typename T>
 T& Array<T>::operator[](int n)
+{
+	if (n >= mSize || n < 0)
+	{
+		throw (std::out_of_range("out of range"));
+	}
+	return (mArray[n]);
+}
+
+template <typename T>
+const T& Array<T>::operator[](int n) const
 {
 	if (n >= mSize || n < 0)
 	{
