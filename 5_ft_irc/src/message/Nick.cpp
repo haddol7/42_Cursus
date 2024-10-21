@@ -1,7 +1,7 @@
 #include "Nick.hpp"
 
-Nick::Nick(const std::string nick, const std::string msg) :
-AMessage(nick, "Nick", msg)
+Nick::Nick(Client* origin, const std::string msg) :
+AMessage(origin, "Nick", msg)
 {
 	//some work depending on command type
 }

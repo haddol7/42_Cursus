@@ -5,7 +5,7 @@
 class NoCommand : public AMessage
 {
 	public:
-		NoCommand(const std::string nick, const std::string msg);
+		NoCommand(Client* origin, const std::string msg);
 		virtual void	ExecuteCommand() const;
 		virtual	~NoCommand();
 

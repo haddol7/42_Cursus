@@ -5,7 +5,7 @@
 class Nick : public AMessage
 {
 	public:
-		Nick(const std::string nick, const std::string msg);
+		Nick(Client* origin, const std::string msg);
 		virtual void	ExecuteCommand() const;
 		virtual	~Nick();
 

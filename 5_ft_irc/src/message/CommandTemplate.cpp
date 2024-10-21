@@ -6,8 +6,8 @@ Repace all occurance of 'CommandTemplate' to command name.
 And implement its execution fuction.
 */
 
-CommandTemplate::CommandTemplate(const std::string nick, const std::string msg) :
-AMessage(nick, "CommandTemplate", msg)
+CommandTemplate::CommandTemplate(Client* origin, const std::string msg) :
+AMessage(origin, "CommandTemplate", msg)
 {
 	//some work depending on command type
 }
