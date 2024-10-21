@@ -5,6 +5,7 @@
 #include <sys/epoll.h>
 #include <vector>
 #include <map>
+#include <cerrno>
 #include "Client.hpp"
 
 //TODO : 매크로 따로 옮기고 사이즈 설정 해야 함! 
@@ -34,7 +35,7 @@ private:
 	//map<tag, <channel>>
 	Server();
 	void registerClient();
-	void receiveFromClient(const int client_fd);
+	int	 receiveFromClient(const int client_fd);
 	void sendToClient(const int client_fd);
 	void controlClientEvent(const int client_fd, const int epoll_mode, const int event_mode);
 	void unregisterClientSocket(const int client_fd, const std::string& msg);

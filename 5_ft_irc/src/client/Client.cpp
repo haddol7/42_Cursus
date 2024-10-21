@@ -41,21 +41,31 @@ in_addr_t			Client::GetIpAddress() const
 	return (mIpAddress);
 }
 
+bool				Client::GetPasswordConfirmation() const
+{
+	return (mPasswordConfirmation);
+}
+
 // public member function(setter)
 
-void				Client::SetNickName(const std::string &_nickName)
+void				Client::SetNickName(const std::string &nickName)
 {
-	mNickName = _nickName;
+	mNickName = nickName;
 }
 
-void				Client::SetUserName(const std::string &_userName)
+void				Client::SetUserName(const std::string &userName)
 {
-	mUserName = _userName;
+	mUserName = userName;
 }
 
-void				Client::SetHostName(const std::string &_hostName)
+void				Client::SetHostName(const std::string &hostName)
 {
-	mHostName = _hostName;
+	mHostName = hostName;
+}
+
+void				Client::SetPasswordConfirmation(const bool passwordConfirmation)
+{
+	mPasswordConfirmation = passwordConfirmation;
 }
 
 void	Client::AddBuffer(const std::string buff)

@@ -19,12 +19,12 @@ public:
 	unsigned int		GetFd() const;
 	const std::string&	GetHostName() const;
 	in_addr_t			GetIpAddress() const;
+	bool				GetPasswordConfirmation() const;
 	// setter
 	void				SetNickName(const std::string &nickName);
 	void				SetUserName(const std::string &userName);
-	void				SetFd(unsigned int fd);
 	void				SetHostName(const std::string &hostName);
-	void				SetIpAddress(in_addr_t ipAddress);
+	void				SetPasswordConfirmation(const bool passwordConfirmation);
 	//MessageBuffer
 	void				AddBuffer(const std::string buff);
 
@@ -41,5 +41,6 @@ private:
 	std::string			mHostName;
 	std::string			mNickName;
 	std::string			mUserName;
+	bool				mPasswordConfirmation;
 	std::string			mbuffer;
 };
