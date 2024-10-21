@@ -1,7 +1,7 @@
 #include "NoCommand.hpp"
 
-NoCommand::NoCommand(const std::string nick, const std::string msg) :
-AMessage(nick, "NoCommand", msg)
+NoCommand::NoCommand(Client* origin, const std::string msg) :
+AMessage(origin, "NoCommand", msg)
 {
 	//some work depending on command type
 }

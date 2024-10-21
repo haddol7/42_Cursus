@@ -2,23 +2,24 @@
 
 #include <string>
 
+#include "Client.hpp"
+
 class AMessage
 {
 	public:
-		static AMessage*	GetMessageObject(const std::string nick, const std::string msg);
-		const std::string&	GetOriginNick() const;
+		static AMessage*	GetMessageObject(Client* origin, const std::string msg);
 		const std::string&	GetCommand() const;
 		virtual void		ExecuteCommand() const = 0;
 		virtual ~AMessage();
 
 	protected:
-		AMessage(const std::string nick, const std::string command, const std::string msg);
+		AMessage(Client* origin, const std::string command, const std::string msg);
 
 	private:
 		AMessage();
 
 	protected:
-		std::string	mOriginNick;
+		Client*		mOrigin;
 		std::string	mCommand;
 		std::string	mBuff;
 };

@@ -7,18 +7,23 @@ std::string	FindCommand(std::string msg) // to indicate command of a message
 	std::string::size_type	end;
 
 	if (msg[0] == ':')
-		pos = msg.find(' ') + 1;
+	{
+		pos = msg.find(' ');
+		if (pos != std::string::npos)
+			++pos;
+	}
 	else
 		pos = 0;
 	end = msg.find(' ', pos);
 
 	std::string	cmd;
-	cmd.append(msg, pos, end - pos);
+	if (pos != std::string::npos && end != std::string::npos)
+		cmd.append(msg, pos, end - pos);
 
 	return cmd;
 }
 
-AMessage*	AMessage::GetMessageObject(const std::string nick, const std::string msg)
+AMessage*	AMessage::GetMessageObject(Client* origin, const std::string msg)
 {
 	const char* commandList[] = {"NICK", "USER"}; // set accepting commands
 
@@ -26,7 +31,7 @@ AMessage*	AMessage::GetMessageObject(const std::string nick, const std::string m
 	int	index = 0;
 	for (; commandList[index]; ++index)
 	{
-		if (msg == commandList[index])
+		if (cmd == commandList[index])
 			break ;
 	}
 
@@ -34,20 +39,15 @@ AMessage*	AMessage::GetMessageObject(const std::string nick, const std::string m
 	switch (index)
 	{
 		case 0:
-			message = new Nick(nick, msg);
+			message = new Nick(origin, msg);
 			break ;
 		case 1:
-			message = new User(nick, msg);
+			message = new User(origin, msg);
 			break ;
 		default:
-			message = new NoCommand(nick, msg);
+			message = new NoCommand(origin, msg);
 	}
 	return message;
-}
-
-const std::string&	AMessage::GetOriginNick() const
-{
-	return mOriginNick;
 }
 
 const std::string&	AMessage::GetCommand() const
@@ -55,8 +55,8 @@ const std::string&	AMessage::GetCommand() const
 	return mCommand;
 }
 
-AMessage::AMessage(const std::string nick, const std::string command, const std::string msg) :
-mOriginNick(nick),
+AMessage::AMessage(Client* origin, const std::string command, const std::string msg) :
+mOrigin(origin),
 mCommand(command),
 mBuff(msg)
 {
