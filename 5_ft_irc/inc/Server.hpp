@@ -28,7 +28,7 @@ private:
 	int		mSocket;
 	
 	std::map<const int, Client> mClientMap;
-	std::vector<const int> mSendList;
+	std::vector<int> mSendList;
 	//server name
 	//password
 	//map<tag, <channel>>
