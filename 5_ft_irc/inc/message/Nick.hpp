@@ -11,4 +11,16 @@ class Nick : public AMessage
 
 	private:
 		Nick();
+
+		//Nickname validation check
+		bool	isNickInvalid() const;
+		bool	isNickDuplicated() const;
+
+		//Error reply
+		void	errorNoNick() const;
+		void	errorErroneusNick() const;
+		void	errorNickInUse() const;
+
+	private:
+		std::string	mNick;
 };
