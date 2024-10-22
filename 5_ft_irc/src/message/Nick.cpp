@@ -20,8 +20,7 @@ AMessage(origin, "Nick", msg)
 }
 
 void	Nick::ExecuteCommand()
-{	
-	std::cerr << "adasd >> " << mNick << std::endl;
+{
 	if (mNick.length() == 0)
 		ReplyToOrigin(ERR_NONICKNAMEGIVEN);
 	else if (isNickInvalid())
