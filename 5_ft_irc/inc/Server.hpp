@@ -13,25 +13,25 @@
 # define EPOLL_SIZE (5)
 # define BUF_SIZE (600)
 
-//싱글톤 패턴
 class Server
 {
 public:
-	static Server* GetServer();
-	void InitServer(const char* port);
-	void ExecServerLoop(void);
+	static	Server* GetServer();
+	void	InitServer(const char* port);
+	void	ExecServerLoop(void);
+	Client*	ReturnClientOrNull(const int fd);
+	Client*	ReturnClientOrNull(const std::string& nick);
 
 private:
-	static	Server* mInstance;
-	struct	epoll_event *mEpollEvents;
-	char	mBuffer[BUF_SIZE];
-	int		mEpfd;
-	int		mSocket;
-	
+	static		Server* mInstance;
+	struct		epoll_event *mEpollEvents;
+	std::string	mName;
+	std::string	mPassword;
+	char		mBuffer[BUF_SIZE];
+	int			mEpfd;
+	int			mSocket;
 	std::map<const int, Client> mClientMap;
-	std::vector<int> mSendList;
-	//server name
-	//password
+
 	//map<tag, <channel>>
 	Server();
 	void registerClient();
