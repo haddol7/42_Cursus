@@ -75,12 +75,13 @@ void				Client::SetPasswordConfirmation(const bool passwordConfirmation)
 	mPasswordConfirmation = passwordConfirmation;
 }
 
-void	Client::AddBuffer(const std::string buff)
+void	Client::AddBuffer(const std::string& buff)
 {
 	mbuffer = mbuffer + buff;
 
 	AMessage*	message;
 
+	std::cerr << "AddBuffer" << std::endl;
 	while (checkCommand())
 	{
 		message = makeCommand();
@@ -111,6 +112,7 @@ AMessage*	Client::makeCommand()
 	if (length >= 512)
 	{
 		mbuffer.copy(buff, 512, 0);
+		mbuffer.erase(0, 512);
 		buff[510] = '\r';
 		buff[511] = '\n';
 		buff[512] = '\0';
@@ -122,6 +124,6 @@ AMessage*	Client::makeCommand()
 		mbuffer.erase(0, pos + 2);
 		buff[pos + 2] = '\0';
 	}
-	message = AMessage::GetMessageObject(mNickName, buff);
+	message = AMessage::GetMessageObject(this, buff);
 	return message;
 }
