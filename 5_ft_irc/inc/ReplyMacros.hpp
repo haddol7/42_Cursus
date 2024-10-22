@@ -13,3 +13,8 @@
 #define ERR_NEEDMOREPARAMS(COMMAND) (std::string("461") + " " + COMMAND + " :Not enough parameters")
 #define ERR_ALREDYREGISTRED (std::string("462") + " :Unauthorized command (already registered)")
 #define ERR_RESTRICTED (std::string("484") + " :Your connection is restricted!")
+
+#define ERR_NORECIPIENT(COMMAND)	(std::string("411 ") + ":No recipient given " + COMMAND)
+#define ERR_NOSUCHNICK(NICK)		(std::string("401 ") + NICK + " :No such nick/channel")
+#define ERR_NOTEXTTOSEN				(std::string("412 ") + ":No text to send")
+#define ERR_CANNOTSENDTOCHAN(CHAN)	(std::string("404 ") + CHAN + " :Cannot send to channel")
