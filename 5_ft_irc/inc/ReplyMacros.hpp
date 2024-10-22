@@ -18,4 +18,5 @@
 #define ERR_UNAVAILRESOURCE(NAME, TYPE) (std::string("437") + " " + NAME + " :" + TYPE + " is temporarily unavailable\r\n") //can be used for both nick and channel
 #define ERR_NEEDMOREPARAMS(COMMAND) (std::string("461") + " " + COMMAND + " :Not enough parameters\r\n")
 #define ERR_ALREDYREGISTRED (std::string("462") + " :Unauthorized command (already registered)\r\n")
+#define ERR_BADCHANNELKEY(CHANNEL) (std::string("475") + " " + (CHANNEL) + " :Cannot join channel (+k)")
 #define ERR_RESTRICTED (std::string("484") + " :Your connection is restricted!\r\n")
