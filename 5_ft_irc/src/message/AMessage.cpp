@@ -18,8 +18,11 @@ std::string	FindCommand(std::string msg) // to indicate command of a message
 		pos = 0;
 	end = msg.find(' ', pos);
 
+	if (end == std::string::npos)
+		end = msg.find("\r\n");
+
 	std::string	cmd;
-	if (pos != std::string::npos && end != std::string::npos)
+	if (pos != std::string::npos)
 		cmd.append(msg, pos, end - pos);
 
 	return cmd;
