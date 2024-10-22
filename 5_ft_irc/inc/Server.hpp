@@ -31,6 +31,8 @@ public:
 	Client*							ReturnClientOrNull(const int fd);
 	Client*							ReturnClientOrNull(const std::string& nick);
 
+	std::map<const std::string, Channel>	&GetChannelList();
+
 private:
 	static Server					*mInstance;
 	struct epoll_event				*mEpollEvents;
@@ -41,9 +43,8 @@ private:
 	int								mEpfd;
 	int								mSocket;
 	std::map<const int, Client>		mClientMap;
+	std::map<const std::string, Channel> mChannelMap;
 
-	//map<tag, <channel>>
-//	void	sendToClient(const int client_fd);
 	Server();
 	void	registerClient();
 	void	receiveFromClientLoop(const int client_fd);

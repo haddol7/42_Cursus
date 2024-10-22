@@ -19,11 +19,11 @@ AMessage(origin, "Nick", msg)
 void	Nick::ExecuteCommand()
 {
 	if (mNick.length() == 0)
-		errorNoNick();
+		ReplyToOrigin(ERR_NONICKNAMEGIVEN);
 	else if (isNickInvalid())
-		errorErroneusNick();
+		ReplyToOrigin(ERR_ERRONEUSNICKNAME(mNick));
 	else if (isNickDuplicated())
-		errorNickInUse();
+		ReplyToOrigin(ERR_NICKNAMEINUSE(mNick));
 	else
 		mOrigin->SetNickName(mNick);
 }
@@ -63,37 +63,4 @@ bool	Nick::isNickDuplicated() const
 	if (server)
 		return 1;
 	return 0;
-}
-
-void	Nick::errorNoNick() const
-{
-	std::string	reply;
-	Server	*server;
-
-	server = Server::GetServer();
-
-	reply = server->GetPrefix() + " " + ERR_NONICKNAMEGIVEN;
-	server->SendMessage(*mOrigin, reply);
-}
-
-void	Nick::errorErroneusNick() const
-{
-	std::string	reply;
-	Server	*server;
-
-	server = Server::GetServer();
-
-	reply = server->GetPrefix() + " " + ERR_ERRONEUSNICKNAME(mNick);
-	server->SendMessage(*mOrigin, reply);
-}
-
-void	Nick::errorNickInUse() const
-{
-	std::string	reply;
-	Server	*server;
-
-	server = Server::GetServer();
-
-	reply = server->GetPrefix() + " " + ERR_NICKNAMEINUSE(mNick);
-	server->SendMessage(*mOrigin, reply);
 }
