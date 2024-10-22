@@ -12,8 +12,15 @@ Privmsg::~Privmsg()
 }
 
 void Privmsg::ExecuteCommand()
-{
+{	
+	std::cerr << mBuff << std::endl;
 	ParseBuffer();
+	
+	std::cerr << "========PRIVMSG DEBUG========" << std::endl;
+	std::cerr << "Target <" << mTarget << ">" << std::endl;
+	std::cerr << "Msg <" << mMessage << ">" << std::endl;
+	std::cerr << "=============================" << std::endl;
+
 	if (mTarget[0] == ':')
 	{	
 		ReplyToOrigin(ERR_NORECIPIENT(mOrigin->GetNickName()));
@@ -40,7 +47,7 @@ void Privmsg::ParseBuffer()
 	std::string	msg_only_param;
 
 	delim = mBuff.find(" ");
-	msg_only_param = mBuff.substr(delim, mBuff.length());
+	msg_only_param = mBuff.substr(delim + 1, mBuff.length());
 	delim = msg_only_param.find(" :");
 	if (delim == std::string::npos)
 	{
@@ -69,7 +76,8 @@ void Privmsg::SendMessageClient()
 
 	if (target == NULL)
 	{
-		ReplyToOrigin(ERR_NOSUCHNICK(mOrigin->GetNickName()));
+		ReplyToOrigin(ERR_NOSUCHNICK(mTarget));
+		return ;
 	}
 	SendPrivMessage(target);
 }
