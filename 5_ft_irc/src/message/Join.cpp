@@ -45,7 +45,7 @@ void	Join::ExecuteCommand()
 			catch(const std::exception &e)
 			{
 				std::cerr << e.what() << std::endl;
-				send(mOrigin->GetFd(), e.what(), std::strlen(e.what()), MSG_DONTWAIT);
+				Server::GetServer()->SendMessage(*mOrigin, e.what());
 			}
 		}
 	}
