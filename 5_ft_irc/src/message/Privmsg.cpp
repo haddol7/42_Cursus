@@ -1,3 +1,4 @@
+#include "ReplyMacros.hpp"
 #include "Privmsg.hpp"
 #include "Server.hpp"
 
@@ -14,12 +15,14 @@ void Privmsg::ExecuteCommand()
 {
 	ParseBuffer();
 	if (mTarget.front() == ':')
-	{
-		//ERR_NORECIPIENT
+	{	
+		ReplyToOrigin(ERR_NORECIPIENT(mOrigin->GetNickName()));
+		return ;
 	}
 	else if (mMessage.empty() == true)
 	{
-		//ERR_NOTEXTTOSEN
+		ReplyToOrigin(ERR_NOTEXTTOSEN);
+		return ;
 	}
 	if (mTarget.front() == '#')
 	{
@@ -66,7 +69,7 @@ void Privmsg::SendMessageClient()
 
 	if (target == NULL)
 	{
-		//ERR_NOSUCHNICK
+		ReplyToOrigin(ERR_NOSUCHNICK(mOrigin->GetNickName()));
 	}
 	SendPrivMessage(target);
 }
@@ -76,15 +79,5 @@ void Privmsg::SendPrivMessage(Client* target)
 	std::string	result;
 
 	result = GetPrefix() + mBuff;
-	if (send(target->GetFd(), result.c_str(), result.size(), MSG_DONTWAIT) == -1)
-	{
-		//error
-	}
+	Server::GetServer()->SendMessage(*target, result);
 }
-
-//"PRIVMSG daeha :hello world"
-//token[0] = PRIVMSG (전제조건, 항상 들어옴)
-//token[1] = "daeha"
-//token[2] = ":hello world"
-
-// :root_!root@127.0.0.1 PRIVMSG #test :hi
