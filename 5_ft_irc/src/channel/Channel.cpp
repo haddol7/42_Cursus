@@ -57,6 +57,21 @@ void	Channel::AddOperator(const Client &oper)
 	mOperators.push_back(oper.GetFd());
 }
 
+// broadcast message to channel
+// TODO : primsg의 파라미터로 채널이 왔을 때 이 함수를 사용하시면 됩니다.
+void	Channel::Broadcast(const Client &broadcaster, const std::string &msg)
+{
+	for (std::vector<const Client *>::iterator iter = mUsers.begin(); \
+		iter != mUsers.end(); iter++)
+	{
+		if (*iter == &broadcaster)
+			continue ;
+		
+		if (send((*iter)->GetFd(), msg.c_str(), msg.size(), MSG_DONTWAIT) == -1)
+			perror("send(at channel broadcast) error");
+	}
+}
+
 // must not be called with default variable(instance need creater info)
 Channel::Channel(){}
 
