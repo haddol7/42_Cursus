@@ -1,8 +1,18 @@
 #include "Channel.hpp"
 
+// exception class function
+Channel::BADCHANNELKEYEXCEPTION::BADCHANNELKEYEXCEPTION(const std::string &tag) \
+	: mTag(tag) {}
+
+const char	*Channel::BADCHANNELKEYEXCEPTION::what() const throw()
+{
+	return (ERR_BADCHANNELKEY(mTag).c_str());
+}
+
 // constructor && destructor
 Channel::Channel(const std::string &tag, const Client &channelCreater) \
-	: mTag(tag) \
+	: mTag(tag), \
+	mKey("")
 {
 	mOperators.reserve(10);
 	mUsers.reserve(50);
@@ -13,6 +23,12 @@ Channel::Channel(const std::string &tag, const Client &channelCreater) \
 Channel::~Channel(){}
 
 /* public member function */
+// set channel key
+void				Channel::setChannelKey(const std::string &channelKey)
+{
+	mKey = channelKey;	
+}
+
 // remove one in channel
 void	Channel::RemoveOne(const Client &target)
 {
@@ -40,9 +56,12 @@ void	Channel::DemoteOperator(const Client &target)
 }
 
 // add user in channel
-void	Channel::AddUser(const Client &user)
-{	
-	if (getUserIter(user) == mUsers.end())
+void	Channel::AddUser(const Client &user) throw(Channel::BADCHANNELKEYEXCEPTION)
+{
+	// key가 할당되어 있는 상황에서는 key 없이 channel에 들어올 수 없다.
+	if (mKey != std::string(""))
+		throw (BADCHANNELKEYEXCEPTION(mTag));
+	if (getUserIter(user) != mUsers.end())
 		return ;
 	
 	mUsers.push_back(&user);
@@ -51,10 +70,22 @@ void	Channel::AddUser(const Client &user)
 // add operator in channel
 void	Channel::AddOperator(const Client &oper)
 {
-	if (getOperatorIter(oper) == mOperators.end())
+	if (getOperatorIter(oper) != mOperators.end())
 		return ;
 	
 	mOperators.push_back(oper.GetFd());
+}
+
+// add user with key
+void	Channel::AddUserWithKey(const Client &user, const std::string &key) \
+	throw(Channel::BADCHANNELKEYEXCEPTION)
+{
+	if (key != mKey && !mKey.empty())
+		throw (BADCHANNELKEYEXCEPTION(mTag));
+	if (getUserIter(user) != mUsers.end())
+		return ;
+	
+	mUsers.push_back(&user);
 }
 
 // broadcast message to channel

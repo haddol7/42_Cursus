@@ -121,6 +121,11 @@ void Server::ExecServerLoop(void)
 	close(mEpfd);
 }
 
+std::map<const std::string, Channel>	&Server::GetChannelList()
+{
+	return (mChannelMap);
+}
+
 void Server::registerClient()
 {	
 	socklen_t			address_size;
