@@ -1,10 +1,12 @@
 #include "Channel.hpp"
 
 // exception class function
-Channel::BADCHANNELKEYEXCEPTION::BADCHANNELKEYEXCEPTION(const std::string &tag) \
+Channel::BadChannelKeyException::BadChannelKeyException(const std::string &tag) \
 	: mTag(tag) {}
 
-const char	*Channel::BADCHANNELKEYEXCEPTION::what() const throw()
+Channel::BadChannelKeyException::~BadChannelKeyException() throw() {}
+
+const char	*Channel::BadChannelKeyException::what() const throw()
 {
 	return (ERR_BADCHANNELKEY(mTag).c_str());
 }
@@ -56,11 +58,11 @@ void	Channel::DemoteOperator(const Client &target)
 }
 
 // add user in channel
-void	Channel::AddUser(const Client &user) throw(Channel::BADCHANNELKEYEXCEPTION)
+void	Channel::AddUser(const Client &user) throw(Channel::BadChannelKeyException)
 {
 	// key가 할당되어 있는 상황에서는 key 없이 channel에 들어올 수 없다.
 	if (mKey != std::string(""))
-		throw (BADCHANNELKEYEXCEPTION(mTag));
+		throw (BadChannelKeyException(mTag));
 	if (getUserIter(user) != mUsers.end())
 		return ;
 	
@@ -78,10 +80,10 @@ void	Channel::AddOperator(const Client &oper)
 
 // add user with key
 void	Channel::AddUserWithKey(const Client &user, const std::string &key) \
-	throw(Channel::BADCHANNELKEYEXCEPTION)
+	throw(Channel::BadChannelKeyException)
 {
 	if (key != mKey && !mKey.empty())
-		throw (BADCHANNELKEYEXCEPTION(mTag));
+		throw (BadChannelKeyException(mTag));
 	if (getUserIter(user) != mUsers.end())
 		return ;
 	
