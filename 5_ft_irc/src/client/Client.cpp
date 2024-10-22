@@ -81,7 +81,6 @@ void	Client::AddBuffer(const std::string& buff)
 
 	AMessage*	message;
 
-	std::cerr << "AddBuffer" << std::endl;
 	while (checkCommand())
 	{
 		message = makeCommand();
