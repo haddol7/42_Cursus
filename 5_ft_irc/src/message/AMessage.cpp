@@ -1,3 +1,4 @@
+#include <sstream>
 #include "message/AMessage.hpp"
 #include "message.hpp"
 
@@ -55,11 +56,23 @@ const std::string&	AMessage::GetCommand() const
 	return mCommand;
 }
 
+const std::string& AMessage::GetPrefix() const
+{
+	return (mPrefix);
+}
+
+//prefix -> ":root_!root@127.0.0.1 "
 AMessage::AMessage(Client* origin, const std::string command, const std::string msg) :
 mOrigin(origin),
 mCommand(command),
 mBuff(msg)
 {
+	std::stringstream stream;
+
+	stream	<< ":" << mOrigin->GetNickName() \
+			<< "!" << mOrigin->GetHostName() \
+            << "@" << mOrigin->GetIpAddressString() << " ";
+	mPrefix = stream.str();
 }
 
 AMessage::~AMessage()
