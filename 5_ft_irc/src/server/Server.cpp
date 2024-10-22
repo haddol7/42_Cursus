@@ -56,12 +56,12 @@ const std::string&	Server::GetPrefix() const
 	return (mPrefix);
 }
 
-void Server::InitServer(const char *port)
+void Server::InitServer(const char *port, const char* pass)
 {
 	struct sockaddr_in	address;
 	
+	SetPassword(pass);
 	mSocket = socket(PF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
-
 	memset(&address, 0, sizeof(address));
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = htonl(INADDR_ANY);

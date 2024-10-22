@@ -5,13 +5,13 @@ int	main(int argc, char *argv[])
 {
 	Server *server;
 
-	if (argc != 2)
+	if (argc != 3)
 	{
-		std::cerr << "Invalid arguments" << std::endl;
+		std::cerr << "Invalid arguments ./ircserv <port> <password>" << std::endl;
 		return (1);
 	}
 	server = Server::GetServer();
-	server->InitServer(argv[1]);
+	server->InitServer(argv[1], argv[2]);
 	server->ExecServerLoop();
 
 	delete server;

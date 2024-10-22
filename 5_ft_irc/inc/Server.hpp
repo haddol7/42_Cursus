@@ -24,7 +24,7 @@ public:
 	void							SetNameAndPrefix(const std::string& name);
 	void							SetPassword(const std::string& pass);
 
-	void							InitServer(const char* port);
+	void							InitServer(const char* port, const char* pass);
 	void							ExecServerLoop(void);
 
 	void							SendMessage(Client &target, const std::string& msg);
