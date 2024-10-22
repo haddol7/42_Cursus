@@ -8,7 +8,10 @@ class Privmsg : public AMessage
 		Privmsg(Client* origin, const std::string msg);
 		virtual void	ExecuteCommand();
 		virtual	~Privmsg();
-		void ParseBuffer();
+		void	ParseBuffer();
+		void	SendMessageClient();
+		void	SendMessageChannel();
+		void	SendPrivMessage(Client *target);
 
 	private:
 		Privmsg();
