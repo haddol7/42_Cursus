@@ -6,7 +6,7 @@ AMessage(origin, "Nick", msg)
 	//some work depending on command type
 }
 
-void	Nick::ExecuteCommand() const
+void	Nick::ExecuteCommand()
 {
 	//command execution depanding on command type
 }

@@ -6,7 +6,7 @@ class User : public AMessage
 {
 	public:
 		User(Client* origin, const std::string msg);
-		virtual void	ExecuteCommand() const;
+		virtual void	ExecuteCommand();
 		virtual	~User();
 
 	private:

@@ -12,7 +12,7 @@ AMessage(origin, "CommandTemplate", msg)
 	//some work depending on command type
 }
 
-void	CommandTemplate::ExecuteCommand() const
+void	CommandTemplate::ExecuteCommand()
 {
 	//command execution depanding on command type
 }

@@ -6,7 +6,7 @@ class CommandTemplate : public AMessage
 {
 	public:
 		CommandTemplate(Client* origin, const std::string msg);
-		virtual void	ExecuteCommand() const;
+		virtual void	ExecuteCommand();
 		virtual	~CommandTemplate();
 
 	private:
