@@ -6,19 +6,21 @@
 #include <vector>
 
 #include "Client.hpp"
+#include "Server.hpp"
 #include "ReplyMacros.hpp"
 
 class Channel
 {
 public:
 	// exception class
-	class BADCHANNELKEYEXCEPTION : std::exception
+	class BadChannelKeyException : public std::exception
 	{
 	public :
-		BADCHANNELKEYEXCEPTION(const std::string &tag);
+		BadChannelKeyException(const std::string &tag);
+		virtual ~BadChannelKeyException() throw();
 		virtual const char	*what() const throw();
 	private :
-		BADCHANNELKEYEXCEPTION();
+		BadChannelKeyException();
 		const std::string mTag;
 	};
 	// constructor && destructor
@@ -34,12 +36,12 @@ public:
 	// demote operator to user
 	void	DemoteOperator(const Client &oper);
 	// add user in channel
-	void	AddUser(const Client &user) throw(Channel::BADCHANNELKEYEXCEPTION);
+	void	AddUser(const Client &user) throw(Channel::BadChannelKeyException);
 	// add operator in channel
 	void	AddOperator(const Client &oper);
 	// add user with key
 	void	AddUserWithKey(const Client &user, const std::string &key) \
-		throw(Channel::BADCHANNELKEYEXCEPTION);
+		throw(Channel::BadChannelKeyException);
 
 	// broadcast message to channel
 	void	Broadcast(const Client &broadcaster, const std::string &msg);

@@ -13,6 +13,8 @@
 # define EPOLL_SIZE (5)
 # define BUF_SIZE (600)
 
+class Channel;
+
 class Server
 {
 public:
@@ -52,3 +54,5 @@ private:
 	void	controlClientEvent(const int client_fd, const int epoll_mode, const int event_mode);
 	void	unregisterClientSocket(const int client_fd, const std::string& msg);
 };
+
+#include "Channel.hpp"
