@@ -10,7 +10,6 @@ Server* Server::mInstance = NULL;
 Server::Server()
 {
 	std::cout << "Server Init" << std::endl;
-	mSendList.reserve(100);
 }
 
 Server* Server::GetServer()
@@ -192,3 +191,29 @@ void Server::unregisterClientSocket(const int client_fd, const std::string& msg)
 	mClientMap.erase(client_fd);
 	close(client_fd);
 }
+
+Client*	Server::ReturnClientOrNull(const int fd)
+{
+	std::map<int, Client>::iterator it = mClientMap.find(fd);
+
+	if (it == mClientMap.end())
+	{
+		return (NULL);
+	}
+	return (&(mClientMap.find(fd)->second));
+}
+
+Client*	Server::ReturnClientOrNull(const std::string& nick)
+{
+	std::map<const int, Client>::iterator it = mClientMap.begin();
+
+	for (; it != mClientMap.end(); ++it)
+	{
+		if (it->second.GetNickName() == nick)
+		{
+			return (&(it->second));
+		}
+	}
+	return (NULL);
+}
+	
