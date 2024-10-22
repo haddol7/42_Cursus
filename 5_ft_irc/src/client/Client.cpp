@@ -43,6 +43,11 @@ in_addr_t			Client::GetIpAddress() const
 	return (mIpAddress);
 }
 
+const std::string&	Client::GetIpAddressString() const
+{
+	return (mIpAddressString);
+}
+
 bool				Client::GetPasswordConfirmation() const
 {
 	return (mPasswordConfirmation);
