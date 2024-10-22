@@ -111,6 +111,7 @@ AMessage*	Client::makeCommand()
 	if (length >= 512)
 	{
 		mbuffer.copy(buff, 512, 0);
+		mbuffer.erase(0, 512);
 		buff[510] = '\r';
 		buff[511] = '\n';
 		buff[512] = '\0';
