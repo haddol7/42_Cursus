@@ -34,7 +34,6 @@ public:
 private:
 	static Server					*mInstance;
 	struct epoll_event				*mEpollEvents;
-	//TODO password
 	std::string						mName;
 	std::string						mPassword;
 	std::string						mPrefix;
