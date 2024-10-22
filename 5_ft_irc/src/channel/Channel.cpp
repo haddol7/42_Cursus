@@ -67,8 +67,8 @@ void	Channel::Broadcast(const Client &broadcaster, const std::string &msg)
 		if (*iter == &broadcaster)
 			continue ;
 		
-		if (send((*iter)->GetFd(), msg.c_str(), msg.size(), MSG_DONTWAIT) == -1)
-			perror("send(at channel broadcast) error");
+		/*if (*/send((*iter)->GetFd(), msg.c_str(), msg.size(), MSG_DONTWAIT); /*== -1)*/
+			// perror("send(at channel broadcast) error");
 	}
 }
 
