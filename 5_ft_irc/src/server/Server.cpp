@@ -4,6 +4,7 @@
 #include <string.h>
 #include <cstdlib>
 #include "Server.hpp"
+#include "AMessage.hpp"
 
 Server* Server::mInstance = NULL;
 
@@ -84,7 +85,6 @@ void Server::ExecServerLoop(void)
 	int	event_count;
 	int	i_event;
 	int	client_fd;
-	//int epoll_mode;
 
 	while (true)
 	{
@@ -96,25 +96,14 @@ void Server::ExecServerLoop(void)
 		for (i_event = 0; i_event < event_count; i_event++)
 		{
 			client_fd = mEpollEvents[i_event].data.fd;
-			//epoll_mode = mEpollEvents[i_event].events;
 			if (client_fd == mSocket)
 			{
 				registerClient();
 			}
 			else
 			{
-				while (1)
-				{
-					if (receiveFromClient(client_fd) == -1)
-						break ;
-				}
+				receiveFromClientLoop(client_fd);
 			}
-			/*
-			else if (epoll_mode & EPOLLOUT)
-			{
-				sendToClient(client_fd);
-			}
-			*/
 		}
 	}
 	close(mSocket);
@@ -144,19 +133,27 @@ void Server::registerClient()
 	}
 }
 
+void Server::receiveFromClientLoop(int client_fd)
+{
+	while (1)
+	{
+		if (receiveFromClient(client_fd) == -1)
+		{
+			break ;
+		}
+	}
+}
+
 int Server::receiveFromClient(const int client_fd)
 {
 	int	len_buf;
 
 	memset(mBuffer, 0, sizeof(mBuffer));
-	std::cout << "Before read" << std::endl;
 	len_buf = recv(client_fd, mBuffer, BUF_SIZE, MSG_DONTWAIT);
-	std::cout << "After read" << std::endl;
 	if (len_buf == -1)
 	{
 		if (errno == EAGAIN)
 		{
-			std::cout << "Now End!!!" << std::endl;
 			return (-1);
 		}
 	}
@@ -167,12 +164,12 @@ int Server::receiveFromClient(const int client_fd)
 	}
 	else
 	{
-		sendToClient(client_fd);
+		ReturnClientOrNull(client_fd)->AddBuffer(mBuffer);
 	}
-
 	return (0);
 }
 
+/*
 void Server::sendToClient(const int client_fd)
 {
 	int	len_buf;
@@ -208,6 +205,7 @@ void Server::sendToClient(const int client_fd)
 	}
 	memset(mBuffer, 0, sizeof(mBuffer));
 }
+*/
 
 void Server::controlClientEvent(const int client_fd, const int epoll_mode, const int event_mode)
 {

@@ -27,7 +27,7 @@ public:
 	void				SetHostName(const std::string &hostName);
 	void				SetPasswordConfirmation(const bool passwordConfirmation);
 	//MessageBuffer
-	void				AddBuffer(const std::string buff);
+	void				AddBuffer(const std::string &buff);
 
 private:
 	// must not be call with default constructor(instance need ip info)

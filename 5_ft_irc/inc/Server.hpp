@@ -47,8 +47,8 @@ private:
 
 	Server();
 	void	registerClient();
+	void	receiveFromClientLoop(const int client_fd);
 	int		receiveFromClient(const int client_fd);
-	void	sendToClient(const int client_fd);
 	void	controlClientEvent(const int client_fd, const int epoll_mode, const int event_mode);
 	void	unregisterClientSocket(const int client_fd, const std::string& msg);
 };

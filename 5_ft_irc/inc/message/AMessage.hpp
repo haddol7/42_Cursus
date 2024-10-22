@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Client.hpp"
+class Client;
 
 class AMessage
 {
@@ -27,3 +27,5 @@ class AMessage
 		std::string	mBuff;
 		std::string mPrefix;
 };
+
+#include "Client.hpp"

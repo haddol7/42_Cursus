@@ -14,7 +14,7 @@ Privmsg::~Privmsg()
 void Privmsg::ExecuteCommand()
 {
 	ParseBuffer();
-	if (mTarget.front() == ':')
+	if (mTarget[0] == ':')
 	{	
 		ReplyToOrigin(ERR_NORECIPIENT(mOrigin->GetNickName()));
 		return ;
@@ -24,7 +24,7 @@ void Privmsg::ExecuteCommand()
 		ReplyToOrigin(ERR_NOTEXTTOSEN);
 		return ;
 	}
-	if (mTarget.front() == '#')
+	if (mTarget[0] == '#')
 	{
 		SendMessageChannel();
 	}

@@ -47,7 +47,7 @@ bool	Nick::isNickInvalid() const
 		return 1;
 	else if (std::isdigit(mNick[0]) || mNick[0] == '-')
 		return 1;
-	for (int i = 0; i < mNick.length(); ++i)
+	for (unsigned int i = 0; i < mNick.length(); ++i)
 	{
 		if (checkLetter(mNick[i]))
 			return 1;
@@ -57,7 +57,7 @@ bool	Nick::isNickInvalid() const
 
 bool	Nick::isNickDuplicated() const
 {
-	Sever	*server = Server::GetServer();
+	Server	*server = Server::GetServer();
 
 	server->ReturnClientOrNull(mNick);
 	if (server)
