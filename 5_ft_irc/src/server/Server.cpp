@@ -8,6 +8,8 @@
 Server* Server::mInstance = NULL;
 
 Server::Server()
+	: mName("unlucky_DISCORD")
+	, mPrefix(":unlucky_DISCORD ")
 {
 	std::cout << "Server Init" << std::endl;
 }
@@ -21,13 +23,44 @@ Server* Server::GetServer()
 	return (mInstance);
 }
 
+std::map<const int, Client>* Server::GetClientMap()
+{
+	return (&mClientMap);
+}
+
+const std::string&	Server::GetName() const
+{
+	return (mName);
+}
+
+const std::string&	Server::GetPassword() const
+{
+	return (mPassword);
+}
+
+//TODO : Name rule
+void Server::SetNameAndPrefix(const std::string& name)
+{
+	mName = name;
+	mPrefix = ":" + name + " ";
+}
+
+//TODO : Pass rule
+void Server::SetPassword(const std::string& pass)
+{
+	mPassword = pass;
+}
+
+const std::string&	Server::GetPrefix() const
+{
+	return (mPrefix);
+}
+
 void Server::InitServer(const char *port)
 {
 	struct sockaddr_in	address;
 	
 	mSocket = socket(PF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
-	
-	/*fcntl*/
 
 	memset(&address, 0, sizeof(address));
 	address.sin_family = AF_INET;
@@ -135,10 +168,6 @@ int Server::receiveFromClient(const int client_fd)
 	return (0);
 }
 
-//TODO	Implimention client list for send
-//		현재는 본인을 제외한 모든 클라이언트에 메시지를 전달하지만,
-//		나중에 모드를 구현할 때 어떤 클라이언트에 전송할 지에 대한
-//		컨테이너가 필요할 것 같습니다.
 void Server::sendToClient(const int client_fd)
 {
 	int	len_buf;
@@ -192,6 +221,11 @@ void Server::unregisterClientSocket(const int client_fd, const std::string& msg)
 	close(client_fd);
 }
 
+void Server::SendMessage(Client &target, const std::string& msg)
+{
+	send(target.GetFd(), msg.c_str(), msg.size(), MSG_DONTWAIT);
+}
+
 Client*	Server::ReturnClientOrNull(const int fd)
 {
 	std::map<int, Client>::iterator it = mClientMap.find(fd);
@@ -216,4 +250,3 @@ Client*	Server::ReturnClientOrNull(const std::string& nick)
 	}
 	return (NULL);
 }
-	
