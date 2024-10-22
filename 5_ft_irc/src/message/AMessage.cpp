@@ -30,11 +30,12 @@ std::string	FindCommand(std::string msg) // to indicate command of a message
 
 AMessage*	AMessage::GetMessageObject(Client* origin, const std::string msg)
 {
-	const char* commandList[] = {"NICK", "USER"}; // set accepting commands
+	const char* commandList[] = {"NICK", "USER", "PRIVMSG"}; // set accepting commands
 
 	std::string cmd = FindCommand(msg); // to indicate command of a message
 	int	index = 0;
-	for (; commandList[index]; ++index)
+	//여기 수정해야 합니다.
+	for (; index < 3; ++index)
 	{
 		if (cmd == commandList[index])
 			break ;
@@ -48,6 +49,9 @@ AMessage*	AMessage::GetMessageObject(Client* origin, const std::string msg)
 			break ;
 		case 1:
 			message = new User(origin, msg);
+			break ;
+		case 2:
+			message = new Privmsg(origin, msg);
 			break ;
 		default:
 			message = new NoCommand(origin, msg);
@@ -87,6 +91,6 @@ void AMessage::ReplyToOrigin(const std::string& replymsg)
 {
 	std::string	result;
 
-	result = GetPrefix() + replymsg;
+	result = Server::GetServer()->GetPrefix() + replymsg;
 	Server::GetServer()->SendMessage(*mOrigin, result);
 }
