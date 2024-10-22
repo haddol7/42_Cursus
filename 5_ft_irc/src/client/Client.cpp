@@ -8,6 +8,7 @@ Client::Client(unsigned int fd, sockaddr_in clientAddrInfo) \
 {
 	struct hostent	*host;
 
+	mIpAddressString = inet_ntoa(clientAddrInfo.sin_addr);
 	host = gethostbyaddr(reinterpret_cast<char *>(&clientAddrInfo), 4, AF_INET);
 	if (host)
 		mHostName = host->h_name;
@@ -40,6 +41,11 @@ const std::string	&Client::GetHostName() const
 in_addr_t			Client::GetIpAddress() const
 {
 	return (mIpAddress);
+}
+
+const std::string&	Client::GetIpAddressString() const
+{
+	return (mIpAddressString);
 }
 
 bool				Client::GetPasswordConfirmation() const

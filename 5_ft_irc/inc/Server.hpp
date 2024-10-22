@@ -16,27 +16,37 @@
 class Server
 {
 public:
-	static	Server* GetServer();
-	void	InitServer(const char* port);
-	void	ExecServerLoop(void);
-	Client*	ReturnClientOrNull(const int fd);
-	Client*	ReturnClientOrNull(const std::string& nick);
+	static	Server* 				GetServer();
+	std::map<const int, Client>*	GetClientMap();
+	const std::string&				GetName() const;
+	const std::string&				GetPassword() const;
+	const std::string&				GetPrefix() const;
+	void							SetNameAndPrefix(const std::string& name);
+	void							SetPassword(const std::string& pass);
+
+	void							InitServer(const char* port, const char* pass);
+	void							ExecServerLoop(void);
+
+	void							SendMessage(Client &target, const std::string& msg);
+	Client*							ReturnClientOrNull(const int fd);
+	Client*							ReturnClientOrNull(const std::string& nick);
 
 private:
-	static		Server* mInstance;
-	struct		epoll_event *mEpollEvents;
-	std::string	mName;
-	std::string	mPassword;
-	char		mBuffer[BUF_SIZE];
-	int			mEpfd;
-	int			mSocket;
-	std::map<const int, Client> mClientMap;
+	static Server					*mInstance;
+	struct epoll_event				*mEpollEvents;
+	std::string						mName;
+	std::string						mPassword;
+	std::string						mPrefix;
+	char							mBuffer[BUF_SIZE];
+	int								mEpfd;
+	int								mSocket;
+	std::map<const int, Client>		mClientMap;
 
 	//map<tag, <channel>>
 	Server();
-	void registerClient();
-	int	 receiveFromClient(const int client_fd);
-	void sendToClient(const int client_fd);
-	void controlClientEvent(const int client_fd, const int epoll_mode, const int event_mode);
-	void unregisterClientSocket(const int client_fd, const std::string& msg);
+	void	registerClient();
+	int		receiveFromClient(const int client_fd);
+	void	sendToClient(const int client_fd);
+	void	controlClientEvent(const int client_fd, const int epoll_mode, const int event_mode);
+	void	unregisterClientSocket(const int client_fd, const std::string& msg);
 };

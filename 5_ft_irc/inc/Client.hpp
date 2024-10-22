@@ -19,6 +19,7 @@ public:
 	unsigned int		GetFd() const;
 	const std::string&	GetHostName() const;
 	in_addr_t			GetIpAddress() const;
+	const std::string&	GetIpAddressString() const;
 	bool				GetPasswordConfirmation() const;
 	// setter
 	void				SetNickName(const std::string &nickName);
@@ -38,6 +39,7 @@ private:
 	// private member variable
 	const unsigned int	mFd;
 	const in_addr_t		mIpAddress;
+	std::string			mIpAddressString;
 	std::string			mHostName;
 	std::string			mNickName;
 	std::string			mUserName;

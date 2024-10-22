@@ -6,7 +6,7 @@ AMessage(origin, "NoCommand", msg)
 	//some work depending on command type
 }
 
-void	NoCommand::ExecuteCommand() const
+void	NoCommand::ExecuteCommand()
 {
 	//command execution depanding on command type
 }
