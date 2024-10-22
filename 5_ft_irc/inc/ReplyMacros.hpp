@@ -7,6 +7,7 @@
 //Errors
 
 #define ERR_NORECIPIENT(COMMAND)	(std::string("411 ") + ":No recipient given " + COMMAND)
+//TODO : 닉, 서버 분기에 따른 매크로 분할
 #define ERR_NOSUCHNICK(NICK)		(std::string("401 ") + NICK + " :No such nick/channel")
 #define ERR_NOTEXTTOSEN				(std::string("412 ") + ":No text to send")
 #define ERR_CANNOTSENDTOCHAN(CHAN)	(std::string("404 ") + CHAN + " :Cannot send to channel")

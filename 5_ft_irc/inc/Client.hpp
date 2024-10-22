@@ -6,6 +6,7 @@
 
 #include "message.hpp"
 
+//TODO : 비밀 번호 인증 구현 <PASS 구현 때>
 class Client
 {
 public:

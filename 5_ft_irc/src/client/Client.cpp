@@ -6,12 +6,23 @@ Client::Client(unsigned int fd, sockaddr_in clientAddrInfo) \
 	mIpAddress(clientAddrInfo.sin_addr.s_addr), \
 	mPasswordConfirmation(false) \
 {
-	struct hostent	*host;
+struct hostent	*host;
 
+	//TODO : 디버그용이므로 꼭 지울 것!
+	{
+	mNickName = " ";
+	mNickName[0] = fd + '0';
+	}
 	mIpAddressString = inet_ntoa(clientAddrInfo.sin_addr);
-	host = gethostbyaddr(reinterpret_cast<char *>(&clientAddrInfo), 4, AF_INET);
+	host = gethostbyaddr(&clientAddrInfo.sin_addr, sizeof(clientAddrInfo.sin_addr), AF_INET);
 	if (host)
+	{
 		mHostName = host->h_name;
+	}
+	else
+	{
+		mHostName = "Unknownhost";
+	}
 }
 
 Client::~Client() {}
@@ -81,7 +92,6 @@ void	Client::AddBuffer(const std::string& buff)
 
 	AMessage*	message;
 
-	std::cerr << "AddBuffer" << std::endl;
 	while (checkCommand())
 	{
 		message = makeCommand();
