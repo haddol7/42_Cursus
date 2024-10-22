@@ -38,6 +38,7 @@ private:
 	// private member variable
 	const unsigned int	mFd;
 	const in_addr_t		mIpAddress;
+	std::string			mIpAddressString;
 	std::string			mHostName;
 	std::string			mNickName;
 	std::string			mUserName;
