@@ -1,4 +1,5 @@
 #include <sstream>
+#include <Server.hpp>
 #include "message/AMessage.hpp"
 #include "message.hpp"
 
@@ -77,4 +78,12 @@ mBuff(msg)
 
 AMessage::~AMessage()
 {
+}
+
+void AMessage::ReplyToOrigin(const std::string& replymsg)
+{
+	std::string	result;
+
+	result = GetPrefix() + replymsg;
+	Server::GetServer()->SendMessage(*mOrigin, result);
 }
