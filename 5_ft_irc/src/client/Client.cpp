@@ -13,6 +13,7 @@ struct hostent	*host;
 	{
 	mNickName = " ";
 	mNickName[0] = fd + '0';
+	TurnOnRegisterStatus(USER);
 	}
 	mIpAddressString = inet_ntoa(clientAddrInfo.sin_addr);
 	host = gethostbyaddr(&clientAddrInfo.sin_addr, sizeof(clientAddrInfo.sin_addr), AF_INET);
@@ -149,7 +150,7 @@ AMessage*	Client::makeCommand()
 
 void		Client::TurnOnRegisterStatus(int mode)
 {
-	if (mode < 0 || mode > 3)
+	if (mode < 0 || mode > 3 || GetRegisterStatus() & (1 << mode))
 	{
 		return ;
 	}
