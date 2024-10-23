@@ -15,7 +15,8 @@ SRC_MESSAGE =	$(SRC_DIR)message/AMessage.cpp \
 				$(SRC_DIR)message/Nick.cpp \
 				$(SRC_DIR)message/User.cpp \
 				$(SRC_DIR)message/NoCommand.cpp \
-				$(SRC_DIR)message/Privmsg.cpp
+				$(SRC_DIR)message/Privmsg.cpp \
+				$(SRC_DIR)message/Join.cpp \
 
 SRC_CHANNEL = 	$(SRC_DIR)channel/Channel.cpp
 

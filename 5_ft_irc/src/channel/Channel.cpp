@@ -1,12 +1,12 @@
 #include "Channel.hpp"
 
 // exception class function
-Channel::BadChannelKeyException::BadChannelKeyException(const std::string &tag) \
+Channel::BadChannelKeyException::BadChannelKeyException(std::string tag) \
 	: mTag(tag) {}
 
 Channel::BadChannelKeyException::~BadChannelKeyException() throw() {}
 
-const char	*Channel::BadChannelKeyException::what() const throw()
+std::string	Channel::BadChannelKeyException::what() const throw()
 {
 	return (ERR_BADCHANNELKEY(mTag).c_str());
 }
@@ -97,9 +97,8 @@ void	Channel::Broadcast(const Client &broadcaster, const std::string &msg)
 	for (std::vector<const Client *>::iterator iter = mUsers.begin(); \
 		iter != mUsers.end(); iter++)
 	{
-		if (*iter == &broadcaster)
-			continue ;
-		
+		//if (*iter == &broadcaster)
+		//	continue ;
 		Server::GetServer()->SendMessage(const_cast<Client &>(broadcaster), msg);
 	}
 }
