@@ -23,7 +23,10 @@ void	Nick::ExecuteCommand()
 	else if (isNickDuplicated())
 		ReplyToOrigin(ERR_NICKNAMEINUSE(mNick));
 	else
+	{
 		mOrigin->SetNickName(mNick);
+		mOrigin->TurnOnRegisterStatus(NICK);
+	}
 }
 
 Nick::~Nick()
