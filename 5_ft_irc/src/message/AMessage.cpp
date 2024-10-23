@@ -1,5 +1,6 @@
 #include <sstream>
-#include <Server.hpp>
+
+#include "Server.hpp"
 #include "message/AMessage.hpp"
 #include "message.hpp"
 
@@ -47,7 +48,7 @@ AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 	{
 		return NULL;
 	}
-	
+
 	AMessage*	message;
 	switch (index)
 	{
@@ -63,7 +64,7 @@ AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 		case 3:
 			message = new Privmsg(origin, msg);
 			break ;
-		case 3:
+		case 4:
 			message = new Join(origin, msg);
 			break ;
 		default:
@@ -72,48 +73,60 @@ AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 	return message;
 }
 
+const std::string& AMessage::GetPrefix() const
+{
+	return mPrefix;
+}
+
+const std::string& AMessage::GetMessagePrefix() const
+{
+	return mMessagePrefix;
+}
+
 const std::string&	AMessage::GetCommand() const
 {
 	return mCommand;
 }
 
-const std::string& AMessage::GetPrefix() const
-{
-	return mPrefix;
-}
 
 int	AMessage::GetParamCount() const
 {
 	return mParamCount;
 }
 
-void	AMessage::ParseMessage(const std::string& msg)
+void	AMessage::ParseMessage()
 {
 	std::string::size_type	pos;
 	std::string::size_type	end;
 	std::string::size_type	last;
 
-	last = msg.find(":", 1);
-	if (last == std::string::npos)
-		last = msg.find("\r\n");
+	if (mBuff[0] == ':')
+	{
+		end = mBuff.find(" ");
+		mMessagePrefix = mBuff.substr(0, end);
+	}
+
+	pos = mBuff.find(mCommand) + mCommand.length() + 1;
+	last = mBuff.find("\r\n", pos);
 
 	mParamCount = 0;
-	pos = 0;
-	end = msg.find(" ");
-	while (end != std::string::npos && end + 1 != last)
+	end = mBuff.find(" ", pos);
+	while (end != std::string::npos && end + 1 != last && mParamCount < 14)
 	{
-		mBuffArray[mParamCount++] = msg.substr(pos, end - pos);
+		mParamArray[mParamCount++] = mBuff.substr(pos, end - pos);
 		pos = end + 1;
-		end = msg.find(" ", pos);
+		end = mBuff.find(" ", pos);
 	}
 	if (end == std::string::npos)
 		end = last;
-	mBuffArray[mParamCount++] = msg.substr(pos, end - pos);
+	if (mParamCount != 14 || mBuff[pos] == ':')
+		mParamArray[mParamCount++] = mBuff.substr(pos, end - pos);
 }
 
 AMessage::AMessage(Client* origin, const std::string& command, const std::string& msg) :
 mOrigin(origin),
-mCommand(command)
+mCommand(command),
+mBuff(msg)
 {
 	std::stringstream stream;
 
@@ -122,9 +135,7 @@ mCommand(command)
             << "@" << mOrigin->GetIpAddressString() << " ";
 	mPrefix = stream.str();
 
-	ParseMessage(msg);
-	//TODO : 나중에 array에 다 담으면 지울것!
-	mBuff = msg;
+	ParseMessage();
 }
 
 AMessage::~AMessage()

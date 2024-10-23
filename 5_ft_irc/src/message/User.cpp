@@ -2,28 +2,24 @@
 #include "message/User.hpp"
 
 User::User(Client* origin, const std::string msg) :
-AMessage(origin, "User", msg)
+AMessage(origin, "USER", msg)
 {
-	int	index = 0;
-	while (mBuffArray[index] != "USER" && index < mParamCount)
-		++index;
-
-	switch (mParamCount - index)
+	switch (mParamCount)
 	{
-		case 5:
-			mRealName = mBuffArray[index + 4];
-			//FALLTHROUGH
 		case 4:
-			mServerName = mBuffArray[index + 3];
+			mRealName = mParamArray[3];
 			//FALLTHROUGH
 		case 3:
-			mHostName = mBuffArray[index + 2];
+			mServerName = mParamArray[2];
 			//FALLTHROUGH
 		case 2:
-			mUserName = mBuffArray[index + 1];
+			mHostName = mParamArray[1];
 			//FALLTHROUGH
+		case 1:
+			mUserName = mParamArray[0];
+			break ;
 		default:
-			;
+			break ;
 	}
 }
 
