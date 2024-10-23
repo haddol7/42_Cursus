@@ -4,7 +4,8 @@
 Client::Client(unsigned int fd, sockaddr_in clientAddrInfo) \
 	: mFd(fd), \
 	mIpAddress(clientAddrInfo.sin_addr.s_addr), \
-	mPasswordConfirmation(false) \
+	mPasswordConfirmation(false) ,
+	mRegisterStatus(0)
 {
 struct hostent	*host;
 
@@ -64,6 +65,11 @@ bool				Client::GetPasswordConfirmation() const
 	return (mPasswordConfirmation);
 }
 
+int					Client::GetRegisterStatus() const
+{
+	return (mRegisterStatus);
+}
+
 // public member function(setter)
 
 void				Client::SetNickName(const std::string &nickName)
@@ -95,8 +101,11 @@ void	Client::AddBuffer(const std::string& buff)
 	while (checkCommand())
 	{
 		message = makeCommand();
-		message->ExecuteCommand();
-		delete message;
+		if (message != NULL)
+		{
+			message->ExecuteCommand();
+			delete message;
+		}
 	}
 }
 
@@ -136,4 +145,20 @@ AMessage*	Client::makeCommand()
 	}
 	message = AMessage::GetMessageObject(this, buff);
 	return message;
+}
+
+void		Client::TurnOnRegisterStatus(int mode)
+{
+	if (mode < 0 || mode > 3)
+	{
+		return ;
+	}
+	mRegisterStatus |= (1 << mode);
+	if (GetRegisterStatus() == REGISTERD)
+	{	
+		std::string	result;
+
+		result = Server::GetServer()->GetPrefix() + RPL_WELCOME(GetNickName(), GetUserName(), GetHostName());
+		Server::GetServer()->SendMessage(*this, result);
+	}
 }

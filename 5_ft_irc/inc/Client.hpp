@@ -6,7 +6,14 @@
 
 #include "message.hpp"
 
-//TODO : 비밀 번호 인증 구현 <PASS 구현 때>
+//Client RegisterStatus Bitmask 
+//	 | USER | NICK | PASS |
+
+# define REGISTERD (7)
+# define PASS (0)
+# define NICK (1)
+# define USER (2)
+
 class Client
 {
 public:
@@ -22,6 +29,7 @@ public:
 	in_addr_t			GetIpAddress() const;
 	const std::string&	GetIpAddressString() const;
 	bool				GetPasswordConfirmation() const;
+	int					GetRegisterStatus() const;
 	// setter
 	void				SetNickName(const std::string &nickName);
 	void				SetUserName(const std::string &userName);
@@ -29,6 +37,7 @@ public:
 	void				SetPasswordConfirmation(const bool passwordConfirmation);
 	//MessageBuffer
 	void				AddBuffer(const std::string &buff);
+	void				TurnOnRegisterStatus(int mode);
 
 private:
 	// must not be call with default constructor(instance need ip info)
@@ -45,5 +54,6 @@ private:
 	std::string			mNickName;
 	std::string			mUserName;
 	bool				mPasswordConfirmation;
+	int					mRegisterStatus;
 	std::string			mbuffer;
 };
