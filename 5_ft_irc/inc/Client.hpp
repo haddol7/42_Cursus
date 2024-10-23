@@ -6,7 +6,7 @@
 
 #include "message.hpp"
 
-# define ISREGISTERD (7)
+# define REGISTERD (7)
 # define PASS (2)
 # define NICK (1)
 # define USER (0)
