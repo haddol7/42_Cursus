@@ -6,12 +6,14 @@
 
 #include "message.hpp"
 
-# define REGISTERD (7)
-# define PASS (2)
-# define NICK (1)
-# define USER (0)
+//Client RegisterStatus Bitmask 
+//	 | USER | NICK | PASS |
 
-//TODO : 비밀 번호 인증 구현 <PASS 구현 때>
+# define REGISTERD (7)
+# define PASS (0)
+# define NICK (1)
+# define USER (2)
+
 class Client
 {
 public:

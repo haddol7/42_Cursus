@@ -101,8 +101,11 @@ void	Client::AddBuffer(const std::string& buff)
 	while (checkCommand())
 	{
 		message = makeCommand();
-		message->ExecuteCommand();
-		delete message;
+		if (message != NULL)
+		{
+			message->ExecuteCommand();
+			delete message;
+		}
 	}
 }
 
@@ -151,4 +154,11 @@ void		Client::TurnOnRegisterStatus(int mode)
 		return ;
 	}
 	mRegisterStatus |= (1 << mode);
+	if (GetRegisterStatus() == REGISTERD)
+	{	
+		std::string	result;
+
+		result = Server::GetServer()->GetPrefix() + RPL_WELCOME(GetNickName(), GetUserName(), GetHostName());
+		Server::GetServer()->SendMessage(*this, result);
+	}
 }
