@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Client.hpp"
+#include "NewException.hpp"
 #include "Server.hpp"
 #include "ReplyMacros.hpp"
 
@@ -13,18 +14,19 @@ class Channel
 {
 public:
 	// exception class
-	class BadChannelKeyException : public std::exception
+	class BadChannelKeyException : public NewException
 	{
 	public :
-		BadChannelKeyException(const std::string &tag);
+		BadChannelKeyException(std::string tag);
 		virtual ~BadChannelKeyException() throw();
-		virtual const char	*what() const throw();
+		virtual std::string	what() const throw();
 	private :
 		BadChannelKeyException();
 		const std::string mTag;
 	};
 	// constructor && destructor
 	Channel(const std::string &tag, const Client &channelCreater);
+	Channel();
 	~Channel();
 
 	/* public member function */
@@ -45,10 +47,7 @@ public:
 
 	// broadcast message to channel
 	void	Broadcast(const Client &broadcaster, const std::string &msg);
-
 private:
-	// must not be called with default variable(instance need creater info)
-	Channel();
 
 	/* private member function */
 	// get operator location in vector
