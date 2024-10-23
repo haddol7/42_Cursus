@@ -3,7 +3,7 @@
 #include "message/AMessage.hpp"
 #include "message.hpp"
 
-std::string	FindCommand(std::string msg) // to indicate command of a message
+static std::string	FindCommand(std::string msg) // to indicate command of a message
 {
 	std::string::size_type	pos;
 	std::string::size_type	end;
@@ -23,19 +23,19 @@ std::string	FindCommand(std::string msg) // to indicate command of a message
 
 	std::string	cmd;
 	if (pos != std::string::npos)
-		cmd.append(msg, pos, end - pos);
+		cmd = msg.substr(pos, end - pos);
 
 	return cmd;
 }
 
 AMessage*	AMessage::GetMessageObject(Client* origin, const std::string msg)
 {
-	const char* commandList[] = {"NICK", "USER", "PRIVMSG"}; // set accepting commands
+	const char* commandList[] = {"NICK", "USER", "PRIVMSG" , NULL}; // set accepting commands
 
 	std::string cmd = FindCommand(msg); // to indicate command of a message
-	int	index = 0;
-	//여기 수정해야 합니다.
-	for (; index < 3; ++index)
+
+	size_t	index = 0;
+	for (; commandList[index] != NULL; ++index)
 	{
 		if (cmd == commandList[index])
 			break ;
