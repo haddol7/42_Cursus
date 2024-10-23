@@ -41,7 +41,6 @@ AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 			break ;
 	}
 
-	//PASS가 무조건 오도록
 	int status = origin->GetRegisterStatus();
 	if ((status != REGISTERD && !(index == PASS || index == NICK || index == USER)) || \
 		(!(status & (1 << PASS)) && (index == NICK || index == USER)) )
@@ -109,7 +108,6 @@ void	AMessage::ParseMessage(const std::string& msg)
 	mBuffArray[mParamCount++] = msg.substr(pos, end - pos);
 }
 
-//prefix -> ":root_!root@127.0.0.1 "
 AMessage::AMessage(Client* origin, const std::string& command, const std::string& msg) :
 mOrigin(origin),
 mCommand(command)
@@ -122,6 +120,8 @@ mCommand(command)
 	mPrefix = stream.str();
 
 	ParseMessage(msg);
+	//TODO : 나중에 array에 다 담으면 지울것!
+	mBuff = msg;
 }
 
 AMessage::~AMessage()
