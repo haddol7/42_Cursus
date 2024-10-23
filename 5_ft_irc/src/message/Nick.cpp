@@ -5,13 +5,10 @@
 #include "Nick.hpp"
 
 Nick::Nick(Client* origin, const std::string msg) :
-AMessage(origin, "Nick", msg)
+AMessage(origin, "NICK", msg)
 {
-	int	index = 0;
-	while (mBuffArray[index] != "NICK" && index < mParamCount)
-		++index;
-	if (++index < mParamCount)
-		mNick =	mBuffArray[index];
+	if (mParamCount)
+		mNick =	mParamArray[0];
 }
 
 void	Nick::ExecuteCommand()
