@@ -57,7 +57,7 @@ std::string	Join::BadChannelKeyException::what() const throw()
 
 /* constructor && destructor */
 Join::Join(Client* origin, const std::string &msg) : \
-	AMessage(origin, "Join", msg) \
+	AMessage(origin, "JOIN", msg) \
 {}
 
 Join::~Join()
@@ -86,7 +86,7 @@ void	Join::ExecuteCommand()
 
 		std::map<const std::string, Channel>::iterator	target = \
 			channelsInServer.find(targetName);
-		
+
 		// 채널이 없으면 새로 만든 후 최초로 join을 호출한 사람을 관리자로 삼는다.
 		if (target == channelsInServer.end())
 			channelsInServer[targetName] = Channel(targetName, *mOrigin);
@@ -136,7 +136,7 @@ bool	Join::isControlCharInString(const std::string &s)
 
 	if (s.find(127) != std::string::npos)
 		return (true);
-	
+
 	return (false);
 }
 
@@ -146,16 +146,16 @@ bool	Join::isChannelNameValid(const std::string &channelName)
 	// channel 이름은 비어있거나 50자를 초과할 수 없다.
 	if (channelName.empty() || channelName.size() > 50)
 		return (false);
-	
+
 	// channel 이름은 #, &, + 중 하나의 문자로 시작해야 한다.
 	if (channelName[0] != '#' && channelName[0] != '&' \
 		&& channelName[0] != '+')
 		return (false);
-	
+
 	// channel 이름엔 제어 문자가 포함될 수 없다.
 	if (isControlCharInString(channelName) == true)
 		return (false);
-	
+
 	return (true);
 }
 
@@ -167,7 +167,7 @@ bool	Join::isChannelKeyValid(const std::string &channelKey)
 		std::cout << channelKey.size() << std::endl;
 		return (false);
 	}
-	
+
 	// key에는 아래의 아스키 문자가 포함될 수 없음
 	char	bannedCharList[] = {6, 9, 10, 11, 13, 32};
 	for (int i = 0; i < 6; i++)
@@ -204,19 +204,19 @@ void				Join::parseParameter(const std::string &parameter)
 
 	// 파라미터가 비어 있다 -> ERR_NEEDMOREPARAM
 	if (parameter.empty())
-		throw (Join::NeedMoreParamException());		
+		throw (Join::NeedMoreParamException());
 
 	// ' ' 구분자를 기준으로 파라미터의 채널 부분 분리
 	std::getline(lineParser, channelParam, ' ');
-	
+
 	// ' ' 구분자를 기준으로 파라미터의 키 부분 분리(이 부분은 비어있을 수 있음)
 	if (!lineParser.eof())
 		std::getline(lineParser, keyParam, ' ');
-	
+
 	// 파라미터가 3개 이상이다 -> 3번째 파라미터부터 버리고 다음 로직으로 넘어간다.
 	// 파라미터가 넘칠 경우의 err reply가 정의되어 있지 않으며
 	// 해당 케이스에서 상용 프로그램도 정상적으로 작동함
-	
+
 	std::istringstream	channelListParser(channelParam);
 	std::istringstream	keyListParser(keyParam);
 	std::string			temp;
