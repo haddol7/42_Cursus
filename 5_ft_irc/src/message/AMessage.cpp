@@ -43,8 +43,8 @@ AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 
 	//PASS가 무조건 오도록
 	int status = origin->GetRegisterStatus();
-	if (status != REGISTERD && !(index == PASS || index == NICK || index == USER) || \
-		!status & (1 << PASS)&& (index == NICK || index == USER) )
+	if ((status != REGISTERD && !(index == PASS || index == NICK || index == USER)) || \
+		(!(status & (1 << PASS)) && (index == NICK || index == USER)) )
 	{
 		return NULL;
 	}
