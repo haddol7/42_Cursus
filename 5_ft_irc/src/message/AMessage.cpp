@@ -30,7 +30,7 @@ static std::string	FindCommand(std::string msg) // to indicate command of a mess
 
 AMessage*	AMessage::GetMessageObject(Client* origin, const std::string msg)
 {
-	const char* commandList[] = {"NICK", "USER", "PRIVMSG" , NULL}; // set accepting commands
+	const char* commandList[] = {"PASS", "NICK", "USER", "PRIVMSG", NULL}; // set accepting commands
 
 	std::string cmd = FindCommand(msg); // to indicate command of a message
 
@@ -41,16 +41,27 @@ AMessage*	AMessage::GetMessageObject(Client* origin, const std::string msg)
 			break ;
 	}
 
+	//PASS가 무조건 오도록
+	int status = origin->GetRegisterStatus();
+	if (status != REGISTERD && !(index == PASS || index == NICK || index == USER) || \
+		!status & (1 << PASS)&& (index == NICK || index == USER) )
+	{
+		return NULL;
+	}
+	
 	AMessage*	message;
 	switch (index)
 	{
 		case 0:
+			message = new Pass(origin, msg);
+			break;
+		case 1:
 			message = new Nick(origin, msg);
 			break ;
-		case 1:
+		case 2:
 			message = new User(origin, msg);
 			break ;
-		case 2:
+		case 3:
 			message = new Privmsg(origin, msg);
 			break ;
 		default:
