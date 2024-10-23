@@ -11,4 +11,10 @@ class User : public AMessage
 
 	private:
 		User();
+
+		//<username> <hostname> <servername> :<realname>
+		std::string	mUserName;
+		std::string	mHostName;
+		std::string	mServerName;
+		std::string	mRealName;
 };
