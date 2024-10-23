@@ -3,7 +3,7 @@
 #include "message/AMessage.hpp"
 #include "message.hpp"
 
-static std::string	FindCommand(std::string msg) // to indicate command of a message
+static std::string	FindCommand(const std::string& msg) // to indicate command of a message
 {
 	std::string::size_type	pos;
 	std::string::size_type	end;
@@ -28,7 +28,7 @@ static std::string	FindCommand(std::string msg) // to indicate command of a mess
 	return cmd;
 }
 
-AMessage*	AMessage::GetMessageObject(Client* origin, const std::string msg)
+AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 {
 	const char* commandList[] = {"NICK", "USER", "PRIVMSG" , NULL}; // set accepting commands
 
@@ -66,14 +66,42 @@ const std::string&	AMessage::GetCommand() const
 
 const std::string& AMessage::GetPrefix() const
 {
-	return (mPrefix);
+	return mPrefix;
+}
+
+int	AMessage::GetParamCount() const
+{
+	return mParamCount;
+}
+
+void	AMessage::ParseMessage(const std::string& msg)
+{
+	std::string::size_type	pos;
+	std::string::size_type	end;
+	std::string::size_type	last;
+
+	last = msg.find(":", 1);
+	if (last == std::string::npos)
+		last = msg.find("\r\n");
+
+	mParamCount = 0;
+	pos = 0;
+	end = msg.find(" ");
+	while (end != std::string::npos && end + 1 != last)
+	{
+		mBuffArray[mParamCount++] = msg.substr(pos, end - pos);
+		pos = end + 1;
+		end = msg.find(" ", pos);
+	}
+	if (end == std::string::npos)
+		end = last;
+	mBuffArray[mParamCount++] = msg.substr(pos, end - pos);
 }
 
 //prefix -> ":root_!root@127.0.0.1 "
-AMessage::AMessage(Client* origin, const std::string command, const std::string msg) :
+AMessage::AMessage(Client* origin, const std::string& command, const std::string& msg) :
 mOrigin(origin),
-mCommand(command),
-mBuff(msg)
+mCommand(command)
 {
 	std::stringstream stream;
 
@@ -81,6 +109,8 @@ mBuff(msg)
 			<< "!" << mOrigin->GetHostName() \
             << "@" << mOrigin->GetIpAddressString() << " ";
 	mPrefix = stream.str();
+
+	ParseMessage(msg);
 }
 
 AMessage::~AMessage()
