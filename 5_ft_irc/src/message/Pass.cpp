@@ -22,7 +22,7 @@ void	Pass::ExecuteCommand()
 		ReplyToOrigin(ERR_ALREADYREGISTRED);
 		return ;
 	}
-	mPassword = mBuff.substr(pos + 1);
+	mPassword = mBuff.substr(pos + 1, mBuff.length() - 7);
 	if (mPassword == Server::GetServer()->GetPassword())
 	{
 		mOrigin->TurnOnRegisterStatus(PASS);
