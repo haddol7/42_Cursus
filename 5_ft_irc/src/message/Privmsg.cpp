@@ -12,15 +12,8 @@ Privmsg::~Privmsg()
 }
 
 void Privmsg::ExecuteCommand()
-{	
-	std::cerr << mBuff << std::endl;
+{
 	ParseBuffer();
-	
-	std::cerr << "========PRIVMSG DEBUG========" << std::endl;
-	std::cerr << "Target <" << mTarget << ">" << std::endl;
-	std::cerr << "Msg <" << mMessage << ">" << std::endl;
-	std::cerr << "=============================" << std::endl;
-
 	if (mTarget[0] == ':')
 	{	
 		ReplyToOrigin(ERR_NORECIPIENT(mOrigin->GetNickName()));

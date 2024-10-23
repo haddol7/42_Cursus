@@ -3,7 +3,7 @@
 #include "message/AMessage.hpp"
 #include "message.hpp"
 
-std::string	FindCommand(std::string msg) // to indicate command of a message
+static std::string	FindCommand(const std::string& msg) // to indicate command of a message
 {
 	std::string::size_type	pos;
 	std::string::size_type	end;
@@ -23,34 +23,44 @@ std::string	FindCommand(std::string msg) // to indicate command of a message
 
 	std::string	cmd;
 	if (pos != std::string::npos)
-		cmd.append(msg, pos, end - pos);
+		cmd = msg.substr(pos, end - pos);
 
 	return cmd;
 }
 
-AMessage*	AMessage::GetMessageObject(Client* origin, const std::string msg)
+AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 {
-	const char* commandList[] = {"NICK", "USER", "PRIVMSG", "JOIN"}; // set accepting commands
+	const char* commandList[] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", NULL}; // set accepting commands
 
 	std::string cmd = FindCommand(msg); // to indicate command of a message
-	int	index = 0;
-	//여기 수정해야 합니다.
-	for (; index < 4; ++index)
+
+	size_t	index = 0;
+	for (; commandList[index] != NULL; ++index)
 	{
 		if (cmd == commandList[index])
 			break ;
 	}
 
+	int status = origin->GetRegisterStatus();
+	if ((status != REGISTERD && !(index == PASS || index == NICK || index == USER)) || \
+		(!(status & (1 << PASS)) && (index == NICK || index == USER)) )
+	{
+		return NULL;
+	}
+	
 	AMessage*	message;
 	switch (index)
 	{
 		case 0:
+			message = new Pass(origin, msg);
+			break;
+		case 1:
 			message = new Nick(origin, msg);
 			break ;
-		case 1:
+		case 2:
 			message = new User(origin, msg);
 			break ;
-		case 2:
+		case 3:
 			message = new Privmsg(origin, msg);
 			break ;
 		case 3:
@@ -69,14 +79,41 @@ const std::string&	AMessage::GetCommand() const
 
 const std::string& AMessage::GetPrefix() const
 {
-	return (mPrefix);
+	return mPrefix;
 }
 
-//prefix -> ":root_!root@127.0.0.1 "
-AMessage::AMessage(Client* origin, const std::string command, const std::string msg) :
+int	AMessage::GetParamCount() const
+{
+	return mParamCount;
+}
+
+void	AMessage::ParseMessage(const std::string& msg)
+{
+	std::string::size_type	pos;
+	std::string::size_type	end;
+	std::string::size_type	last;
+
+	last = msg.find(":", 1);
+	if (last == std::string::npos)
+		last = msg.find("\r\n");
+
+	mParamCount = 0;
+	pos = 0;
+	end = msg.find(" ");
+	while (end != std::string::npos && end + 1 != last)
+	{
+		mBuffArray[mParamCount++] = msg.substr(pos, end - pos);
+		pos = end + 1;
+		end = msg.find(" ", pos);
+	}
+	if (end == std::string::npos)
+		end = last;
+	mBuffArray[mParamCount++] = msg.substr(pos, end - pos);
+}
+
+AMessage::AMessage(Client* origin, const std::string& command, const std::string& msg) :
 mOrigin(origin),
-mCommand(command),
-mBuff(msg)
+mCommand(command)
 {
 	std::stringstream stream;
 
@@ -84,6 +121,10 @@ mBuff(msg)
 			<< "!" << mOrigin->GetHostName() \
             << "@" << mOrigin->GetIpAddressString() << " ";
 	mPrefix = stream.str();
+
+	ParseMessage(msg);
+	//TODO : 나중에 array에 다 담으면 지울것!
+	mBuff = msg;
 }
 
 AMessage::~AMessage()
