@@ -7,16 +7,11 @@
 Nick::Nick(Client* origin, const std::string msg) :
 AMessage(origin, "Nick", msg)
 {
-	std::string::size_type	pos;
-	std::string::size_type	end;
-
-	pos = mBuff.find("NICK");
-	pos = mBuff.find(" ", pos);
-
-	end = mBuff.find("\r\n");
-
-	if (pos != std::string::npos && ++pos != end)
-		mNick = mBuff.substr(pos, end - pos);
+	int	index = 0;
+	while (mBuffArray[index] != "NICK" && index < mParamCount)
+		++index;
+	if (++index < mParamCount)
+		mNick =	mBuffArray[index];
 }
 
 void	Nick::ExecuteCommand()
