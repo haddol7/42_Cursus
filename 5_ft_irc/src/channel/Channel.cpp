@@ -230,12 +230,9 @@ void Channel::SetKey(const std::string& key)
 	mKey = key;
 }
 
+//TODO : overflow
 void Channel::SetLimit(int limit)
 {	
-	if (limit < 0)
-	{
-		limit = 0;
-	}
 	mLimit = limit;
 }
 

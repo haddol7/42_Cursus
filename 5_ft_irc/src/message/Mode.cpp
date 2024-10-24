@@ -1,8 +1,8 @@
 #include "Mode.hpp"
 
 Mode::Mode(Client* origin, const std::string msg) :
-AMessage(origin, "MODE", msg),
-mParamIter(2)
+	AMessage(origin, "MODE", msg),
+	mParamIter(2)
 {
 	mTarget = mParamArray[0];
 	mModeList = mParamArray[1];
@@ -10,44 +10,40 @@ mParamIter(2)
 
 void	Mode::ExecuteCommand()
 {
-	if ((mTarget.empty() && mModeList.empty()))
+	if (CheckParamAndGiveInfo() == false)
 	{
-		ReplyToOrigin(ERR_NEEDMOREPARAMS("MODE"));
-		return ;
-	}
-	if (FindChannel() == false)
-	{
-		return ;
-	}
-	// TODO : 모드 응답 기능
-	// key 값을 그냥 보여준다고??
-	// if (mParamCount == mModeList.empty())
-	// {
-	// 	ReplyToOrigin(RPL_CHANNELMODEIS());
-	// 	return ;
-	// }
-	if (mChannel->IsOperator(*mOrigin) == false)
-	{
-		ReplyToOrigin(ERR_CHANOPRIVSNEEDED(mTarget));
 		return ;
 	}
 	ExecuteAllLoop();
-	SendReply();
+	if (mReplyParam.str().empty() == false)
+	{
+		SendReply();
+	}
 }
 
-void Mode::SendReply() const
+bool	Mode::CheckParamAndGiveInfo()
 {
-	std::stringstream	resultstream;
-	std::string			result;
-
-	resultstream << GetPrefix() << "MODE " << mTarget << " " << mReplyParam.str() << mReplyParamValues.str() << "\r\n";
-	result = resultstream.str();
-	if (mReplyParamValues.str().empty() == false)
+	if ((mTarget.empty() && mModeList.empty()))
 	{
-		size_t pos = result.rfind(" ");
-		result.insert(pos + 1, ":");
+		ReplyToOrigin(ERR_NEEDMOREPARAMS("MODE"));
+		return (false);
 	}
-	mChannel->SendBackCmdMsg(result);
+	if (FindChannel() == false)
+	{
+		ReplyToOrigin(ERR_NOSUCHCHANNEL(mTarget));
+		return (false);
+	}
+	if (mParamCount == mModeList.empty())
+	{
+		ReplyToOrigin(RPL_CHANNELMODEIS(mTarget, GetModeString()));
+		return (false);
+	}
+	if (mChannel->IsOperator(*mOrigin) == false)
+	{
+		ReplyToOrigin(ERR_CHANOPRIVSNEEDED(mTarget));
+		return (false);
+	}
+	return (true);
 }
 
 bool Mode::FindChannel()
@@ -58,7 +54,6 @@ bool Mode::FindChannel()
 	iter = channel_map.find(mTarget);
 	if (iter == channel_map.end())
 	{
-		ReplyToOrigin(ERR_NOSUCHCHANNEL(mTarget));
 		return (false);
 	}
 	mChannel = &iter->second;
@@ -67,21 +62,22 @@ bool Mode::FindChannel()
 
 void Mode::ExecuteAllLoop()
 {
-	bool	status = TURN_ON;
 	char	mode;
-	char	insert_plus_minus = '\0';
+	char	mode_i = 0;
+	bool	status = TURN_ON;
+	int		perior_status = -1;
+	char	status_ch = '\0';
 	bool	success;
 
-	for (int mode_iter = 0; mModeList[mode_iter] != '\0'; ++mode_iter)
+	for (; mModeList[mode_i] != '\0'; ++mode_i)
 	{	
-		mode = mModeList[mode_iter];
+		mode = mModeList[mode_i];
 		success = false;
-
 		if (mode == '+' || mode == '-')
 		{
-			if (mode_iter == 0 || status != (mode == '+'))
+			if (mode_i == 0 || status != (mode == '+'))
 			{	
-				insert_plus_minus = mode;
+				status_ch = mode;
 				status = (mode == '+') ? TURN_ON : TURN_OFF;
 				continue;
 			}
@@ -103,17 +99,21 @@ void Mode::ExecuteAllLoop()
 			case 'o':
 				success = Execute_o(mParamArray[mParamIter], status);
 				break;
+			case '+':
+			case '-':
+				break;
 			default:
-				ReplyToOrigin(ERR_UNKNOWNMODE(mode));
+				ReplyToOrigin(ERR_UNKNOWNMODE(mode, mTarget));
 				break;
 		}
 		if (success == true)
 		{
-			if (insert_plus_minus != '\0')
+			if (status_ch != '\0' && status_ch != perior_status)
 			{
-				mReplyParam << insert_plus_minus;
+				mReplyParam << status_ch;
+				perior_status = status_ch;
 			}
-			insert_plus_minus = '\0';
+			status_ch = '\0';
 			mReplyParam << mode;
 		}
 	}
@@ -158,7 +158,7 @@ bool	Mode::Execute_l(const std::string& num, bool mode)
 	{
 		mParamIter++;
 	}
-	if (mChannel->GetOneModeStatus(L_MODE) == mode)
+	if (mChannel->GetOneModeStatus(L_MODE) == mode && mode == TURN_OFF)
 	{
 		return (false);
 	}
@@ -171,15 +171,19 @@ bool	Mode::Execute_l(const std::string& num, bool mode)
 		ReplyToOrigin(ERR_NEEDMOREPARAMS("l"));
 		return (false);
 	}
+	else if (mChannel->GetLimit() == atoi(num.c_str()))
+	{
+		return (false);
+	}
 	else
 	{
 		mChannel->SetLimit(atoi(num.c_str()));
 		mReplyParamValues << " " << mChannel->GetLimit();
 	}
-	return (mChannel->ToggleModeStatus(L_MODE, mode));
+	mChannel->ToggleModeStatus(L_MODE, mode);
+	return (true);
 }
 
-//TODO : 껐다 키면 토픽이 제대로 있는지
 bool	Mode::Execute_t(bool mode)
 {
 	if (mChannel->GetOneModeStatus(T_MODE) == mode)
@@ -197,15 +201,21 @@ bool	Mode::Execute_o(const std::string& client, bool mode)
 		return (false);
 	}
 	mParamIter++;
+	if (Server::GetServer()->ReturnClientOrNull(client) == NULL)
+	{
+		ReplyToOrigin(ERR_NOSUCHNICK(client));
+		return (false);
+	}
 	const Client *client_target = mChannel->FindUser(client);
 	if (client_target == NULL)
 	{
-		ReplyToOrigin(ERR_USERNOTINCHANNEL(client, mTarget));
 		return (false);
 	}
-
-	//TODO : 이미 있는 사람이라면??
-	//TODO : 없는 사람이라면?
+	bool isOper = mChannel->IsOperator(*client_target);
+	if (mode == isOper)
+	{
+		return (false);
+	}
 	if (mode == TURN_ON)
 	{
 		mChannel->AddOperator(*client_target);
@@ -216,6 +226,54 @@ bool	Mode::Execute_o(const std::string& client, bool mode)
 	}
 	mReplyParamValues << " " << client;
 	return (true);
+}
+
+void Mode::SendReply() const
+{
+	std::stringstream	resultstream;
+	std::string			result;
+
+	resultstream << GetPrefix() << "MODE " << mTarget << " " << mReplyParam.str() << mReplyParamValues.str() << "\r\n";
+	result = resultstream.str();
+	result.insert(result.rfind(" ") + 1, ":");
+	mChannel->SendBackCmdMsg(result);
+}
+
+const std::string Mode::GetModeString() const
+{
+	std::string			result;
+	std::stringstream	modestream;
+	std::stringstream	paramstream;
+
+	modestream << "+";
+	if (mChannel->GetOneModeStatus(I_MODE))
+	{
+		modestream << "i";
+	}
+	if (mChannel->GetOneModeStatus(K_MODE))
+	{
+		modestream << "k";
+		if (mChannel->IsOperator(*mOrigin) == false)
+		{
+			paramstream << " <key>";
+		}
+		else
+		{
+			paramstream << " " << mChannel->GetKey();
+		}
+	}
+	if (mChannel->GetOneModeStatus(L_MODE))
+	{
+		modestream << "l";
+		paramstream << " " << mChannel->GetLimit();
+	}
+	if (mChannel->GetOneModeStatus(T_MODE))
+	{
+		modestream << "t";
+	}
+	result = modestream.str() + paramstream.str();
+	result.insert(result.rfind(" ") + 1, ":");
+	return (result);
 }
 
 Mode::~Mode()
