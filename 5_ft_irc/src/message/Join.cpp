@@ -115,7 +115,7 @@ void	Join::ExecuteCommand()
 			}
 		}
 		// 채널 가입에 성공했으므로 채널의 모두에게 브로드캐스트한다.
-		channelsInServer[targetName].Broadcast(*mOrigin, "Join Success!!");
+		channelsInServer[targetName].SendBackCmdMsg(GetJoinSendBack(targetName));
 	}
 }
 
@@ -184,7 +184,7 @@ bool	Join::isChannelKeyValid(const std::string &channelKey)
 std::string	Join::getParameter()
 {
 	// 캐리지 리턴을 지운다.
-	mBuff.erase(mBuff.length() - 3);
+	mBuff.erase(mBuff.length() - 2);
 	// prefix가 있으면 공백을 두 번 건너뛴다.
 	if (mBuff[0] == ':')
 		return (mBuff.substr(mBuff.find(" ", mBuff.find(" ") + 1) + 1));
@@ -241,4 +241,10 @@ void				Join::parseParameter(const std::string &parameter)
 		else
 			ReplyToOrigin(ERR_NOSUCHCHANNEL(temp));
 	}
+}
+
+std::string	Join::GetJoinSendBack(const std::string &channelName)
+{
+	return (":" + mOrigin->GetNickName() + "!" + mOrigin->GetUserName() + "@" + \
+		mOrigin->GetHostName() + " JOIN " + channelName + "\r\n");
 }
