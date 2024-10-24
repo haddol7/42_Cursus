@@ -19,10 +19,16 @@ void	Nick::ExecuteCommand()
 		ReplyToOrigin(ERR_ERRONEUSNICKNAME(mNick));
 	else if (isNickDuplicated() == true)
 		ReplyToOrigin(ERR_NICKNAMEINUSE(mNick));
-	else
+	else if (!(mOrigin->GetRegisterStatus() & (1 << NICK)))
 	{
 		mOrigin->SetNickName(mNick);
 		mOrigin->TurnOnRegisterStatus(NICK);
+	}
+	else if (mOrigin->GetNickName() != mNick)
+	{
+		Server::GetServer()->SendMessage(*mOrigin, \
+			mOrigin->GetClientPrefix() + "NICK :" + mNick + "\r\n");
+		mOrigin->SetNickName(mNick);
 	}
 }
 
@@ -55,9 +61,7 @@ bool	Nick::isNickValid() const
 
 bool	Nick::isNickDuplicated() const
 {
-	Server	*server = Server::GetServer();
-
-	if (server->ReturnClientOrNull(mNick))
+	if (Server::GetServer()->ReturnClientOrNull(mNick) && mOrigin->GetNickName() != mNick)
 		return true;
 	return false;
 }

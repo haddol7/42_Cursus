@@ -31,14 +31,14 @@ Channel::~Channel(){}
 // set channel key
 void				Channel::setChannelKey(const std::string &channelKey)
 {
-	mKey = channelKey;	
+	mKey = channelKey;
 }
 
 // remove one in channel
 void	Channel::RemoveOne(const Client &target)
 {
 	DemoteOperator(target);
-	
+
 	std::vector<const Client *>::iterator	targetLocation = \
 		getUserIter(target);
 
@@ -68,7 +68,7 @@ void	Channel::AddUser(const Client &user) throw(Channel::BadChannelKeyException)
 		throw (BadChannelKeyException(mTag));
 	if (getUserIter(user) != mUsers.end())
 		return ;
-	
+
 	mUsers.push_back(&user);
 }
 
@@ -77,7 +77,7 @@ void	Channel::AddOperator(const Client &oper)
 {
 	if (getOperatorIter(oper) != mOperators.end())
 		return ;
-	
+
 	mOperators.push_back(oper.GetFd());
 }
 
@@ -89,7 +89,7 @@ void	Channel::AddUserWithKey(const Client &user, const std::string &key) \
 		throw (BadChannelKeyException(mTag));
 	if (getUserIter(user) != mUsers.end())
 		return ;
-	
+
 	mUsers.push_back(&user);
 }
 
@@ -152,7 +152,7 @@ void	Channel::SendPrivateMsgToChannel(const Client &broadcaster, const std::stri
 		if (*iter == &broadcaster)
 			continue ;
 		Server::GetServer()->SendMessage(const_cast<Client &>(**iter), msg);
-	}	
+	}
 }
 
 // must not be called with default variable(instance need creater info)
@@ -169,6 +169,11 @@ std::vector<unsigned int>::iterator		Channel::getOperatorIter(const Client &targ
 std::vector<const Client *>::iterator	Channel::getUserIter(const Client &target)
 {
 	return (std::find(mUsers.begin(), mUsers.end(), &target));
+}
+
+std::vector<const Client *>	&Channel::GetUserList()
+{
+	return mUsers;
 }
 
 int		Channel::GetAllModeStatus()

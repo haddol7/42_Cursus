@@ -60,7 +60,7 @@ const std::string&	Server::GetPrefix() const
 void Server::InitServer(const char *port, const char* pass)
 {
 	struct sockaddr_in	address;
-	
+
 	SetPassword(pass);
 	mSocket = socket(PF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
 	memset(&address, 0, sizeof(address));
@@ -90,7 +90,7 @@ void Server::ExecServerLoop(void)
 	{
 		event_count = epoll_wait(mEpfd, mEpollEvents, EPOLL_SIZE, -1);
 		if (event_count == -1)
-		{ 
+		{
 			//error here
 		}
 		for (i_event = 0; i_event < event_count; i_event++)
@@ -116,14 +116,14 @@ std::map<const std::string, Channel>	&Server::GetChannelList()
 }
 
 void Server::registerClient()
-{	
+{
 	socklen_t			address_size;
 	int					socket;
 	struct sockaddr_in	address;
 
 	address_size = sizeof(address);
 	socket = accept(mSocket, reinterpret_cast<sockaddr *>(& address), &address_size);
-	
+
 	controlClientEvent(socket, EPOLL_CTL_ADD, EPOLLIN | EPOLLET);
 	mClientMap.insert(std::make_pair(socket, Client(socket, address)));
 
@@ -177,7 +177,7 @@ void Server::sendToClient(const int client_fd)
 
 	//test code for broadcasting
 	for (std::map<const int, Client>::iterator it = mClientMap.begin(); it != mClientMap.end(); ++it)
-	{	
+	{
 		it_fd = it->second.GetFd();
 		if (it_fd == client_fd)
 		{
@@ -196,7 +196,7 @@ void Server::sendToClient(const int client_fd)
 		len_buf = write(it_fd, mBuffer, strlen(mBuffer));
 		if (len_buf == -1)
 		{
-			unregisterClientSocket(it_fd, "sendToClient : write"); 
+			unregisterClientSocket(it_fd, "sendToClient : write");
 		}
 		else
 		{
@@ -224,7 +224,7 @@ void Server::unregisterClientSocket(const int client_fd, const std::string& msg)
 	close(client_fd);
 }
 
-void Server::SendMessage(Client &target, const std::string& msg)
+void Server::SendMessage(const Client &target, const std::string& msg)
 {
 	send(target.GetFd(), msg.c_str(), msg.size(), MSG_DONTWAIT);
 }

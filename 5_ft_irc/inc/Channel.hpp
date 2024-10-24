@@ -10,7 +10,7 @@
 #include "Server.hpp"
 #include "ReplyMacros.hpp"
 
-/* 
+/*
 		Channel mode
 
 |	t	|	l	|	k	|	i	|
@@ -74,6 +74,7 @@ public:
 	const Client	*FindUserInChannelWithNick(const std::string &nickname) const;
 	const Client	*FindOpInChannelWithNick(const std::string &nickname) const;
 
+	std::vector<const Client *>	&GetUserList();
 	int		GetAllModeStatus();
 	bool	GetOneModeStatus(int mode) const;
 	bool	ToggleModeStatus(int mode, bool turn);

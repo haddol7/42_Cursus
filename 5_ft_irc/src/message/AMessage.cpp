@@ -31,7 +31,8 @@ static std::string	FindCommand(const std::string& msg) // to indicate command of
 
 AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 {
-	const char* commandList[] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "INVITE", NULL}; // set accepting commands
+
+	const char* commandList[] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "QUIT", "INVITE", NULL}; // set accepting commands
 
 	std::string cmd = FindCommand(msg); // to indicate command of a message
 
@@ -55,19 +56,16 @@ AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 			return new Pass(origin, msg);
 		case 1:
 			return new Nick(origin, msg);
-			break ;
 		case 2:
 			return new User(origin, msg);
-			break ;
 		case 3:
 			return new Privmsg(origin, msg);
-			break ;
 		case 4:
 			return new Join(origin, msg);
-			break ;
 		case 5:
+			return new Quit(origin, msg);
+		case 6:
 			return new Invite(origin, msg);
-			break;
 		default:
 			return NULL;
 	}
@@ -117,12 +115,14 @@ void	AMessage::ParseMessage()
 	{
 		if (end == std::string::npos)
 			end = last;
+		if (mBuff[pos] == ':')
+		{
+			++pos;
+			end = last;
+		}
 		mParamArray[mParamCount++] = mBuff.substr(pos, end - pos);
 		pos = mBuff.find_first_not_of(" ", end);
-		if (mBuff[pos] == ':')
-			end = last;
-		else
-			end = mBuff.find(" ", pos);
+		end = mBuff.find(" ", pos);
 	}
 }
 

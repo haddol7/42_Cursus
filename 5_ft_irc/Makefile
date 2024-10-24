@@ -16,6 +16,7 @@ SRC_MESSAGE =	$(SRC_DIR)message/AMessage.cpp \
 				$(SRC_DIR)message/Pass.cpp \
 				$(SRC_DIR)message/Privmsg.cpp \
 				$(SRC_DIR)message/Join.cpp \
+				$(SRC_DIR)message/Quit.cpp \
 				$(SRC_DIR)message/Invite.cpp \
 
 SRC_CHANNEL = 	$(SRC_DIR)channel/Channel.cpp

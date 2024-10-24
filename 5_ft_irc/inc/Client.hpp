@@ -28,6 +28,7 @@ public:
 	const std::string&	GetHostName() const;
 	const std::string&	GetServerName() const;
 	const std::string&	GetRealName() const;
+	std::string			GetClientPrefix() const;
 	unsigned int		GetFd() const;
 	in_addr_t			GetIpAddress() const;
 	const std::string&	GetIpAddressString() const;
