@@ -128,3 +128,35 @@ std::vector<const Client *>::iterator	Channel::getUserIter(const Client &target)
 {
 	return (std::find(mUsers.begin(), mUsers.begin(), &target));
 }
+
+int		Channel::GetAllModeStatus()
+{
+	return (mMode);
+}
+
+bool	Channel::GetOneModeStatus(int mode)
+{
+	if (mode < I_MODE || mode > T_MODE)
+	{
+		return (false);
+	}
+	return (mMode & (1 << mode));
+}
+
+//반환값은 모드를 바꿨으면 true, 그렇지 못하면 false입니다.
+bool	Channel::ToggleModeStatus(int mode, bool turn)
+{
+	if (mode < I_MODE || mode > T_MODE || GetOneModeStatus(mode) == turn)
+	{
+		return (false);
+	}
+	if (turn == TURN_ON)
+	{
+		mMode = mMode | (1 << mode);
+	}
+	else
+	{
+		mMode = mMode & ~(1 << mode);
+	}
+	return (true);
+}

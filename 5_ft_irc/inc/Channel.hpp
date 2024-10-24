@@ -70,7 +70,7 @@ public:
 
 	int		GetAllModeStatus();
 	bool	GetOneModeStatus(int mode);
-	void	ToggleModeStatus(int mode, bool turn);
+	bool	ToggleModeStatus(int mode, bool turn);
 
 	// broadcast sent back msg of command to all in channel
 	void	SendBackCmdMsg(const std::string &cmdMsg);
