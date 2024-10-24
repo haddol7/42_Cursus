@@ -10,6 +10,29 @@
 #include "Server.hpp"
 #include "ReplyMacros.hpp"
 
+/* 
+		Channel mode
+
+|	t	|	l	|	k	|	i	|
+|	3	|	2	|	1	|	0	|
+
+t is none
+l is mLimit
+k is mKey
+i is mInviteLists
+
+*/
+
+# define I_MODE	(0)
+# define K_MODE	(1)
+# define L_MODE	(2)
+# define T_MODE	(3)
+
+# define LIMIT_OFF (-1)
+
+# define TURN_OFF (false)
+# define TURN_ON (true)
+
 class Channel
 {
 public:
@@ -47,6 +70,11 @@ public:
 
 	// broadcast message to channel
 	void	Broadcast(const Client &broadcaster, const std::string &msg);
+
+	int		GetAllModeStatus();
+	bool	GetOneModeStatus(int mode);
+	void	ToggleModeStatus(int mode, bool turn);
+
 private:
 
 	/* private member function */
@@ -56,8 +84,14 @@ private:
 	std::vector<const Client *>::iterator	getUserIter(const Client &target);
 
 	/* private member variable */
+	//TODO : mInviteLists에 클라이언트가 도중에 나가면 해당 포인터는 어떻게 처리할 것인지
+	//		1. 나갈 때 직접 찾아서 지우기
+	//		2. 스마트 포인터..
 	std::string					mTag;
 	std::vector<unsigned int>	mOperators;
 	std::vector<const Client *>	mUsers;
+	std::vector<const Client *> mInviteLists;
 	std::string					mKey;
+	int							mLimit;
+	int							mMode;
 };
