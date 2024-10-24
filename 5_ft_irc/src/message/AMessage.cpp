@@ -103,21 +103,21 @@ void	AMessage::ParseMessage()
 		mMessagePrefix = mBuff.substr(0, end);
 	}
 
-	pos = mBuff.find(mCommand) + mCommand.length() + 1;
+	mParamCount = 0;
+
+	pos = mBuff.find(mCommand) + mCommand.length();
+	pos = mBuff.find_first_not_of(" ", pos);
 	last = mBuff.find("\r\n", pos);
 
-	mParamCount = 0;
 	end = mBuff.find(" ", pos);
-	while (end != std::string::npos && end + 1 != last && mParamCount < 14)
+	while (pos < last && mParamCount < 15)
 	{
+		if (end == std::string::npos)
+			end = last;
 		mParamArray[mParamCount++] = mBuff.substr(pos, end - pos);
-		pos = end + 1;
+		pos = mBuff.find_first_not_of(" ", end);
 		end = mBuff.find(" ", pos);
 	}
-	if (end == std::string::npos)
-		end = last;
-	if (mParamCount != 14 || mBuff[pos] == ':')
-		mParamArray[mParamCount++] = mBuff.substr(pos, end - pos);
 }
 
 AMessage::AMessage(Client* origin, const std::string& command, const std::string& msg) :
