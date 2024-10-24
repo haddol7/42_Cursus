@@ -50,6 +50,11 @@ const std::string	&Client::GetRealName() const
 	return (mRealName);
 }
 
+std::string	Client::GetClientPrefix() const
+{
+	return mNickName + "!" + mUserName + "@" + mHostName + " ";
+}
+
 unsigned int		Client::GetFd() const
 {
 	return (mFd);
