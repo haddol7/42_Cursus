@@ -49,28 +49,25 @@ AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 		return NULL;
 	}
 
-	AMessage*	message;
 	switch (index)
 	{
 		case 0:
-			message = new Pass(origin, msg);
-			break;
+			return new Pass(origin, msg);
 		case 1:
-			message = new Nick(origin, msg);
+			return new Nick(origin, msg);
 			break ;
 		case 2:
-			message = new User(origin, msg);
+			return new User(origin, msg);
 			break ;
 		case 3:
-			message = new Privmsg(origin, msg);
+			return new Privmsg(origin, msg);
 			break ;
 		case 4:
-			message = new Join(origin, msg);
+			return new Join(origin, msg);
 			break ;
 		default:
-			message = new NoCommand(origin, msg);
+			return NULL;
 	}
-	return message;
 }
 
 const std::string& AMessage::GetPrefix() const
