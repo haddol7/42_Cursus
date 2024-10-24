@@ -63,7 +63,7 @@ AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 		case 3:
 			message = new Privmsg(origin, msg);
 			break ;
-		case 3:
+		case 4:
 			message = new Join(origin, msg);
 			break ;
 		default:
