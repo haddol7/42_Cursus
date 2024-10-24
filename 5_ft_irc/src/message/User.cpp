@@ -68,6 +68,7 @@ bool	User::isParamAllowed() const
 	return true;
 }
 
+
 User::~User()
 {
 }
