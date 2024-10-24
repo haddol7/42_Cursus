@@ -29,3 +29,9 @@
 #define ERR_CHANOPRIVSNEEDED(CHANNEL)		(std::string("482 ") + (CHANNEL) + " :You're not channel operator\r\n")
 #define ERR_RESTRICTED						(std::string("484 :Your connection is restricted!\r\n"))
 
+#define ERR_KEYSET(CHANNEL)					(std::string("467 ") + CAHNNEL + " :Channel key already set\r\n")
+#define ERR_CHANOPRIVSNEEDED(CHANNEL)		(std::string("482 ") + CHANNEL + " :You're not channel operator\r\n")
+#define ERR_USERNOTINCHANNEL(NICK, CHANNEL)	(std::string("441 ") + NICK + " " + CHANNEL + " :They aren't on that channel\r\n")
+#define ERR_UNKNOWNMODE(CHAR)				(std::string("472 ") + CHAR + " :is unknown mode char to me for <channel>\r\n")
+#define RPL_CHANNELMODEIS(CHANNEL, MODE, PARAMS)	(std::string("324 ") + CHANNEL + " " + MODE + " " + PARAMS + "\r\n")
+

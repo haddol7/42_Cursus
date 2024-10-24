@@ -31,10 +31,9 @@ static std::string	FindCommand(const std::string& msg) // to indicate command of
 
 AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 {
-
-	const char* commandList[] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "QUIT", "INVITE", NULL}; // set accepting commands
-
-	std::string cmd = FindCommand(msg); // to indicate command of a message
+	const char* commandList[] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "QUIT", "INVITE", NULL}; // set accepting commands
+	
+  std::string cmd = FindCommand(msg); // to indicate command of a message
 
 	size_t	index = 0;
 	for (; commandList[index] != NULL; ++index)
@@ -63,8 +62,10 @@ AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 		case 4:
 			return new Join(origin, msg);
 		case 5:
-			return new Quit(origin, msg);
+			return new Mode(origin, msg);
 		case 6:
+			return new Quit(origin, msg);
+		case 7:
 			return new Invite(origin, msg);
 		default:
 			return NULL;

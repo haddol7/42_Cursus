@@ -57,6 +57,7 @@ public:
 	void				setChannelKey(const std::string &channelKey);
 	// set channel key
 	// remove one in channel
+	bool	IsOperator(const Client	&target);
 	void	RemoveOne(const Client &target);
 	// demote operator to user
 	void	DemoteOperator(const Client &oper);
@@ -67,6 +68,7 @@ public:
 	// add user with key
 	void	AddUserWithKey(const Client &user, const std::string &key) \
 		throw(Channel::BadChannelKeyException);
+
 	// invite one in channel
 	void	InviteOne(const Client *target);
 	
@@ -78,6 +80,12 @@ public:
 	int		GetAllModeStatus();
 	bool	GetOneModeStatus(int mode) const;
 	bool	ToggleModeStatus(int mode, bool turn);
+  const Client*		FindUser(const std::string& nick);
+  
+  const std::string&	GetKey() const;
+	void				SetKey(const std::string& key);
+	int					GetLimit() const;
+	void				SetLimit(int limit);
 
 	// broadcast sent back msg of command to all in channel
 	void	SendBackCmdMsg(const std::string &cmdMsg);
