@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "ReplyMacros.hpp"
+
 class Client;
 
 class AMessage
