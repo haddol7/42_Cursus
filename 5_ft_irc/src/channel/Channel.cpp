@@ -14,9 +14,12 @@ std::string	Channel::BadChannelKeyException::what() const throw()
 // constructor && destructor
 Channel::Channel(const std::string &tag, const Client &channelCreater) \
 	: mTag(tag), \
-	mKey("")
+	mKey(""),
+	mLimit(LIMIT_OFF),
+	mMode(0)
 {
 	mOperators.reserve(10);
+	mInviteLists.reserve(50);
 	mUsers.reserve(50);
 	AddOperator(channelCreater);
 	AddUser(channelCreater);
