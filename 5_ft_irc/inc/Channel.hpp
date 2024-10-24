@@ -68,12 +68,14 @@ public:
 	void	AddUserWithKey(const Client &user, const std::string &key) \
 		throw(Channel::BadChannelKeyException);
 
-	// broadcast message to channel
-	void	Broadcast(const Client &broadcaster, const std::string &msg);
-
 	int		GetAllModeStatus();
 	bool	GetOneModeStatus(int mode);
 	void	ToggleModeStatus(int mode, bool turn);
+
+	// broadcast sent back msg of command to all in channel
+	void	SendBackCmdMsg(const std::string &cmdMsg);
+	// broadcast private message to channel except broadcaster
+	void	SendPrivateMsgToChannel(const Client &broadcaster, const std::string &msg);
 
 private:
 

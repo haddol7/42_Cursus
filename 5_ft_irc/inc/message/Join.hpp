@@ -101,6 +101,7 @@ class Join : public AMessage
 		bool				isChannelKeyValid(const std::string &channelKey);
 		std::string			getParameter();
 		void				parseParameter(const std::string &parameter);
+		std::string			GetJoinSendBack(const std::string &channelName);
 		
 		/* private member variable */
 		// channel, key info

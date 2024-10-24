@@ -7,14 +7,8 @@ Client::Client(unsigned int fd, sockaddr_in clientAddrInfo) \
 	mPasswordConfirmation(false) ,
 	mRegisterStatus(0)
 {
-struct hostent	*host;
+	struct hostent	*host;
 
-	//TODO : 디버그용이므로 꼭 지울 것!
-	{
-	mNickName = " ";
-	mNickName[0] = fd + '0';
-	TurnOnRegisterStatus(USER);
-	}
 	mIpAddressString = inet_ntoa(clientAddrInfo.sin_addr);
 	host = gethostbyaddr(&clientAddrInfo.sin_addr, sizeof(clientAddrInfo.sin_addr), AF_INET);
 	if (host)
@@ -156,7 +150,7 @@ void		Client::TurnOnRegisterStatus(int mode)
 	}
 	mRegisterStatus |= (1 << mode);
 	if (GetRegisterStatus() == REGISTERD)
-	{	
+	{
 		std::string	result;
 
 		result = Server::GetServer()->GetPrefix() + RPL_WELCOME(GetNickName(), GetUserName(), GetHostName());

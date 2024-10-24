@@ -93,17 +93,24 @@ void	Channel::AddUserWithKey(const Client &user, const std::string &key) \
 	mUsers.push_back(&user);
 }
 
-// broadcast message to channel
-// TODO : primsg의 파라미터로 채널이 왔을 때 이 함수를 사용하시면 됩니다.
-void	Channel::Broadcast(const Client &broadcaster, const std::string &msg)
+// broadcast sent back msg of command to all in channel
+void	Channel::SendBackCmdMsg(const std::string &cmdMsg)
+{
+	for (std::vector<const Client *>::iterator iter = mUsers.begin(); \
+		iter != mUsers.end(); iter++)
+		Server::GetServer()->SendMessage(const_cast<Client &>(**iter), cmdMsg);
+}
+
+// broadcast private message to channel except broadcaster
+void	Channel::SendPrivateMsgToChannel(const Client &broadcaster, const std::string &msg)
 {
 	for (std::vector<const Client *>::iterator iter = mUsers.begin(); \
 		iter != mUsers.end(); iter++)
 	{
-		//if (*iter == &broadcaster)
-		//	continue ;
-		Server::GetServer()->SendMessage(const_cast<Client &>(broadcaster), msg);
-	}
+		if (*iter == &broadcaster)
+			continue ;
+		Server::GetServer()->SendMessage(const_cast<Client &>(**iter), msg);
+	}	
 }
 
 // must not be called with default variable(instance need creater info)
