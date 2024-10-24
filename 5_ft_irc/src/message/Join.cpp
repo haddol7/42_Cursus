@@ -227,7 +227,7 @@ void				Join::parseParameter(const std::string &parameter)
 		if (isChannelNameValid(temp) == true)
 			mChannelList.push_back(temp);
 		else
-			throw (Join::NoSuchChannelException(temp));
+			ReplyToOrigin(ERR_NOSUCHCHANNEL(temp));
 	}
 
 	if (keyParam.empty())
@@ -239,6 +239,6 @@ void				Join::parseParameter(const std::string &parameter)
 		if (isChannelKeyValid(temp) == true)
 			mChannelKeyList.push_back(temp);
 		else
-			throw (Join::BadChannelKeyException(temp));
+			ReplyToOrigin(ERR_NOSUCHCHANNEL(temp));
 	}
 }
