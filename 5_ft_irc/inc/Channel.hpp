@@ -67,10 +67,16 @@ public:
 	// add user with key
 	void	AddUserWithKey(const Client &user, const std::string &key) \
 		throw(Channel::BadChannelKeyException);
+	// invite one in channel
+	void	InviteOne(const Client *target);
+	
+	// find one in channel with nickname
+	const Client	*FindUserInChannelWithNick(const std::string &nickname) const;
+	const Client	*FindOpInChannelWithNick(const std::string &nickname) const;
 
 	std::vector<const Client *>	&GetUserList();
 	int		GetAllModeStatus();
-	bool	GetOneModeStatus(int mode);
+	bool	GetOneModeStatus(int mode) const;
 	bool	ToggleModeStatus(int mode, bool turn);
 
 	// broadcast sent back msg of command to all in channel
@@ -79,7 +85,6 @@ public:
 	void	SendPrivateMsgToChannel(const Client &broadcaster, const std::string &msg);
 
 private:
-
 	/* private member function */
 	// get operator location in vector
 	std::vector<unsigned int>::iterator		getOperatorIter(const Client &target);
