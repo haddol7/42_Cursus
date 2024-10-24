@@ -48,6 +48,15 @@ void	Channel::RemoveOne(const Client &target)
 		mUsers.erase(targetLocation);
 }
 
+bool	Channel::IsOperator(const Client	&target)
+{
+	std::vector<unsigned int>::iterator	targetLocation = getOperatorIter(target);
+
+	if (targetLocation == mOperators.end())
+		return (false);
+	return (true);
+}
+
 // demote operator to user
 void	Channel::DemoteOperator(const Client &target)
 {
@@ -59,6 +68,8 @@ void	Channel::DemoteOperator(const Client &target)
 	else
 		mOperators.erase(targetLocation);
 }
+
+
 
 // add user in channel
 void	Channel::AddUser(const Client &user) throw(Channel::BadChannelKeyException)
@@ -129,23 +140,19 @@ std::vector<const Client *>::iterator	Channel::getUserIter(const Client &target)
 	return (std::find(mUsers.begin(), mUsers.begin(), &target));
 }
 
-int		Channel::GetAllModeStatus()
+int		Channel::GetAllModeStatus() const
 {
 	return (mMode);
 }
 
-bool	Channel::GetOneModeStatus(int mode)
+bool	Channel::GetOneModeStatus(int mode) const
 {
-	if (mode < I_MODE || mode > T_MODE)
-	{
-		return (false);
-	}
 	return (mMode & (1 << mode));
 }
 
 //반환값은 모드를 바꿨으면 true, 그렇지 못하면 false입니다.
 bool	Channel::ToggleModeStatus(int mode, bool turn)
-{
+{	
 	if (mode < I_MODE || mode > T_MODE || GetOneModeStatus(mode) == turn)
 	{
 		return (false);
@@ -159,4 +166,42 @@ bool	Channel::ToggleModeStatus(int mode, bool turn)
 		mMode = mMode & ~(1 << mode);
 	}
 	return (true);
+}
+
+const std::string& Channel::GetKey() const
+{
+	return (mKey);
+}
+
+int Channel::GetLimit() const
+{
+	return (mLimit);
+}
+
+void Channel::SetKey(const std::string& key)
+{
+	mKey = key;
+}
+
+void Channel::SetLimit(int limit)
+{	
+	if (limit < 0)
+	{
+		limit = 0;
+	}
+	mLimit = limit;
+}
+
+const Client*	Channel::FindUser(const std::string& nick)
+{
+	std::vector<const Client *>::iterator	it = mUsers.begin();
+
+	for (; it != mUsers.end(); ++it)
+	{
+		if ((*it)->GetNickName() == nick)
+		{
+			return ((*it));
+		}
+	}
+	return (NULL);
 }
