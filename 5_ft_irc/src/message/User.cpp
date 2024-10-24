@@ -25,7 +25,6 @@ AMessage(origin, "USER", msg)
 
 void	User::ExecuteCommand()
 {
-	// TODO : 임시 작업, 이후 자세한 예외 처리 등 필요!!
 	if (mOrigin->GetRegisterStatus() & (1 << USER))
 		ReplyToOrigin(ERR_ALREADYREGISTRED);
 	else if (mParamCount < 4)
