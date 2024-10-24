@@ -10,7 +10,7 @@
 #include "Server.hpp"
 #include "ReplyMacros.hpp"
 
-/* 
+/*
 		Channel mode
 
 |	t	|	l	|	k	|	i	|
@@ -68,6 +68,7 @@ public:
 	void	AddUserWithKey(const Client &user, const std::string &key) \
 		throw(Channel::BadChannelKeyException);
 
+	std::vector<const Client *>	&GetUserList();
 	int		GetAllModeStatus();
 	bool	GetOneModeStatus(int mode);
 	bool	ToggleModeStatus(int mode, bool turn);
