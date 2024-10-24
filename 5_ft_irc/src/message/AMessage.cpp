@@ -116,7 +116,10 @@ void	AMessage::ParseMessage()
 			end = last;
 		mParamArray[mParamCount++] = mBuff.substr(pos, end - pos);
 		pos = mBuff.find_first_not_of(" ", end);
-		end = mBuff.find(" ", pos);
+		if (mBuff[pos] == ':')
+			end = last;
+		else
+			end = mBuff.find(" ", pos);
 	}
 }
 
