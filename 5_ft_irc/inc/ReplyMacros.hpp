@@ -2,7 +2,7 @@
 
 //Replys
 #define RPL_WELCOME(NICK, USER, HOST) 		(std::string("001 ") + NICK + " Welcome to the Internet Relay Network " + NICK + "!" + USER + "@" + HOST + "\r\n")
-#define RPL_CHANNELMODEIS(CHANNEL, MODE, PARAMS)	(std::string("324 ") + CHANNEL + " " + MODE + " " + PARAMS + "\r\n")
+#define RPL_CHANNELMODEIS(CHANNEL, MODE)	(std::string("324 ") + CHANNEL + " " + MODE + "\r\n")
 #define RPL_TOPIC(CHANNEL, TOPIC) 			(std::string("332 ") + CHANNEL + " :" + TOPIC + "\r\n")
 #define RPL_INVITING(CHANNEL, NICK)			(std::string("341 ") + (CHANNEL) + " " + (NICK) + "\r\n")
 
@@ -26,7 +26,7 @@
 #define ERR_ALREADYREGISTRED				(std::string("462 :Unauthorized command (already registered)\r\n"))
 #define ERR_KEYSET(CHANNEL)					(std::string("467 ") + CAHNNEL + " :Channel key already set\r\n")
 #define ERR_CHANNELISFULL(CHANNEL)			(std::string("471 ") + (CHANNEL) + " :Cannot join channel (+i)\r\n")
-#define ERR_UNKNOWNMODE(CHAR)				(std::string("472 ") + CHAR + " :is unknown mode char to me for <channel>\r\n")
+#define ERR_UNKNOWNMODE(CHAR, CHANNEL)		(std::string("472 ") + CHAR + " :is unknown mode char to me for " + CHANNEL + "\r\n")
 #define ERR_INVITEONLYCHAN(CHANNEL) 		(std::string("473 ") + (CHANNEL) + " :Cannot join channel (+i)\r\n")
 #define ERR_BANNEDFROMCHAN(CHANNEL)			(std::string("474 ") + (CHANNEL) + " :Cannot join channel (+b)\r\n")
 #define ERR_BADCHANNELKEY(CHANNEL) 			(std::string("475 ") + CHANNEL + " :Cannot join channel (+k)\r\n")
