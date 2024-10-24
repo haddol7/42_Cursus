@@ -77,7 +77,7 @@ public:
 	const Client	*FindOpInChannelWithNick(const std::string &nickname) const;
 
 	std::vector<const Client *>	&GetUserList();
-	int		GetAllModeStatus();
+	int		GetAllModeStatus() const;
 	bool	GetOneModeStatus(int mode) const;
 	bool	ToggleModeStatus(int mode, bool turn);
   const Client*		FindUser(const std::string& nick);
