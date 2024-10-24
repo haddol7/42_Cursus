@@ -6,3 +6,4 @@
 #include "Join.hpp"
 #include "Privmsg.hpp"
 #include "Pass.hpp"
+#include "Quit.hpp"
