@@ -79,6 +79,6 @@ void Privmsg::SendPrivMessage(Client* target)
 {
 	std::string	result;
 
-	result = GetPrefix() + mBuff;
+	result = GetPrefix() + mBuff + "\r\n";
 	Server::GetServer()->SendMessage(*target, result);
 }
