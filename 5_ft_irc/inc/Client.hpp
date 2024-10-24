@@ -19,6 +19,7 @@ class Client
 public:
 	// constructor && destructor
 	Client(unsigned int fd, sockaddr_in clientAddrInfo);
+	Client();
 	~Client();
 
 	// getter
@@ -41,7 +42,6 @@ public:
 
 private:
 	// must not be call with default constructor(instance need ip info)
-	Client();
 	//MessageBuffer
 	bool				checkCommand() const;
 	AMessage*			makeCommand();
