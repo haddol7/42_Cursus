@@ -64,7 +64,7 @@ void	Channel::DemoteOperator(const Client &target)
 void	Channel::AddUser(const Client &user) throw(Channel::BadChannelKeyException)
 {
 	// key가 할당되어 있는 상황에서는 key 없이 channel에 들어올 수 없다.
-	if (mKey != std::string(""))
+	if (!mKey.empty())
 		throw (BadChannelKeyException(mTag));
 	if (getUserIter(user) != mUsers.end())
 		return ;
@@ -91,6 +91,48 @@ void	Channel::AddUserWithKey(const Client &user, const std::string &key) \
 		return ;
 	
 	mUsers.push_back(&user);
+}
+
+// invite one in channel
+void	Channel::InviteOne(const Client *target)
+{
+	// 이미 초대 리스트에 있으면 아무런 동작도 하지 않고 넘김
+	std::vector<const Client *>::iterator iter = mInviteLists.begin();
+	for (; iter != mInviteLists.end(); iter++)
+	{
+		if (*iter == target)
+			return ;
+	}
+	mInviteLists.push_back(target);
+}
+
+// find one in channel with nickname
+const Client	*Channel::FindUserInChannelWithNick(const std::string &nickname) const
+{
+	for (std::vector<const Client *>::const_iterator i = mUsers.begin(); \
+		i != mUsers.end(); i++)
+	{
+		if ((*i)->GetNickName() == nickname)
+			return (*i);
+	}
+	return (NULL);
+}
+const Client	*Channel::FindOpInChannelWithNick(const std::string &nickname) const
+{
+	for (std::vector<unsigned int>::const_iterator i = mOperators.begin(); \
+		i != mOperators.end(); i++)
+	{
+		for (std::vector<const Client *>::const_iterator j = mUsers.begin(); \
+			j != mUsers.end(); j++)
+		{
+			if ((*j)->GetFd() == (*i))
+			{
+				if ((*j)->GetNickName() == nickname)
+					return (*j);
+			}
+		}
+	}
+	return (NULL);
 }
 
 // broadcast sent back msg of command to all in channel
@@ -126,7 +168,7 @@ std::vector<unsigned int>::iterator		Channel::getOperatorIter(const Client &targ
 // get user location in vector
 std::vector<const Client *>::iterator	Channel::getUserIter(const Client &target)
 {
-	return (std::find(mUsers.begin(), mUsers.begin(), &target));
+	return (std::find(mUsers.begin(), mUsers.end(), &target));
 }
 
 int		Channel::GetAllModeStatus()
@@ -134,7 +176,7 @@ int		Channel::GetAllModeStatus()
 	return (mMode);
 }
 
-bool	Channel::GetOneModeStatus(int mode)
+bool	Channel::GetOneModeStatus(int mode) const
 {
 	if (mode < I_MODE || mode > T_MODE)
 	{
