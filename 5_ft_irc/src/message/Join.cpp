@@ -68,7 +68,7 @@ void	Join::ExecuteCommand()
 {
 	try
 	{
-		parseParameter(getParameter());
+		parseParameter();
 	}
 	catch (const NewException &e)
 	{
@@ -179,6 +179,9 @@ bool	Join::isChannelKeyValid(const std::string &channelKey)
 	return (true);
 }
 
+/*
+// getParameter()는 paramArray의 존재로 그 필요가 사라졌으나
+// 혹시 몰라 주석의 형태로 남겨둡니다.
 // parse parameter from msg
 // prefix, command가 보장된 상태로 들어오므로 parameter만 파싱
 std::string	Join::getParameter()
@@ -192,26 +195,26 @@ std::string	Join::getParameter()
 	else
 		return (mBuff.substr(mBuff.find(" ") + 1));
 }
+*/
 
 // ' '로 파라미터를 채널 목록과 키 목록으로 구분
 // 파라미터는 # 또는 &로 시작해야 함
 // 그렇지 않은 parameter 이후로는 모두 key 목록(mChannelKeyList)에 저장
-void				Join::parseParameter(const std::string &parameter)
+void				Join::parseParameter()
 {
-	std::istringstream	lineParser(parameter);
 	std::string			channelParam;
 	std::string			keyParam;
 
 	// 파라미터가 비어 있다 -> ERR_NEEDMOREPARAM
-	if (parameter.empty())
+	if (mParamCount == 0)
 		throw (Join::NeedMoreParamException());
 
-	// ' ' 구분자를 기준으로 파라미터의 채널 부분 분리
-	std::getline(lineParser, channelParam, ' ');
+	// 파라미터의 채널 목록
+	channelParam = mParamArray[0];
 
-	// ' ' 구분자를 기준으로 파라미터의 키 부분 분리(이 부분은 비어있을 수 있음)
-	if (!lineParser.eof())
-		std::getline(lineParser, keyParam, ' ');
+	// 파라미터의 키 목록(이 부분은 비어있을 수 있음)
+	if (mParamCount >= 2)
+		keyParam = mParamArray[1];
 
 	// 파라미터가 3개 이상이다 -> 3번째 파라미터부터 버리고 다음 로직으로 넘어간다.
 	// 파라미터가 넘칠 경우의 err reply가 정의되어 있지 않으며
