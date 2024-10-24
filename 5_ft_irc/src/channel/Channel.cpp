@@ -152,11 +152,11 @@ bool	Channel::ToggleModeStatus(int mode, bool turn)
 	}
 	if (turn == TURN_ON)
 	{
-		mMode = mMode & ~(1 << mode);
+		mMode = mMode | (1 << mode);
 	}
 	else
 	{
-		mMode = mMode | (1 << mode);
+		mMode = mMode & ~(1 << mode);
 	}
 	return (true);
 }
