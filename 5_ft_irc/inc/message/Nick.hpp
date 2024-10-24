@@ -13,7 +13,7 @@ class Nick : public AMessage
 		Nick();
 
 		//Nickname validation check
-		bool	isNickInvalid() const;
+		bool	isNickValid() const;
 		bool	isNickDuplicated() const;
 
 	private:

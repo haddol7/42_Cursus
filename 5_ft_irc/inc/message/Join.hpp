@@ -99,8 +99,10 @@ class Join : public AMessage
 		bool				isControlCharInString(const std::string &s);
 		bool				isChannelNameValid(const std::string &channelName);
 		bool				isChannelKeyValid(const std::string &channelKey);
-		std::string			getParameter();
-		void				parseParameter(const std::string &parameter);
+		// getParameter()는 paramArray의 존재로 그 필요가 사라졌으나
+		// 혹시 몰라 주석의 형태로 남겨둡니다.
+		//std::string			getParameter();
+		void				parseParameter();
 		std::string			GetJoinSendBack(const std::string &channelName);
 		
 		/* private member variable */

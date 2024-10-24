@@ -11,6 +11,7 @@ class User : public AMessage
 
 	private:
 		User();
+		bool	isParamAllowed() const;
 
 		//<username> <hostname> <servername> :<realname>
 		std::string	mUserName;

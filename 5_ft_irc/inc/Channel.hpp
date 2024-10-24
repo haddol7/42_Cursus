@@ -10,7 +10,7 @@
 #include "Server.hpp"
 #include "ReplyMacros.hpp"
 
-/* 
+/*
 		Channel mode
 
 |	t	|	l	|	k	|	i	|
@@ -69,15 +69,23 @@ public:
 	void	AddUserWithKey(const Client &user, const std::string &key) \
 		throw(Channel::BadChannelKeyException);
 
-	int					GetAllModeStatus() const;
-	bool				GetOneModeStatus(int mode) const;
-	bool				ToggleModeStatus(int mode, bool turn);
-	const std::string&	GetKey() const;
+	// invite one in channel
+	void	InviteOne(const Client *target);
+	
+	// find one in channel with nickname
+	const Client	*FindUserInChannelWithNick(const std::string &nickname) const;
+	const Client	*FindOpInChannelWithNick(const std::string &nickname) const;
+
+	std::vector<const Client *>	&GetUserList();
+	int		GetAllModeStatus();
+	bool	GetOneModeStatus(int mode) const;
+	bool	ToggleModeStatus(int mode, bool turn);
+  const Client*		FindUser(const std::string& nick);
+  
+  const std::string&	GetKey() const;
 	void				SetKey(const std::string& key);
 	int					GetLimit() const;
 	void				SetLimit(int limit);
-	const Client*		FindUser(const std::string& nick);
-
 
 	// broadcast sent back msg of command to all in channel
 	void	SendBackCmdMsg(const std::string &cmdMsg);
@@ -85,7 +93,6 @@ public:
 	void	SendPrivateMsgToChannel(const Client &broadcaster, const std::string &msg);
 
 private:
-
 	/* private member function */
 	// get operator location in vector
 	std::vector<unsigned int>::iterator		getOperatorIter(const Client &target);

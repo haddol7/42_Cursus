@@ -15,14 +15,20 @@ void	Nick::ExecuteCommand()
 {
 	if (mNick.length() == 0)
 		ReplyToOrigin(ERR_NONICKNAMEGIVEN);
-	else if (isNickInvalid())
+	else if (isNickValid() == false)
 		ReplyToOrigin(ERR_ERRONEUSNICKNAME(mNick));
-	else if (isNickDuplicated())
+	else if (isNickDuplicated() == true)
 		ReplyToOrigin(ERR_NICKNAMEINUSE(mNick));
-	else
+	else if (!(mOrigin->GetRegisterStatus() & (1 << NICK)))
 	{
 		mOrigin->SetNickName(mNick);
 		mOrigin->TurnOnRegisterStatus(NICK);
+	}
+	else if (mOrigin->GetNickName() != mNick)
+	{
+		Server::GetServer()->SendMessage(*mOrigin, \
+			mOrigin->GetClientPrefix() + "NICK :" + mNick + "\r\n");
+		mOrigin->SetNickName(mNick);
 	}
 }
 
@@ -30,34 +36,32 @@ Nick::~Nick()
 {
 }
 
-static bool	isCharacterNotAllowed(char c)
+static bool	isCharacterAllowed(char c)
 {
 	if (std::isalnum(c))
-		return false;
+		return true;
 	else if ((c >= 0x5B && c <= 0x60) || (c >= 0x7B && c <= 0x7D) || c == '-')
-		return false;
-	return true;
+		return true;
+	return false;
 }
 
-bool	Nick::isNickInvalid() const
+bool	Nick::isNickValid() const
 {
 	if (mNick.length() > 9)
-		return true;
+		return false;
 	else if (std::isdigit(mNick[0]) || mNick[0] == '-')
-		return true;
+		return false;
 	for (unsigned int i = 0; i < mNick.length(); ++i)
 	{
-		if (isCharacterNotAllowed(mNick[i]))
-			return true;
+		if (isCharacterAllowed(mNick[i]) == false)
+			return false;
 	}
-	return false;
+	return true;
 }
 
 bool	Nick::isNickDuplicated() const
 {
-	Server	*server = Server::GetServer();
-
-	if (server->ReturnClientOrNull(mNick))
+	if (Server::GetServer()->ReturnClientOrNull(mNick) && mOrigin->GetNickName() != mNick)
 		return true;
 	return false;
 }

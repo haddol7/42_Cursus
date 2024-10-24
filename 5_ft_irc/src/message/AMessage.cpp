@@ -31,9 +31,9 @@ static std::string	FindCommand(const std::string& msg) // to indicate command of
 
 AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 {
-	const char* commandList[] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", NULL}; // set accepting commands
-
-	std::string cmd = FindCommand(msg); // to indicate command of a message
+	const char* commandList[] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "QUIT", "INVITE", NULL}; // set accepting commands
+	
+  std::string cmd = FindCommand(msg); // to indicate command of a message
 
 	size_t	index = 0;
 	for (; commandList[index] != NULL; ++index)
@@ -49,31 +49,27 @@ AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 		return NULL;
 	}
 
-	AMessage*	message;
 	switch (index)
 	{
 		case 0:
-			message = new Pass(origin, msg);
-			break;
+			return new Pass(origin, msg);
 		case 1:
-			message = new Nick(origin, msg);
-			break ;
+			return new Nick(origin, msg);
 		case 2:
-			message = new User(origin, msg);
-			break ;
+			return new User(origin, msg);
 		case 3:
-			message = new Privmsg(origin, msg);
-			break ;
+			return new Privmsg(origin, msg);
 		case 4:
-			message = new Join(origin, msg);
-			break ;
+			return new Join(origin, msg);
 		case 5:
-			message = new Mode(origin, msg);
-			break ;
+			return new Mode(origin, msg);
+		case 6:
+			return new Quit(origin, msg);
+		case 7:
+			return new Invite(origin, msg);
 		default:
-			message = new NoCommand(origin, msg);
+			return NULL;
 	}
-	return message;
 }
 
 const std::string& AMessage::GetPrefix() const
@@ -109,21 +105,26 @@ void	AMessage::ParseMessage()
 		mMessagePrefix = mBuff.substr(0, end);
 	}
 
-	pos = mBuff.find(mCommand) + mCommand.length() + 1;
+	mParamCount = 0;
+
+	pos = mBuff.find(mCommand) + mCommand.length();
+	pos = mBuff.find_first_not_of(" ", pos);
 	last = mBuff.find("\r\n", pos);
 
-	mParamCount = 0;
 	end = mBuff.find(" ", pos);
-	while (end != std::string::npos && end + 1 != last && mParamCount < 14)
+	while (pos < last && mParamCount < 15)
 	{
+		if (end == std::string::npos)
+			end = last;
+		if (mBuff[pos] == ':')
+		{
+			++pos;
+			end = last;
+		}
 		mParamArray[mParamCount++] = mBuff.substr(pos, end - pos);
-		pos = end + 1;
+		pos = mBuff.find_first_not_of(" ", end);
 		end = mBuff.find(" ", pos);
 	}
-	if (end == std::string::npos)
-		end = last;
-	if (mParamCount != 14 || mBuff[pos] == ':')
-		mParamArray[mParamCount++] = mBuff.substr(pos, end - pos);
 }
 
 AMessage::AMessage(Client* origin, const std::string& command, const std::string& msg) :

@@ -35,14 +35,29 @@ const std::string	&Client::GetUserName() const
 	return (mUserName);
 }
 
-unsigned int		Client::GetFd() const
-{
-	return (mFd);
-}
-
 const std::string	&Client::GetHostName() const
 {
 	return (mHostName);
+}
+
+const std::string	&Client::GetServerName() const
+{
+	return (mServerName);
+}
+
+const std::string	&Client::GetRealName() const
+{
+	return (mRealName);
+}
+
+std::string	Client::GetClientPrefix() const
+{
+	return mNickName + "!" + mUserName + "@" + mHostName + " ";
+}
+
+unsigned int		Client::GetFd() const
+{
+	return (mFd);
 }
 
 in_addr_t			Client::GetIpAddress() const
@@ -80,6 +95,16 @@ void				Client::SetUserName(const std::string &userName)
 void				Client::SetHostName(const std::string &hostName)
 {
 	mHostName = hostName;
+}
+
+void				Client::SetServerName(const std::string &serverName)
+{
+	mServerName = serverName;
+}
+
+void				Client::SetRealName(const std::string &realName)
+{
+	mRealName = realName;
 }
 
 void				Client::SetPasswordConfirmation(const bool passwordConfirmation)
