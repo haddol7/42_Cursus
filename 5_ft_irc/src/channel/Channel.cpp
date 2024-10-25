@@ -46,6 +46,16 @@ void	Channel::RemoveOne(const Client &target)
 		return ;
 	else
 		mUsers.erase(targetLocation);
+	
+	// 채널에 한 명도 없을 경우 채널 삭제
+	if (mUsers.empty())
+	{
+		Server::GetServer()->GetChannelList().erase(mTag);
+		return ;
+	}
+	// 관리자가 1명도 없을 경우 제일 먼저 들어온 유저를 관리자로 선출
+	if (mOperators.empty())
+		AddOperator(*mUsers[0]);
 }
 
 bool	Channel::IsOperator(const Client	&target)
@@ -274,7 +284,7 @@ std::string		Channel::GetMembersOfChannelInString()
 		if (IsOperator(**iter))
 			output.append("@" + (*iter)->GetNickName() + " ");
 	}
-	
+
 	iter = mUsers.begin();
 	for (; iter != mUsers.end(); iter++)
 	{
