@@ -197,6 +197,17 @@ void Server::unregisterClientSocket(const int client_fd, const std::string& msg)
 {
 	std::cerr << client_fd << msg << std::endl;
 	epoll_ctl(mEpfd, EPOLL_CTL_DEL, client_fd, NULL);
+	Client	&client = mClientMap.find(client_fd)->second;
+	if (client.howManyChannelJoining() > 0)
+	{
+		std::vector<Channel *>				&channal_list = client.GetChannelListOfClient();
+		std::vector<Channel *>::iterator	it = channal_list.begin();
+		for (; it != channal_list.end(); ++it)
+		{
+			(*it)->RemoveOne(client);
+			(*it)->ExcludeOneFromInvitation(&client);
+		}
+	}
 	mClientMap.erase(client_fd);
 	close(client_fd);
 }
