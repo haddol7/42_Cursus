@@ -8,7 +8,6 @@
 #include <cerrno>
 #include "Client.hpp"
 
-//TODO : 매크로 따로 옮기고 사이즈 설정 해야 함!
 # define LISTEN_SIZE (5)
 # define EPOLL_SIZE (5)
 # define BUF_SIZE (600)
