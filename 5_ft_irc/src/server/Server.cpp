@@ -45,7 +45,7 @@ void Server::SetNameAndPrefix(const std::string& name)
 	mPrefix = ":" + name + " ";
 }
 
-void Server::SetPassword(const std::string& pass)
+void Server::setPassword(const std::string& pass)
 {
 	mPassword = pass;
 }
@@ -55,11 +55,11 @@ const std::string&	Server::GetPrefix() const
 	return (mPrefix);
 }
 
-void Server::InitServer(const char *port, const char* pass)
+bool Server::InitServer(const char *port, const char* pass)
 {
 	struct sockaddr_in	address;
 
-	SetPassword(pass);
+	setPassword(pass);
 	mSocket = socket(PF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
 	memset(&address, 0, sizeof(address));
 	address.sin_family = AF_INET;
@@ -67,15 +67,18 @@ void Server::InitServer(const char *port, const char* pass)
 	address.sin_port = htons(atoi(port));
 	if (bind(mSocket, reinterpret_cast<sockaddr *>(& address), sizeof(address)) == -1)
 	{
-		//error here
+		std::cerr << "Error: " << strerror(errno) << std::endl;
+		return (false);
 	}
 	if (listen(mSocket, LISTEN_SIZE) == -1)
 	{
-		//error here
+		std::cerr << "Error: " << strerror(errno) << std::endl;
+		return (false);
 	}
 	mEpfd = epoll_create(EPOLL_SIZE);
 	mEpollEvents = new struct epoll_event[EPOLL_SIZE];
 	controlClientEvent(mSocket, EPOLL_CTL_ADD, EPOLLIN);
+	return (true);
 }
 
 void Server::ExecServerLoop(void)
@@ -89,14 +92,18 @@ void Server::ExecServerLoop(void)
 		event_count = epoll_wait(mEpfd, mEpollEvents, EPOLL_SIZE, -1);
 		if (event_count == -1)
 		{
-			//error here
+			std::cerr << "Error: " << strerror(errno) << std::endl;
+			break ;
 		}
 		for (i_event = 0; i_event < event_count; i_event++)
 		{
 			client_fd = mEpollEvents[i_event].data.fd;
 			if (client_fd == mSocket)
 			{
-				registerClient();
+				if (registerClient() == false)
+				{
+					break ;
+				}
 			}
 			else
 			{
@@ -113,7 +120,7 @@ std::map<const std::string, Channel>	&Server::GetChannelList()
 	return (mChannelMap);
 }
 
-void Server::registerClient()
+bool Server::registerClient()
 {
 	socklen_t			address_size;
 	int					socket;
@@ -121,19 +128,23 @@ void Server::registerClient()
 
 	address_size = sizeof(address);
 	socket = accept(mSocket, reinterpret_cast<sockaddr *>(& address), &address_size);
-
+	if (socket == -1)
+	{
+		std::cerr << "Error: " << strerror(errno) << std::endl;
+		return (false);
+	}
 	controlClientEvent(socket, EPOLL_CTL_ADD, EPOLLIN | EPOLLET);
 	mClientMap.insert(std::make_pair(socket, Client(socket, address)));
-
 	//debug
 	{
-		std::cout << socket << " | " << ntohs(address.sin_port) << " connected."<< std::endl;
+		std::cerr << socket << " | " << ntohs(address.sin_port) << " connected."<< std::endl;
 	}
+	return (true);
 }
 
 void Server::receiveFromClientLoop(int client_fd)
 {
-	while (1)
+	while (true)
 	{
 		if (receiveFromClient(client_fd) == -1)
 		{

@@ -23,9 +23,8 @@ public:
 	const std::string&				GetPassword() const;
 	const std::string&				GetPrefix() const;
 	void							SetNameAndPrefix(const std::string& name);
-	void							SetPassword(const std::string& pass);
 
-	void							InitServer(const char* port, const char* pass);
+	bool							InitServer(const char* port, const char* pass);
 	void							ExecServerLoop(void);
 
 	void							SendMessage(const Client &target, const std::string& msg);
@@ -47,7 +46,8 @@ private:
 	std::map<const std::string, Channel> mChannelMap;
 
 	Server();
-	void	registerClient();
+	void	setPassword(const std::string& pass);
+	bool	registerClient();
 	void	receiveFromClientLoop(const int client_fd);
 	int		receiveFromClient(const int client_fd);
 	void	controlClientEvent(const int client_fd, const int epoll_mode, const int event_mode);
