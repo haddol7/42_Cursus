@@ -13,3 +13,4 @@
 #include "Invite.hpp"
 #include "Topic.hpp"
 #include "Part.hpp"
+#include "Kick.hpp"
