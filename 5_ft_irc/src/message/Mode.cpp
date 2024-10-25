@@ -158,6 +158,11 @@ bool	Mode::Execute_k(const std::string& key, bool mode)
 
 bool	Mode::Execute_l(const std::string& num, bool mode)
 {
+	int num_limit = atoi(num.c_str());
+	if (num_limit < 0)
+	{
+		num_limit = 0;
+	}
 	if (mode == TURN_ON && num.empty() == false)
 	{
 		mParamIter++;
@@ -175,13 +180,13 @@ bool	Mode::Execute_l(const std::string& num, bool mode)
 		ReplyToOrigin(ERR_NEEDMOREPARAMS("l"));
 		return (false);
 	}
-	else if (mChannel->GetLimit() == atoi(num.c_str()))
+	else if (mChannel->GetLimit() == num_limit)
 	{
 		return (false);
 	}
 	else
 	{
-		mChannel->SetLimit(atoi(num.c_str()));
+		mChannel->SetLimit(num_limit);
 		mReplyParamValues << " " << mChannel->GetLimit();
 	}
 	mChannel->ToggleModeStatus(L_MODE, mode);
