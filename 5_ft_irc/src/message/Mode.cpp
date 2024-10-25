@@ -1,6 +1,5 @@
 #include "Mode.hpp"
 
-//TODO : Target에 닉네임이 들어왔을 때 무시
 Mode::Mode(Client* origin, const std::string msg) :
 	AMessage(origin, "MODE", msg),
 	mParamIter(2)
