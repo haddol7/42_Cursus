@@ -6,11 +6,12 @@ Topic::Topic(Client* origin, const std::string msg) :
 	mTargetTopic(mParamArray[1])
 {
 	mOriginNick = mOrigin->GetNickName();
+	if (mTargetTopic.empty() && mBuff.find(":") != std::string::npos)
+	{
+		mTargetTopic = ":";
+	}
 }
 
-//ex)
-//		TOPIC #test :another topic
-//		:asd!asd@127.0.0.1 TOPIC #test :asd
 void Topic::ExecuteCommand()
 {
 	if (Isvalidchannel() == false)
