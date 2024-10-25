@@ -33,8 +33,6 @@ public:
 	Client*							ReturnClientOrNull(const int fd);
 	Client*							ReturnClientOrNull(const std::string& nick);
 
-	void							unregisterClientSocket(const int client_fd, const std::string& msg);
-
 	std::map<const std::string, Channel>	&GetChannelList();
 
 private:
@@ -54,6 +52,7 @@ private:
 	void	receiveFromClientLoop(const int client_fd);
 	int		receiveFromClient(const int client_fd);
 	void	controlClientEvent(const int client_fd, const int epoll_mode, const int event_mode);
+	void	unregisterClientSocket(const int client_fd, const std::string& msg);
 };
 
 #include "Channel.hpp"

@@ -164,7 +164,13 @@ int Server::receiveFromClient(const int client_fd)
 	}
 	else
 	{
-		ReturnClientOrNull(client_fd)->AddBuffer(mBuffer);
+		Client	*client = ReturnClientOrNull(client_fd);
+		client->AddBuffer(mBuffer);
+		if (client->CheckQuitFlag() == true)
+		{
+			unregisterClientSocket(client_fd, " closed.");
+			return (-1);
+		}
 	}
 	return (0);
 }

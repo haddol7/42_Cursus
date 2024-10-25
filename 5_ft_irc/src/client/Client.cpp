@@ -4,7 +4,8 @@
 Client::Client(unsigned int fd, sockaddr_in clientAddrInfo) \
 	: mFd(fd), \
 	mIpAddress(clientAddrInfo.sin_addr.s_addr), \
-	mPasswordConfirmation(false) ,
+	mPasswordConfirmation(false),
+	mQuitFlag(false),
 	mRegisterStatus(0)
 {
 	struct hostent	*host;
@@ -181,4 +182,14 @@ void		Client::TurnOnRegisterStatus(int mode)
 		result = Server::GetServer()->GetPrefix() + RPL_WELCOME(GetNickName(), GetUserName(), GetHostName());
 		Server::GetServer()->SendMessage(*this, result);
 	}
+}
+
+void	Client::TriggerQuitFlag()
+{
+	mQuitFlag = true;
+}
+
+bool	Client::CheckQuitFlag() const
+{
+	return (mQuitFlag);
 }

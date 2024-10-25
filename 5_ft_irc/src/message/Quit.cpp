@@ -16,7 +16,7 @@ void	Quit::ExecuteCommand()
 {
 	FillClientList();
 	QuitBroadcast(mOrigin->GetClientPrefix() + "QUIT :Quit: " + mQuitMessage + "\r\n");
-	Server::GetServer()->unregisterClientSocket(mOrigin->GetFd(), " closed.");
+	mOrigin->TriggerQuitFlag();
 }
 
 void	Quit::FillClientList()

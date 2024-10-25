@@ -44,6 +44,8 @@ public:
 	//MessageBuffer
 	void				AddBuffer(const std::string &buff);
 	void				TurnOnRegisterStatus(int mode);
+	void				TriggerQuitFlag();
+	bool				CheckQuitFlag() const;
 
 private:
 	// must not be call with default constructor(instance need ip info)
@@ -61,6 +63,7 @@ private:
 	std::string			mServerName;
 	std::string			mRealName;
 	bool				mPasswordConfirmation;
+	bool				mQuitFlag;
 	int					mRegisterStatus;
 	std::string			mbuffer;
 };
