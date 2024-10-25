@@ -71,6 +71,11 @@ public:
 
 	// invite one in channel
 	void	InviteOne(const Client *target);
+	// 초대 목록에서 제거
+	void	ExcludeOneFromInvitation(const Client *target);
+	// check invitation
+	bool	IsInvited(const Client *target);
+
 	
 	// find one in channel with nickname
 	const Client	*FindUserInChannelWithNick(const std::string &nickname) const;
@@ -86,6 +91,10 @@ public:
 	void				SetKey(const std::string& key);
 	int					GetLimit() const;
 	void				SetLimit(int limit);
+  
+	// 현재 채널 인구 가져오기
+	int					GetCurrentNumberOfMemeber();
+  // abount topic
 	const std::string&	GetTopic() const;
 	void				SetTopic(const std::string& topic);
 

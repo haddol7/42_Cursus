@@ -193,3 +193,41 @@ bool	Client::CheckQuitFlag() const
 {
 	return (mQuitFlag);
 }
+
+// mChannelListOfClient 관리
+std::vector<Channel *>::iterator	Client::GetChannelOfClientIter(const Channel *channel)
+{
+	return (std::find(mChannelListOfClient.begin(), mChannelListOfClient.end(), channel));
+}
+
+void				Client::JoinNewChannel(Channel *channel)
+{
+	if (GetChannelOfClientIter(channel) != mChannelListOfClient.end())
+	{
+		std::cerr << "Client::JoinNewChannel : Error : Cllient is already in the channel." << std::endl;
+		return ;
+	}
+	mChannelListOfClient.push_back(channel);
+}
+
+void				Client::PartChannel(Channel *channel)
+{
+	std::vector<Channel *>::iterator	channelIter = GetChannelOfClientIter(channel);
+	if (channelIter == mChannelListOfClient.end())
+	{
+		std::cerr << "Client::PartChannel : Error : Cllient already parted the channel." << std::endl;
+		return ;
+	}
+	mChannelListOfClient.erase(channelIter);	
+}
+
+// 클라이언트가 가입 중인 채널 정보 가져오기
+int						Client::howManyChannelJoining()
+{
+	return (mChannelListOfClient.size());
+}
+
+std::vector<Channel *>	&Client::GetChannelListOfClient()
+{
+	return (mChannelListOfClient);
+}

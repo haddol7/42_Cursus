@@ -10,6 +10,11 @@
 #include "ReplyMacros.hpp"
 #include "Server.hpp"
 
+/*
+	TODO
+	
+*/
+
 class Join : public AMessage
 {
 	public:
@@ -60,16 +65,6 @@ class Join : public AMessage
 				InviteOnlyChanException();
 				const std::string	mChannelName;
 		};
-		class BannedFromChanException : public NewException
-		{
-			public :
-				virtual	~BannedFromChanException() throw();
-				BannedFromChanException(const std::string &channelName);
-				virtual std::string	what() const throw();
-			private :
-				BannedFromChanException();
-				const std::string	mChannelName;
-		};
 		class BadChannelKeyException : public NewException
 		{
 			public :
@@ -102,7 +97,7 @@ class Join : public AMessage
 		// getParameter()는 paramArray의 존재로 그 필요가 사라졌으나
 		// 혹시 몰라 주석의 형태로 남겨둡니다.
 		//std::string			getParameter();
-		void				parseParameter();
+		void				parseParameter() throw(NewException);
 		std::string			GetJoinSendBack(const std::string &channelName);
 		
 		/* private member variable */

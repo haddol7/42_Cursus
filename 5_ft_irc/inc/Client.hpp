@@ -3,8 +3,10 @@
 #include <iostream>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <vector>
 
 #include "message.hpp"
+#include "Channel.hpp"
 
 //Client RegisterStatus Bitmask
 //	 | USER | NICK | PASS |
@@ -46,12 +48,22 @@ public:
 	void				TurnOnRegisterStatus(int mode);
 	void				TriggerQuitFlag();
 	bool				CheckQuitFlag() const;
+	void				JoinNewChannel(Channel *channel);
+	void				PartChannel(Channel *channel);
+	// 클라이언트가 가입 중인 채널 정보 가져오기
+	int						howManyChannelJoining();
+	std::vector<Channel *>	&GetChannelListOfClient();
+	
+
+	// 클라이언트가 가입할 수 있는 채널 개수의 상한값
+	const static int	sMaximumChannelJoin = 10;
 
 private:
-	// must not be call with default constructor(instance need ip info)
 	//MessageBuffer
 	bool				checkCommand() const;
 	AMessage*			makeCommand();
+	// mChannelListOfClient 관리
+	std::vector<Channel *>::iterator	GetChannelOfClientIter(const Channel *channel);
 
 	// private member variable
 	const unsigned int	mFd;
@@ -66,4 +78,7 @@ private:
 	bool				mQuitFlag;
 	int					mRegisterStatus;
 	std::string			mbuffer;
+	
+	// Client가 가입 중인 채널의 목록
+	std::vector<Channel *>	mChannelListOfClient;
 };

@@ -29,7 +29,6 @@
 #define ERR_CHANNELISFULL(CHANNEL)			(std::string("471 ") + (CHANNEL) + " :Cannot join channel (+i)\r\n")
 #define ERR_UNKNOWNMODE(CHAR, CHANNEL)		(std::string("472 ") + CHAR + " :is unknown mode char to me for " + CHANNEL + "\r\n")
 #define ERR_INVITEONLYCHAN(CHANNEL) 		(std::string("473 ") + (CHANNEL) + " :Cannot join channel (+i)\r\n")
-#define ERR_BANNEDFROMCHAN(CHANNEL)			(std::string("474 ") + (CHANNEL) + " :Cannot join channel (+b)\r\n")
 #define ERR_BADCHANNELKEY(CHANNEL) 			(std::string("475 ") + CHANNEL + " :Cannot join channel (+k)\r\n")
 #define ERR_CHANOPRIVSNEEDED(CHANNEL)		(std::string("482 ") + (CHANNEL) + " :You're not channel operator\r\n")
 #define ERR_RESTRICTED						(std::string("484 :Your connection is restricted!\r\n"))

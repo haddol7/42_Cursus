@@ -21,17 +21,16 @@ void	Quit::ExecuteCommand()
 
 void	Quit::FillClientList()
 {
-	std::map<const std::string, Channel>			&ChannelList = \
-		Server::GetServer()->GetChannelList();
-	std::map<const std::string, Channel>::iterator	it_ch = ChannelList.begin();
+	std::vector<Channel *>				&ChannelListOfClient = mOrigin->GetChannelListOfClient();
+	std::vector<Channel *>::iterator	it_ch = ChannelListOfClient.begin();
 
-	for (; it_ch != ChannelList.end(); ++it_ch)
+	for (; it_ch != ChannelListOfClient.end(); ++it_ch)
 	{
-		std::vector<const Client *>				&vec_user = it_ch->second.GetUserList();
+		std::vector<const Client *>				&vec_user = (*it_ch)->GetUserList();
 		std::vector<const Client *>::iterator	it_user = vec_user.begin();
 		for (; it_user != vec_user.end(); ++it_user)
 			AddClientList(*it_user);
-		it_ch->second.RemoveOne(*mOrigin);
+		(*it_ch)->RemoveOne(*mOrigin);
 	}
 }
 
