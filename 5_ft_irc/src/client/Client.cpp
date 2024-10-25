@@ -119,7 +119,7 @@ void	Client::AddBuffer(const std::string& buff)
 
 	AMessage*	message;
 
-	while (checkCommand())
+	while (checkCommand() == true && checkQuitFlag() == false)
 	{
 		message = makeCommand();
 		if (message != NULL)
@@ -136,10 +136,10 @@ bool	Client::checkCommand() const
 
 	length = mbuffer.length();
 	if (length >= 512)
-		return 1;
+		return true;
 	else if (mbuffer.find("\r\n") != std::string::npos)
-		return 1;
-	return 0;
+		return true;
+	return false;
 }
 
 AMessage*	Client::makeCommand()
