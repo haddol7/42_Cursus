@@ -29,6 +29,10 @@ bool	Mode::CheckParamAndGiveInfo()
 		ReplyToOrigin(ERR_NEEDMOREPARAMS("MODE"));
 		return (false);
 	}
+	if ((mTarget[0] != '#'))
+	{
+		return (false);
+	}
 	if (FindChannel() == false)
 	{
 		ReplyToOrigin(ERR_NOSUCHCHANNEL(mTarget));
