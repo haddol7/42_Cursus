@@ -50,6 +50,9 @@ $(OBJ_DIR)%.o : $(SRC_DIR)%.cpp
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -MMD -c $< -o $@
 
+bonus: $(SRC_DIR)Bot/Bot.cpp
+	$(CC) $(CFLAGS) $^ -o bot
+
 -include $(DEPS)
 
 clean:
@@ -58,7 +61,7 @@ clean:
 
 fclean:
 	rm -rf $(OBJ_DIR)
-	rm -f $(NAME)
+	rm -f $(NAME) bot
 	@echo "$(BLUE)💬 ft_irc : fclean done! 💬$(WHITE)"
 
 re: fclean all
