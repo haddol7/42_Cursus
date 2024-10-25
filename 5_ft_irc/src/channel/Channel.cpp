@@ -277,3 +277,13 @@ const Client*	Channel::FindUser(const std::string& nick)
 	}
 	return (NULL);
 }
+
+const std::string& Channel::GetTopic() const
+{
+	return (mTopic);
+}
+
+void Channel::SetTopic(const std::string& topic)
+{
+	mTopic = topic;
+}
