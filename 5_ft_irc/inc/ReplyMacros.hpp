@@ -13,7 +13,6 @@
 #define ERR_CANNOTSENDTOCHAN(CHAN)			(std::string("404 ") + CHAN + " :Cannot send to channel\r\n")
 #define ERR_TOOMANYCHANNELS(CHANNEL)		(std::string("405 ") + (CHANNEL) + " :You have joined too many channels\r\n")
 #define ERR_NORECIPIENT(COMMAND)			(std::string("411 ") + ":No recipient given " + COMMAND + "\r\n")
-//TODO : 닉, 서버 분기에 따른 매크로 분할
 #define ERR_NOTEXTTOSEN						(std::string("412 :No text to send\r\n"))
 #define ERR_NONICKNAMEGIVEN 				(std::string("431") + " :No nickname given\r\n")
 #define ERR_ERRONEUSNICKNAME(NICK)			(std::string("432 ") + NICK + " :Erroneous nickname\r\n")
