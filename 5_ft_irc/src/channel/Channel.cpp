@@ -35,6 +35,8 @@ void				Channel::setChannelKey(const std::string &channelKey)
 }
 
 // remove one in channel
+// TODO : 채널에 아무도 없으면 채널 지우기
+// TODO : 채널에 운영자가 아무도 없으면 운영자 부여하기
 void	Channel::RemoveOne(const Client &target)
 {
 	DemoteOperator(target);
