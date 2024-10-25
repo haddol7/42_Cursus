@@ -39,14 +39,12 @@ const std::string&	Server::GetPassword() const
 	return (mPassword);
 }
 
-//TODO : Name rule
 void Server::SetNameAndPrefix(const std::string& name)
 {
 	mName = name;
 	mPrefix = ":" + name + " ";
 }
 
-//TODO : Pass rule
 void Server::SetPassword(const std::string& pass)
 {
 	mPassword = pass;
@@ -174,44 +172,6 @@ int Server::receiveFromClient(const int client_fd)
 	}
 	return (0);
 }
-
-/*
-void Server::sendToClient(const int client_fd)
-{
-	int	len_buf;
-	int	it_fd;
-
-	//test code for broadcasting
-	for (std::map<const int, Client>::iterator it = mClientMap.begin(); it != mClientMap.end(); ++it)
-	{
-		it_fd = it->second.GetFd();
-		if (it_fd == client_fd)
-		{
-			controlClientEvent(it_fd, EPOLL_CTL_MOD, EPOLLIN);
-			continue;
-		}
-		//debug
-		{
-			char	fd[1];
-
-			fd[0] = '0' + client_fd;
-			send(it_fd, "Debug <", 8, MSG_DONTWAIT);
-			send(it_fd, fd, 1, MSG_DONTWAIT);
-			send(it_fd, "> ", 3, MSG_DONTWAIT);
-		}
-		len_buf = write(it_fd, mBuffer, strlen(mBuffer));
-		if (len_buf == -1)
-		{
-			unregisterClientSocket(it_fd, "sendToClient : write");
-		}
-		else
-		{
-			controlClientEvent(it_fd, EPOLL_CTL_MOD, EPOLLIN);
-		}
-	}
-	memset(mBuffer, 0, sizeof(mBuffer));
-}
-*/
 
 void Server::controlClientEvent(const int client_fd, const int epoll_mode, const int event_mode)
 {
