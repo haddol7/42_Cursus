@@ -82,10 +82,12 @@ public:
 	bool	ToggleModeStatus(int mode, bool turn);
   const Client*		FindUser(const std::string& nick);
   
-  const std::string&	GetKey() const;
+  	const std::string&	GetKey() const;
 	void				SetKey(const std::string& key);
 	int					GetLimit() const;
 	void				SetLimit(int limit);
+	const std::string&	GetTopic() const;
+	void				SetTopic(const std::string& topic);
 
 	// broadcast sent back msg of command to all in channel
 	void	SendBackCmdMsg(const std::string &cmdMsg);
@@ -108,6 +110,7 @@ private:
 	std::vector<const Client *>	mUsers;
 	std::vector<const Client *> mInviteLists;
 	std::string					mKey;
+	std::string					mTopic;
 	int							mLimit;
 	int							mMode;
 };
