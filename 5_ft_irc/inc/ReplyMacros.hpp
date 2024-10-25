@@ -3,7 +3,8 @@
 //Replys
 #define RPL_WELCOME(NICK, USER, HOST) 		(std::string("001 ") + NICK + " Welcome to the Internet Relay Network " + NICK + "!" + USER + "@" + HOST + "\r\n")
 #define RPL_CHANNELMODEIS(CHANNEL, MODE)	(std::string("324 ") + CHANNEL + " " + MODE + "\r\n")
-#define RPL_TOPIC(CHANNEL, TOPIC) 			(std::string("332 ") + CHANNEL + " :" + TOPIC + "\r\n")
+#define RPL_NOTOPIC(CHANNEL)				(std::string("331 ") + CHANNEL + " :No topic is set\r\n")
+#define RPL_TOPIC(CHANNEL, TOPIC)			(std::string("332 ") + CHANNEL + " :" + TOPIC + "\r\n")
 #define RPL_INVITING(CHANNEL, NICK)			(std::string("341 ") + (CHANNEL) + " " + (NICK) + "\r\n")
 
 //Errors
@@ -32,5 +33,3 @@
 #define ERR_BADCHANNELKEY(CHANNEL) 			(std::string("475 ") + CHANNEL + " :Cannot join channel (+k)\r\n")
 #define ERR_CHANOPRIVSNEEDED(CHANNEL)		(std::string("482 ") + (CHANNEL) + " :You're not channel operator\r\n")
 #define ERR_RESTRICTED						(std::string("484 :Your connection is restricted!\r\n"))
-
-
