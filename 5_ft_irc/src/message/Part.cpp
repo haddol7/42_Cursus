@@ -18,8 +18,8 @@ void Part::ExecuteCommand()
 	{
 		return ;
 	}
-	mChannel->RemoveOne(*mOrigin);
 	SendReply();
+	mChannel->RemoveOne(*mOrigin);
 }
 
 bool Part::IsValidChannel()

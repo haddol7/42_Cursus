@@ -71,6 +71,15 @@ void	Join::ExecuteCommand()
 	std::map<const std::string, Channel>	&channelsInServer = \
 		(Server::GetServer())->GetChannelList();
 
+	// DEBUG!!!!!!!!!!!!!
+	int	i = 0;
+	for (std::map<const std::string, Channel>::iterator iter = channelsInServer.begin();\
+		iter != channelsInServer.end(); iter++)
+	{
+		std::cout << (*iter).first << std::endl;
+		i++;
+	}
+
 	while (!mChannelList.empty())
 	{
 		std::string	targetName = mChannelList.front();
