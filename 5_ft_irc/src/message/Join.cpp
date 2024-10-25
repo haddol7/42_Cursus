@@ -39,14 +39,6 @@ std::string	Join::InviteOnlyChanException::what() const throw()
 	return (ERR_INVITEONLYCHAN(mChannelName));
 }
 
-Join::BannedFromChanException::~BannedFromChanException() throw() {}
-Join::BannedFromChanException::BannedFromChanException(const std::string &channelName) \
-	: mChannelName(channelName) {}
-std::string	Join::BannedFromChanException::what() const throw()
-{
-	return (ERR_BANNEDFROMCHAN(mChannelName));
-}
-
 Join::BadChannelKeyException::~BadChannelKeyException() throw() {}
 Join::BadChannelKeyException::BadChannelKeyException(const std::string &channelName) \
 	: mChannelName(channelName) {}
@@ -83,39 +75,68 @@ void	Join::ExecuteCommand()
 	{
 		std::string	targetName = mChannelList.front();
 		mChannelList.pop_front();
-
-		std::map<const std::string, Channel>::iterator	target = \
+		std::map<const std::string, Channel>::iterator	targetIter = \
 			channelsInServer.find(targetName);
 
-		// 채널이 없으면 새로 만든 후 최초로 join을 호출한 사람을 관리자로 삼는다.
-		if (target == channelsInServer.end())
-			channelsInServer[targetName] = Channel(targetName, *mOrigin);
-		// 채널이 이미 존재할 경우
-		else
+		try
 		{
-			try
+			// 클라이언트가 가입 가능한 채널 개수의 상한을 넘으려 하면 ERR_TOOMANYCHANNELSEXCEPTION
+			if (mOrigin->howManyChannelJoining() >= Client::sMaximumChannelJoin)
+				throw (Join::TooManyChannelsException(targetName));
+			
+			// 채널이 없으면 새로 만든 후 최초로 join을 호출한 사람을 관리자로 삼는다.
+			if (targetIter == channelsInServer.end())
 			{
+				channelsInServer.insert(std::pair<const std::string, Channel>\
+					(targetName, Channel(targetName, *mOrigin)));
+				// 한 번 삽입 후엔 반복자 유효성이 날아가므로 다시 초기화해야 함.
+				targetIter = channelsInServer.begin();
+			}
+			// 채널이 이미 존재할 경우
+			else
+			{
+				Channel	&target = targetIter->second;
+
+				// 초대받지 않고 Invite-only 채널에 join하려 하면 ERR_INVITEONLYCHANEXCEPTION
+				if (target.GetOneModeStatus(I_MODE) && !target.IsInvited(mOrigin))
+					throw (Join::InviteOnlyChanException(targetName));
+				// mode로 채널 가입 인원의 상한이 정해진 상황에서 클라이언트가 join하면 상한을 넘을 때 -> ERR_CHANNELISFULL
+				if (target.GetOneModeStatus(L_MODE) && target.GetLimit() <= target.GetCurrentNumberOfMemeber())
+					throw (Join::ChannelIsFullException(targetName));
+				
 				// key 목록에 남은 키가 없다면 키 없이 채널에 가입을 시도한다.
 				if (mChannelKeyList.empty())
-					channelsInServer[targetName].AddUser(*mOrigin);
+					target.AddUser(*mOrigin);
 				// key 목록에 남은 키가 있다면 해당 키로 채널에 가입을 시도한다.
 				else
 				{
-					channelsInServer[targetName].AddUserWithKey(*mOrigin, mChannelKeyList.front());
+					target.AddUserWithKey(*mOrigin, mChannelKeyList.front());
 					mChannelKeyList.pop_front();
 				}
-				// 채널 가입에 실패하였다면 위에서 throw 된다.
-			}
-			// 채널 가입에 실패하였다면 에러 메세지를 서버에서 출력하고 클라이언트에게 보낸다.
-			catch(const NewException &e)
-			{
-				std::cerr << e.what() << std::endl;
-				ReplyToOrigin(e.what());
-				continue ;
 			}
 		}
-		// 채널 가입에 성공했으므로 채널의 모두에게 브로드캐스트한다.
-		channelsInServer[targetName].SendBackCmdMsg(GetJoinSendBack(targetName));
+		// ERR 중 TooManyChannelsException은 즉시 리턴한다.
+		catch(const Join::TooManyChannelsException &e)
+		{
+			std::cerr << e.what() << std::endl;
+			ReplyToOrigin(e.what());
+			break ;
+		}
+		// 채널 가입에 실패하였다면 에러 메세지를 서버에서 출력하고 클라이언트에게 보낸다.
+		// 이후 다음 채널의 처리로 넘어간다.
+		catch(const NewException &e)
+		{
+			std::cerr << e.what() << std::endl;
+			ReplyToOrigin(e.what());
+			continue ;
+		}
+		
+		Channel	&target = targetIter->second;
+
+		// 채널 가입에 성공하면 채널의 모두에게 브로드캐스트하고 클라이언트의 채널 목록에 저장한다.
+		mOrigin->JoinNewChannel(&target);
+		target.ExcludeOneFromInvitation(mOrigin);
+		target.SendBackCmdMsg(GetJoinSendBack(targetName));
 	}
 }
 
@@ -200,7 +221,7 @@ std::string	Join::getParameter()
 // ' '로 파라미터를 채널 목록과 키 목록으로 구분
 // 파라미터는 # 또는 &로 시작해야 함
 // 그렇지 않은 parameter 이후로는 모두 key 목록(mChannelKeyList)에 저장
-void				Join::parseParameter()
+void				Join::parseParameter() throw(NewException)
 {
 	std::string			channelParam;
 	std::string			keyParam;
@@ -242,7 +263,7 @@ void				Join::parseParameter()
 		if (isChannelKeyValid(temp) == true)
 			mChannelKeyList.push_back(temp);
 		else
-			ReplyToOrigin(ERR_NOSUCHCHANNEL(temp));
+			ReplyToOrigin(ERR_BADCHANNELKEY(temp));
 	}
 }
 

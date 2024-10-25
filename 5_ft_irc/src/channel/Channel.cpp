@@ -117,6 +117,28 @@ void	Channel::InviteOne(const Client *target)
 	mInviteLists.push_back(target);
 }
 
+// 초대 목록에서 제거
+void	Channel::ExcludeOneFromInvitation(const Client *target)
+{
+	std::vector<const Client *>::iterator	iter = \
+		std::find(mInviteLists.begin(), mInviteLists.end(), target);
+
+	if (iter == mInviteLists.end())
+		return ;
+	else
+		mInviteLists.erase(iter);	
+}
+
+// check invitation
+bool	Channel::IsInvited(const Client *target)
+{
+	if (std::find(mInviteLists.begin(), mInviteLists.end(), target) \
+		== mInviteLists.end())
+		return (false);
+	else
+		return (true);
+}
+
 // find one in channel with nickname
 const Client	*Channel::FindUserInChannelWithNick(const std::string &nickname) const
 {
@@ -234,6 +256,12 @@ void Channel::SetKey(const std::string& key)
 void Channel::SetLimit(int limit)
 {	
 	mLimit = limit;
+}
+
+// 현재 채널 인구 가져오기
+int Channel::GetCurrentNumberOfMemeber()
+{
+	return (mUsers.size());
 }
 
 const Client*	Channel::FindUser(const std::string& nick)
