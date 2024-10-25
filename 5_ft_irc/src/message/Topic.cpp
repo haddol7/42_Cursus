@@ -14,7 +14,7 @@ Topic::Topic(Client* origin, const std::string msg) :
 
 void Topic::ExecuteCommand()
 {
-	if (Isvalidchannel() == false)
+	if (IsValidChannel() == false)
 	{
 		return ;
 	}
@@ -26,7 +26,7 @@ void Topic::ExecuteCommand()
 	SendReply();
 }
 
-bool Topic::Isvalidchannel()
+bool Topic::IsValidChannel()
 {
 	if (mTargetChannel.empty())
 	{
