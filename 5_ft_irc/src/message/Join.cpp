@@ -133,10 +133,21 @@ void	Join::ExecuteCommand()
 		
 		Channel	&target = targetIter->second;
 
-		// 채널 가입에 성공하면 채널의 모두에게 브로드캐스트하고 클라이언트의 채널 목록에 저장한다.
+		// 채널 가입에 성공하면
+		// 1. 클라이언트의 자신이 가입한 채널 목록에 저장한다.
 		mOrigin->JoinNewChannel(&target);
+		// 2. 채널에 가입했으므로 초대 목록에서 삭제한다.
 		target.ExcludeOneFromInvitation(mOrigin);
+		// 3. 채널의 모두에게 새로운 멤버가 JOIN했음을 공지한다.
 		target.SendBackCmdMsg(GetJoinSendBack(targetName));
+		// 4. 새로 가입한 클라이언트에게 새로 가입한 채널의 topic을 공지한다.
+		if (target.GetTopic().empty())
+			ReplyToOrigin(RPL_NOTOPIC(targetName));
+		else
+			ReplyToOrigin(RPL_TOPIC(targetName, target.GetTopic()));
+		// 5. 새로 가입한 클라이언트에게 새로 가입한 채널의 구성원들을 공지한다.
+		ReplyToOrigin(RPL_NAMREPLY(targetName, target.GetMembersOfChannelInString()));
+		ReplyToOrigin(RPL_ENDOFNAMES(targetName));
 	}
 }
 

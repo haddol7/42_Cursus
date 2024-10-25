@@ -6,6 +6,8 @@
 #define RPL_NOTOPIC(CHANNEL)				(std::string("331 ") + CHANNEL + " :No topic is set\r\n")
 #define RPL_TOPIC(CHANNEL, TOPIC)			(std::string("332 ") + CHANNEL + " :" + TOPIC + "\r\n")
 #define RPL_INVITING(CHANNEL, NICK)			(std::string("341 ") + (CHANNEL) + " " + (NICK) + "\r\n")
+#define RPL_NAMREPLY(CHANNEL, LIST_OF_NICKS)(std::string("353 = ") + (CHANNEL) + " :" + (LIST_OF_NICKS) + "\r\n")
+#define RPL_ENDOFNAMES(CHANNEL)				(std::string("366 ") + (CHANNEL) + " :End of NAMES list\r\n")
 
 //Errors
 #define ERR_NOSUCHNICK(NICK)				(std::string("401 ") + NICK + " :No such nick\r\n")

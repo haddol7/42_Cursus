@@ -94,6 +94,8 @@ public:
   
 	// 현재 채널 인구 가져오기
 	int					GetCurrentNumberOfMemeber();
+	// 현재 채널 구성원 목록 string으로 반환
+	std::string			GetMembersOfChannelInString();
   // abount topic
 	const std::string&	GetTopic() const;
 	void				SetTopic(const std::string& topic);

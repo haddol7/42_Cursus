@@ -264,6 +264,27 @@ int Channel::GetCurrentNumberOfMemeber()
 	return (mUsers.size());
 }
 
+// 현재 채널 구성원 목록 string으로 반환
+std::string		Channel::GetMembersOfChannelInString()
+{
+	std::string	output;
+
+	std::vector<const Client *>::iterator	iter = mUsers.begin();
+	for (; iter != mUsers.end(); iter++)
+	{
+		if (IsOperator(**iter))
+			output.append("@" + (*iter)->GetNickName() + " ");
+	}
+	
+	iter = mUsers.begin();
+	for (; iter != mUsers.end(); iter++)
+	{
+		if (!IsOperator(**iter))
+			output.append((*iter)->GetNickName() + " ");
+	}
+	return (output);
+}
+
 const Client*	Channel::FindUser(const std::string& nick)
 {
 	std::vector<const Client *>::iterator	it = mUsers.begin();
