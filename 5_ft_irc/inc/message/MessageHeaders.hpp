@@ -12,3 +12,4 @@
 #include "Quit.hpp"
 #include "Invite.hpp"
 #include "Topic.hpp"
+#include "Part.hpp"
