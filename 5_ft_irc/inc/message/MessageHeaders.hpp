@@ -11,3 +11,4 @@
 #include "Mode.hpp"
 #include "Quit.hpp"
 #include "Invite.hpp"
+#include "Topic.hpp"
