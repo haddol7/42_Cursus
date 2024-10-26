@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <sstream>
 #include <sys/socket.h>
 #include <sys/epoll.h>
 #include <arpa/inet.h>
@@ -10,11 +11,11 @@
 
 #include "Bot.hpp"
 
-std::vector<Bot> Bot::BotList;
+std::vector<Bot> Bot::sBotList;
+std::string      Bot::sBuffer;
 
 int main(int argc, char *argv[])
 {
-    std::string Buffer;
     int         socket;
 
     if (argc != 4)
@@ -23,7 +24,7 @@ int main(int argc, char *argv[])
         return (1);
     }
     socket = InitBot(argv[1], argv[2], argv[3]);
-    ExecBotLoop(socket, Buffer);
+    ExecBotLoop(socket);
 
     return (0);
 }
@@ -61,7 +62,7 @@ static int InitBot(std::string IpAddress, std::string Port, std::string Password
     return (sock);
 }
 
-static void    ExecBotLoop(int sock, std::string& Buffer)
+static void    ExecBotLoop(int sock)
 {
     // epoll 인스턴스 생성
     int epollFd = epoll_create1(0);
@@ -87,6 +88,14 @@ static void    ExecBotLoop(int sock, std::string& Buffer)
     }
 
     // 이벤트 루프
+    EventLoop(epollFd, sock);
+
+    // 소켓 닫기
+    close(sock);
+}
+
+static void EventLoop(int epollFd, int sock)
+{
     while (true) 
     {
         struct epoll_event events[1];
@@ -109,57 +118,52 @@ static void    ExecBotLoop(int sock, std::string& Buffer)
                 break;
             }
             buffer[bytesReceived] = '\0';
-            std::cout << "Received: " << buffer << "\n";
-            AddBuffer(sock, Buffer, buffer);
+            Bot::AddBuffer(sock, buffer);
         }
     }
-
-    // 소켓 닫기
-    close(sock);
 }
 
-static void    AddBuffer(int sock, std::string& Buffer, std::string buffer)
+void    Bot::AddBuffer(int sock, std::string buffer)
 {
-    Buffer = Buffer + buffer;
+    Bot::sBuffer = Bot::sBuffer + buffer; // addBuffer static 함수 만들기 
 
-    while (CheckCommand(Buffer) == true)
+    while (CheckCommand() == true)
     {
-        ExecMessage(sock, makeCommand(Buffer));
+        ExecMessage(sock, makeCommand());
     }
 }
 
-static std::string makeCommand(std::string& Buffer)
+static std::string makeCommand()
 {
     size_t		length;
 	char		buff[513];
 
-	length = Buffer.length();
+	length = Bot::sBuffer.length();
 	if (length >= 512)
 	{
-		Buffer.copy(buff, 512, 0);
-		Buffer.erase(0, 512);
+		Bot::sBuffer.copy(buff, 512, 0);
+		Bot::sBuffer.erase(0, 512);
 		buff[510] = '\r';
 		buff[511] = '\n';
 		buff[512] = '\0';
 	}
 	else
 	{
-		std::string::size_type	pos = Buffer.find("\r\n");
-		Buffer.copy(buff, pos + 2, 0);
-		Buffer.erase(0, pos + 2);
+		std::string::size_type	pos = Bot::sBuffer.find("\r\n");
+        if (pos == std::string::npos)
+            pos = Bot::sBuffer.find("\r");
+		Bot::sBuffer.copy(buff, pos + 2, 0);
+		Bot::sBuffer.erase(0, pos + 2);
 		buff[pos + 2] = '\0';
 	}
-    std::cerr << "makeCommand : buff = " << buff << std::endl;
 	return (buff);
 }
 
 static void    ExecMessage(int sock, std::string msg)
 {
-    const char* commandList[] = {"001", "PING", "PRIVMSG", "INVITE", "JOIN", "PART", NULL};
+    const char* commandList[] = {"001", "PING", "PRIVMSG", "INVITE", "JOIN", "PART", "KICK", NULL};
 
     std::string command = FindCommand(msg);
-
-    std::cerr << "ExecMessage : command = " << command << std::endl;
 
     size_t	index = 0;
 	for (; commandList[index] != NULL; ++index)
@@ -171,7 +175,7 @@ static void    ExecMessage(int sock, std::string msg)
     switch (index)
     {
         case 0:
-            std::cout << "Bot connected to server!" << std::endl;
+            std::cerr << "Bot connected to server!" << std::endl;
             break ;
         case 1:
             Ping(sock, msg);
@@ -188,21 +192,27 @@ static void    ExecMessage(int sock, std::string msg)
         case 5:
             Part(msg);
             break ;
+        case 6:
+            Kick(msg);
+            break ;
         default:
             break ;
     }
 }
 
-static bool CheckCommand(const std::string& Buffer)
+static bool CheckCommand()
 {
     size_t	length;
 
-	length = Buffer.length();
+	length = Bot::sBuffer.length();
 	if (length >= 512)
 		return true;
-	else if (Buffer.find("\r\n") != std::string::npos)
+    else if (Bot::sBuffer.find("\r\n") != std::string::npos)
 		return true;
-	return false;
+    else if (Bot::sBuffer.find("\r") != std::string::npos)
+        return true;
+    else
+	    return false;
 }
 
 static std::string  FindCommand(std::string& msg)
@@ -238,11 +248,20 @@ static void Ping(int sock, std::string& msg)
     send(sock, pongResponse.c_str(), pongResponse.length(), 0);
 }
 
+static std::string::size_type   FindLastPosition(const std::string& msg)
+{
+    std::string::size_type  last = msg.find("\r\n");
+    if (last == std::string::npos)
+        last = msg.find("\r");
+    return last;
+}
+
 static void Invite(int sock, std::string& msg)
 {
     const std::string   COMMAND = "INVITE";
+
     std::string::size_type  pos = msg.find("Bot ", msg.find("INVITE"));
-    std::string::size_type  last = msg.find("\r\n");
+    std::string::size_type  last = FindLastPosition(msg);
     
     pos = msg.find(":", pos);
     if (pos == std::string::npos)
@@ -257,7 +276,7 @@ static void Invite(int sock, std::string& msg)
     std::string channelName = msg.substr(pos, end - pos);
 
     std::vector<Bot>::iterator  it = Bot::GetBotChannel(channelName);
-    if (it == Bot::BotList.end())
+    if (it == Bot::sBotList.end())
     {
         std::string joinResponse = "JOIN " + channelName + "\r\n";
         send(sock, joinResponse.c_str(), joinResponse.length(), 0);
@@ -265,15 +284,16 @@ static void Invite(int sock, std::string& msg)
     else
     {
         std::string errorResponse = "PRIVMSG " + channelName + " :Bot is already in the channel\r\n";
-            send(sock, errorResponse.c_str(), errorResponse.length(), 0);
+        send(sock, errorResponse.c_str(), errorResponse.length(), 0);
     }
 }
 
 static void Join(int sock, std::string& msg)
 {
     const std::string   COMMAND = "JOIN";
+
     std::string::size_type  pos = msg.find("JOIN");
-    std::string::size_type  last = msg.find("\r\n");
+    std::string::size_type  last = FindLastPosition(msg);
 
     pos = msg.find(":", pos);
     if (pos == std::string::npos)
@@ -287,17 +307,20 @@ static void Join(int sock, std::string& msg)
         return ;
     std::string channelName = msg.substr(pos, end - pos);
 
-    std::cerr << "Join : channelName = " << channelName << std::endl;
-
-    if (Bot::GetBotChannel(channelName) == Bot::BotList.end())
-        Bot::BotList.push_back(Bot(sock, channelName));
+    if (Bot::GetBotChannel(channelName) == Bot::sBotList.end())
+    {
+        Bot::sBotList.push_back(Bot(sock, channelName));
+        std::cerr << "Bot joined channel [ " << channelName \
+                  << " ]\nTotal : " << Bot::GetChannelCount() << "\n";
+    }
 }
 
 static void Part(std::string& msg)
 {
     const std::string   COMMAND = "PART";
+
     std::string::size_type  pos = msg.find(COMMAND);
-    std::string::size_type  last = msg.find("\r\n");
+    std::string::size_type  last = FindLastPosition(msg);
 
     if (pos + COMMAND.length() >= last)
         return ;
@@ -307,10 +330,7 @@ static void Part(std::string& msg)
         end = last;
 
     std::string channelName = msg.substr(pos, end - pos);
-
-    std::vector<Bot>::iterator  it = Bot::GetBotChannel(channelName);
-    if (it != Bot::BotList.end())
-        Bot::BotList.erase(it);
+    Bot::ExitChannel(channelName);
 }
 
 static void Privmsg(std::string& msg)
@@ -318,7 +338,7 @@ static void Privmsg(std::string& msg)
     const std::string COMMAND = "PRIVMSG";
 
     std::string::size_type  pos = msg.find(COMMAND);
-    std::string::size_type  last = msg.find("\r\n");
+    std::string::size_type  last = FindLastPosition(msg);
 
     if (pos + COMMAND.length() >= last)
         return ;
@@ -332,15 +352,66 @@ static void Privmsg(std::string& msg)
     pos = msg.find(":", end);
     std::string message = msg.substr(pos, last - pos);
 
-    std::cerr << "Privmsg : message = " << message << std::endl;
-    std::cerr << "Privmsg : channelName = " << channelName << std::endl;
-
     std::vector<Bot>::iterator  it = Bot::GetBotChannel(channelName);
-    if (it != Bot::BotList.end())
+    if (it != Bot::sBotList.end())
     {
-        std::cerr << "Bot is proccing from " << channelName << std::endl;
-        it->ProcessMessage(message);
+        if (it->ProcessMessage(message))
+            Bot::FinishBot(it);
     }
+}
+
+static void Kick(std::string& msg)
+{
+    const std::string   COMMAND = "KICK";
+
+    std::string::size_type  pos = msg.find(COMMAND);
+    std::string::size_type  last = FindLastPosition(msg);
+    if (pos + COMMAND.length() >= last)
+        return ;
+
+    pos = msg.find_first_not_of(" ", pos + COMMAND.length());
+    std::string::size_type  end = msg.find(" ", pos);
+    if (end == std::string::npos)
+        return ;
+    std::string channelName = msg.substr(pos, end - pos);
+
+    pos = msg.find_first_not_of(" ", end);
+    end = msg.find(" ", pos);
+    if (end == std::string::npos)
+        end = last;
+    std::string targetName = msg.substr(pos, end - pos);
+
+    if (targetName == "Bot")
+        Bot::ExitChannel(channelName);
+}
+
+int Bot::GetChannelCount()
+{
+    int                         count = 0;
+    std::vector<Bot>::iterator  it = Bot::sBotList.begin();
+
+    for (; it != Bot::sBotList.end(); ++it)
+        ++count;
+    return count;
+}
+
+void    Bot::ExitChannel(std::string& channelName)
+{
+    std::vector<Bot>::iterator  it = Bot::GetBotChannel(channelName);
+    if (it != Bot::sBotList.end())
+    {
+        Bot::sBotList.erase(it);
+        std::cerr << "Bot exited channel [ " << channelName \
+                  << " ]\nTotal : " << Bot::GetChannelCount() << "\n";
+    }
+}
+
+void    Bot::FinishBot(std::vector<Bot>::iterator it)
+{
+    int         sock = it->GetSockFd();
+    std::string Message = "PART " + it->GetChannelName() + " :Bot finished\r\n";
+
+    send(sock, Message.c_str(), Message.length(), 0);
 }
 
 Bot::Bot(int sock, const std::string& channelName) :
@@ -350,32 +421,33 @@ mTryCount(9),
 mBallCount(0),
 mStrikeCount(0)
 {
-    std::string BotMessage = "PRIVMSG " + mChannelName + " :Bot is now ready to play\r\n";
-    send(mSock, BotMessage.c_str(), BotMessage.length(), 0);
-
-    BotMessage = "PRIVMSG " + mChannelName + " :Type '!Bot start' to start game\r\n";
-    send(mSock, BotMessage.c_str(), BotMessage.length(), 0);
+    std::string Message = "PRIVMSG " + mChannelName \
+                          + " :Bot is now ready to play\nPRIVMSG " \
+                          + mChannelName + " :Type '!Bot start' to start game\r\n";
+    send(mSock, Message.c_str(), Message.length(), 0);
 }
 
-void    Bot::ProcessMessage(const std::string& msg)
+int    Bot::ProcessMessage(const std::string& msg)
 {
     const std::string   COMMAND = ":!Bot ";
     std::string::size_type  pos = msg.find(COMMAND);
 
     if (pos == std::string::npos || pos != 0)
-        return ;
+        return 0;
 
     pos = msg.find_first_not_of(" ", COMMAND.length());
-    std::string::size_type  last = msg.find("\r\n");
+    std::string::size_type  last = FindLastPosition(msg);
     if (pos == last)
-        return ;
+        return 0;
     std::string arg = msg.substr(pos, last - pos);
 
     if (arg == "start")
         startGame();
+    else if (arg == "finish")
+        return 1;
     else
         checkAnswer(arg);
-    std::cerr << "[ " << arg << " ]" << std::endl;
+    return 0;
 }
 
 const std::string&  Bot::GetChannelName() const
@@ -383,20 +455,27 @@ const std::string&  Bot::GetChannelName() const
     return mChannelName;
 }
 
+int Bot::GetSockFd() const
+{
+    return mSock;
+}
+
 void    Bot::startGame()
 {
     mTryCount = 0;
     mBallCount = 0;
     mStrikeCount = 0;
-    mRandomNumber = generateRandomNumber();
+    generateRandomNumber();
 
     std::string BotMessage = "PRIVMSG " + mChannelName + " :[GAME START]\r\n";
     send(mSock, BotMessage.c_str(), BotMessage.length(), 0);
 }
 
-std::vector<int> Bot::generateRandomNumber() 
+void Bot::generateRandomNumber() 
 {
     std::vector<int> digits;
+
+    mRandomNumber.clear();
 
     // 0-9까지의 숫자를 벡터에 추가
     for (int i = 0; i <= 9; ++i) {
@@ -411,7 +490,8 @@ std::vector<int> Bot::generateRandomNumber()
 
     // 첫 4자리 숫자 선택 (중복 없이)
     std::vector<int> randomNumber(digits.begin(), digits.begin() + 4);
-    return randomNumber;
+    for (int i = 0; i < 4; ++i)
+        mRandomNumber = mRandomNumber + (char)(randomNumber[i] +'0');
 }
 
 void    Bot::checkAnswer(std::string& number)
@@ -423,53 +503,58 @@ void    Bot::checkAnswer(std::string& number)
         send(mSock, BotMessage.c_str(), BotMessage.length(), 0);
         return ;
     }
-    if (number.length() != 4 || isTryDigit(number) == false)
+    else if (number.length() != 4 || isTryDigit(number) == false)
     {
         std::string BotMessage = "PRIVMSG " + mChannelName + " :'" + number + "' is not in right form\r\n";
         send(mSock, BotMessage.c_str(), BotMessage.length(), 0);
+        return ;
     }
     mStrikeCount = 0;
     mBallCount = 0;
-    for (int i = 0; i < 4; ++i)
+    for (std::string::size_type i = 0; i < 4; ++i)
     {
-        for (int j = 0; j < 4; ++j)
-        {
-            if (mRandomNumber[i] == number[j] - '0')
-            {
-                if (i == j)
-                    ++mStrikeCount;
-                else
-                    ++mBallCount;
-                break ;
-            }
-        }
+        std::string::size_type  pos = mRandomNumber.find(number[i]);
+        if (pos == i)
+            ++mStrikeCount;
+        else if (pos != std::string::npos)
+            ++mBallCount;
     }
     ++mTryCount;
+
+    printResult(number);
+}
+
+void    Bot::printResult(const std::string& number) const
+{
+    std::stringstream   stream;
+    std::string         Message;
+
     if (mStrikeCount == 4)
     {
-        std::string BotMessage = "PRIVMSG " + mChannelName + \
-            " :[CORRECT!!!] " + (char)(mTryCount + '0') + " TRY\r\n";
-        send(mSock, BotMessage.c_str(), BotMessage.length(), 0);
+        stream << "PRIVMSG " << mChannelName << " :[CORRECT!!!] " \
+               << mTryCount << " TRY\r\n";
+        Message = stream.str();
+        send(mSock, Message.c_str(), Message.length(), 0);
         return ;
     }
-    std::string BotMessage = "PRIVMSG " + mChannelName + \
-        " :" + (char)(mTryCount + '0') + ") "+ number +" [ " + (char)(mStrikeCount + '0') + \
-        " Strike | " + (char)(mBallCount + '0') + " Ball ]\r\n";
-    send(mSock, BotMessage.c_str(), BotMessage.length(), 0);
+    stream << "PRIVMSG " << mChannelName << " :" << mTryCount \
+           << ") " << number << " [ " << mStrikeCount \
+           << " Strike | " << mBallCount << " Ball ]\r\n";
+    Message = stream.str();
+    send(mSock, Message.c_str(), Message.length(), 0);
     if (mTryCount == 9)
     {
-        std::string answer;
-        for (int i = 0; i < 4; ++i)
-            answer = answer + (char)(mRandomNumber[i] + '0');
-        std::string BotMessage = "PRIVMSG " + mChannelName + \
-            " :[FAILD] Answer : " + answer + "\r\n";
-        send(mSock, BotMessage.c_str(), BotMessage.length(), 0);
+        Message = "PRIVMSG " + mChannelName + " :[FAILD] Answer : " \
+                + mRandomNumber + "\r\n";
+        send(mSock, Message.c_str(), Message.length(), 0);
     }
     else
     {
-        std::string BotMessage = "PRIVMSG " + mChannelName + \
-            " :" + (char)(9 - mTryCount + '0') + " TRY LEFT\r\n";
-        send(mSock, BotMessage.c_str(), BotMessage.length(), 0);
+        stream.str("");
+        stream << "PRIVMSG " << mChannelName << " :" \
+               << 9 - mTryCount << " TRY LEFT\r\n";
+        Message = stream.str();
+        send(mSock, Message.c_str(), Message.length(), 0);
     }
 }
 
@@ -485,9 +570,9 @@ static bool isTryDigit(std::string& number)
 
 std::vector<Bot>::iterator  Bot::GetBotChannel(std::string& channelName)
 {
-    std::vector<Bot>::iterator  it = BotList.begin();
+    std::vector<Bot>::iterator  it = Bot::sBotList.begin();
 
-    for (; it != BotList.end(); ++it)
+    for (; it != Bot::sBotList.end(); ++it)
     {
         if (it->GetChannelName() == channelName)
             return it;
