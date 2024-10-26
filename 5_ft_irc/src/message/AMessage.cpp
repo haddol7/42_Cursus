@@ -4,41 +4,21 @@
 #include "message/AMessage.hpp"
 #include "message.hpp"
 
-static std::string	FindCommand(const std::string& msg) // to indicate command of a message
-{
-	std::string::size_type	pos;
-	std::string::size_type	end;
+static std::string	FindCommand(const std::string& msg);
 
-	if (msg[0] == ':')
-	{
-		pos = msg.find(' ');
-		if (pos != std::string::npos)
-			++pos;
-	}
-	else
-		pos = 0;
-	end = msg.find(' ', pos);
-
-	if (end == std::string::npos)
-		end = msg.find("\r\n");
-
-	std::string	cmd;
-	if (pos != std::string::npos)
-		cmd = msg.substr(pos, end - pos);
-
-	return cmd;
-}
+const char* AMessage::commandList[] = {"PASS", "NICK", "USER", "PRIVMSG", \
+									   "JOIN", "MODE", "QUIT", "INVITE", \
+									   "TOPIC", "PART", "KICK", "PING", \
+									   NULL}; // set accepting commands
 
 AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 {
-	const char* commandList[] = {"PASS", "NICK", "USER", "PRIVMSG", "JOIN", "MODE", "QUIT", "INVITE", "TOPIC", "PART", "KICK", NULL}; // set accepting commands
-	
   std::string cmd = FindCommand(msg); // to indicate command of a message
 
 	size_t	index = 0;
-	for (; commandList[index] != NULL; ++index)
+	for (; AMessage::commandList[index] != NULL; ++index)
 	{
-		if (cmd == commandList[index])
+		if (cmd == AMessage::commandList[index])
 			break ;
 	}
 
@@ -73,11 +53,37 @@ AMessage*	AMessage::GetMessageObject(Client* origin, const std::string& msg)
 			return new Part(origin, msg);
 		case 10:
 			return new Kick(origin, msg);
+		case 11:
+			return new Ping(origin, msg);
 		default:
 			return NULL;
 	}
 }
 
+static std::string	FindCommand(const std::string& msg) // to indicate command of a message
+{
+	std::string::size_type	pos;
+	std::string::size_type	end;
+
+	if (msg[0] == ':')
+	{
+		pos = msg.find(' ');
+		if (pos != std::string::npos)
+			++pos;
+	}
+	else
+		pos = 0;
+	end = msg.find(' ', pos);
+
+	if (end == std::string::npos)
+		end = msg.find("\r\n");
+
+	std::string	cmd;
+	if (pos != std::string::npos)
+		cmd = msg.substr(pos, end - pos);
+
+	return cmd;
+}
 const std::string& AMessage::GetPrefix() const
 {
 	return mPrefix;

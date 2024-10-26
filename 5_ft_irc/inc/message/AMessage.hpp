@@ -9,6 +9,8 @@ class Client;
 class AMessage
 {
 	public:
+		static const char*	commandList[];
+		
 		static AMessage*	GetMessageObject(Client* origin, const std::string& msg);
 		const std::string&	GetPrefix() const;
 		const std::string&	GetMessagePrefix() const;
