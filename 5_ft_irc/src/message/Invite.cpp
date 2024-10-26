@@ -104,5 +104,5 @@ std::string	Invite::GetInviteConfirmMsg()
 {
 	return (":" + mOrigin->GetNickName() + "!" + \
 		mOrigin->GetUserName() + "@" + mOrigin->GetHostName() + \
-		" INVITE " + mNickname + " " + mChannel);
+		" INVITE " + mNickname + " " + mChannel + "\r\n");
 }
