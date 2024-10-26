@@ -204,8 +204,8 @@ void Server::unregisterClientSocket(const int client_fd, const std::string& msg)
 		std::vector<Channel *>::iterator	it = channal_list.begin();
 		for (; it != channal_list.end(); ++it)
 		{
-			(*it)->RemoveOne(client);
 			(*it)->ExcludeOneFromInvitation(&client);
+			(*it)->RemoveOne(client);
 		}
 	}
 	mClientMap.erase(client_fd);
