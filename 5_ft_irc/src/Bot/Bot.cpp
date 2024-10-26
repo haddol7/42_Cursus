@@ -413,7 +413,7 @@ mBallCount(0),
 mStrikeCount(0)
 {
     std::string Message = "PRIVMSG " + mChannelName \
-                          + " :Bot is now ready to play\nPRIVMSG " \
+                          + " :Bot is now ready to play\r\nPRIVMSG " \
                           + mChannelName + " :Type '!Bot start' to start game\r\n";
     send(mSock, Message.c_str(), Message.length(), 0);
 }
