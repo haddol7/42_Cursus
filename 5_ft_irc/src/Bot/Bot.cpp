@@ -290,6 +290,9 @@ static void Join(int sock, std::string& msg)
 {
     const std::string   COMMAND = "JOIN";
 
+    if (msg.find(":Bot!Bot@root ") == std::string::npos)
+        return ;
+
     std::string::size_type  pos = msg.find(COMMAND);
     std::string::size_type  last = msg.find("\r\n");
 

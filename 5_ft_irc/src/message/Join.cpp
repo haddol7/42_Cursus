@@ -99,7 +99,7 @@ void	Join::ExecuteCommand()
 				channelsInServer.insert(std::pair<const std::string, Channel>\
 					(targetName, Channel(targetName, *mOrigin)));
 				// 한 번 삽입 후엔 반복자 유효성이 날아가므로 다시 초기화해야 함.
-				targetIter = channelsInServer.begin();
+				targetIter = channelsInServer.find(targetName);
 			}
 			// 채널이 이미 존재할 경우
 			else
@@ -151,12 +151,12 @@ void	Join::ExecuteCommand()
 		target.SendBackCmdMsg(GetJoinSendBack(targetName));
 		// 4. 새로 가입한 클라이언트에게 새로 가입한 채널의 topic을 공지한다.
 		if (target.GetTopic().empty())
-			ReplyToOrigin(RPL_NOTOPIC(targetName));
+			;// ReplyToOrigin(RPL_NOTOPIC(targetName));
 		else
 			ReplyToOrigin(RPL_TOPIC(targetName, target.GetTopic()));
 		// 5. 새로 가입한 클라이언트에게 새로 가입한 채널의 구성원들을 공지한다.
-		ReplyToOrigin(RPL_NAMREPLY(targetName, target.GetMembersOfChannelInString()));
-		ReplyToOrigin(RPL_ENDOFNAMES(targetName));
+		ReplyToOrigin(RPL_NAMREPLY(mOrigin->GetNickName(), targetName, target.GetMembersOfChannelInString()));
+		ReplyToOrigin(RPL_ENDOFNAMES(mOrigin->GetNickName(), targetName));
 	}
 }
 

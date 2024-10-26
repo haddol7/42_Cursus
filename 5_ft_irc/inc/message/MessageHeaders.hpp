@@ -12,3 +12,4 @@
 #include "Topic.hpp"
 #include "Part.hpp"
 #include "Kick.hpp"
+#include "Ping.hpp"
