@@ -29,13 +29,14 @@ void	User::ExecuteCommand()
 		ReplyToOrigin(ERR_ALREADYREGISTRED);
 	else if (mParamCount < 4)
 		ReplyToOrigin(ERR_NEEDMOREPARAMS(mCommand));
-	else if (isParamAllowed() == false)
-		return ;
-	mOrigin->SetUserName(mUserName);
-	mOrigin->SetHostName(mHostName);
-	mOrigin->SetServerName(mServerName);
-	mOrigin->SetRealName(mRealName);
-	mOrigin->TurnOnRegisterStatus(USER);
+	else if (isParamAllowed() == true)
+	{
+		mOrigin->SetUserName(mUserName);
+		mOrigin->SetHostName(mHostName);
+		mOrigin->SetServerName(mServerName);
+		mOrigin->SetRealName(mRealName);
+		mOrigin->TurnOnRegisterStatus(USER);
+	}
 }
 
 static bool	isCharValid(const std::string& str, int lengthLimit)
