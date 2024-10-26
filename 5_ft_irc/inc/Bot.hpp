@@ -9,6 +9,9 @@
 class Bot
 {
     public:
+        static std::vector<Bot> BotList;
+        static std::vector<Bot>::iterator  GetBotChannel(std::string& channelName);
+
         Bot(int sock, const std::string& channelName);
 
         void                ProcessMessage(const std::string& msg);
@@ -31,14 +34,14 @@ class Bot
 
 static int          InitBot(std::string IpAddress, std::string Port, std::string Password);
 static void         ExecBotLoop(int socket, std::string& Buffer);
-static void         AddBuffer(int socket, std::string& Buffer, std::string buffer, bool& registStatus, std::vector<Bot>& BotList);
+static void         AddBuffer(int socket, std::string& Buffer, std::string buffer);
 static std::string  makeCommand(std::string& Buffer);
-static void         ExecMessage(int socket, std::string msg, bool& registStatus, std::vector<Bot>& BotList);
+static void         ExecMessage(int socket, std::string msg);
 static std::string  FindCommand(std::string& msg);
 static bool         CheckCommand(const std::string& Buffer);
 static void         Ping(int socket, std::string& msg);
-static void         Invite(int socket, std::string& msg, std::vector<Bot>& BotList);
-static void         Join(int sock, std::string& msg, std::vector<Bot>& BotList);
-static void         Part(std::string& msg, std::vector<Bot>& BotList);
-static void         Privmsg(std::string& msg, std::vector<Bot>& BotList);
+static void         Invite(int socket, std::string& msg);
+static void         Join(int sock, std::string& msg);
+static void         Part(std::string& msg);
+static void         Privmsg(std::string& msg);
 static bool         isTryDigit(std::string& number);
