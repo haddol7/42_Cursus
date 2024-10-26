@@ -53,7 +53,7 @@ static int InitBot(std::string IpAddress, std::string Port, std::string Password
 
     std::string passCommand = "PASS " + Password + "\r\n";
     std::string nickCommand = "NICK Bot\r\n";
-    std::string userCommand = "USER Bot 0 * :Bot\r\n";
+    std::string userCommand = "USER Bot root * :Bot\r\n";
     
     send(sock, passCommand.c_str(), passCommand.length(), 0);
     send(sock, nickCommand.c_str(), nickCommand.length(), 0);
@@ -254,10 +254,17 @@ static void Invite(int sock, std::string& msg)
     std::string::size_type  pos = msg.find("Bot ", msg.find("INVITE"));
     std::string::size_type  last = msg.find("\r\n");
     
-    pos = msg.find(":", pos);
     if (pos == std::string::npos)
         return ;
-    ++pos;
+    pos = msg.find(" ", pos);
+    if (pos == std::string::npos)
+        return ;
+    pos = msg.find_first_not_of(" ", pos);
+    if (pos == last)
+        return ;
+    if (msg[pos] == ':')
+        ++pos;
+
     std::string::size_type  end = msg.find(" ", pos);
     if (end == std::string::npos)
         end = last;
@@ -283,13 +290,15 @@ static void Join(int sock, std::string& msg)
 {
     const std::string   COMMAND = "JOIN";
 
-    std::string::size_type  pos = msg.find("JOIN");
+    std::string::size_type  pos = msg.find(COMMAND);
     std::string::size_type  last = msg.find("\r\n");
 
-    pos = msg.find(":", pos);
-    if (pos == std::string::npos)
+    pos = msg.find_first_not_of(" ", pos + COMMAND.length());
+    if (pos == last)
         return ;
-    ++pos;
+    if (msg[pos] == ':')
+        ++pos;
+
     std::string::size_type  end = msg.find(" ", pos);
     if (end == std::string::npos)
         end = last;
