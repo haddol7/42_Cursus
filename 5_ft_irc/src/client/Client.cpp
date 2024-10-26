@@ -144,12 +144,11 @@ bool	Client::checkCommand() const
 
 AMessage*	Client::makeCommand()
 {
-	size_t		length;
 	char		buff[513];
 	AMessage*	message;
 
-	length = mbuffer.length();
-	if (length >= 512)
+	std::string::size_type	pos = mbuffer.find("\r\n");
+	if (pos >= 511)
 	{
 		mbuffer.copy(buff, 512, 0);
 		mbuffer.erase(0, 512);
@@ -159,10 +158,10 @@ AMessage*	Client::makeCommand()
 	}
 	else
 	{
-		std::string::size_type	pos = mbuffer.find("\r\n");
-		mbuffer.copy(buff, pos + 2, 0);
-		mbuffer.erase(0, pos + 2);
-		buff[pos + 2] = '\0';
+		pos = pos + 2;
+		mbuffer.copy(buff, pos, 0);
+		mbuffer.erase(0, pos);
+		buff[pos] = '\0';
 	}
 	message = AMessage::GetMessageObject(this, buff);
 	return message;

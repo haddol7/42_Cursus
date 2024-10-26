@@ -133,13 +133,25 @@ void    Bot::AddBuffer(int sock, std::string buffer)
     }
 }
 
-static std::string makeCommand()
+static bool CheckCommand()
 {
-    size_t		length;
-	char		buff[513];
+    size_t	length;
 
 	length = Bot::sBuffer.length();
 	if (length >= 512)
+		return true;
+    else if (Bot::sBuffer.find("\r\n") != std::string::npos)
+		return true;
+    else
+	    return false;
+}
+
+static std::string makeCommand()
+{
+	char		buff[513];
+
+	std::string::size_type	pos = Bot::sBuffer.find("\r\n");
+	if (pos >= 511)
 	{
 		Bot::sBuffer.copy(buff, 512, 0);
 		Bot::sBuffer.erase(0, 512);
@@ -149,12 +161,10 @@ static std::string makeCommand()
 	}
 	else
 	{
-		std::string::size_type	pos = Bot::sBuffer.find("\r\n");
-        if (pos == std::string::npos)
-            pos = Bot::sBuffer.find("\r");
-		Bot::sBuffer.copy(buff, pos + 2, 0);
-		Bot::sBuffer.erase(0, pos + 2);
-		buff[pos + 2] = '\0';
+        pos = pos + 2;
+		Bot::sBuffer.copy(buff, pos, 0);
+		Bot::sBuffer.erase(0, pos);
+		buff[pos] = '\0';
 	}
 	return (buff);
 }
@@ -200,21 +210,6 @@ static void    ExecMessage(int sock, std::string msg)
     }
 }
 
-static bool CheckCommand()
-{
-    size_t	length;
-
-	length = Bot::sBuffer.length();
-	if (length >= 512)
-		return true;
-    else if (Bot::sBuffer.find("\r\n") != std::string::npos)
-		return true;
-    else if (Bot::sBuffer.find("\r") != std::string::npos)
-        return true;
-    else
-	    return false;
-}
-
 static std::string  FindCommand(std::string& msg)
 {
     std::string::size_type	pos;
@@ -230,30 +225,26 @@ static std::string  FindCommand(std::string& msg)
 		pos = 0;
 	end = msg.find(' ', pos);
 
-	if (end == std::string::npos)
-		end = msg.find("\r\n");
+    if (end == std::string::npos)
+    {
+        end = msg.find("\r\n");
+    }
 
-	std::string	cmd;
+    std::string	cmd;
 	if (pos != std::string::npos)
 		cmd = msg.substr(pos, end - pos);
 
-	return cmd;
+    return cmd;
 }
 
 static void Ping(int sock, std::string& msg)
 {
     // PING/PONG 처리
-    std::string::size_type  pos = msg.find("PING");
-    std::string pongResponse = "PONG " + msg.substr(pos + 5); // PING 뒤의 주소
-    send(sock, pongResponse.c_str(), pongResponse.length(), 0);
-}
+    const std::string   COMMAND = "PING";
 
-static std::string::size_type   FindLastPosition(const std::string& msg)
-{
-    std::string::size_type  last = msg.find("\r\n");
-    if (last == std::string::npos)
-        last = msg.find("\r");
-    return last;
+    std::string::size_type  pos = msg.find(COMMAND);
+    std::string pongResponse = "PONG" + msg.substr(pos + COMMAND.length()); // PING 뒤의 주소
+    send(sock, pongResponse.c_str(), pongResponse.length(), 0);
 }
 
 static void Invite(int sock, std::string& msg)
@@ -261,7 +252,7 @@ static void Invite(int sock, std::string& msg)
     const std::string   COMMAND = "INVITE";
 
     std::string::size_type  pos = msg.find("Bot ", msg.find("INVITE"));
-    std::string::size_type  last = FindLastPosition(msg);
+    std::string::size_type  last = msg.find("\r\n");
     
     pos = msg.find(":", pos);
     if (pos == std::string::npos)
@@ -293,7 +284,7 @@ static void Join(int sock, std::string& msg)
     const std::string   COMMAND = "JOIN";
 
     std::string::size_type  pos = msg.find("JOIN");
-    std::string::size_type  last = FindLastPosition(msg);
+    std::string::size_type  last = msg.find("\r\n");
 
     pos = msg.find(":", pos);
     if (pos == std::string::npos)
@@ -320,7 +311,7 @@ static void Part(std::string& msg)
     const std::string   COMMAND = "PART";
 
     std::string::size_type  pos = msg.find(COMMAND);
-    std::string::size_type  last = FindLastPosition(msg);
+    std::string::size_type  last = msg.find("\r\n");
 
     if (pos + COMMAND.length() >= last)
         return ;
@@ -338,7 +329,7 @@ static void Privmsg(std::string& msg)
     const std::string COMMAND = "PRIVMSG";
 
     std::string::size_type  pos = msg.find(COMMAND);
-    std::string::size_type  last = FindLastPosition(msg);
+    std::string::size_type  last = msg.find("\r\n");
 
     if (pos + COMMAND.length() >= last)
         return ;
@@ -365,7 +356,7 @@ static void Kick(std::string& msg)
     const std::string   COMMAND = "KICK";
 
     std::string::size_type  pos = msg.find(COMMAND);
-    std::string::size_type  last = FindLastPosition(msg);
+    std::string::size_type  last = msg.find("\r\n");
     if (pos + COMMAND.length() >= last)
         return ;
 
@@ -422,7 +413,7 @@ mBallCount(0),
 mStrikeCount(0)
 {
     std::string Message = "PRIVMSG " + mChannelName \
-                          + " :Bot is now ready to play\nPRIVMSG " \
+                          + " :Bot is now ready to play\r\nPRIVMSG " \
                           + mChannelName + " :Type '!Bot start' to start game\r\n";
     send(mSock, Message.c_str(), Message.length(), 0);
 }
@@ -436,7 +427,7 @@ int    Bot::ProcessMessage(const std::string& msg)
         return 0;
 
     pos = msg.find_first_not_of(" ", COMMAND.length());
-    std::string::size_type  last = FindLastPosition(msg);
+    std::string::size_type  last = msg.find("\r\n");;
     if (pos == last)
         return 0;
     std::string arg = msg.substr(pos, last - pos);
