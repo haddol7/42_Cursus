@@ -119,7 +119,7 @@ void	Client::AddBuffer(const std::string& buff)
 
 	AMessage*	message;
 
-	while (checkCommand() == true && checkQuitFlag() == false)
+	while (checkCommand() == true && CheckQuitFlag() == false)
 	{
 		message = makeCommand();
 		if (message != NULL)
