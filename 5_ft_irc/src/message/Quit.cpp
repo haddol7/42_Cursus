@@ -30,7 +30,6 @@ void	Quit::FillClientList()
 		std::vector<const Client *>::iterator	it_user = vec_user.begin();
 		for (; it_user != vec_user.end(); ++it_user)
 			AddClientList(*it_user);
-		(*it_ch)->RemoveOne(*mOrigin);
 	}
 }
 
