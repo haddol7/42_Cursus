@@ -1,6 +1,6 @@
 NAME := ircserv
 CC := c++
-CFLAGS := -Werror -Wall -Wextra -std=c++98 -Iinc/ -Iinc/message/ -fsanitize=address -g
+CFLAGS := -Werror -Wall -Wextra -std=c++98 -Iinc/ -Iinc/message/ -g #-fsanitize=address
 
 SRC_DIR := src/
 OBJ_DIR := obj/
@@ -21,7 +21,8 @@ SRC_MESSAGE =	$(SRC_DIR)message/AMessage.cpp \
 				$(SRC_DIR)message/Invite.cpp \
 				$(SRC_DIR)message/Topic.cpp \
 				$(SRC_DIR)message/Part.cpp \
-				$(SRC_DIR)message/Kick.cpp 
+				$(SRC_DIR)message/Kick.cpp \
+				$(SRC_DIR)message/Ping.cpp
 
 SRC_CHANNEL = 	$(SRC_DIR)channel/Channel.cpp
 
