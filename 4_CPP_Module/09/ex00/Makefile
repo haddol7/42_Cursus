@@ -1,6 +1,6 @@
-NAME = ex00
+NAME = btc
 
-SRCS = 
+SRCS = main.cpp BitcoinExchange.cpp
 OBJS = ${SRCS:.cpp=.o}
 
 CC = c++
