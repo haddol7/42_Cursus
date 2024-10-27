@@ -1,6 +1,6 @@
 NAME = ex01
 
-SRCS = 
+SRCS = main.cpp Span.cpp
 OBJS = ${SRCS:.cpp=.o}
 
 CC = c++
