@@ -9,10 +9,7 @@ AMessage(origin, "PASS", msg)
 
 void	Pass::ExecuteCommand()
 {
-	size_t	pos;
-
-	pos = mBuff.rfind(" ");
-	if (pos == std::string::npos)
+	if (mParamCount == 0)
 	{
 		ReplyToOrigin(ERR_NEEDMOREPARAMS("PASS"));
 		return ;
@@ -22,7 +19,7 @@ void	Pass::ExecuteCommand()
 		ReplyToOrigin(ERR_ALREADYREGISTRED);
 		return ;
 	}
-	mPassword = mBuff.substr(pos + 1, mBuff.length() - 7);
+	mPassword = mParamArray[0];
 	if (mPassword == Server::GetServer()->GetPassword())
 	{
 		mOrigin->TurnOnRegisterStatus(PASS);
