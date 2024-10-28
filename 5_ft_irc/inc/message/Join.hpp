@@ -10,11 +10,6 @@
 #include "ReplyMacros.hpp"
 #include "Server.hpp"
 
-/*
-	TODO
-	
-*/
-
 class Join : public AMessage
 {
 	public:
