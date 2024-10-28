@@ -15,6 +15,10 @@ Server::Server()
 	std::cout << "Server Init" << std::endl;
 }
 
+Server::~Server()
+{
+}
+
 Server* Server::GetServer()
 {
 	if (mInstance == NULL)
@@ -76,7 +80,6 @@ bool Server::InitServer(const char *port, const char* pass)
 		return (false);
 	}
 	mEpfd = epoll_create(EPOLL_SIZE);
-	//mEpollEvents = new struct epoll_event[EPOLL_SIZE];
 	controlClientEvent(mSocket, EPOLL_CTL_ADD, EPOLLIN);
 	return (true);
 }
@@ -108,7 +111,10 @@ void Server::ExecServerLoop(void)
 			}
 		}
 	}
-	//client all fd close code
+	for (std::map<const int, Client>::iterator it = mClientMap.begin(); it != mClientMap.end(); ++it)
+	{
+		close(it->first);
+	}
 	close(mSocket);
 	close(mEpfd);
 }
