@@ -35,7 +35,6 @@ public:
 
 private:
 	static Server					*mInstance;
-	//struct epoll_event			*mEpollEvents;
 	struct epoll_event				mEpollEvents[EPOLL_SIZE];
 	std::string						mName;
 	std::string						mPassword;
@@ -47,6 +46,7 @@ private:
 	std::map<const std::string, Channel> mChannelMap;
 
 	Server();
+	~Server();
 	void	setPassword(const std::string& pass);
 	bool	registerClient();
 	void	receiveFromClientLoop(const int client_fd);
