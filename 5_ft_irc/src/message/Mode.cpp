@@ -215,7 +215,7 @@ bool	Mode::Execute_o(const std::string& client, bool mode)
 		ReplyToOrigin(ERR_NOSUCHNICK(client));
 		return (false);
 	}
-	const Client *client_target = mChannel->FindUser(client);
+	const Client *client_target = mChannel->FindUserInChannelWithNick(client);
 	if (client_target == NULL)
 	{
 		return (false);
