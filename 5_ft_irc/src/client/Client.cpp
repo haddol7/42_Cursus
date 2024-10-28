@@ -4,7 +4,6 @@
 Client::Client(unsigned int fd, sockaddr_in clientAddrInfo) \
 	: mFd(fd), \
 	mIpAddress(clientAddrInfo.sin_addr.s_addr), \
-	mPasswordConfirmation(false),
 	mQuitFlag(false),
 	mRegisterStatus(0)
 {

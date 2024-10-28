@@ -49,15 +49,13 @@ public:
 	};
 	// constructor && destructor
 	Channel(const std::string &tag, const Client &channelCreater);
-	Channel();
 	~Channel();
 
 	/* public member function */
 	// set channel key
-	void				setChannelKey(const std::string &channelKey);
-	// set channel key
-	// remove one in channel
+	void	setChannelKey(const std::string &channelKey);
 	bool	IsOperator(const Client	&target);
+	// remove one in channel
 	void	RemoveOne(const Client &target);
 	// demote operator to user
 	void	DemoteOperator(const Client &oper);
@@ -85,7 +83,6 @@ public:
 	int		GetAllModeStatus() const;
 	bool	GetOneModeStatus(int mode) const;
 	bool	ToggleModeStatus(int mode, bool turn);
-  const Client*		FindUser(const std::string& nick);
   
   	const std::string&	GetKey() const;
 	void				SetKey(const std::string& key);
@@ -106,6 +103,7 @@ public:
 	void	SendPrivateMsgToChannel(const Client &broadcaster, const std::string &msg);
 
 private:
+	Channel();
 	/* private member function */
 	// get operator location in vector
 	std::vector<unsigned int>::iterator		getOperatorIter(const Client &target);
@@ -113,9 +111,6 @@ private:
 	std::vector<const Client *>::iterator	getUserIter(const Client &target);
 
 	/* private member variable */
-	//TODO : mInviteLists에 클라이언트가 도중에 나가면 해당 포인터는 어떻게 처리할 것인지
-	//		1. 나갈 때 직접 찾아서 지우기
-	//		2. 스마트 포인터..
 	std::string					mTag;
 	std::vector<unsigned int>	mOperators;
 	std::vector<const Client *>	mUsers;
