@@ -34,7 +34,6 @@ public:
 	unsigned int		GetFd() const;
 	in_addr_t			GetIpAddress() const;
 	const std::string&	GetIpAddressString() const;
-	bool				GetPasswordConfirmation() const;
 	int					GetRegisterStatus() const;
 	// setter
 	void				SetNickName(const std::string &nickName);
@@ -42,7 +41,6 @@ public:
 	void				SetHostName(const std::string &hostName);
 	void				SetServerName(const std::string &serverName);
 	void				SetRealName(const std::string &realName);
-	void				SetPasswordConfirmation(const bool passwordConfirmation);
 	//MessageBuffer
 	void				AddBuffer(const std::string &buff);
 	void				TurnOnRegisterStatus(int mode);
@@ -74,7 +72,6 @@ private:
 	std::string			mHostName;
 	std::string			mServerName;
 	std::string			mRealName;
-	bool				mPasswordConfirmation;
 	bool				mQuitFlag;
 	int					mRegisterStatus;
 	std::string			mbuffer;

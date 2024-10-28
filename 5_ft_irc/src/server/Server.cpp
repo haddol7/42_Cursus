@@ -76,7 +76,7 @@ bool Server::InitServer(const char *port, const char* pass)
 		return (false);
 	}
 	mEpfd = epoll_create(EPOLL_SIZE);
-	mEpollEvents = new struct epoll_event[EPOLL_SIZE];
+	//mEpollEvents = new struct epoll_event[EPOLL_SIZE];
 	controlClientEvent(mSocket, EPOLL_CTL_ADD, EPOLLIN);
 	return (true);
 }
@@ -100,10 +100,7 @@ void Server::ExecServerLoop(void)
 			client_fd = mEpollEvents[i_event].data.fd;
 			if (client_fd == mSocket)
 			{
-				if (registerClient() == false)
-				{
-					break ;
-				}
+				registerClient();
 			}
 			else
 			{
@@ -111,6 +108,7 @@ void Server::ExecServerLoop(void)
 			}
 		}
 	}
+	//client all fd close code
 	close(mSocket);
 	close(mEpfd);
 }
@@ -135,10 +133,7 @@ bool Server::registerClient()
 	}
 	controlClientEvent(socket, EPOLL_CTL_ADD, EPOLLIN | EPOLLET);
 	mClientMap.insert(std::make_pair(socket, Client(socket, address)));
-	//debug
-	{
-		std::cerr << socket << " | " << ntohs(address.sin_port) << " connected."<< std::endl;
-	}
+	std::cerr << socket << " | " << ntohs(address.sin_port) << " connected."<< std::endl;
 	return (true);
 }
 

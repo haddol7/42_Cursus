@@ -32,7 +32,8 @@ void	User::ExecuteCommand()
 	else if (isParamAllowed() == true)
 	{
 		mOrigin->SetUserName(mUserName);
-		mOrigin->SetHostName(mHostName);
+		if (mHostName != "*")
+			mOrigin->SetHostName(mHostName);
 		mOrigin->SetServerName(mServerName);
 		mOrigin->SetRealName(mRealName);
 		mOrigin->TurnOnRegisterStatus(USER);

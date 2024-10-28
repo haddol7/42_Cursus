@@ -35,7 +35,8 @@ public:
 
 private:
 	static Server					*mInstance;
-	struct epoll_event				*mEpollEvents;
+	//struct epoll_event			*mEpollEvents;
+	struct epoll_event				mEpollEvents[EPOLL_SIZE];
 	std::string						mName;
 	std::string						mPassword;
 	std::string						mPrefix;
