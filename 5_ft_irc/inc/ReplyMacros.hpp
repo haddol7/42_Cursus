@@ -6,6 +6,8 @@
 #define RPL_NOTOPIC(CHANNEL)				        (std::string("331 ") + CHANNEL + " :No topic is set\r\n")
 #define RPL_TOPIC(CHANNEL, TOPIC)			        (std::string("332 ") + CHANNEL + " :" + TOPIC + "\r\n")
 #define RPL_INVITING(CHANNEL, NICK)			        (std::string("341 ") + (CHANNEL) + " " + (NICK) + "\r\n")
+// 원래 표준에서는 RPL_NAMREPLY, RPL_ENDOFNAMES에 NICK이 포함이 되지 않지만
+// 역시 상용 클라이언트가 표준을 안지켜서 호환이 안되기 때문에 아래와 같이 임의로 수정합니다.
 #define RPL_NAMREPLY(NICK, CHANNEL, LIST_OF_NICKS)  (std::string("353 ") + (NICK) + " = " + (CHANNEL) + " :" + (LIST_OF_NICKS) + "\r\n")
 #define RPL_ENDOFNAMES(NICK, CHANNEL)				(std::string("366 ") + (NICK) + " " + (CHANNEL) + " :End of /NAMES list\r\n")
 
