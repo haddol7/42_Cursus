@@ -18,6 +18,7 @@ class Server
 {
 public:
 	static	Server* 				GetServer();
+	~Server();
 	std::map<const int, Client>*	GetClientMap();
 	const std::string&				GetName() const;
 	const std::string&				GetPassword() const;
@@ -46,7 +47,6 @@ private:
 	std::map<const std::string, Channel> mChannelMap;
 
 	Server();
-	~Server();
 	void	setPassword(const std::string& pass);
 	bool	registerClient();
 	void	receiveFromClientLoop(const int client_fd);
