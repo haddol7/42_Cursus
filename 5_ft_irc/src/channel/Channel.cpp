@@ -35,8 +35,6 @@ void				Channel::setChannelKey(const std::string &channelKey)
 }
 
 // remove one in channel
-// TODO : 채널에 아무도 없으면 채널 지우기
-// TODO : 채널에 운영자가 아무도 없으면 운영자 부여하기
 void	Channel::RemoveOne(const Client &target)
 {
 	DemoteOperator(target);
@@ -185,7 +183,7 @@ void	Channel::SendBackCmdMsg(const std::string &cmdMsg)
 {
 	for (std::vector<const Client *>::iterator iter = mUsers.begin(); \
 		iter != mUsers.end(); iter++)
-		Server::GetServer()->SendMessage(const_cast<Client &>(**iter), cmdMsg);
+		Server::GetServer()->SendMessage(**iter, cmdMsg);
 }
 
 // broadcast private message to channel except broadcaster
@@ -196,7 +194,7 @@ void	Channel::SendPrivateMsgToChannel(const Client &broadcaster, const std::stri
 	{
 		if (*iter == &broadcaster)
 			continue ;
-		Server::GetServer()->SendMessage(const_cast<Client &>(**iter), msg);
+		Server::GetServer()->SendMessage(**iter, msg);
 	}
 }
 
@@ -294,20 +292,6 @@ std::string		Channel::GetMembersOfChannelInString()
 			output.append((*iter)->GetNickName() + " ");
 	}
 	return (output);
-}
-
-const Client*	Channel::FindUser(const std::string& nick)
-{
-	std::vector<const Client *>::iterator	it = mUsers.begin();
-
-	for (; it != mUsers.end(); ++it)
-	{
-		if ((*it)->GetNickName() == nick)
-		{
-			return ((*it));
-		}
-	}
-	return (NULL);
 }
 
 const std::string& Channel::GetTopic() const
