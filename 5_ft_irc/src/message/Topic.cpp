@@ -38,7 +38,7 @@ bool Topic::IsValidChannel()
 		ReplyToOrigin(ERR_NOSUCHCHANNEL(mTargetChannel));
 		return (false);
 	}
-	if (mChannel->FindUser(mOriginNick) == NULL)
+	if (mChannel->FindUserInChannelWithNick(mOriginNick) == NULL)
 	{
 		ReplyToOrigin(ERR_NOTONCHANNEL(mTargetChannel));
 		return (false);

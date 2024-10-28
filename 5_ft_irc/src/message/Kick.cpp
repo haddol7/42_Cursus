@@ -36,12 +36,12 @@ bool Kick::IsValidChannel()
 		ReplyToOrigin(ERR_NOSUCHNICK(mTargetClientStr));
 		return (false);
 	}
-	if (mChannel->FindUser(mOriginNick) == NULL)
+	if (mChannel->FindUserInChannelWithNick(mOriginNick) == NULL)
 	{
 		ReplyToOrigin(ERR_NOTONCHANNEL(mTargetChannel));
 		return (false);
 	}
-	mTargetClientPtr = mChannel->FindUser(mTargetClientStr);
+	mTargetClientPtr = mChannel->FindUserInChannelWithNick(mTargetClientStr);
 	if (mTargetClientPtr == NULL)
 	{
 		ReplyToOrigin(ERR_USERNOTINCHANNEL(mTargetClientStr, mTargetChannel));

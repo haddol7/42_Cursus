@@ -62,7 +62,7 @@ void Privmsg::SendMessageChannel()
 		return;
 	}
 	Channel &channel = it->second;
-	if (channel.FindUser(mOrigin->GetNickName()) == NULL)
+	if (channel.FindUserInChannelWithNick(mOrigin->GetNickName()) == NULL)
 	{
 		ReplyToOrigin(ERR_CANNOTSENDTOCHAN(mTarget));
 		return;
