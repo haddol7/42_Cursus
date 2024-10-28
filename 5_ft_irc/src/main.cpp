@@ -13,10 +13,10 @@ int	main(int argc, char *argv[])
 	server = Server::GetServer();
 	if (server->InitServer(argv[1], argv[2]) == false)
 	{
+		delete server;
 		return (1);
 	}
 	server->ExecServerLoop();
-
 	delete server;
 	return (0);
 }

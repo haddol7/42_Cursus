@@ -71,11 +71,6 @@ const std::string&	Client::GetIpAddressString() const
 	return (mIpAddressString);
 }
 
-bool				Client::GetPasswordConfirmation() const
-{
-	return (mPasswordConfirmation);
-}
-
 int					Client::GetRegisterStatus() const
 {
 	return (mRegisterStatus);
@@ -108,14 +103,10 @@ void				Client::SetRealName(const std::string &realName)
 	mRealName = realName;
 }
 
-void				Client::SetPasswordConfirmation(const bool passwordConfirmation)
-{
-	mPasswordConfirmation = passwordConfirmation;
-}
-
 void	Client::AddBuffer(const std::string& buff)
 {
-	mbuffer = mbuffer + buff;
+	//mbuffer = mbuffer + buff;
+	mbuffer.append(buff);
 
 	AMessage*	message;
 
@@ -203,7 +194,6 @@ void				Client::JoinNewChannel(Channel *channel)
 {
 	if (GetChannelOfClientIter(channel) != mChannelListOfClient.end())
 	{
-		std::cerr << "Client::JoinNewChannel : Error : Cllient is already in the channel." << std::endl;
 		return ;
 	}
 	mChannelListOfClient.push_back(channel);
@@ -214,7 +204,6 @@ void				Client::PartChannel(Channel *channel)
 	std::vector<Channel *>::iterator	channelIter = GetChannelOfClientIter(channel);
 	if (channelIter == mChannelListOfClient.end())
 	{
-		std::cerr << "Client::PartChannel : Error : Cllient already parted the channel." << std::endl;
 		return ;
 	}
 	mChannelListOfClient.erase(channelIter);	
