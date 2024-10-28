@@ -71,15 +71,6 @@ void	Join::ExecuteCommand()
 	std::map<const std::string, Channel>	&channelsInServer = \
 		(Server::GetServer())->GetChannelList();
 
-	// DEBUG!!!!!!!!!!!!!
-	int	i = 0;
-	for (std::map<const std::string, Channel>::iterator iter = channelsInServer.begin();\
-		iter != channelsInServer.end(); iter++)
-	{
-		std::cout << (*iter).first << std::endl;
-		i++;
-	}
-
 	while (!mChannelList.empty())
 	{
 		std::string	targetName = mChannelList.front();
@@ -150,6 +141,8 @@ void	Join::ExecuteCommand()
 		// 3. 채널의 모두에게 새로운 멤버가 JOIN했음을 공지한다.
 		target.SendBackCmdMsg(GetJoinSendBack(targetName));
 		// 4. 새로 가입한 클라이언트에게 새로 가입한 채널의 topic을 공지한다.
+		// 원래 표준에서는 토픽이 없으면 RPL_TOPIC을 뱉어야 하지만
+		// 역시 상용 클라이언트가 표준을 안지켜서 호환이 안되기 때문에 아래와 같이 임의로 수정합니다.
 		if (target.GetTopic().empty())
 			;// ReplyToOrigin(RPL_NOTOPIC(targetName));
 		else
@@ -289,6 +282,9 @@ void				Join::parseParameter() throw(NewException)
 
 std::string	Join::GetJoinSendBack(const std::string &channelName)
 {
+	// 원래 표준 상에서는 JOIN의 send back message format에
+	// 클라이언트의 닉네임이 들어가지 않지만 상용 클라이언트가 표준을 지키지 않고 클라이언트의 닉네임을 삽입합니다.
+	// 따라서 평가에서 상용 클라이언트와의 호환성을 위해 임의로 아래와 같이 format을 수정합니다.
 	return (":" + mOrigin->GetNickName() + "!" + mOrigin->GetUserName() + "@" + \
 		mOrigin->GetHostName() + " JOIN " + channelName + "\r\n");
 }
