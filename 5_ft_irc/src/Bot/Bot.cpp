@@ -44,7 +44,7 @@ static int InitBot(std::string IpAddress, std::string Port, std::string Password
     serverAddr.sin_port = htons(atoi(Port.c_str()));
     inet_pton(AF_INET, IpAddress.c_str(), &serverAddr.sin_addr);
 
-    if (connect(sock, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) < 0 && errno != EINPROGRESS) 
+    if (connect(sock, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) < 0 && errno != EINPROGRESS)
     {
         std::cerr << "Connection failed\n";
         close(sock);
@@ -54,7 +54,7 @@ static int InitBot(std::string IpAddress, std::string Port, std::string Password
     std::string passCommand = "PASS " + Password + "\r\n";
     std::string nickCommand = "NICK Bot\r\n";
     std::string userCommand = "USER Bot root * :Bot\r\n";
-    
+
     send(sock, passCommand.c_str(), passCommand.length(), 0);
     send(sock, nickCommand.c_str(), nickCommand.length(), 0);
     send(sock, userCommand.c_str(), userCommand.length(), 0);
@@ -66,7 +66,7 @@ static void    ExecBotLoop(int sock)
 {
     // epoll 인스턴스 생성
     int epollFd = epoll_create1(0);
-    if (epollFd < 0) 
+    if (epollFd < 0)
     {
         std::cerr << "Epoll creation failed: " << strerror(errno) << "\n";
         close(sock);
@@ -79,7 +79,7 @@ static void    ExecBotLoop(int sock)
     event.data.fd = sock;
 
     // epoll에 소켓 추가
-    if (epoll_ctl(epollFd, EPOLL_CTL_ADD, sock, &event) < 0) 
+    if (epoll_ctl(epollFd, EPOLL_CTL_ADD, sock, &event) < 0)
     {
         std::cerr << "Epoll ctl failed: " << strerror(errno) << "\n";
         close(sock);
@@ -96,22 +96,22 @@ static void    ExecBotLoop(int sock)
 
 static void EventLoop(int epollFd, int sock)
 {
-    while (true) 
+    while (true)
     {
         struct epoll_event events[1];
         int nfds = epoll_wait(epollFd, events, 1, -1); // 블록킹 모드
 
-        if (nfds < 0) 
+        if (nfds < 0)
         {
             std::cerr << "Epoll wait error: " << strerror(errno) << "\n";
             break;
         }
 
-        for (int i = 0; i < nfds; ++i) 
+        for (int i = 0; i < nfds; ++i)
         {
             char buffer[1024];
             int bytesReceived = recv(sock, buffer, sizeof(buffer) - 1, 0);
-            if (bytesReceived <= 0) 
+            if (bytesReceived <= 0)
             {
                 std::cerr << "Connection closed or error occurred\n";
                 close(sock);
@@ -125,7 +125,7 @@ static void EventLoop(int epollFd, int sock)
 
 void    Bot::AddBuffer(int sock, std::string buffer)
 {
-    Bot::sBuffer = Bot::sBuffer + buffer; // addBuffer static 함수 만들기 
+    Bot::sBuffer = Bot::sBuffer + buffer; // addBuffer static 함수 만들기
 
     while (CheckCommand() == true)
     {
@@ -253,7 +253,7 @@ static void Invite(int sock, std::string& msg)
 
     std::string::size_type  pos = msg.find("Bot ", msg.find("INVITE"));
     std::string::size_type  last = msg.find("\r\n");
-    
+
     if (pos == std::string::npos)
         return ;
     pos = msg.find(" ", pos);
@@ -474,7 +474,7 @@ void    Bot::startGame()
     send(mSock, BotMessage.c_str(), BotMessage.length(), 0);
 }
 
-void Bot::generateRandomNumber() 
+void Bot::generateRandomNumber()
 {
     std::vector<int> digits;
 
@@ -563,10 +563,20 @@ void    Bot::printResult(const std::string& number) const
 
 static bool isTryDigit(std::string& number)
 {
+	char	store[5];
+
+	store[4] = '\0';
+
     for (int i = 0; i < 4; ++i)
     {
         if (isdigit(number[i]) == false)
             return false;
+		store[i] = number[i];
+		for (int j = 0; j < i; ++j)
+		{
+			if (number[i] == store[j])
+				return false;
+		}
     }
     return true;
 }
