@@ -63,14 +63,14 @@ class Join : public AMessage
 		class BadChannelKeyException : public NewException
 		{
 			public :
-				virtual	~BadChannelKeyException() throw();
-				BadChannelKeyException(const std::string &channelName);
+				BadChannelKeyException(const std::string &userNick, const std::string &channelName);
+				virtual ~BadChannelKeyException() throw();
 				virtual std::string	what() const throw();
 			private :
 				BadChannelKeyException();
-				const std::string	mChannelName;
+				const std::string mChannelName;
+				const std::string mUserNick;
 		};
-
 
 		/* constructor && destructor */
 		Join(Client* origin, const std::string &msg);

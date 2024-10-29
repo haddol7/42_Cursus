@@ -1,14 +1,14 @@
 #include "Channel.hpp"
 
 // exception class function
-Channel::BadChannelKeyException::BadChannelKeyException(std::string tag) \
-	: mTag(tag) {}
+Channel::BadChannelKeyException::BadChannelKeyException(std::string userNick, std::string tag) \
+	: mTag(tag), mUserNick(userNick) {}
 
 Channel::BadChannelKeyException::~BadChannelKeyException() throw() {}
 
 std::string	Channel::BadChannelKeyException::what() const throw()
 {
-	return (ERR_BADCHANNELKEY(mTag).c_str());
+	return (ERR_BADCHANNELKEY(mUserNick, mTag.c_str()));
 }
 
 // constructor && destructor
@@ -86,7 +86,7 @@ void	Channel::AddUser(const Client &user) throw(Channel::BadChannelKeyException)
 {
 	// key가 할당되어 있는 상황에서는 key 없이 channel에 들어올 수 없다.
 	if (!mKey.empty())
-		throw (BadChannelKeyException(mTag));
+		throw (BadChannelKeyException(user.GetNickName(), mTag));
 	if (getUserIter(user) != mUsers.end())
 		return ;
 
@@ -107,7 +107,7 @@ void	Channel::AddUserWithKey(const Client &user, const std::string &key) \
 	throw(Channel::BadChannelKeyException)
 {
 	if (key != mKey && !mKey.empty())
-		throw (BadChannelKeyException(mTag));
+		throw (BadChannelKeyException(user.GetNickName(), mTag));
 	if (getUserIter(user) != mUsers.end())
 		return ;
 

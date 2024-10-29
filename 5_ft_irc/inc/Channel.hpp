@@ -40,12 +40,13 @@ public:
 	class BadChannelKeyException : public NewException
 	{
 	public :
-		BadChannelKeyException(std::string tag);
+		BadChannelKeyException(std::string userNick, std::string tag);
 		virtual ~BadChannelKeyException() throw();
 		virtual std::string	what() const throw();
 	private :
 		BadChannelKeyException();
 		const std::string mTag;
+		const std::string mUserNick;
 	};
 	// constructor && destructor
 	Channel(const std::string &tag, const Client &channelCreater);
