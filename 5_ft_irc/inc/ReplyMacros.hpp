@@ -29,7 +29,7 @@
 #define ERR_NEEDMOREPARAMS(COMMAND) 		        (std::string("461 ") + COMMAND + " :Not enough parameters\r\n")
 #define ERR_ALREADYREGISTRED				        (std::string("462 :Unauthorized command (already registered)\r\n"))
 #define ERR_KEYSET(CHANNEL)					        (std::string("467 ") + CAHNNEL + " :Channel key already set\r\n")
-#define ERR_CHANNELISFULL(CHANNEL)			        (std::string("471 ") + (CHANNEL) + " :Cannot join channel (+i)\r\n")
+#define ERR_CHANNELISFULL(NICK, CHANNEL)			(std::string("471 ") + NICK + " " + (CHANNEL) + " :Cannot join channel (channel is full)\r\n")
 #define ERR_UNKNOWNMODE(CHAR, CHANNEL)		        (std::string("472 ") + CHAR + " :is unknown mode char to me for " + CHANNEL + "\r\n")
 #define ERR_INVITEONLYCHAN(CHANNEL) 		        (std::string("473 ") + (CHANNEL) + " :Cannot join channel (+i)\r\n")
 // 원래 표준에서는 Cannot join channel (+k)와 같이 응답해야 하지만

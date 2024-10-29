@@ -24,11 +24,11 @@ std::string	Join::NeedMoreParamException::what() const throw()
 }
 
 Join::ChannelIsFullException::~ChannelIsFullException() throw() {}
-Join::ChannelIsFullException::ChannelIsFullException(const std::string &channelName) \
-	: mChannelName(channelName) {}
+Join::ChannelIsFullException::ChannelIsFullException(const std::string &userNick, const std::string &channelName) \
+	: mUserNick(userNick) ,mChannelName(channelName) {}
 std::string	Join::ChannelIsFullException::what() const throw()
 {
-	return (ERR_CHANNELISFULL(mChannelName));
+	return (ERR_CHANNELISFULL(mUserNick, mChannelName));
 }
 
 Join::InviteOnlyChanException::~InviteOnlyChanException() throw() {}
@@ -102,7 +102,7 @@ void	Join::ExecuteCommand()
 					throw (Join::InviteOnlyChanException(targetName));
 				// mode로 채널 가입 인원의 상한이 정해진 상황에서 클라이언트가 join하면 상한을 넘을 때 -> ERR_CHANNELISFULL
 				if (target.GetOneModeStatus(L_MODE) && target.GetLimit() <= target.GetCurrentNumberOfMemeber())
-					throw (Join::ChannelIsFullException(targetName));
+					throw (Join::ChannelIsFullException(mOrigin->GetNickName(), targetName));
 				
 				// key 목록에 남은 키가 없다면 키 없이 채널에 가입을 시도한다.
 				if (mChannelKeyList.empty())

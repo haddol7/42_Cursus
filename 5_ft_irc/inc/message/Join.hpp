@@ -44,10 +44,11 @@ class Join : public AMessage
 		{
 			public :
 				virtual	~ChannelIsFullException() throw();
-				ChannelIsFullException(const std::string &channelName);
+				ChannelIsFullException(const std::string &userNick, const std::string &channelName);
 				virtual std::string	what() const throw();
 			private :
 				ChannelIsFullException();
+				const std::string	mUserNick;
 				const std::string	mChannelName;
 		};
 		class InviteOnlyChanException : public NewException
