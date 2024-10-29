@@ -33,7 +33,7 @@ static int InitBot(std::string IpAddress, std::string Port, std::string Password
 {
     struct sockaddr_in  serverAddr;
 
-    int sock = socket(PF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+    int sock = socket(PF_INET, SOCK_STREAM, 0);
     if (sock == -1)
     {
         std::cerr << "Could not create socket\n";
@@ -55,7 +55,7 @@ static int InitBot(std::string IpAddress, std::string Port, std::string Password
     std::string nickCommand = "NICK Bot\r\n";
     std::string userCommand = "USER Bot root * :Bot\r\n";
 
-    send(sock, passCommand.c_str(), passCommand.length(), 0);
+	send(sock, passCommand.c_str(), passCommand.length(), 0);
     send(sock, nickCommand.c_str(), nickCommand.length(), 0);
     send(sock, userCommand.c_str(), userCommand.length(), 0);
 
