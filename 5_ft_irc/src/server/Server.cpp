@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <cstdlib>
+#include <csignal>
 #include "Server.hpp"
 #include "AMessage.hpp"
 
@@ -63,6 +64,7 @@ bool Server::InitServer(const char *port, const char* pass)
 {
 	struct sockaddr_in	address;
 
+	SetSignalOnlySIGINT();
 	setPassword(pass);
 	mSocket = socket(PF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
 	memset(&address, 0, sizeof(address));
@@ -82,6 +84,16 @@ bool Server::InitServer(const char *port, const char* pass)
 	mEpfd = epoll_create(EPOLL_SIZE);
 	controlClientEvent(mSocket, EPOLL_CTL_ADD, EPOLLIN);
 	return (true);
+}
+
+int Server::GetEpfd() const
+{
+	return (mEpfd);
+}
+
+int Server::GetSocket() const
+{
+	return (mSocket);
 }
 
 void Server::ExecServerLoop(void)
@@ -241,4 +253,36 @@ Client*	Server::ReturnClientOrNull(const std::string& nick)
 		}
 	}
 	return (NULL);
+}
+
+static void TerminateServer(int signal)
+{
+	Server* server = Server::GetServer();
+	std::map<const int, Client>	*client_map = server->GetClientMap();
+	for (std::map<const int, Client>::iterator it = client_map->begin(); it != client_map->end(); ++it)
+	{
+		close(it->first);
+	}
+	close(server->GetEpfd());
+	close(server->GetSocket());
+	delete server;
+	exit(128 + signal);
+}
+
+void Server::SetSignalOnlySIGINT() const
+{
+	struct sigaction sig;
+	sig.sa_handler = SIG_IGN;
+	sig.sa_flags = 0;
+	for (int i = 1; i < NSIG; ++i) 
+	{
+		if (i != SIGINT)
+		{
+			sigaction(i, &sig, NULL);
+		}
+	}
+	struct sigaction sigint_action;
+	sigint_action.sa_handler = TerminateServer;
+	sigint_action.sa_flags = 0;
+	sigaction(SIGINT, &sigint_action, NULL);
 }
