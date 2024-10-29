@@ -2,12 +2,6 @@
 
 #include "AMessage.hpp"
 
-// ERR_NEEDMOREPARAMS
-// ERR_NOSUCHCHANNEL
-// ERR_NOTONCHANNEL
-// ERR_USERNOTINCHANNEL
-// ERR_CHANOPRIVSNEEDED
-
 class Kick : public AMessage
 {
 public:
