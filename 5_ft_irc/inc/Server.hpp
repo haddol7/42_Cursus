@@ -23,6 +23,8 @@ public:
 	const std::string&				GetName() const;
 	const std::string&				GetPassword() const;
 	const std::string&				GetPrefix() const;
+	int								GetEpfd() const;
+	int								GetSocket() const;
 	void							SetNameAndPrefix(const std::string& name);
 
 	bool							InitServer(const char* port, const char* pass);
@@ -53,6 +55,7 @@ private:
 	int		receiveFromClient(const int client_fd);
 	void	controlClientEvent(const int client_fd, const int epoll_mode, const int event_mode);
 	void	unregisterClientSocket(const int client_fd, const std::string& msg);
+	void	SetSignalOnlySIGINT() const;
 };
 
 #include "Channel.hpp"
