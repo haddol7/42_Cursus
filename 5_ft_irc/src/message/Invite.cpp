@@ -80,7 +80,6 @@ void	Invite::ExecuteCommand() throw(NewException)
 	}
 	catch(const NewException &e)
 	{
-		std::cerr << e.what() << '\n';
 		ReplyToOrigin(e.what());
 	}
 }

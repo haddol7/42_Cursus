@@ -64,7 +64,6 @@ void	Join::ExecuteCommand()
 	}
 	catch (const NewException &e)
 	{
-		std::cerr << e.what() << std::endl;
 		ReplyToOrigin(e.what());
 	}
 
@@ -118,7 +117,6 @@ void	Join::ExecuteCommand()
 		// ERR 중 TooManyChannelsException은 즉시 리턴한다.
 		catch(const Join::TooManyChannelsException &e)
 		{
-			std::cerr << e.what() << std::endl;
 			ReplyToOrigin(e.what());
 			break ;
 		}
@@ -126,7 +124,6 @@ void	Join::ExecuteCommand()
 		// 이후 다음 채널의 처리로 넘어간다.
 		catch(const NewException &e)
 		{
-			std::cerr << e.what() << std::endl;
 			ReplyToOrigin(e.what());
 			continue ;
 		}
