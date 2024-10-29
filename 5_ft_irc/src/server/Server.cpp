@@ -201,6 +201,7 @@ void Server::controlClientEvent(const int client_fd, const int epoll_mode, const
 {
 	struct epoll_event	event;
 
+	memset(&event, 0, sizeof(event));
 	event.events = event_mode;
 	event.data.fd = client_fd;
 	epoll_ctl(mEpfd, epoll_mode, client_fd, &event);
@@ -274,6 +275,12 @@ void Server::SetSignalOnlySIGINT() const
 	struct sigaction sig;
 	sig.sa_handler = SIG_IGN;
 	sig.sa_flags = 0;
+
+    sigset_t mask;
+    for (size_t i = 0; i < sizeof(mask) / sizeof(int); i++) {
+        ((int*)&mask)[i] = 0;
+    }
+    sig.sa_mask = mask;
 	for (int i = 1; i < NSIG; ++i) 
 	{
 		if (i != SIGINT)
@@ -281,8 +288,7 @@ void Server::SetSignalOnlySIGINT() const
 			sigaction(i, &sig, NULL);
 		}
 	}
-	struct sigaction sigint_action;
-	sigint_action.sa_handler = TerminateServer;
-	sigint_action.sa_flags = 0;
-	sigaction(SIGINT, &sigint_action, NULL);
+	sig.sa_handler = TerminateServer;
+	sig.sa_flags = 0;
+	sigaction(SIGINT, &sig, NULL);
 }
