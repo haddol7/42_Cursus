@@ -34,6 +34,6 @@
 #define ERR_INVITEONLYCHAN(CHANNEL) 		        (std::string("473 ") + (CHANNEL) + " :Cannot join channel (+i)\r\n")
 // 원래 표준에서는 Cannot join channel (+k)와 같이 응답해야 하지만
 // 역시 상용 클라이언트가 표준을 안지켜서 호환이 안되기 때문에 아래와 같이 임의로 수정합니다.
-#define ERR_BADCHANNELKEY(CHANNEL) 			        (std::string("475 ") + CHANNEL + " :Cannot join channel (incorrect channel key)\r\n")
+#define ERR_BADCHANNELKEY(NICK, CHANNEL) 			        (std::string("475 ") + NICK + " " + CHANNEL + " :Cannot join channel (incorrect channel key)\r\n")
 #define ERR_CHANOPRIVSNEEDED(CHANNEL)		        (std::string("482 ") + (CHANNEL) + " :You're not channel operator\r\n")
 #define ERR_RESTRICTED						        (std::string("484 :Your connection is restricted!\r\n"))

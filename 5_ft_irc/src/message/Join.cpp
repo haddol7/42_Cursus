@@ -40,11 +40,11 @@ std::string	Join::InviteOnlyChanException::what() const throw()
 }
 
 Join::BadChannelKeyException::~BadChannelKeyException() throw() {}
-Join::BadChannelKeyException::BadChannelKeyException(const std::string &channelName) \
-	: mChannelName(channelName) {}
+Join::BadChannelKeyException::BadChannelKeyException(const std::string &userNick, const std::string &channelName) \
+	: mChannelName(channelName), mUserNick(userNick) {}
 std::string	Join::BadChannelKeyException::what() const throw()
 {
-	return (ERR_BADCHANNELKEY(mChannelName));
+	return (ERR_BADCHANNELKEY(mUserNick, mChannelName));
 }
 
 /* constructor && destructor */
@@ -276,7 +276,7 @@ void				Join::parseParameter() throw(NewException)
 		if (isChannelKeyValid(temp) == true)
 			mChannelKeyList.push_back(temp);
 		else
-			ReplyToOrigin(ERR_BADCHANNELKEY(temp));
+			ReplyToOrigin(ERR_BADCHANNELKEY(mOrigin->GetNickName(), temp));
 	}
 }
 
