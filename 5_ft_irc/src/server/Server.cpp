@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <cstdlib>
+#include <csignal>
 #include "Server.hpp"
 #include "AMessage.hpp"
 
@@ -63,6 +64,7 @@ bool Server::InitServer(const char *port, const char* pass)
 {
 	struct sockaddr_in	address;
 
+	SetSignalOnlySIGINT();
 	setPassword(pass);
 	mSocket = socket(PF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
 	memset(&address, 0, sizeof(address));
@@ -82,6 +84,16 @@ bool Server::InitServer(const char *port, const char* pass)
 	mEpfd = epoll_create(EPOLL_SIZE);
 	controlClientEvent(mSocket, EPOLL_CTL_ADD, EPOLLIN);
 	return (true);
+}
+
+int Server::GetEpfd() const
+{
+	return (mEpfd);
+}
+
+int Server::GetSocket() const
+{
+	return (mSocket);
 }
 
 void Server::ExecServerLoop(void)
@@ -189,6 +201,7 @@ void Server::controlClientEvent(const int client_fd, const int epoll_mode, const
 {
 	struct epoll_event	event;
 
+	memset(&event, 0, sizeof(event));
 	event.events = event_mode;
 	event.data.fd = client_fd;
 	epoll_ctl(mEpfd, epoll_mode, client_fd, &event);
@@ -241,4 +254,41 @@ Client*	Server::ReturnClientOrNull(const std::string& nick)
 		}
 	}
 	return (NULL);
+}
+
+static void TerminateServer(int signal)
+{
+	Server* server = Server::GetServer();
+	std::map<const int, Client>	*client_map = server->GetClientMap();
+	for (std::map<const int, Client>::iterator it = client_map->begin(); it != client_map->end(); ++it)
+	{
+		close(it->first);
+	}
+	close(server->GetEpfd());
+	close(server->GetSocket());
+	delete server;
+	exit(128 + signal);
+}
+
+void Server::SetSignalOnlySIGINT() const
+{
+	struct sigaction sig;
+	sig.sa_handler = SIG_IGN;
+	sig.sa_flags = 0;
+
+    sigset_t mask;
+    for (size_t i = 0; i < sizeof(mask) / sizeof(int); i++) {
+        ((int*)&mask)[i] = 0;
+    }
+    sig.sa_mask = mask;
+	for (int i = 1; i < NSIG; ++i) 
+	{
+		if (i != SIGINT)
+		{
+			sigaction(i, &sig, NULL);
+		}
+	}
+	sig.sa_handler = TerminateServer;
+	sig.sa_flags = 0;
+	sigaction(SIGINT, &sig, NULL);
 }
