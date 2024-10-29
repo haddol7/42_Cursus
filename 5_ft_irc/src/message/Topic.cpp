@@ -38,6 +38,17 @@ bool Topic::IsValidChannel()
 		ReplyToOrigin(ERR_NOSUCHCHANNEL(mTargetChannel));
 		return (false);
 	}
+	if (mTargetTopic.empty())
+	{
+		std::string	current_topic = mChannel->GetTopic();
+		if (current_topic.empty())
+		{
+			ReplyToOrigin(RPL_NOTOPIC(mTargetChannel));
+			return (false);
+		}
+		ReplyToOrigin(RPL_TOPIC(mTargetChannel, current_topic));
+		return (false);
+	}
 	if (mChannel->FindUserInChannelWithNick(mOriginNick) == NULL)
 	{
 		ReplyToOrigin(ERR_NOTONCHANNEL(mTargetChannel));
@@ -48,17 +59,6 @@ bool Topic::IsValidChannel()
 
 bool Topic::IsOperatorOrReplyInfo()
 {
-	if (mTargetTopic.empty())
-	{
-		std::string	current_topic = mChannel->GetTopic();
-		if (current_topic.empty())
-		{
-			ReplyToOrigin(RPL_NOTOPIC(mTargetChannel));
-			return (true);
-		}
-		ReplyToOrigin(RPL_TOPIC(mTargetChannel, current_topic));
-		return (true);
-	}
 	if (mChannel->GetOneModeStatus(T_MODE) == TURN_ON && \
 		mChannel->FindOpInChannelWithNick(mOriginNick) == NULL)
 	{
