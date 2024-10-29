@@ -62,11 +62,6 @@ void Privmsg::SendMessageChannel()
 		return;
 	}
 	Channel &channel = it->second;
-	if (channel.FindUserInChannelWithNick(mOrigin->GetNickName()) == NULL)
-	{
-		ReplyToOrigin(ERR_CANNOTSENDTOCHAN(mTarget));
-		return;
-	}
 	std::string	result;
 	result = GetPrefix() + mBuff;
 	channel.SendPrivateMsgToChannel(*mOrigin, result);
