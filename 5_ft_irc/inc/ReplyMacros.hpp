@@ -31,7 +31,7 @@
 #define ERR_KEYSET(CHANNEL)					        (std::string("467 ") + CAHNNEL + " :Channel key already set\r\n")
 #define ERR_CHANNELISFULL(NICK, CHANNEL)			(std::string("471 ") + NICK + " " + (CHANNEL) + " :Cannot join channel (channel is full)\r\n")
 #define ERR_UNKNOWNMODE(CHAR, CHANNEL)		        (std::string("472 ") + CHAR + " :is unknown mode char to me for " + CHANNEL + "\r\n")
-#define ERR_INVITEONLYCHAN(CHANNEL) 		        (std::string("473 ") + (CHANNEL) + " :Cannot join channel (+i)\r\n")
+#define ERR_INVITEONLYCHAN(NICK, CHANNEL) 		    (std::string("473 ") + NICK + " " + (CHANNEL) + " :Cannot join channel (channel is invite-only)\r\n")
 // 원래 표준에서는 Cannot join channel (+k)와 같이 응답해야 하지만
 // 역시 상용 클라이언트가 표준을 안지켜서 호환이 안되기 때문에 아래와 같이 임의로 수정합니다.
 #define ERR_BADCHANNELKEY(NICK, CHANNEL) 			        (std::string("475 ") + NICK + " " + CHANNEL + " :Cannot join channel (incorrect channel key)\r\n")
