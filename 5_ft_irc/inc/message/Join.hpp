@@ -55,10 +55,11 @@ class Join : public AMessage
 		{
 			public :
 				virtual	~InviteOnlyChanException() throw();
-				InviteOnlyChanException(const std::string &channelName);
+				InviteOnlyChanException(const std::string &userNick, const std::string &channelName);
 				virtual std::string	what() const throw();
 			private :
 				InviteOnlyChanException();
+				const std::string	mUserNick;
 				const std::string	mChannelName;
 		};
 		class BadChannelKeyException : public NewException

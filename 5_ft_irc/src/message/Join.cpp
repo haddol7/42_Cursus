@@ -32,11 +32,11 @@ std::string	Join::ChannelIsFullException::what() const throw()
 }
 
 Join::InviteOnlyChanException::~InviteOnlyChanException() throw() {}
-Join::InviteOnlyChanException::InviteOnlyChanException(const std::string &channelName) \
-	: mChannelName(channelName) {}
+Join::InviteOnlyChanException::InviteOnlyChanException(const std::string &userNick, const std::string &channelName) \
+	: mUserNick(userNick), mChannelName(channelName) {}
 std::string	Join::InviteOnlyChanException::what() const throw()
 {
-	return (ERR_INVITEONLYCHAN(mChannelName));
+	return (ERR_INVITEONLYCHAN(mUserNick, mChannelName));
 }
 
 Join::BadChannelKeyException::~BadChannelKeyException() throw() {}
@@ -98,7 +98,7 @@ void	Join::ExecuteCommand()
 
 				// 초대받지 않고 Invite-only 채널에 join하려 하면 ERR_INVITEONLYCHANEXCEPTION
 				if (target.GetOneModeStatus(I_MODE) && !target.IsInvited(mOrigin))
-					throw (Join::InviteOnlyChanException(targetName));
+					throw (Join::InviteOnlyChanException(mOrigin->GetNickName(), targetName));
 				// mode로 채널 가입 인원의 상한이 정해진 상황에서 클라이언트가 join하면 상한을 넘을 때 -> ERR_CHANNELISFULL
 				if (target.GetOneModeStatus(L_MODE) && target.GetLimit() <= target.GetCurrentNumberOfMemeber())
 					throw (Join::ChannelIsFullException(mOrigin->GetNickName(), targetName));
