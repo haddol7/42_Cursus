@@ -66,8 +66,7 @@ void	Invite::ExecuteCommand() throw(NewException)
 			|| !targetChannel.FindUserInChannelWithNick(mOrigin->GetNickName()))
 			throw (Invite::NotOnChannelException(mChannel));
 		// 채널이 invite_only 채널이고 초대하는 사람이 관리자 권한이 없을 때 ERR_CHANOPRIVSNEEDED
-		if (!targetChannel.FindOpInChannelWithNick(mNickname) && \
-			targetChannel.GetOneModeStatus(I_MODE))
+		if (!targetChannel.FindOpInChannelWithNick(mOrigin->GetNickName()) && targetChannel.GetOneModeStatus(I_MODE))
 			throw (Invite::ChanOprivsNeededException(mChannel));
 		// 해당 채널에 초대하려는 사람이 이미 있을 때 ERR_USERONCHANNEL
 		if (targetChannel.FindUserInChannelWithNick(mNickname))
