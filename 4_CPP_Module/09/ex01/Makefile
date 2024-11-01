@@ -1,10 +1,10 @@
-NAME = ex01
+NAME = RPN
 
-SRCS = 
+SRCS = main.cpp RPN.cpp
 OBJS = ${SRCS:.cpp=.o}
 
 CC = c++
-CFLAGS = -Wall -Wextra -Werror -std=c++98 #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address
 
 all: $(NAME)
 

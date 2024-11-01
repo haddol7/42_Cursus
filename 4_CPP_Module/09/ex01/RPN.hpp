@@ -7,10 +7,12 @@ public:
 	RPN();
 	~RPN();
 	RPN(const RPN& copy);
-	bool		PushToken(char token);
-	long long	Calculate();
+	bool		PushTokenAndCalculate(char token);
+	int			GetResult() const;
+	size_t		GetSize() const;
+	static bool	isoperator(char token);
 	RPN& operator=(const RPN& rhs);
 
 private:
-	std::stack<char> mTokens;	
+	std::stack<int> mTokens;	
 };

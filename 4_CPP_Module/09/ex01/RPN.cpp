@@ -22,20 +22,68 @@ RPN& RPN::operator=(const RPN& rhs)
 	return (*this);
 }
 
-bool RPN::PushToken(char token)
+bool	RPN::isoperator(char token)
 {
-	static const char op[4] = {'+', '-', '/', '*'};
+	if (token == '+' || token == '-' || token == '/' || token == '*')
+	{
+		return (true);
+	}
+	return (false);
+}
 
-	if (!isnumber(token) || token != '+' || token != '-' || token != '/' || token != '*')
+bool RPN::PushTokenAndCalculate(char token)
+{
+	int		lhs;
+	int		rhs;
+	size_t	size = mTokens.size();			
+
+	if (!isnumber(token) && !isoperator(token))
 	{
 		return (false);
 	}
-	mTokens.push(token);
+	if (isnumber(token))
+	{
+		mTokens.push(token - '0');
+	}
+	else
+	{
+		if (size < 2)
+		{
+			return (false);
+		}
+		lhs = mTokens.top();
+		mTokens.pop();
+		rhs = mTokens.top();
+		mTokens.pop();
+		switch (token)
+		{
+		case '+':
+			mTokens.push(rhs + lhs);
+			break ;
+		case '-':
+			mTokens.push(rhs - lhs);
+			break ;
+		case '*':
+			mTokens.push(rhs * lhs);
+			break ;
+		case '/':
+			if (lhs == 0)
+			{
+				return (false);
+			}
+			mTokens.push(rhs / lhs);
+			break ;
+		}
+	}
 	return (true);
 }
-	
-long long RPN::Calculate()
-{
 
+int RPN::GetResult() const
+{
+	return (mTokens.top());
 }
 
+size_t	RPN::GetSize() const
+{
+	return (mTokens.size());
+}
