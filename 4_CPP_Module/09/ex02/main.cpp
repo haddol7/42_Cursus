@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <list>
 #include <cmath>
 #include <ctime>
 #include <iomanip>
@@ -10,6 +11,8 @@
 typedef	std::pair<int, size_t> 											t_pair_value_index;
 typedef std::vector<t_pair_value_index>									t_vec_value_index;
 typedef std::vector<std::pair<t_pair_value_index, t_pair_value_index> >	t_vec_main_sub_chain_index;
+typedef std::list<t_pair_value_index>									t_list_value_index;
+typedef std::list<std::pair<t_pair_value_index, t_pair_value_index> >	t_list_main_sub_chain_index;
 
 void print_vector(std::vector<int> ary)
 {
@@ -21,14 +24,18 @@ void print_vector(std::vector<int> ary)
 //TODO : 인덱스 범위 탐색 수정
 t_vec_value_index::iterator binary_search(t_vec_value_index &result, int value)
 {
-	t_vec_value_index::reverse_iterator it = result.rbegin();
+	size_t left = 0;
+	size_t right = result.size();
 
-	for (; it != result.rend(); ++it)
+	while (left < right)
 	{
-		if (value >= it->first)
-			return it.base();
+		size_t mid = left + (right - left) / 2;
+		if (result[mid].first < value)
+			left = mid + 1;
+		else
+			right = mid;
 	}
-	return result.begin();
+	return result.begin() + left;
 }
 
 void	ford_johnson(t_vec_value_index &ary)
@@ -129,5 +136,5 @@ int main(int argc, char *argv[])
 	std::cout << std::fixed << std::setprecision(0);
     std::cout << "Elapsed time: " << elapsed_us << " us" << std::endl;
 	fj_sort(test);
-	//print_vector(test);
+	print_vector(test);
 }
