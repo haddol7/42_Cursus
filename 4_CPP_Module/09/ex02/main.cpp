@@ -2,176 +2,132 @@
 #include <algorithm>
 #include <vector>
 #include <cmath>
+#include <ctime>
+#include <iomanip>
 
-size_t	jacob(int i)
-{
-	return ((pow(2, i) - pow(-1, i)) / 3);
-}
+#define JACOPSTHAL(i) (((1 << ((i) + 1)) + ((i) % 2 == 0 ? 1 : -1)) / 3)
 
-void print(const std::vector<int> &ary)
+typedef	std::pair<int, size_t> 											t_pair_value_index;
+typedef std::vector<t_pair_value_index>									t_vec_value_index;
+typedef std::vector<std::pair<t_pair_value_index, t_pair_value_index> >	t_vec_main_sub_chain_index;
+
+void print_vector(std::vector<int> ary)
 {
 	for (size_t i = 0; i < ary.size(); i++)
-	{
 		std::cout << ary[i] << " ";
-	}
 	std::cout << std::endl;
 }
 
-void print(const std::vector<std::pair<int, int> > &ary)
+//TODO : 인덱스 범위 탐색 수정
+t_vec_value_index::iterator binary_search(t_vec_value_index &result, int value)
 {
-	for (size_t i = 0; i < ary.size(); i++)
+	t_vec_value_index::reverse_iterator it = result.rbegin();
+
+	for (; it != result.rend(); ++it)
 	{
-		std::cout << ary[i].first;
-		if (i + 1 != ary.size())
-			std::cout << " --> ";
+		if (value >= it->first)
+			return it.base();
 	}
-	std::cout << std::endl;
-	for (size_t i = 0; i < ary.size(); i++)
-	{
-		std::cout << ary[i].second << "     ";
-	}
-	std::cout << std::endl;
+	return result.begin();
 }
 
-// std::vector<int> fj(std::vector<int> &ary)
-// {
-// 	if (ary.size() == 0 || ary.size() == 1)
-// 	{
-// 		return ary;
-// 	}
-// 	if (ary.size() == 2)
-// 	{
-// 		std::vector<int> index_order;
-// 		if (ary[0] > ary[1])
-// 		{	
-// 			index_order.push_back(1);
-// 			index_order.push_back(0);
-// 		}
-// 		index_order.push_back(0);
-// 		index_order.push_back(1);
-// 		return ary;
-// 	}
-
-// 	std::vector<std::pair<int, int> >	chains;
-// 	std::vector<std::pair<int, int> >	chain_order;
-// 	std::vector<int>					result;
-// 	std::vector<int> 					main_chain;
-
-// 	for (size_t i = 1; i < ary.size(); i += 2)
-// 	{
-// 		if (ary[i] > ary[i - 1])
-// 		{
-// 			chains.push_back(std::pair<int,int>(ary[i], ary[i - 1]));
-// 			main_chain.push_back(ary[i]);
-// 		}
-// 		else
-// 		{
-// 			chains.push_back(std::pair<int,int>(ary[i - 1], ary[i]));
-// 			main_chain.push_back(ary[i - 1]);
-// 		}
-// 	}
-
-// 	std::vector<int> ordered_main_chain_index;
-// 	ordered_main_chain_index = fj(main_chain);
-
-// 	chain_order = chains;
-// 	for (size_t i = 0; i < main_chain.size(); i++)
-// 	{
-// 		chain_order[ordered_main_chain_index[i]] = chains[i];
-// 	}
-	
-// 	print(chains);
-// 	std::cout << std::endl;
-// 	for (size_t i = 1; jacob(i - 1) < chains.size(); i++)
-// 	{
-// 		for (size_t j = jacob(i); j > jacob(i - 1); j--)
-// 		{
-// 			if (j > chains.size())
-// 				j = chains.size();
-// 			for (size_t k = 0; k < result.size(); k++)
-// 			{
-// 				if (chains[j - 1].second < result[k])
-// 				{
-// 					result.insert(result.begin() + k, chains[j - 1].second);
-// 					break ;
-// 				}
-// 			}
-// 			print(result);
-// 		}
-// 	}
-// }
-
-//<Value, Original Index>
-//<Value, Index It have to be>
-void fj(std::vector<std::pair<int, int> > &ary)
+void	ford_johnson(t_vec_value_index &ary)
 {
-	if (ary.size() == 0 || ary.size() == 1)
-	{
+	size_t	size = ary.size();
+
+	if (size <= 1)
 		return ;
-	}
-	if (ary.size() == 2)
+	else if (size == 2)
 	{
 		if (ary[0].first > ary[1].first)
-		{	
 			std::swap(ary[0].second, ary[1].second);
-		}
 		return ;
 	}
+	t_vec_main_sub_chain_index	whole_chain;
+	t_vec_value_index		main_chain;
 
-	std::vector<std::pair<int, int> >	chains;
-	std::vector<std::pair<int, int> > 	main_chain;
-
-	for (size_t i = 1; i < ary.size(); i += 2)
+	whole_chain.reserve(size / 2);
+	main_chain.reserve(size / 2);
+	for (size_t i = 0; i < size / 2; ++i)
 	{
-		if (ary[i] > ary[i - 1])
+		if (ary[i * 2].first > ary[i * 2 + 1].first)
 		{
-			chains.push_back(std::pair<int,int>(ary[i].first, ary[i - 1].first));
-			main_chain.push_back(std::pair<int,int>(ary[i].first, --i));
+			whole_chain.push_back(std::make_pair(std::make_pair(ary[i * 2].first, i * 2), std::make_pair(ary[i * 2 + 1].first, i * 2 + 1)));
+			main_chain.push_back(std::make_pair(ary[i * 2].first, i));
 		}
 		else
 		{
-			chains.push_back(std::pair<int,int>(ary[i - 1].first, ary[i].first));
-			main_chain.push_back(std::pair<int,int>(ary[i - 1].first, --i));
+			whole_chain.push_back(std::make_pair(std::make_pair(ary[i * 2 + 1].first, i * 2 + 1), std::make_pair(ary[i * 2].first, i * 2)));
+			main_chain.push_back(std::make_pair(ary[i * 2 + 1].first, i));
 		}
-		++i;
 	}
 
-	fj(main_chain);
-	std::vector<std::pair<int, int> >	chains_order;
-	for (size_t i = 0; i < main_chain.size(); i++)
+	ford_johnson(main_chain);
+	t_vec_main_sub_chain_index	sorted_whole_chain;
+	t_vec_value_index 		result;
+
+	sorted_whole_chain.resize(size / 2);
+	result.reserve(size);
+	for (size_t i = 0; i < size / 2; ++i)
+		sorted_whole_chain[main_chain[i].second] = whole_chain[i];
+	for (size_t i = 0; i < size / 2; ++i)
+		result.push_back(sorted_whole_chain[i].first);
+	bool 	loop = true;
+	size_t	i = 2;
+	result.insert(result.begin(), sorted_whole_chain[0].second);
+	do
 	{
-		chain_order[ordered_main_chain_index[i]] = chains[i];
-	}
-	
-	print(chains);
-	std::cout << std::endl;
-	for (size_t i = 1; jacob(i - 1) < chains.size(); i++)
-	{
-		for (size_t j = jacob(i); j > jacob(i - 1); j--)
-		{
-			if (j > chains.size())
-				j = chains.size();
-			for (size_t k = 0; k < result.size(); k++)
-			{
-				if (chains[j - 1].second < result[k])
-				{
-					result.insert(result.begin() + k, chains[j - 1].second);
-					break ;
-				}
-			}
-			print(result);
-		}
-	}
+		size_t	ford_i = std::min(static_cast<size_t>(JACOPSTHAL(i)), size / 2 - 1);
+		if (ford_i == size / 2 - 1)
+			loop = false;
+		for (; ford_i > static_cast<size_t>(JACOPSTHAL(i - 1)) || ford_i == 1; --ford_i)
+			result.insert(binary_search(result, sorted_whole_chain[ford_i].second.first), sorted_whole_chain[ford_i].second);
+		i++;
+	} while (loop);
+	if (size % 2 == 1)
+		result.insert(binary_search(result, ary[size - 1].first), ary[size - 1]);
+	for (size_t j = 0; j < size; ++j)
+		ary[result[j].second].second = j;
 }
 
-int main()
-{	
-	std::vector<int>test;
-	int test2[8] = {6, 4, 1, 3, 2, 7, 9, 8};
+void	fj_sort(std::vector<int> &ary)
+{
+	clock_t start = clock();
 
-    for (int i = 0; i < 9; ++i) {
-        test.push_back(test2[i]);
-    }
+	t_vec_value_index ary_index;
+	ary_index.reserve(ary.size());
+	for (size_t i = 0; i < ary.size(); ++i)
+	{
+		ary_index.push_back(std::make_pair(ary[i], i));
+	}
+	ford_johnson(ary_index);
+	for (size_t i = 0; i < ary.size(); ++i)
+	{
+		ary[ary_index[i].second] = ary_index[i].first;
+	}
+    clock_t end = clock();
+    double elapsed_us = static_cast<double>(end - start) / CLOCKS_PER_SEC * 1000000;
+	std::cout << std::fixed << std::setprecision(0);
+    std::cout << "Elapsed time: " << elapsed_us << " us" << std::endl;
+}
 
-	fj(test);
+int main(int argc, char *argv[])
+{
+	std::vector<int> test;
+	std::vector<int> test2;
+
+	for (int i = 1; i < argc; ++i)
+	{	
+		test.push_back(atoi(argv[i]));
+	}
+	test2 = test;
+	//print_vector(test);
+	clock_t start = clock();
+	std::sort(test2.begin(), test2.end());
+	clock_t end = clock();
+	double elapsed_us = static_cast<double>(end - start) / CLOCKS_PER_SEC * 1000000;
+	std::cout << std::fixed << std::setprecision(0);
+    std::cout << "Elapsed time: " << elapsed_us << " us" << std::endl;
+	fj_sort(test);
+	//print_vector(test);
 }
