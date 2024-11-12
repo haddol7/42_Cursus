@@ -14,19 +14,30 @@ typedef std::vector<std::pair<t_pair_value_index, t_pair_value_index> >	t_vec_ma
 typedef std::list<t_pair_value_index>									t_list_value_index;
 typedef std::list<std::pair<t_pair_value_index, t_pair_value_index> >	t_list_main_sub_chain_index;
 
-void print_vector(std::vector<int> ary)
+void print_vector(std::vector<int> &ary)
 {
 	for (size_t i = 0; i < ary.size(); i++)
 		std::cout << ary[i] << " ";
 	std::cout << std::endl;
 }
 
-//TODO : 인덱스 범위 탐색 수정
-t_vec_value_index::iterator binary_search(t_vec_value_index &result, int value)
+void print_vector(t_vec_value_index &ary)
 {
-	size_t left = 0;
-	size_t right = result.size();
+	for (size_t i = 0; i < ary.size(); i++)
+		std::cout << ary[i].first << " ";
+	std::cout << std::endl;
+}
 
+t_vec_value_index::iterator binary_search(t_vec_value_index &result, int value, size_t parent_idx)
+{
+	size_t	left = 0;
+	size_t	size = result.size();
+	size_t	right;
+
+	if (parent_idx > size)
+		right = parent_idx;
+	else
+		right = size;
 	while (left < right)
 	{
 		size_t mid = left + (right - left) / 2;
@@ -68,7 +79,6 @@ void	ford_johnson(t_vec_value_index &ary)
 			main_chain.push_back(std::make_pair(ary[i * 2 + 1].first, i));
 		}
 	}
-
 	ford_johnson(main_chain);
 	t_vec_main_sub_chain_index	sorted_whole_chain;
 	t_vec_value_index 		result;
@@ -81,6 +91,7 @@ void	ford_johnson(t_vec_value_index &ary)
 		result.push_back(sorted_whole_chain[i].first);
 	bool 	loop = true;
 	size_t	i = 2;
+	size_t	k = 1;
 	result.insert(result.begin(), sorted_whole_chain[0].second);
 	do
 	{
@@ -88,11 +99,11 @@ void	ford_johnson(t_vec_value_index &ary)
 		if (ford_i == size / 2 - 1)
 			loop = false;
 		for (; ford_i > static_cast<size_t>(JACOPSTHAL(i - 1)) || ford_i == 1; --ford_i)
-			result.insert(binary_search(result, sorted_whole_chain[ford_i].second.first), sorted_whole_chain[ford_i].second);
+			result.insert(binary_search(result, sorted_whole_chain[ford_i].second.first, k++ * 2), sorted_whole_chain[ford_i].second);
 		i++;
 	} while (loop);
 	if (size % 2 == 1)
-		result.insert(binary_search(result, ary[size - 1].first), ary[size - 1]);
+		result.insert(binary_search(result, ary[size - 1].first, size / 2), ary[size - 1]);
 	for (size_t j = 0; j < size; ++j)
 		ary[result[j].second].second = j;
 }
@@ -129,12 +140,21 @@ int main(int argc, char *argv[])
 	}
 	test2 = test;
 	//print_vector(test);
-	clock_t start = clock();
-	std::sort(test2.begin(), test2.end());
-	clock_t end = clock();
-	double elapsed_us = static_cast<double>(end - start) / CLOCKS_PER_SEC * 1000000;
-	std::cout << std::fixed << std::setprecision(0);
-    std::cout << "Elapsed time: " << elapsed_us << " us" << std::endl;
+	// clock_t start = clock();
+	// std::sort(test2.begin(), test2.end());
+	// clock_t end = clock();
+	// double elapsed_us = static_cast<double>(end - start) / CLOCKS_PER_SEC * 1000000;
+	// std::cout << std::fixed << std::setprecision(0);
+    // std::cout << "Elapsed time: " << elapsed_us << " us" << std::endl;
 	fj_sort(test);
-	print_vector(test);
+	for (size_t i = 0 ; i < test.size(); i += 2)
+	{
+		if (test[i] > test[i + 1])
+		{
+			std::cout << test[0] << " KO " << test[1] << std::endl;
+			print_vector(test);
+			exit(42);
+		}
+	}
+	std::cout << "👍" << std::endl;
 }
