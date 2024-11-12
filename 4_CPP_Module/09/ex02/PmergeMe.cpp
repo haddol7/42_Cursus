@@ -157,8 +157,8 @@ static void	ford_johnson(t_list_value_index &ary)
 		return ;
 	else if (size == 2)
 	{
-		if (ary.begin()->first > std::prev(ary.end())->first)
-			std::swap(ary.begin()->second, std::prev(ary.end())->second);
+		if (ary.begin()->first > (--ary.end())->first)
+			std::swap(ary.begin()->second, (--ary.end())->second);
 		return ;
 	}
 	t_list_main_sub_chain_index		whole_chain;
@@ -223,7 +223,7 @@ static void	ford_johnson(t_list_value_index &ary)
 		i++;
 	} while (loop);
 	if (size % 2 == 1)
-		result.insert(binary_search(result, std::prev(ary.end())->first, size / 2), *std::prev(ary.end()));
+		result.insert(binary_search(result, (--ary.end())->first, size / 2), *(--ary.end()));
 	for (size_t j = 0; j < size; ++j)
 	{
 		it = result.begin();
