@@ -1,6 +1,7 @@
 #include <exception>
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 #include "BitcoinExchange.hpp"
 
 # define COMMA (10)
