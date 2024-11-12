@@ -1,3 +1,4 @@
+#include <cctype>
 #include "RPN.hpp"
 
 RPN::RPN()
@@ -37,11 +38,11 @@ bool RPN::PushTokenAndCalculate(char token)
 	int		rhs;
 	size_t	size = mTokens.size();			
 
-	if (!isnumber(token) && !isoperator(token))
+	if (!isdigit(token) && !isoperator(token))
 	{
 		return (false);
 	}
-	if (isnumber(token))
+	if (isdigit(token))
 	{
 		mTokens.push(token - '0');
 	}
