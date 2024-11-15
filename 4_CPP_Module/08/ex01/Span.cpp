@@ -6,7 +6,7 @@ Span::Span()
 {
 }
 
-Span::Span(size_t size)
+Span::Span(unsigned int size)
 	: mCapacity(size)
 	, mSize(0)
 {
@@ -17,7 +17,6 @@ Span::Span(const Span& copy)
 	: mCapacity(copy.mCapacity)
 	, mSize(copy.mSize)
 {
-	mVector.reserve(mCapacity);
 	mVector = copy.mVector;
 }
 
@@ -27,7 +26,6 @@ Span& Span::operator=(const Span& rhs)
 	{
 		mCapacity = rhs.mCapacity;
 		mSize = rhs.mSize;
-		mVector.reserve(mCapacity);
 		mVector = rhs.mVector;
 	}
 	return (*this);
@@ -57,7 +55,7 @@ unsigned long Span::shortestSpan(void) const
 	std::sort(sorted_vector.begin(), sorted_vector.end());
 	unsigned long 	min = std::numeric_limits<int>::max() - std::numeric_limits<int>::min();
 	unsigned long	span;
-	for (size_t i = 1; i < mSize; ++i)
+	for (unsigned int i = 1; i < mSize; ++i)
 	{
 		span = sorted_vector[i] - sorted_vector[i - 1];
 		if (span == 0)
@@ -80,7 +78,7 @@ unsigned long Span::longestSpan(void) const
 	}
 	int min = mVector[0];
 	int max = mVector[0];
-	for (size_t i = 1; i < mSize; ++i)
+	for (unsigned int i = 1; i < mSize; ++i)
 	{
 		if (mVector[i] < min)
 		{

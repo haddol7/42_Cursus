@@ -5,7 +5,7 @@
 class Span
 {
 public:
-	Span(size_t size);
+	Span(unsigned int size);
 	Span(const Span& copy);
 	Span& operator=(const Span& rhs);
 	~Span();
@@ -14,9 +14,24 @@ public:
 	unsigned long	shortestSpan(void) const;
 	unsigned long	longestSpan(void) const;
 
+	template <typename Iter>
+	void			addNumbers(Iter first, Iter last);
+
 private:
 	Span();
-	size_t				mCapacity;
-	size_t				mSize;
+	unsigned int		mCapacity;
+	unsigned int		mSize;
 	std::vector<int>	mVector;
 };
+
+template <typename Iter>
+void Span::addNumbers(Iter first, Iter last)
+{
+	unsigned int	range = std::distance(first, last);
+	if (mSize + range > mCapacity)
+	{
+		throw std::out_of_range("Index out of range");
+	}
+	mVector.insert(mVector.end(), first, last);
+	mSize += range;
+}
