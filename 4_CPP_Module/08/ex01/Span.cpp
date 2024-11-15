@@ -39,7 +39,7 @@ void Span::addNumber(int num)
 {
 	if (mSize >= mCapacity)
 	{
-		throw std::logic_error("Index out of range");
+		throw ("Index out of range");
 	}
 	mVector.push_back(num);
 	mSize++;
@@ -49,11 +49,11 @@ unsigned long Span::shortestSpan(void) const
 {
 	if (mSize < 2)
 	{
-		throw std::logic_error("Size must be at least 2");
+		throw ("Size must be at least 2");
 	}
 	std::vector<int> sorted_vector = mVector;
 	std::sort(sorted_vector.begin(), sorted_vector.end());
-	unsigned long 	min = std::numeric_limits<int>::max() - std::numeric_limits<int>::min();
+	unsigned long 	min = 2147483647 + 2147483648;
 	unsigned long	span;
 	for (unsigned int i = 1; i < mSize; ++i)
 	{
@@ -74,7 +74,7 @@ unsigned long Span::longestSpan(void) const
 {
 	if (mSize < 2)
 	{
-		throw std::logic_error("Size must be at least 2");
+		throw ("Size must be at least 2");
 	}
 	int min = mVector[0];
 	int max = mVector[0];

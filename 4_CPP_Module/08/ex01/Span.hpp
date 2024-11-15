@@ -30,7 +30,7 @@ void Span::addNumbers(Iter first, Iter last)
 	unsigned int	range = std::distance(first, last);
 	if (mSize + range > mCapacity)
 	{
-		throw std::logic_error("Index out of range");
+		throw ("Index out of range");
 	}
 	mVector.insert(mVector.end(), first, last);
 	mSize += range;
