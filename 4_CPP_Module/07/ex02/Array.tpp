@@ -9,7 +9,7 @@ Array<T>::Array()
 }
 
 template <typename T>
-Array<T>::Array(int n)
+Array<T>::Array(unsigned int n)
 	: mArray(new T[n])
 	, mSize(n)
 {
@@ -26,6 +26,7 @@ Array<T>::~Array()
 template <typename T>
 Array<T>::Array(const Array<T>& copy)
 {
+	mArray = NULL;
 	*this = copy;
 	std::cout << "copy construction" << std::endl;
 }
@@ -38,7 +39,7 @@ Array<T>& Array<T>::operator=(const Array<T>& rhs)
 		delete[] mArray;
 		mArray = new T[rhs.size()];
 		mSize = rhs.size();
-		for (int i = 0; i < rhs.size(); i++)
+		for (unsigned int i = 0; i < rhs.size(); i++)
 		{
 			mArray[i] = rhs.mArray[i];
 		}
@@ -48,13 +49,13 @@ Array<T>& Array<T>::operator=(const Array<T>& rhs)
 }
 
 template <typename T>
-int Array<T>::size() const
+unsigned int Array<T>::size() const
 {
 	return (mSize);
 }
 
 template <typename T>
-T& Array<T>::operator[](int n)
+T& Array<T>::operator[](unsigned int n)
 {
 	if (n >= mSize || n < 0)
 	{
@@ -64,7 +65,7 @@ T& Array<T>::operator[](int n)
 }
 
 template <typename T>
-const T& Array<T>::operator[](int n) const
+const T& Array<T>::operator[](unsigned int n) const
 {
 	if (n >= mSize || n < 0)
 	{
