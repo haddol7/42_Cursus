@@ -41,9 +41,10 @@ void	PmergeMe::sort()
 
 	if (mArrayList.size() != mArrayVector.size() || !std::equal(mArrayList.begin(), mArrayList.end(), mArrayVector.begin()))
 		throw (std::logic_error("Evaluate as KO.."));
-	for (size_t i = 0; i + 1 < mArrayVector.size(); i += 2)
+		
+	for (size_t i = 1; i < mArrayVector.size(); ++i)
 	{
-		if (mArrayVector[i] > mArrayVector[i + 1])
+		if (mArrayVector[i - 1] > mArrayVector[i])
 			throw (std::logic_error("Evaluate as KO.."));
 	}
 }
