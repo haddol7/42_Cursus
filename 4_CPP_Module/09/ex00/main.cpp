@@ -6,13 +6,13 @@ int main(int argc, char *argv[])
 {
 	if (argc != 2)
 	{
-		std::cout << "Error: could not open file." << std::endl;
+		std::cout << "./btc input.txt" << std::endl;
 		return (1);
 	}
 	std::ifstream file(argv[1]);
 	if (file.fail() || file.bad())
 	{
-		std::cout << "Error: could not open file." << std::endl;
+		std::cout << "Error: could not open " << argv[1] << std::endl;
 		return (1);
 	}
 	std::string		line;
@@ -24,13 +24,14 @@ int main(int argc, char *argv[])
 	catch(const std::exception& e)
 	{
 		std::cout << "Error: Database has error =>" << e.what() << '\n';
+		file.close();
 		return (1);
 	}
 	
 	getline(file, line);
 	if (line != "date | value")
 	{
-		std::cout << "Error: could not open file." << std::endl;
+		std::cout << "Error: header must be \"date | value\"" << std::endl;
 		delete database;
 		file.close();
 		return (1);
