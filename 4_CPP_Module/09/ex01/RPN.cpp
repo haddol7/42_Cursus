@@ -68,7 +68,7 @@ bool RPN::PushTokenAndCalculate(char token)
 			mTokens.push(lhs * rhs);
 			break ;
 		case '/':
-			if (lhs == 0)
+			if (rhs == 0)
 			{
 				return (false);
 			}
