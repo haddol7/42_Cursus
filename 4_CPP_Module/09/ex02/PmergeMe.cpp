@@ -7,22 +7,27 @@
 
 #define JACOPSTHAL(i) (((1 << ((i) + 1)) + ((i) % 2 == 0 ? 1 : -1)) / 3)
 
-typedef	std::pair<int, size_t> 											t_pair_value_index;
-typedef std::vector<t_pair_value_index>									t_vec_value_index;
-typedef std::vector<std::pair<t_pair_value_index, t_pair_value_index> >	t_vec_main_sub_chain_index;
-typedef std::list<t_pair_value_index>									t_list_value_index;
-typedef std::list<std::pair<t_pair_value_index, t_pair_value_index> >	t_list_main_sub_chain_index;
+/*
+
+first<value>	4	2	9	1	0	3	8	7
+second<index>	0	1	2	3	4	5	6	7
+
+first<value>	4	2	9	1	0	3	8	7
+second<index>	4	2	7	1	0	3	6	5
+
+*/
 
 PmergeMe::PmergeMe(int argc, char *argv[])
 {
-	int number;
+	long	number;
+	char	*end;
 
 	if (argc < 2)
 		throw (std::invalid_argument("Error"));
 	for (int i = 1; i < argc; ++i)
 	{	
-		number = atoi(argv[i]);
-		if (number < 0 || (number == 0 && std::string(argv[i]) != "0"))
+		number = strtol(argv[i], &end, 10);
+		if (number < 0 || *end != '\0' || static_cast<int>(number) != number)
 			throw (std::invalid_argument("Error"));
 		mArrayVector.push_back(number);
 		mArrayList.push_back(number);
@@ -42,6 +47,12 @@ void	PmergeMe::sort()
 			throw (std::logic_error("Evaluate as KO.."));
 	}
 }
+
+typedef	std::pair<int, size_t> 											t_pair_value_index;
+typedef std::vector<t_pair_value_index>									t_vec_value_index;
+typedef std::vector<std::pair<t_pair_value_index, t_pair_value_index> >	t_vec_main_sub_chain_index;
+typedef std::list<t_pair_value_index>									t_list_value_index;
+typedef std::list<std::pair<t_pair_value_index, t_pair_value_index> >	t_list_main_sub_chain_index;
 
 static t_vec_value_index::iterator binary_search(t_vec_value_index &result, int value, size_t parent_idx)
 {
@@ -107,6 +118,8 @@ static void	ford_johnson(t_vec_value_index &ary)
 
 	whole_chain.reserve(size / 2);
 	main_chain.reserve(size / 2);
+	//whole_chain = 메인 체인과 서브 체인
+	//main_chain = 메인 체인만 들어감. 각 요소에는 원래 있던 index 위치를 들고 간다.
 	for (size_t i = 0; i < size / 2; ++i)
 	{
 		if (ary[i * 2].first > ary[i * 2 + 1].first)
@@ -120,12 +133,17 @@ static void	ford_johnson(t_vec_value_index &ary)
 			main_chain.push_back(std::make_pair(ary[i * 2 + 1].first, i));
 		}
 	}
+
+	//먼저 재귀적으로 들어가 메인 체인을 정렬하도록 한다.
+	//함수 호출이 다 끝나면, main_chain에 있는 second 요소(index)는 정렬되었을 때 해당 요소가 위치할 index이다.
 	ford_johnson(main_chain);
 	t_vec_main_sub_chain_index	sorted_whole_chain;
 	t_vec_value_index 		result;
 
 	sorted_whole_chain.resize(size / 2);
 	result.reserve(size);
+	//sorted_whole_chain = 메인 체인이 정렬된 상태
+	//result = 나머지 서브 체인을 jacobsthal 수열대로 넣을 배열
 	for (size_t i = 0; i < size / 2; ++i)
 		sorted_whole_chain[main_chain[i].second] = whole_chain[i];
 	for (size_t i = 0; i < size / 2; ++i)
@@ -133,9 +151,12 @@ static void	ford_johnson(t_vec_value_index &ary)
 	bool 	loop = true;
 	size_t	i = 2;
 	size_t	k = 1;
+
+	//첫번째 요소를 넣고 시작한다.
 	result.insert(result.begin(), sorted_whole_chain[0].second);
 	do
 	{
+		//jacobsthal 순서대로 subchain에 있는 요소를 insertion한다. 
 		size_t	ford_i = std::min(static_cast<size_t>(JACOPSTHAL(i)), size / 2 - 1);
 		if (ford_i == size / 2 - 1)
 			loop = false;
@@ -143,8 +164,10 @@ static void	ford_johnson(t_vec_value_index &ary)
 			result.insert(binary_search(result, sorted_whole_chain[ford_i].second.first, k++ * 2), sorted_whole_chain[ford_i].second);
 		i++;
 	} while (loop);
+	//홀수는 체인에 없으므로, 마지막에 하나 넣어준다.
 	if (size % 2 == 1)
 		result.insert(binary_search(result, ary[size - 1].first, size / 2), ary[size - 1]);
+	//이제 다 정렬된 요소의 순서를 집어 넣는다.
 	for (size_t j = 0; j < size; ++j)
 		ary[result[j].second].second = j;
 }

@@ -52,27 +52,27 @@ bool RPN::PushTokenAndCalculate(char token)
 		{
 			return (false);
 		}
-		lhs = mTokens.top();
-		mTokens.pop();
 		rhs = mTokens.top();
+		mTokens.pop();
+		lhs = mTokens.top();
 		mTokens.pop();
 		switch (token)
 		{
 		case '+':
-			mTokens.push(rhs + lhs);
+			mTokens.push(lhs + rhs);
 			break ;
 		case '-':
-			mTokens.push(rhs - lhs);
+			mTokens.push(lhs - rhs);
 			break ;
 		case '*':
-			mTokens.push(rhs * lhs);
+			mTokens.push(lhs * rhs);
 			break ;
 		case '/':
 			if (lhs == 0)
 			{
 				return (false);
 			}
-			mTokens.push(rhs / lhs);
+			mTokens.push(lhs / rhs);
 			break ;
 		}
 	}
