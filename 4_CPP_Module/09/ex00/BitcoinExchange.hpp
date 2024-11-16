@@ -15,5 +15,5 @@ private:
 	BitcoinExchange(const BitcoinExchange& copy);
 	BitcoinExchange& operator=(const BitcoinExchange& rhs);
 	
-	std::map <const std::string, const float> mDatabase;
+	std::map <std::string, float> mDatabase;
 };

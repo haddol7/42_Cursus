@@ -12,6 +12,9 @@ BitcoinExchange::BitcoinExchange()
 {
 	std::ifstream	fin("data.csv");
 	std::string		data_line;
+	std::string		date;
+	float			value;
+	std::map<std::string, float>::iterator it;
 
 	if (fin.bad() || fin.fail())
 	{
@@ -33,7 +36,17 @@ BitcoinExchange::BitcoinExchange()
 		{
 			throw std::runtime_error(data_line);
 		}
-		mDatabase.insert(std::pair<std::string, float>(data_line.substr(0, COMMA), atof(data_line.substr(COMMA + 1).c_str())));
+		date = data_line.substr(0, COMMA);
+		value = atof(data_line.substr(COMMA + 1).c_str());
+		it = mDatabase.find(date);
+		if (it != mDatabase.end())
+		{
+			it->second = value;	
+		}
+		else
+		{
+			mDatabase.insert(std::pair<std::string, float>(date, value));
+		}
 	}
 	fin.close();
 }
@@ -85,8 +98,8 @@ void	BitcoinExchange::DisplayPrice(const std::string& data_line)
 		std::cout << "Error : too large a number." << std::endl;
 		return ;
 	}
-	std::map<const std::string, const float>::iterator it = mDatabase.lower_bound(date);
-	if (it == mDatabase.begin())
+	std::map<std::string, float>::iterator it = mDatabase.lower_bound(date);
+	if (it == mDatabase.begin() && date != it->first)
 	{
 		std::cout << "Error : There is no data before => " << date << std::endl;
 		return ;
