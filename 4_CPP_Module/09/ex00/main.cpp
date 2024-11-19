@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 	}
 	catch(const std::exception& e)
 	{
-		std::cout << "Error: Database has error =>" << e.what() << '\n';
+		std::cout << "Error: Database has error => " << e.what() << '\n';
 		file.close();
 		return (1);
 	}

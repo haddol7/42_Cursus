@@ -48,6 +48,10 @@ BitcoinExchange::BitcoinExchange()
 			mDatabase.insert(std::pair<std::string, float>(date, value));
 		}
 	}
+	if (mDatabase.size() == 0)
+	{
+		throw std::runtime_error("Error: there is no data in database");
+	}
 	fin.close();
 }
 
