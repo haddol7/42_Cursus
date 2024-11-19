@@ -10,20 +10,24 @@
 
 BitcoinExchange::BitcoinExchange()
 {
-	std::ifstream	fin("data.csv");
+}
+
+void BitcoinExchange::ReadDataBase(const char *datafilename)
+{
+	std::ifstream	fin(datafilename);
 	std::string		data_line;
 	std::string		date;
 	float			value;
-	std::map<std::string, float>::iterator it;
+	std::pair<std::map<std::string, float>::iterator, bool> iter_isInserted;
 
 	if (fin.bad() || fin.fail())
 	{
-		throw std::runtime_error("Error: could not open data.csv");
+		throw std::runtime_error("Error: could not open database");
 	}
 	getline(fin, data_line);
 	if (data_line != "date,exchange_rate")
 	{
-		throw std::runtime_error("Error: header must be \"date,exchange_rate\" in data.csv");
+		throw std::runtime_error("Error: header must be \"date,exchange_rate\" in database");
 	}
 	while (true)
 	{
@@ -38,14 +42,10 @@ BitcoinExchange::BitcoinExchange()
 		}
 		date = data_line.substr(0, COMMA);
 		value = atof(data_line.substr(COMMA + 1).c_str());
-		it = mDatabase.find(date);
-		if (it != mDatabase.end())
+		iter_isInserted = mDatabase.insert(std::pair<std::string, float>(date, value));
+		if (iter_isInserted.second == false)
 		{
-			it->second = value;	
-		}
-		else
-		{
-			mDatabase.insert(std::pair<std::string, float>(date, value));
+			iter_isInserted.first->second = value;	
 		}
 	}
 	if (mDatabase.size() == 0)
@@ -102,16 +102,13 @@ void	BitcoinExchange::DisplayPrice(const std::string& data_line)
 		std::cout << "Error : too large a number." << std::endl;
 		return ;
 	}
-	std::map<std::string, float>::iterator it = mDatabase.lower_bound(date);
-	if (it == mDatabase.begin() && date != it->first)
+	std::map<std::string, float>::iterator it = mDatabase.upper_bound(date);
+	if (it == mDatabase.begin())
 	{
 		std::cout << "Error : There is no data before => " << date << std::endl;
 		return ;
 	}
-	if (it == mDatabase.end() || date != it->first)
-	{
-		--it;
-	}
+	--it;
 	std::cout << date << " => " << value << " = " << value * it->second << std::endl;
 }
 

@@ -16,14 +16,14 @@ int main(int argc, char *argv[])
 		return (1);
 	}
 	std::string		line;
-	BitcoinExchange *database;
+	BitcoinExchange database;
 	try
 	{
-		database = new BitcoinExchange();
+		database.ReadDataBase("data.csv");
 	}
 	catch(const std::exception& e)
 	{
-		std::cout << "Error: Database has error => " << e.what() << '\n';
+		std::cout << e.what() << '\n';
 		file.close();
 		return (1);
 	}
@@ -32,7 +32,6 @@ int main(int argc, char *argv[])
 	if (line != "date | value")
 	{
 		std::cout << "Error: header must be \"date | value\"" << std::endl;
-		delete database;
 		file.close();
 		return (1);
 	}
@@ -43,10 +42,9 @@ int main(int argc, char *argv[])
 		{
 			break ;
 		}
-		database->DisplayPrice(line);
+		database.DisplayPrice(line);
 	}
 	
-	delete database;
 	file.close();
 	return (0);
 }
