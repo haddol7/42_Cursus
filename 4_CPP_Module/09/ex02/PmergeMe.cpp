@@ -55,16 +55,10 @@ typedef std::vector<std::pair<t_pair_value_index, t_pair_value_index> >	t_vec_ma
 typedef std::list<t_pair_value_index>									t_list_value_index;
 typedef std::list<std::pair<t_pair_value_index, t_pair_value_index> >	t_list_main_sub_chain_index;
 
-static t_vec_value_index::iterator binary_search(t_vec_value_index &result, int value, size_t parent_idx)
+static t_vec_value_index::iterator binary_search(t_vec_value_index &result, int value, size_t right)
 {
 	size_t	left = 0;
-	size_t	size = result.size();
-	size_t	right;
 
-	if (parent_idx > size)
-		right = parent_idx;
-	else
-		right = size;
 	while (left < right)
 	{
 		size_t mid = left + (right - left) / 2;
@@ -76,17 +70,11 @@ static t_vec_value_index::iterator binary_search(t_vec_value_index &result, int 
 	return result.begin() + left;
 }
 
-static t_list_value_index::iterator binary_search(t_list_value_index &result, int value, size_t parent_idx)
+static t_list_value_index::iterator binary_search(t_list_value_index &result, int value, size_t right)
 {
 	size_t	left = 0;
-	size_t	size = result.size();
-	size_t	right;
 	t_list_value_index::iterator it;
 
-	if (parent_idx > size)
-		right = parent_idx;
-	else
-		right = size;
 	while (left < right)
 	{
 		it = result.begin();
@@ -151,23 +139,27 @@ static void	ford_johnson(t_vec_value_index &ary)
 		result.push_back(sorted_whole_chain[i].first);
 	bool 	loop = true;
 	size_t	i = 2;
-	size_t	k = 1;
+	size_t	k = 4;
 
 	//첫번째 요소를 넣고 시작한다.
 	result.insert(result.begin(), sorted_whole_chain[0].second);
 	do
 	{
 		//jacobsthal 순서대로 subchain에 있는 요소를 insertion한다. 
-		size_t	ford_i = std::min(static_cast<size_t>(JACOPSTHAL(i)), size / 2 - 1);
+		size_t	ford_i = std::min(static_cast<size_t>(JACOPSTHAL(i)), size / 2) - 1;
 		if (ford_i == size / 2 - 1)
+		{
+			k = result.size();
 			loop = false;
-		for (; ford_i > static_cast<size_t>(JACOPSTHAL(i - 1)) || ford_i == 1; --ford_i)
-			result.insert(binary_search(result, sorted_whole_chain[ford_i].second.first, k++ * 2), sorted_whole_chain[ford_i].second);
+		}
+		for (; ford_i >= static_cast<size_t>(JACOPSTHAL(i - 1)); --ford_i)
+			result.insert(binary_search(result, sorted_whole_chain[ford_i].second.first, k - 1), sorted_whole_chain[ford_i].second);
+		k *= 2;
 		i++;
 	} while (loop);
 	//홀수는 체인에 없으므로, 마지막에 하나 넣어준다.
 	if (size % 2 == 1)
-		result.insert(binary_search(result, ary[size - 1].first, size / 2), ary[size - 1]);
+		result.insert(binary_search(result, ary[size - 1].first, size - 1), ary[size - 1]);
 	//이제 다 정렬된 요소의 순서를 집어 넣는다.
 	for (size_t j = 0; j < size; ++j)
 		ary[result[j].second].second = j;
@@ -231,23 +223,27 @@ static void	ford_johnson(t_list_value_index &ary)
 	}
 	bool 	loop = true;
 	size_t	i = 2;
-	size_t	k = 1;
+	size_t	k = 4;
 	result.insert(result.begin(), sorted_whole_chain.begin()->second);
 	do
 	{
-		size_t	ford_i = std::min(static_cast<size_t>(JACOPSTHAL(i)), size / 2 - 1);
+		size_t	ford_i = std::min(static_cast<size_t>(JACOPSTHAL(i)), size / 2) - 1;
 		if (ford_i == size / 2 - 1)
+		{
+			k = result.size();
 			loop = false;
-		for (; ford_i > static_cast<size_t>(JACOPSTHAL(i - 1)) || ford_i == 1; --ford_i)
+		}
+		for (; ford_i >= static_cast<size_t>(JACOPSTHAL(i - 1)); --ford_i)
 		{
 			it_chain = sorted_whole_chain.begin();
 			std::advance(it_chain, ford_i);
-			result.insert(binary_search(result, it_chain->second.first, k++ * 2), it_chain->second);
+			result.insert(binary_search(result, it_chain->second.first, k - 1), it_chain->second);
 		}
+		k *= 2;
 		i++;
 	} while (loop);
 	if (size % 2 == 1)
-		result.insert(binary_search(result, (--ary.end())->first, size / 2), *(--ary.end()));
+		result.insert(binary_search(result, (--ary.end())->first, size - 1), *(--ary.end()));
 	for (size_t j = 0; j < size; ++j)
 	{
 		it = result.begin();
