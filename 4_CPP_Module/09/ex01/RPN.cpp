@@ -38,43 +38,43 @@ bool RPN::PushTokenAndCalculate(char token)
 	int		rhs;
 	size_t	size = mTokens.size();			
 
-	if (!isdigit(token) && !isoperator(token))
+	if (!std::isdigit(token) && !isoperator(token))
 	{
 		return (false);
 	}
-	if (isdigit(token))
+	if (std::isdigit(token))
 	{
 		mTokens.push(token - '0');
+		return (true);
 	}
-	else
+	if (size < 2)
 	{
-		if (size < 2)
+		return (false);
+	}
+	rhs = mTokens.top();
+	mTokens.pop();
+	lhs = mTokens.top();
+	mTokens.pop();
+	switch (token)
+	{
+	case '+':
+		mTokens.push(lhs + rhs);
+		break ;
+	case '-':
+		mTokens.push(lhs - rhs);
+		break ;
+	case '*':
+		mTokens.push(lhs * rhs);
+		break ;
+	case '/':
+		if (rhs == 0)
 		{
+			mTokens.push(lhs);
+			mTokens.push(rhs);
 			return (false);
 		}
-		rhs = mTokens.top();
-		mTokens.pop();
-		lhs = mTokens.top();
-		mTokens.pop();
-		switch (token)
-		{
-		case '+':
-			mTokens.push(lhs + rhs);
-			break ;
-		case '-':
-			mTokens.push(lhs - rhs);
-			break ;
-		case '*':
-			mTokens.push(lhs * rhs);
-			break ;
-		case '/':
-			if (rhs == 0)
-			{
-				return (false);
-			}
-			mTokens.push(lhs / rhs);
-			break ;
-		}
+		mTokens.push(lhs / rhs);
+		break ;
 	}
 	return (true);
 }

@@ -16,5 +16,5 @@ private:
 	RPN(const RPN& copy);
 	RPN& operator=(const RPN& rhs);
 	
-	std::stack<unsigned long> mTokens;	
+	std::stack<int> mTokens;	
 };
