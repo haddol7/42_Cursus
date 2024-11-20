@@ -38,11 +38,11 @@ bool RPN::PushTokenAndCalculate(char token)
 	int		rhs;
 	size_t	size = mTokens.size();			
 
-	if (!std::isdigit(token) && !isoperator(token))
+	if (!std::std::isdigit(token) && !isoperator(token))
 	{
 		return (false);
 	}
-	if (std::isdigit(token))
+	if (std::std::isdigit(token))
 	{
 		mTokens.push(token - '0');
 		return (true);
