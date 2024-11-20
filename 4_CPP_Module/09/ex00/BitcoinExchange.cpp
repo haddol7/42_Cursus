@@ -38,7 +38,7 @@ void BitcoinExchange::ReadDataBase(const char *datafilename)
 		}
 		if (!IsValidFormat(data_line, DATABASE_MODE) || !IsValidDate(data_line))
 		{
-			throw std::runtime_error(data_line);
+			throw std::runtime_error("Error: invalid database line => " + data_line);
 		}
 		date = data_line.substr(0, COMMA);
 		value = atof(data_line.substr(COMMA + 1).c_str());
@@ -90,11 +90,6 @@ void	BitcoinExchange::DisplayPrice(const std::string& data_line)
 	if (!IsValidDate(date))
 	{
 		std::cout << "Error : bad input => " << data_line << std::endl;
-		return ;
-	}
-	else if (value < 0)
-	{
-		std::cout << "Error : not a positive number." << std::endl;
 		return ;
 	}
 	else if (value > 1000)
@@ -160,25 +155,29 @@ bool BitcoinExchange::IsValidFormat(const std::string& data_line, int mode)
 	}
 	for (int i = 0; i < 4; ++i) 
 	{
-		if (!isdigit(data_line[i])) 
+		if (!std::isdigit(data_line[i])) 
 		{
 			return (false);
 		}
 	}
 	for (int i = 5; i < 7; ++i) 
 	{
-		if (!isdigit(data_line[i]) || !isdigit(data_line[i + 3]))
+		if (!std::isdigit(data_line[i]) || !std::isdigit(data_line[i + 3]))
 		{
 			return (false);
 		}
 	}
 	bool	is_float = false;
 	int		pos_num = 11 + mode;
+	if (data_line[pos_num] == '-')
+	{
+		return (false);
+	}
 	for (int i = pos_num; data_line[i] != '\0'; ++i)
 	{
-		if (!isdigit(data_line[i]) && !(data_line[i] == '-' && i == pos_num))
+		if (!std::isdigit(data_line[i]))
 		{
-			if (data_line[i] == '.' && is_float == false && i > pos_num)
+			if (data_line[i] == '.' && data_line[i + 1] != '\0' && is_float == false)
 			{
 				is_float = true;
 				continue ;
