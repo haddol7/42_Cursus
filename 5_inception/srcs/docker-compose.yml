@@ -1,0 +1,48 @@
+#TODO : health-check
+version: "3"
+
+services:
+  mariadb:
+    build:
+      context: ./requirements/mariadb
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - inception_network
+    env_file: .env
+    restart: always
+
+  wordpress: 
+    build:
+      context: ./requirements/wordpress
+    volumes:
+      - wp_data:/var/www/html
+    networks:
+      - inception_network
+    env_file: .env
+    restart: always
+    depends_on:
+      - mariadb
+    
+  nginx:
+    build:
+      context: ./requirements/nginx
+    volumes:
+      - wp_data:/var/www/html
+    networks:
+      - inception_network
+    ports:
+      - "443:443"
+    restart: always
+    depends_on:
+      - wordpress
+
+volumes:
+  mariadb_data:
+    driver: local
+  wp_data:
+    driver: local
+
+networks:
+  inception_network:
+    driver: bridge
