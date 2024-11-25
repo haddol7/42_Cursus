@@ -16,6 +16,4 @@ COPY	conf/server.conf	/etc/nginx/conf.d/
 RUN		mkdir -p /var/www/
 RUN		chown -R www-data:www-data /var/www/
 
-ENTRYPOINT ["tini", "--"]
-
-CMD		["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["tini", "--", "nginx", "-g", "daemon off;"]

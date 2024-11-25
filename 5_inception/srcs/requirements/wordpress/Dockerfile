@@ -34,6 +34,4 @@ COPY	conf/wp-config.php /tmp/
 COPY	tools/setup.sh /bin/
 RUN		chmod +x /bin/setup.sh
 
-ENTRYPOINT ["tini", "--"]
-
-CMD		["setup.sh", "php-fpm7.4", "--nodaemonize"]
+ENTRYPOINT ["tini", "--", "setup.sh", "php-fpm7.4", "--nodaemonize"]
