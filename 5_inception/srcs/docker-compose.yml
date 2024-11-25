@@ -11,6 +11,11 @@ services:
     restart: always
     env_file:
       - .env
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   wordpress:
     container_name: wordpress
@@ -24,6 +29,11 @@ services:
       - .env
     depends_on:
       - mariadb
+    healthcheck:
+      test: ["CMD", "wp", "--allow-root", "--path=/var/www/inception", "user", "get", "$WP_USER"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   nginx:
     container_name: nginx
