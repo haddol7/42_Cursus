@@ -8,9 +8,9 @@ services:
       - database:/var/lib/mysql/
     networks:
       - inception_network
-    restart: on-failure
+    restart: always
     env_file:
-      - ../.env
+      - .env
 
   wordpress:
     container_name: wordpress
@@ -19,9 +19,9 @@ services:
       - wordpress_files:/var/www/inception/
     networks:
       - inception_network
-    restart: on-failure
+    restart: always
     env_file:
-      - ../.env
+      - .env
     depends_on:
       - mariadb
 
@@ -35,9 +35,9 @@ services:
       - wordpress_files:/var/www/inception/
     networks:
       - inception_network
-    restart: on-failure
+    restart: always
     env_file:
-      - ../.env
+      - .env
     depends_on:
       - wordpress
 
