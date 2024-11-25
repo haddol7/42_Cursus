@@ -12,7 +12,7 @@ RUN		apt-get update && apt-get install -y nginx openssl tini && \
 		mkdir -p /var/www/ && \
 		chown -R www-data:www-data /var/www/
 
-COPY	conf/nginx.conf	/etc/nginx/
+COPY	conf/nginx.conf		/etc/nginx/
 COPY	conf/server.conf	/etc/nginx/conf.d/
 
 ENTRYPOINT ["/usr/bin/tini", "--"]

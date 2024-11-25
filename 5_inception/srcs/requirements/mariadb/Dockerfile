@@ -2,6 +2,8 @@ FROM	debian:bullseye
 
 EXPOSE	3306
 
+COPY	tools/setup.sh /bin/
+
 RUN		apt-get update -y && \
 		apt-get install -y --no-install-recommends --no-install-suggests \
 		mariadb-server \
@@ -10,7 +12,6 @@ RUN		apt-get update -y && \
 		chmod +x /bin/setup.sh
 
 COPY	conf/50-server.cnf /etc/mysql/mariadb.conf.d/
-COPY	tools/setup.sh /bin/
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["setup.sh"]
