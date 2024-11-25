@@ -5,12 +5,12 @@ EXPOSE	3306
 RUN		apt-get update -y && \
 		apt-get install -y --no-install-recommends --no-install-suggests \
 		mariadb-server \
-		tini
+		tini && \
+		rm -rf /var/lib/apt/lists/* && \
+		chmod +x /bin/setup.sh
 
 COPY	conf/50-server.cnf /etc/mysql/mariadb.conf.d/
-
 COPY	tools/setup.sh /bin/
-RUN		chmod +x /bin/setup.sh
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["setup.sh", "mysqld_safe"]
+CMD ["setup.sh"]
