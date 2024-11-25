@@ -1,5 +1,6 @@
-services:
+version: '3.8'
 
+services:
   mariadb:
     container_name: mariadb
     build: ./requirements/mariadb/
@@ -7,7 +8,6 @@ services:
       - database:/var/lib/mysql/
     networks:
       - inception_network
-    init: true
     restart: on-failure
     env_file:
       - ../.env
@@ -19,7 +19,6 @@ services:
       - wordpress_files:/var/www/inception/
     networks:
       - inception_network
-    init: true
     restart: on-failure
     env_file:
       - ../.env
@@ -36,7 +35,6 @@ services:
       - wordpress_files:/var/www/inception/
     networks:
       - inception_network
-    init: true
     restart: on-failure
     env_file:
       - ../.env
