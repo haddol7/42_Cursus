@@ -13,7 +13,7 @@
 
 # set -ex # print commands & exit on error (debug mode)
 
-# WP_URL=daeha.42.fr
+# WP_URL=login.42.fr
 # WP_TITLE=Inception
 # WP_ADMIN_USER=theroot
 # WP_ADMIN_PASSWORD=123
