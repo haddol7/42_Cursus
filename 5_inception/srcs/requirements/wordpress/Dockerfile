@@ -3,6 +3,7 @@ FROM	debian:bullseye
 EXPOSE	9000
 
 RUN		apt-get update && apt-get install -y \
+		tini \
 		ca-certificates \
 		php7.4-fpm \
 		php7.4-mysql \
@@ -32,5 +33,7 @@ COPY	conf/wp-config.php /tmp/
 
 COPY	tools/setup.sh /bin/
 RUN		chmod +x /bin/setup.sh
+
+ENTRYPOINT ["tini", "--"]
 
 CMD		["setup.sh", "php-fpm7.4", "--nodaemonize"]

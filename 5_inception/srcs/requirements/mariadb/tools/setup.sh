@@ -14,4 +14,4 @@ sleep 5
 
 service mariadb stop
 
-exec $@ 
+exec $@

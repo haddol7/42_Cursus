@@ -2,7 +2,7 @@ FROM	debian:bullseye
 
 EXPOSE	443
 
-RUN		apt-get update && apt-get install -y nginx openssl
+RUN		apt-get update && apt-get install -y nginx openssl tini
 
 RUN mkdir -p /etc/nginx/certs/ && \
 	openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
@@ -15,5 +15,7 @@ COPY	conf/server.conf	/etc/nginx/conf.d/
 
 RUN		mkdir -p /var/www/
 RUN		chown -R www-data:www-data /var/www/
+
+ENTRYPOINT ["tini", "--"]
 
 CMD		["nginx", "-g", "daemon off;"]
