@@ -2,7 +2,8 @@ FROM	debian:bullseye
 
 EXPOSE	9000
 
-RUN		apt-get update && apt-get install -y \
+RUN		apt-get update -y && \
+		apt-get install -y --no-install-recommends --no-install-suggests \
 		tini \
 		ca-certificates \
 		php7.4-fpm \
@@ -22,13 +23,11 @@ RUN		sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.4/fpm/php.in
 		mkdir -p /run/php/ && \
 		mkdir -p /var/run/php/ && \
 		mkdir -p /var/www/inception/ && \
-		chown -R www-data:www-data /var/www/inception/
+		chown -R www-data:www-data /var/www/inception/ && \
+		chmod +x tools/setup.sh
 
 COPY	conf/wp-config.php /tmp/
 COPY	tools/setup.sh /bin/
 
-RUN		chmod +x /bin/setup.sh
-
 ENTRYPOINT ["tini", "--"]
-
-CMD		["setup.sh"]
+CMD		["/bin/setup.sh"]

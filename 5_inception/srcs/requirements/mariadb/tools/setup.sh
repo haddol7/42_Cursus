@@ -11,8 +11,6 @@ GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$DB_PASS_ROOT' WITH GRA
 FLUSH PRIVILEGES;
 EOF
 
-sleep 3
-
 service mariadb stop
 
 exec mysqld_safe
