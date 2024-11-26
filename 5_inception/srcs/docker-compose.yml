@@ -29,11 +29,6 @@ services:
       - .env
     depends_on:
       - mariadb
-    healthcheck:
-      test: ["CMD", "wp", "--allow-root", "--path=/var/www/inception", "user", "get", "$WP_USER"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
 
   nginx:
     container_name: nginx
