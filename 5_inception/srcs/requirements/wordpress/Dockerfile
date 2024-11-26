@@ -11,7 +11,9 @@ RUN		apt-get update -y && \
 		wget \
 		sendmail
 
+COPY	conf/wp-config.php /tmp/
 COPY	conf/www.conf /etc/php/7.4/fpm/pool.d/
+COPY	tools/setup.sh /bin/
 
 RUN		sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.4/fpm/php.ini && \
 		sed -i "s/listen = \/run\/php\/php$PHP_VERSION_ENV-fpm.sock/listen = 9000/g" /etc/php/7.4/fpm/pool.d/www.conf && \
@@ -24,10 +26,8 @@ RUN		sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.4/fpm/php.in
 		mkdir -p /var/run/php/ && \
 		mkdir -p /var/www/inception/ && \
 		chown -R www-data:www-data /var/www/inception/ && \
-		chmod +x tools/setup.sh
+		chmod +x /bin/setup.sh
 
-COPY	conf/wp-config.php /tmp/
-COPY	tools/setup.sh /bin/
 
 ENTRYPOINT ["tini", "--"]
 CMD		["/bin/setup.sh"]
