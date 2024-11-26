@@ -8,8 +8,7 @@ RUN		apt-get update -y && \
 		ca-certificates \
 		php7.4-fpm \
 		php7.4-mysql \
-		wget \
-		sendmail
+		wget
 
 COPY	conf/wp-config.php /tmp/
 COPY	conf/www.conf /etc/php/7.4/fpm/pool.d/
