@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   mariadb:
+    image: mariadb:inception
     container_name: mariadb
     build: ./requirements/mariadb/
     volumes:
@@ -18,6 +19,7 @@ services:
       retries: 3
 
   wordpress:
+    image: wordpress:inception
     container_name: wordpress
     build: ./requirements/wordpress/
     volumes:
@@ -32,6 +34,7 @@ services:
         condition: service_healthy
 
   nginx:
+    image: nginx:inception
     container_name: nginx
     build:
       context: ./requirements/nginx/
