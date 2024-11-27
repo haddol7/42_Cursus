@@ -18,6 +18,12 @@ WP_CONFIG="$WP_PATH/wp-config.php"
 
 if [ ! -f "$WP_CONFIG" ]; then
     echo "Moving wp-config.php to $WP_PATH..."
+	wget --no-check-certificate https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+	chmod +x wp-cli.phar
+	mv wp-cli.phar /usr/local/bin/wp
+	mkdir -p /run/php/
+	mkdir -p /var/run/php/
+	mkdir -p /var/www/inception/
     mv /tmp/wp-config.php "$WP_PATH"
     chown www-data:www-data "$WP_CONFIG"
 fi
