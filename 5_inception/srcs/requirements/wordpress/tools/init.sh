@@ -11,6 +11,8 @@ if [ ! -f "$WP_CONFIG" ]; then
     sed -i 's/;daemonize = yes/daemonize = no/g' /etc/php/7.4/fpm/pool.d/www.conf
     wget --no-check-certificate https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
     chmod +x wp-cli.phar
+	mkdir -p /run/php
+	mkdir -p /var/run/php
     mv wp-cli.phar /usr/local/bin/wp
     mkdir -p /var/www/inception/
     mv /tmp/wp-config.php "$WP_PATH"
