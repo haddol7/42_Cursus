@@ -2,7 +2,6 @@
 
 WP_PATH="/var/www/inception"
 WP_CONFIG="$WP_PATH/wp-config.php"
-chown www-data:www-data "$WP_CONFIG"
 
 if [ ! -f "$WP_CONFIG" ]; then
     echo "<Inception Debug> Init config in $WP_PATH..."
@@ -19,9 +18,12 @@ if [ ! -f "$WP_CONFIG" ]; then
     mv /tmp/wp-config.php "$WP_PATH"
 fi
 
+chown www-data:www-data "$WP_CONFIG"
+
 if [ ! -f "$WP_PATH/wp-load.php" ]; then
     echo "<Inception Debug> Downloading WordPress..."
     wp --allow-root --path="$WP_PATH" core download
+	
     wp --allow-root --path="$WP_PATH" core install \
         --url=$WP_URL \
         --title=$WP_TITLE \
