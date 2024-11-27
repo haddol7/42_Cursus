@@ -14,6 +14,7 @@ RUN apt-get update -y && \
 COPY conf/wp-config.php /tmp/
 COPY conf/www.conf /etc/php/7.4/fpm/pool.d/
 COPY tools/init.sh /bin/
+
 RUN chmod +x /bin/init.sh
 
 ENTRYPOINT ["/usr/bin/tini", "--"]

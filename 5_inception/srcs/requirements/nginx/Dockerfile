@@ -14,7 +14,7 @@ RUN apt-get update && \
 COPY conf/nginx.conf /etc/nginx/
 COPY conf/server.conf /etc/nginx/conf.d/
 
-COPY init.sh /bin/init.sh
+COPY tools/init.sh /bin/init.sh
 RUN chmod +x /bin/init.sh
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
