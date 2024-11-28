@@ -9,6 +9,7 @@ RUN apt-get update && \
     tini && \
     rm -rf /var/lib/apt/lists/* && \
     mkdir -p /var/www/ && \
+	mkdir -p /var/www/inception/ && \
     chown -R www-data:www-data /var/www/
 
 COPY conf/nginx.conf /etc/nginx/
