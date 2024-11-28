@@ -12,4 +12,18 @@ clean: down
 	docker system prune -af
 	docker volume prune -f
 
+ps:
+	@docker-compose -f srcs/docker-compose.yml ps
+	@echo "\n"
+	@docker images
+	@echo "\n"
+	@docker volume ls
+
+logs:
+	@docker logs mariadb
+	@echo "\n"
+	@docker logs wordpress
+	@echo "\n"
+	@docker logs nginx
+
 re: clean all
