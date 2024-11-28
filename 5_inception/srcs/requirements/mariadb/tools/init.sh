@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo -e "\033[31m<Inception Debug - mariadb> Init Database\033[0m"
+
 service mariadb start
 
 mariadb -u root <<EOF
@@ -14,5 +16,7 @@ EOF
 sleep 3
 
 service mariadb stop
+
+echo -e "\033[31m<Inception Debug - mariadb> Setup Done\033[0m"
 
 exec mysqld_safe
