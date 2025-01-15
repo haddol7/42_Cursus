@@ -92,7 +92,7 @@ def decodeJWT(request: HttpRequest):
         return JsonResponse(decoded_jwt)
     except Exception as e:
         logger.error(e)
-        return JsonResponse({"message": JWTExpired().__format__()})
+        return JsonResponse({"message": JWTExpired().__format__("")})
 
 
 def helper(req: HttpRequest):
