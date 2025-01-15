@@ -28,11 +28,25 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - ./jwt:/server
+  websocket:
+    image: websocket
+    container_name: websocket
+    pull_policy: never
+    build: ./websocket
+    ports:
+      - "7600:7600"
+    networks:
+      - postgresdb_network
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
     tty: true
     init: true
     restart: always
     volumes:
-      - ./jwt:/server
+      - ./websocket:/server
   auth:
     image: auth
     container_name: auth
