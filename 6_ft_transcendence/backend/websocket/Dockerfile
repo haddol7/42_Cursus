@@ -13,7 +13,8 @@ RUN python -m pip install \
     pyjwt \
     logging \
     pyotp \
-    python-socketio
+    python-socketio \
+    gunicorn
 
 # Move Script File
 COPY ./run_server.sh /server/run_server.sh

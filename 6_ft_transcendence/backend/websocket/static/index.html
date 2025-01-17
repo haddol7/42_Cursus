@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+        <script>
+            const socket = io("ws://127.0.0.1:7600")
+            console.log(socket);
+
+            socket.on("broadcast_msg", (data) => {
+                console.log("broadcast_msg, data=", data);
+            });
+
+            function submitform(e) {
+                e.preventDefault();
+                const inputForm = document.querySelector("input#msg");
+                console.dir(inputForm)
+                console.log(inputForm.value)
+                socket.emit("send_msg", inputForm.value);
+            }
+
+
+        </script>
+    </head>
+    <body>
+        <h1>Hello</h1>
+        <form onsubmit="return submitform(event)">
+            Text: <input type="text" name="msg" id="msg">
+            <input type="submit">Submit</input>
+        </form>
+    </body>
+</html>
