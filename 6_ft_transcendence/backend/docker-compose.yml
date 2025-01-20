@@ -52,6 +52,13 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+  test-container:
+    image: ubuntu:24.04
+    container_name: test-container
+    restart: always
+    networks:
+      - postgresdb_network
+    tty: true
   prometheus:
     build: ./prometheus
     volumes:
