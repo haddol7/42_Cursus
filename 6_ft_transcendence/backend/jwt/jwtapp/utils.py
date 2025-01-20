@@ -7,7 +7,11 @@ from typing import Any, Dict, Tuple, TypedDict
 
 import jwt
 
-from exceptions.CustomException import InternalException, JwtInvalidException
+from exceptions.CustomException import (
+    InternalException,
+    JwtExpiredException,
+    JwtInvalidException,
+)
 from jwtapp.models import User, UserStatus
 
 
@@ -75,10 +79,20 @@ def _make_jwt(user_id: int, user_secret: str, exp: datetime.datetime) -> str:
 
 
 def _decode_payload(encoded_jwt: str) -> JwtPayload:
-    decoded_jwt: Dict[str, Any] = jwt.decode(
-        jwt=encoded_jwt, key=JWT_SECRET, algorithms=JWT_ALGORITHM
-    )
-    payload: JwtPayload = _dictToPayload(decoded_jwt)
+    try:
+        decoded_jwt: Dict[str, Any] = jwt.decode(
+            jwt=encoded_jwt,
+            key=JWT_SECRET,
+            algorithms=JWT_ALGORITHM,
+            options={"require": ["exp"], "verify_exp": True},
+        )
+        payload: JwtPayload = _dictToPayload(decoded_jwt)
+    except jwt.InvalidSignatureError:
+        raise JwtInvalidException()
+    except jwt.ExpiredSignatureError:
+        raise JwtExpiredException()
+    except Exception:
+        raise InternalException()
     return payload
 
 

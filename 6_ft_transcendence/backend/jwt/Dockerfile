@@ -17,7 +17,8 @@ RUN python -m pip install \
     pyotp \
     djangorestframework \
     markdown \
-    django-filter
+    django-filter \
+    drf-spectacular
 
 
 # Move Script File

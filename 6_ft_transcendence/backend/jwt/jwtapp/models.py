@@ -4,7 +4,7 @@ from django.db import models
 
 
 class User(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     username = models.CharField(max_length=10)
     profile_url = models.CharField(max_length=128)
     created_at = models.DateTimeField()
