@@ -16,9 +16,26 @@ services:
     restart: always
     volumes:
       - ./django:/server
+  jwt:
+    image: jwt
+    container_name: jwt
+    pull_policy: never
+    build: ./jwt
+    ports:
+      - "8100:8100"
+    networks:
+      - postgresdb_network
+    depends_on:
+      db:
+        condition: service_healthy
+    tty: true
+    init: true
+    restart: always
+    volumes:
+      - ./jwt:/server
   db:
     image: postgres:17.1-alpine3.20
-    # container_name: postgresdb
+    container_name: postgresdb
     restart: always
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -35,6 +52,13 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+  test-container:
+    image: ubuntu:24.04
+    container_name: test-container
+    restart: always
+    networks:
+      - postgresdb_network
+    tty: true
   prometheus:
     build: ./prometheus
     volumes:
