@@ -10,14 +10,14 @@ class ExceptionMiddleware:
         self.get_response = get_response
 
     def __call__(self, request) -> Any:
-        print("middleware start")
+        print("middlware start")
         response = self.get_response(request)
         print("middleware end")
         return response
 
     def process_exception(self, request, exception):
         if isinstance(exception, CustomException):
-            print("custom exception", exception)
+            print("Custom exceptioin = ", exception)
             return HttpResponse(exception.__str__(), status=exception.get_status_code())
-        print("not custom exception", exception, "type=", type(exception))
+        print("Not custom exception = ", exception, ", type=", type(exception))
         return HttpResponse(InternalException().__str__(), status=500)

@@ -15,7 +15,7 @@ class User(models.Model):
 
 class UserInfo(models.Model):
     user_id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    twofa_secret = models.CharField(max_length=15)
+    twofa_secret = models.CharField(max_length=32)
     twofa_name = models.CharField(max_length=32)
 
     class Meta:
@@ -27,6 +27,7 @@ class UserStatus(models.Model):
     jwt_secret = models.CharField(max_length=10)
     refresh_secret = models.CharField(max_length=10)
     expired_at = models.DateTimeField()
+    twofa_passed = models.BooleanField()
 
     class Meta:
         db_table = "user_status"

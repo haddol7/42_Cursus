@@ -89,9 +89,6 @@ DATABASES = {
         "NAME": "user",
         "USER": "user",
         "PASSWORD": "password",
-        "OPTIONS": {
-            "passfile": ".my_pgpass",
-        },
     }
 }
 

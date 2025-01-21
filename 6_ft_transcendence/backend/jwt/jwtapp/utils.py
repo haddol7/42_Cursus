@@ -11,8 +11,10 @@ from exceptions.CustomException import (
     InternalException,
     JwtExpiredException,
     JwtInvalidException,
+    TwoFaNotRegisterException,
+    TwoFaRequiredException,
 )
-from jwtapp.models import User, UserStatus
+from jwtapp.models import User, UserInfo, UserStatus
 
 
 class JwtPayload(TypedDict):
@@ -108,11 +110,13 @@ def set_user_secret(
             "jwt_secret": jwt_secret,
             "refresh_secret": refresh_secret,
             "expired_at": access_exp,
+            "twofa_passed": False,
         },
         create_defaults={
             "jwt_secret": jwt_secret,
             "refresh_secret": refresh_secret,
             "expired_at": access_exp,
+            "twofa_passed": False,
         },
     )
     print(f"created={created}")
@@ -121,27 +125,16 @@ def set_user_secret(
     pass
 
 
-def get_user_secret(user_id: int) -> str:
+def get_user_status(user_id: int) -> UserStatus:
     print("get_user_secret, user_id=", user_id)
     user_status = UserStatus.objects.get(pk=user_id)
-    return user_status.jwt_secret
+    return user_status
 
 
 def get_user_refresh_secret(user_id: int) -> str:
     print("get_user_refresh_secret, user_id=", user_id)
     user_status = UserStatus.objects.get(pk=user_id)
     return user_status.refresh_secret
-
-
-def delete_user_secret(user_id: int) -> None:
-    print("delete_user_secret user_id=", user_id)
-    user_status = UserStatus.objects.get(pk=user_id)
-    user_status.jwt_secret = ""
-    user_status.refresh_secret = ""
-    user_status.expired_at = datetime.datetime.now(
-        datetime.timezone.utc
-    ) - datetime.timedelta(seconds=1)
-    user_status.save()
 
 
 def make_token_pair(user_id: int) -> Tuple[str, str]:
@@ -158,13 +151,27 @@ def make_token_pair(user_id: int) -> Tuple[str, str]:
     )
 
 
-def check_jwt(encoded_jwt: str) -> JwtPayload:
+def get_user_info(user_id: int) -> UserInfo:
+    user = UserInfo.objects.get(user_id=User.objects.get(id=user_id))
+    return user
+
+
+def check_jwt(encoded_jwt: str, skip_2fa: bool) -> JwtPayload:
     payload = _decode_payload(encoded_jwt)
 
-    user_secret = get_user_secret(payload["user_id"])
-    if user_secret != payload["user_secret"]:
+    user_status = get_user_status(payload["user_id"])
+    if user_status.jwt_secret != payload["user_secret"]:
         print("secret not match")
         raise JwtInvalidException()
+    if skip_2fa:
+        return payload
+
+    user_info = get_user_info(payload["user_id"])
+    if user_info.twofa_secret == "":
+        raise TwoFaNotRegisterException()
+
+    if not user_status.twofa_passed:
+        raise TwoFaRequiredException()
 
     return payload
 
@@ -177,8 +184,3 @@ def check_refresh_token(encoded_jwt: str) -> JwtPayload:
         raise JwtInvalidException()
 
     return payload
-
-
-def invalidate_jwt(encoded_jwt: str):
-    payload = check_jwt(encoded_jwt)
-    delete_user_secret(payload["user_id"])

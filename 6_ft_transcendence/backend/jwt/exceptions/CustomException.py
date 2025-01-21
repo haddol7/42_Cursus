@@ -20,20 +20,22 @@ class InternalException(CustomException):
         return INTERNAL_SERVER_ERROR
 
 
-class JwtInvalidException(CustomException):
+class UnauthenticatedException(CustomException):
+    def __init__(self, msg="unauthenticated"):
+        super().__init__(msg)
+
+    def get_status_code(self) -> int:
+        return UNAUTHORIZED
+
+
+class JwtInvalidException(UnauthenticatedException):
     def __init__(self):
         super().__init__("jwt.invalid")
 
-    def get_status_code(self) -> int:
-        return UNAUTHORIZED
 
-
-class JwtExpiredException(CustomException):
+class JwtExpiredException(UnauthenticatedException):
     def __init__(self):
         super().__init__("jwt.expired")
-
-    def get_status_code(self) -> int:
-        return UNAUTHORIZED
 
 
 class BadRequestException(CustomException):
@@ -53,3 +55,13 @@ class BadRequestFieldException(BadRequestException):
 
     def __str__(self) -> str:
         return super().__str__() + ":" + self.field
+
+
+class TwoFaNotRegisterException(UnauthenticatedException):
+    def __init__(self):
+        super().__init__("2fa.register")
+
+
+class TwoFaRequiredException(UnauthenticatedException):
+    def __init__(self):
+        super().__init__("2fa.required")
