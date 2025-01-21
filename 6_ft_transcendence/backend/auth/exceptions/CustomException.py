@@ -1,4 +1,4 @@
-from http.client import BAD_REQUEST, INTERNAL_SERVER_ERROR, OK, UNAUTHORIZED
+from http.client import BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR, OK, UNAUTHORIZED
 
 
 class CustomException(Exception):
@@ -57,11 +57,12 @@ class BadRequestFieldException(BadRequestException):
         return super().__str__() + ":" + self.field
 
 
-class TwoFaNotRegisterException(UnauthenticatedException):
-    def __init__(self):
-        super().__init__("2fa.register")
+class BadRequestFoundException(BadRequestException):
+    target: str
 
+    def __init__(self, target: str):
+        super().__init__()
+        self.target = target
 
-class TwoFaRequiredException(UnauthenticatedException):
-    def __init__(self):
-        super().__init__("2fa.required")
+    def __str__(self) -> str:
+        return f"{self.target}.{super().__str__()}"

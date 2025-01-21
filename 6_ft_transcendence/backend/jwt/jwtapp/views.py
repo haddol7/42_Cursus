@@ -24,8 +24,13 @@ def check_jwt_request(req: Request):
     if jwt is None:
         print("jwt is None")
         raise BadRequestFieldException("jwt")
-    check_jwt(jwt)
-    return HttpResponse()
+
+    if "skip_2fa" not in req.data:
+        skip_2fa = False
+    else:
+        skip_2fa: bool = req.data["skip_2fa"]
+    payload = check_jwt(jwt, skip_2fa)
+    return JsonResponse({"user_id": payload["user_id"]})
 
 
 @api_post

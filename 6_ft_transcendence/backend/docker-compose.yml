@@ -33,6 +33,23 @@ services:
     restart: always
     volumes:
       - ./jwt:/server
+  auth:
+    image: auth
+    container_name: auth
+    pull_policy: never
+    build: ./auth
+    ports:
+      - "8200:8200"
+    networks:
+      - postgresdb_network
+    depends_on:
+      db:
+        condition: service_healthy
+    tty: true
+    init: true
+    restart: always
+    volumes:
+      - ./auth:/server
   db:
     image: postgres:17.1-alpine3.20
     container_name: postgresdb
