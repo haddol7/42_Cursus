@@ -1,3 +1,7 @@
+//TODO: 클라이언트 사이드 공 위치 계산
+//애드온 추가
+//UI 추가
+
 const socket = io();
 
 let scene, camera, renderer;

@@ -1,3 +1,8 @@
+//TODO : 클라이언트 사이드 공 위치 계산 (공 벡터만 전송)
+//클라이언트 재접속 시 게임 상태 유지
+//	아예 나가게 되었을 때는 어떻게 처리할 것인지 (뒤로가기, 새로고침)
+//패들 충돌 자연스럽게
+
 const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
