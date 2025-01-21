@@ -1,7 +1,7 @@
-const express = require('express');
-const { createServer } = require('http');
-const { Server } = require('socket.io');
-const path = require('path');
+const express = require("express");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const path = require("path");
 
 const app = express();
 const httpServer = createServer(app);
@@ -17,15 +17,15 @@ const BALL_RADIUS = 0.2; // Ball radius
 const WINNING_SCORE = 10; // Score needed to win
 
 // client 디렉토리를 정적 파일 루트로 설정
-app.use(express.static(path.join(__dirname, '../client')));
+app.use(express.static(path.join(__dirname, "../client")));
 
 // 루트 경로 처리
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/index.html'));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/index.html"));
 });
 
-io.on('connection', (socket) => {
-  console.log('A user connected');
+io.on("connection", (socket) => {
+  console.log("A user connected");
 
   const roomName = `room-${Math.floor(roomCounter / 2)}`;
   socket.join(roomName);
@@ -39,12 +39,12 @@ io.on('connection', (socket) => {
     };
   }
 
-  const paddleId = roomCounter % 2 === 0 ? 'paddle1' : 'paddle2';
-  socket.emit('init', { roomName, paddleId });
+  const paddleId = roomCounter % 2 === 0 ? "paddle1" : "paddle2";
+  socket.emit("init", { roomName, paddleId });
 
   roomCounter++;
 
-  socket.on('paddleMove', (data) => {
+  socket.on("paddleMove", (data) => {
     if (rooms[roomName].gameOver) return;
 
     if (data.position > GAME_BOUNDS.x - PADDLE_WIDTH / 2) {
@@ -55,15 +55,15 @@ io.on('connection', (socket) => {
     }
 
     rooms[roomName].paddles[data.paddleId] = data.position;
-    socket.to(roomName).emit('updatePaddle', data);
+    socket.to(roomName).emit("updatePaddle", data);
   });
 
   if (roomCounter % 2 === 0) {
     startBallMovement(roomName);
   }
 
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
   });
 });
 
@@ -83,9 +83,13 @@ function startBallMovement(roomName) {
     ball.y += ball.vy;
 
     // Left and right wall collisions
-    if (ball.x >= GAME_BOUNDS.x - BALL_RADIUS || ball.x <= -GAME_BOUNDS.x + BALL_RADIUS) {
+    if (
+      ball.x >= GAME_BOUNDS.x - BALL_RADIUS ||
+      ball.x <= -GAME_BOUNDS.x + BALL_RADIUS
+    ) {
       ball.vx *= -1; // Reverse direction
-      ball.x = ball.x > 0 ? GAME_BOUNDS.x - BALL_RADIUS : -GAME_BOUNDS.x + BALL_RADIUS;
+      ball.x =
+        ball.x > 0 ? GAME_BOUNDS.x - BALL_RADIUS : -GAME_BOUNDS.x + BALL_RADIUS;
     }
 
     // Paddle 1 (bottom) collision
@@ -107,34 +111,38 @@ function startBallMovement(roomName) {
         : GAME_BOUNDS.y - PADDLE_HEIGHT - BALL_RADIUS;
 
       console.log(
-        `Collision detected! Ball: (${ball.x.toFixed(2)}, ${ball.y.toFixed(2)}), ` +
-          `Paddle1: ${paddles.paddle1.toFixed(2)}, Paddle2: ${paddles.paddle2.toFixed(2)}`
+        `Collision detected! Ball: (${ball.x.toFixed(2)}, ${ball.y.toFixed(
+          2
+        )}), ` +
+          `Paddle1: ${paddles.paddle1.toFixed(
+            2
+          )}, Paddle2: ${paddles.paddle2.toFixed(2)}`
       );
     }
 
     // Top and bottom wall collisions (score points)
     if (ball.y >= GAME_BOUNDS.y) {
       scores.paddle1++;
-      io.to(roomName).emit('updateScores', scores);
-      resetGame(roomName, 'paddle1');
+      io.to(roomName).emit("updateScores", scores);
+      resetGame(roomName, "paddle1");
     } else if (ball.y <= -GAME_BOUNDS.y) {
       scores.paddle2++;
-      io.to(roomName).emit('updateScores', scores);
-      resetGame(roomName, 'paddle2');
+      io.to(roomName).emit("updateScores", scores);
+      resetGame(roomName, "paddle2");
     }
 
     // Check for game over
     if (scores.paddle1 === WINNING_SCORE || scores.paddle2 === WINNING_SCORE) {
       room.gameOver = true;
 
-      const winner = scores.paddle1 === WINNING_SCORE ? 'paddle1' : 'paddle2';
-      io.to(roomName).emit('gameOver', { winner });
+      const winner = scores.paddle1 === WINNING_SCORE ? "paddle1" : "paddle2";
+      io.to(roomName).emit("gameOver", { winner });
       console.log(`Game Over! Winner: ${winner}`);
       clearInterval(interval);
       return;
     }
 
-    io.to(roomName).emit('updateBall', ball);
+    io.to(roomName).emit("updateBall", ball);
   }, 16); // 60 FPS
 }
 
@@ -146,7 +154,7 @@ function resetGame(roomName, scorer) {
   room.paddles.paddle1 = 0;
   room.paddles.paddle2 = 0;
 
-  io.to(roomName).emit('resetPositions', {
+  io.to(roomName).emit("resetPositions", {
     ball: room.ball,
     paddles: room.paddles,
   });
@@ -155,8 +163,8 @@ function resetGame(roomName, scorer) {
   setTimeout(() => {
     const initialSpeed = 0.1;
     room.ball.vx = initialSpeed * (Math.random() > 0.5 ? 1 : -1); // 랜덤 X 방향
-    room.ball.vy = scorer === 'paddle1' ? initialSpeed : -initialSpeed; // 득점 반대 방향
-    io.to(roomName).emit('updateBall', room.ball);
+    room.ball.vy = scorer === "paddle1" ? initialSpeed : -initialSpeed; // 득점 반대 방향
+    io.to(roomName).emit("updateBall", room.ball);
   }, 1000);
 }
 

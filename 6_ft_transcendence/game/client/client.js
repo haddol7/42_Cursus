@@ -15,13 +15,18 @@ function init() {
   scene.background = new THREE.Color(0x1a1a1a); // 어두운 회색 배경
 
   // Create camera
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
 
   // 카메라 위치 및 시점 조정
-  if (paddleId === 'paddle1') {
+  if (paddleId === "paddle1") {
     camera.position.set(0, -7, 5); // 패들1이 아래쪽
     camera.lookAt(0, 0, 0);
-  } else if (paddleId === 'paddle2') {
+  } else if (paddleId === "paddle2") {
     camera.position.set(0, 7, 5); // 패들2가 아래쪽
     camera.lookAt(0, 0, 0);
     camera.rotation.z = Math.PI; // 화면을 180도 회전
@@ -34,7 +39,7 @@ function init() {
   renderer.physicallyCorrectLights = true; // 물리적으로 정확한 조명
   document.body.appendChild(renderer.domElement);
 
-  window.addEventListener('resize', () => {
+  window.addEventListener("resize", () => {
     // 카메라 종횡비 업데이트
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
@@ -98,13 +103,16 @@ function init() {
 }
 
 function addFloor() {
-  const floorGeometry = new THREE.PlaneGeometry(GAME_BOUNDS.x * 2, GAME_BOUNDS.y * 2);
+  const floorGeometry = new THREE.PlaneGeometry(
+    GAME_BOUNDS.x * 2,
+    GAME_BOUNDS.y * 2
+  );
 
   // MeshStandardMaterial로 반사 효과 설정
   const floorMaterial = new THREE.MeshStandardMaterial({
     color: 0x222222, // 바닥 기본 색상
-    roughness: 0.5,  // 표면 거칠기 (낮을수록 반사도가 높음)
-    metalness: 0.8,  // 금속성 (높을수록 반사도가 강해짐)
+    roughness: 0.5, // 표면 거칠기 (낮을수록 반사도가 높음)
+    metalness: 0.8, // 금속성 (높을수록 반사도가 강해짐)
   });
 
   floor = new THREE.Mesh(floorGeometry, floorMaterial);
@@ -143,38 +151,38 @@ function animate() {
   ballLight.position.set(ball.position.x, ball.position.y, ball.position.z);
 
   // 패들 움직임 처리
-  if (paddleId === 'paddle1') {
+  if (paddleId === "paddle1") {
     paddle1.position.x += paddleDirection * paddleSpeed * deltaTime;
     paddle1.position.x = Math.max(
       Math.min(paddle1.position.x, GAME_BOUNDS.x - 0.5),
       -GAME_BOUNDS.x + 0.5
     );
-    socket.emit('paddleMove', { paddleId, position: paddle1.position.x });
-  } else if (paddleId === 'paddle2') {
+    socket.emit("paddleMove", { paddleId, position: paddle1.position.x });
+  } else if (paddleId === "paddle2") {
     paddle2.position.x += paddleDirection * paddleSpeed * deltaTime;
     paddle2.position.x = Math.max(
       Math.min(paddle2.position.x, GAME_BOUNDS.x - 0.5),
       -GAME_BOUNDS.x + 0.5
     );
-    socket.emit('paddleMove', { paddleId, position: paddle2.position.x });
+    socket.emit("paddleMove", { paddleId, position: paddle2.position.x });
   }
 
   renderer.render(scene, camera);
 }
 
-socket.on('updatePaddle', (data) => {
-  if (data.paddleId === 'paddle1') {
+socket.on("updatePaddle", (data) => {
+  if (data.paddleId === "paddle1") {
     paddle1.position.x = data.position;
-  } else if (data.paddleId === 'paddle2') {
+  } else if (data.paddleId === "paddle2") {
     paddle2.position.x = data.position;
   }
 });
 
-socket.on('updateBall', (ballData) => {
+socket.on("updateBall", (ballData) => {
   ball.position.set(ballData.x, ballData.y, 0.2);
 });
 
-socket.on('init', (data) => {
+socket.on("init", (data) => {
   paddleId = data.paddleId;
   console.log(`You are controlling ${paddleId}`);
   init();
@@ -182,19 +190,19 @@ socket.on('init', (data) => {
 
 const keyState = { left: false, right: false };
 
-window.addEventListener('keydown', (event) => {
-  if (event.key === 'ArrowLeft') {
+window.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowLeft") {
     keyState.left = true;
-  } else if (event.key === 'ArrowRight') {
+  } else if (event.key === "ArrowRight") {
     keyState.right = true;
   }
   updatePaddleDirection();
 });
 
-window.addEventListener('keyup', (event) => {
-  if (event.key === 'ArrowLeft') {
+window.addEventListener("keyup", (event) => {
+  if (event.key === "ArrowLeft") {
     keyState.left = false;
-  } else if (event.key === 'ArrowRight') {
+  } else if (event.key === "ArrowRight") {
     keyState.right = false;
   }
   updatePaddleDirection();
