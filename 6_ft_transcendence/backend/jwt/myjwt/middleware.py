@@ -10,9 +10,7 @@ class ExceptionMiddleware:
         self.get_response = get_response
 
     def __call__(self, request) -> Any:
-        print("call start")
         response = self.get_response(request)
-        print("call end")
         return response
 
     def process_exception(self, request, exception):
