@@ -36,15 +36,20 @@ class JwtExpiredException(CustomException):
         return UNAUTHORIZED
 
 
-class BadRequestFieldException(CustomException):
+class BadRequestException(CustomException):
+    def __init__(self):
+        super().__init__("bad_request")
+
+    def get_status_code(self) -> int:
+        return BAD_REQUEST
+
+
+class BadRequestFieldException(BadRequestException):
     field: str
 
     def __init__(self, field: str):
-        super().__init__("bad_request")
+        super().__init__()
         self.field = field
 
     def __str__(self) -> str:
         return super().__str__() + ":" + self.field
-
-    def get_status_code(self) -> int:
-        return BAD_REQUEST

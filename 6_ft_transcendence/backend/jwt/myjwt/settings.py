@@ -30,7 +30,7 @@ SECRET_KEY = "django-insecure-@-gp@tz8yabst&83-r2f1vxd4m=lw0%5d&x$eo^nnwx(ix2#6!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["jwt"]
+ALLOWED_HOSTS = ["jwt", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -139,6 +139,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     # YOUR SETTINGS
+    "DEFAULT_PARSER_CLASSES": [
+        "rest_framework.parsers.JSONParser",
+    ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
