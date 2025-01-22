@@ -1,0 +1,376 @@
+// body의 모든 자식 요소들을 제거
+const clearBody = () => {
+  document.body.innerHTML = "";
+};
+
+// 로그인 페이지와 2fa 인증 페이지의 렌더링에 사용되는 박스를 렌더
+const renderCentralBox = () => {
+  document.body.style.height = "100vh";
+  document.body.style.display = "flex";
+  document.body.style.justifyContent = "center";
+  document.body.style.alignItems = "center";
+
+  document.body.innerHTML = `<div class="card text-bg-success mb-3" style="max-width: 18rem;">
+    <div class="card-header">42 Transcendence</div>
+    <div class="card-body">
+        <h5 class="card-title">Mighty Pong Contest</h5>
+        <p class="card-text">Welcome to 42 mighty pong contest!!</p>
+    </div>
+</div>`;
+
+  const cardBody = document.getElementsByClassName("card-body")[0];
+
+  return cardBody;
+};
+
+// 박스를 중앙 정렬하기 위해 body에 부여했던 속성을 초기화한다.
+const removeBodyProperty = () => {
+  document.body.style.removeProperty("display");
+  document.body.style.removeProperty("justify-content");
+  document.body.style.removeProperty("align-items");
+  document.body.style.removeProperty("height");
+};
+
+export class LoginPage {
+  // 로그인 페이지를 화면에 렌더링한다.
+  static renderLoginPage(/* 차후 42 oauth 페이지로의 url을 매개변수로 받아야 함 */) {
+    document.addEventListener("DOMContentLoaded", () => {
+      const centralBox = renderCentralBox();
+
+      const linkTo42Oauth = document.createElement("a");
+
+      linkTo42Oauth.id = "linkTo42Oauth";
+      linkTo42Oauth.classList.add(..."btn btn-info".split(" "));
+      linkTo42Oauth.textContent = "42Oauth";
+
+      centralBox.appendChild(linkTo42Oauth);
+
+      // 차후 42 oauth로의 링크 역할을 하도록 변경해야 함.
+      linkTo42Oauth.onclick = () => {
+        console.log("Authentification success!!!");
+        LoginPage.destroyLoginPage();
+        TwoFAPage.renderTwoFAPage();
+      };
+    });
+  }
+
+  // 로그인 페이지를 화면에서 지운다.
+  static destroyLoginPage() {
+    removeBodyProperty();
+    clearBody();
+  }
+}
+
+export class TwoFAPage {
+  // 2fa 페이지를 렌더한다.
+  static renderTwoFAPage() {
+    const centralBox = renderCentralBox();
+
+    const inputOtpField = document.createElement("input");
+
+    inputOtpField.type = "password";
+    inputOtpField.classList.add("form-control");
+    inputOtpField.placeholder = "input OTP please";
+
+    centralBox.appendChild(inputOtpField);
+
+    const submitButton = document.createElement("input");
+
+    submitButton.type = "submit";
+    submitButton.classList.add(..."btn btn-info mb-3".split(" "));
+    submitButton.value = "submit";
+
+    centralBox.appendChild(submitButton);
+
+    // 차후 실제로 백엔드로부터 2fa 인증을 받도록 변경해야 함
+    submitButton.onclick = () => {
+      TwoFAPage.destroyTwoFAPage();
+      MainPage.renderMainPage();
+    };
+  }
+
+  static destroyTwoFAPage() {
+    removeBodyProperty();
+    clearBody();
+  }
+}
+
+const renderNavBar = () => {
+  document.body.innerHTML = `
+  <a id="title" href="#" class="nav justify-content-center" style="color:green; text-decoration: none;"><h1>Mighty Pong Contest</h1></a>
+  <hr />
+  <ul class="nav justify-content-center">
+    <li class="nav-item">
+      <a id="myPageLink" class="nav-link" href="#">My Page</a>
+    </li>
+    <li class="nav-item">
+      <a id="dashBoardLink" class="nav-link" href="#">Dash Board</a>
+    </li>
+    <li class="nav-item">
+      <a id="gameLobbyLink" class="nav-link" href="#">Game Lobby</a>
+    </li>
+  </ul>
+  <hr />`;
+};
+
+const bindEventToNavBar = () => {
+  const title = document.getElementById("title");
+  const myPageLink = document.getElementById("myPageLink");
+  const dashBoardLink = document.getElementById("dashBoardLink");
+  const gameLobbyLink = document.getElementById("gameLobbyLink");
+
+  title.addEventListener("click", () => {
+    console.log("go to main page!!!");
+    clearBody();
+    MainPage.renderMainPage();
+  })
+
+  myPageLink.addEventListener("click", () => {
+    clearBody();
+    MyPage.renderMyPage();
+  });
+
+  dashBoardLink.addEventListener("click", () => {
+    clearBody();
+    DashBoardPage.renderDashBoardPage();
+  });
+
+  gameLobbyLink.addEventListener("click", () => {
+    clearBody();
+    GameLobbyPage.renderGameLobbyPage();
+  });
+}
+
+class MainPage {
+  static renderMainPage () {
+    renderNavBar();
+    bindEventToNavBar();
+  }
+}
+
+class MyPage {
+  static renderMyPage () {
+    renderNavBar();
+    
+    document.body.innerHTML += `
+      <div id="mainPageSection" style="display: grid; grid-template-columns: 1fr 1fr;">
+        <div id="leftSection">
+          <div id="profileSection" style="display: grid; grid-template-columns: 1fr 2fr; border: 1px solid gray; margin: 4px;">
+            <div style="margin: 4px;">
+              <a id="editProfileLink" href="#" style="margin-left: 60px; text-decoration: none;">edit profile</a>
+              <img src="sampleAvartar.avif" alt="avartar" width="200" />
+            </div>
+            <div style="border: 1px solid gray; margin: 4px;">
+              <p id="nickNameSection" style="border: 1px solid gray; margin: 16px;">this is nick name section.</p>
+              <p id="memoSection" style="border: 1px solid gray; margin: 16px;">this is memo section.</p>
+            </div>
+          </div>
+          <div id="gameHistorySection" style="border: 1px solid gray; margin: 4px;">gameHistorySection</div>
+        </div>
+        <div id="rightSection">
+          <form action="" method="" id="userSearchBar" style="display: grid; grid-template-columns: 4fr 1fr; border: 1px solid gray; margin: 4px;">
+            <input type="string" class="form-control" placeholder="user search bar" style="margin: 16px;" />
+            <input type="submit" class="btn btn-info mb-3" value="search" style="margin: 16px;" />
+          </form>
+        </div>
+      </div>`;
+
+      bindEventToNavBar();
+      
+      const editProfileLink = document.getElementById("editProfileLink");
+      editProfileLink.addEventListener("click", () => {
+        clearBody();
+        EditProfilePage.renderEditProfilePage();
+      });
+  }
+
+  static destroyMyPage () {
+    const myPageSection = document.getElementById("mainPageSection");
+    myPageSection.innerHTML = "";
+    myPageSection.parentNode.removeChild(myPageSection);
+  }
+}
+
+class EditProfilePage {
+  static renderEditProfilePage () {
+    renderNavBar();
+
+    document.body.innerHTML += `
+      <div id="editProfileSection" style="border: 1px solid gray; margin: 4px;">
+        <div id="currentProfileInfo" style="display: grid; grid-template-columns: 1fr 1fr; border: 1px solid gray; margin: 4px;">
+          <div>
+            <p>current image : </p>
+            <img src="sampleAvartar.avif" width="200px" />
+          </div>
+          <div>
+            <p>current nickname : </p>
+            <p>current memo : </p>
+          </div>
+        </div>
+        <form action="" method="" id="editAvartarSection" style="display: grid; grid-template-columns: 4fr 1fr; border: 1px solid gray; margin: 4px;">
+          <input type="file" class="form-control" placeholder="new avartar image" style="margin: 16px;" />
+          <input type="submit" class="btn btn-info mb-3" value="edit" style="margin: 16px;" />
+        </form>
+        <form action="" method="" id="editNickNameSection" style="display: grid; grid-template-columns: 4fr 1fr; border: 1px solid gray; margin: 4px;">
+          <input type="string" class="form-control" placeholder="new nickname" style="margin: 16px;" />
+          <input type="submit" class="btn btn-info mb-3" value="edit" style="margin: 16px;" />
+        </form>
+        <form action="" method="" id="editMemoSection" style="display: grid; grid-template-columns: 4fr 1fr; border: 1px solid gray; margin: 4px;">
+          <input type="string" class="form-control" placeholder="new memo" style="margin: 16px;" />
+          <input type="submit" class="btn btn-info mb-3" value="edit" style="margin: 16px;" />
+        </form>
+      </div>
+    `;
+
+    bindEventToNavBar();
+  }
+
+  static destroyEditProfilePage () {
+    const editProfileSection = document.getElementById("editProfileSection");
+    editProfileSection.innerHTML = "";
+    editProfileSection.parentNode.removeChild(editProfileSection);
+  }
+}
+
+class DashBoardPage {
+  static renderDashBoardPage () {
+    renderNavBar();
+    
+    document.body.innerHTML += `
+      <div id="dashBoardSection" style="border: 1px solid gray; margin: 4px;">dash board section</div>
+    `;
+
+    bindEventToNavBar();
+  }
+
+  static destroyDashBoardPage () {
+    const dashBoardSection = document.getElementById("dashBoardSection");
+    dashBoardSection.innerHTML = "";
+    dashBoardSection.parentNode.removeChild(dashBoardSection);
+  }
+}
+
+class GameLobbyPage {
+  static renderGameLobbyPage () {
+    renderNavBar();
+
+    document.body.innerHTML += `
+      <div id="gameLobbySection" style="border: 1px solid gray; margin: 4px;">
+        <div>
+          <a id="gameQueueCreationLink" class="btn btn-info mb-3" href="#" style="margin: 4px;">make new game queue</a>
+        </div>
+        <div style="border: 1px solid gray; margin: 4px;">
+          <a id="gameQueueLink" href="#" style="margin-left: 60px; text-decoration: none;">game queue link</a>
+        </div>
+      </div>
+    `;
+
+    bindEventToNavBar();
+
+    const gameQueueCreationLink = document.getElementById("gameQueueCreationLink");
+    gameQueueCreationLink.addEventListener("click", () => {
+      clearBody();
+      GameQueueCreationPage.renderGameQueueCreationPage();
+    });
+
+    const gameQueueLink = document.getElementById("gameQueueLink");
+    gameQueueLink.addEventListener("click", () => {
+      clearBody();
+      GameQueuePage.renderGameQueuePage();
+    })
+
+  }
+
+  static destroyGameLobbyPage () {
+    const gameLobbySection = document.getElementById("gameLobbyScetion");
+    gameLobbySection.innerHTML = "";
+    gameLobbySection.parentNode.removeChild(gameLobbySection);
+  }
+}
+
+class GameQueueCreationPage {
+  static renderGameQueueCreationPage () {
+    renderNavBar();
+
+    document.body.innerHTML += `
+      <div id="gameQueueCreationSection" style="border: 1px solid gray; margin: 4px;">
+        <p style="margin: 4px;">Please select the number of members of this Pong Tournament.</p>
+        <form action="" method="" id="selectNumOfMembers">
+          <label style="margin: 4px;">  
+            <input type="radio" name="numOfMembers" value="2" /> 2
+          </label><br />
+          <label style="margin: 4px;">  
+            <input type="radio" name="numOfMembers" value="4" /> 4
+          </label><br />
+          <label style="margin: 4px;">  
+            <input type="radio" name="numOfMembers" value="8" /> 8
+          </label><br />
+          <label style="margin: 4px;">  
+            <input type="radio" name="numOfMembers" value="16" /> 16
+          </label><br />
+          <label style="margin: 4px;">
+            <input id="createQueueButton" type="submit" class="btn btn-info mb-3" value="create queue" />
+          </label>
+        </form>
+      </div>
+    `;
+
+    bindEventToNavBar();
+    
+    const createQueueButton = document.getElementById("createQueueButton");
+    const radioButtons = document.getElementsByName("numOfMembers");
+
+    createQueueButton.disabled = true;
+
+    radioButtons.forEach((rb) => {
+      rb.addEventListener("click", () => {
+        createQueueButton.disabled = false;
+      })
+    });
+
+    createQueueButton.addEventListener("click", () => {
+      clearBody();
+      GameQueuePage.renderGameQueuePage();
+    });
+  }
+
+  static destroyGameQueueCreationPage () {
+    const gameQueueCreationSection = document.getElementById("gameQueueCreationSection");
+    gameQueueCreationSection.innerHTML = "";
+    gameQueueCreationSection.parentNode.removeChild(gameQueueCreationSection);
+  }
+}
+
+class GameQueuePage {
+  static renderGameQueuePage () {
+    renderNavBar();
+
+    document.body.innerHTML += `
+      <div id="gameQueueSection" style="border: 1px solid gray; margin: 4px;">
+        <p style="margin: 4px;">current members (1 / 4)</p>
+        <div style="border: 1px solid gray; margin: 4px;">
+          <p>member 1</p>
+        </div>
+        <a id="quitQueueLink" href="#" class="btn btn-info mb-3"; style="margin: 4px;" text-decoration: none;">Quit queue link</a>
+      </div>
+    `;
+
+    bindEventToNavBar();
+
+    const quitQueueLink = document.getElementById("quitQueueLink");
+    quitQueueLink.addEventListener("click", () => {
+      clearBody();
+      GameLobbyPage.renderGameLobbyPage();
+    });
+  }
+
+  static destroyGameQueuePage () {
+    const gameQueueSection = document.getElementById("gameQueueSection");
+    gameQueueSection.innerHTML = "gameQueueSection";
+    gameQueueSection.parentNode.removeChild(gameQueueSection);
+  }
+}
+
+// 아래의 두 페이지는 서버와의 통신이 가능해야 진입할 수 있기 때문에 일단 구현을 보류합니다.
+class TournamentPage {}
+class PongPage {}
