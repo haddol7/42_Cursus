@@ -207,15 +207,9 @@ class EditProfilePage {
             <p>current memo : </p>
           </div>
         </div>
-        <form action="" method="" id="editAvartarSection" style="display: grid; grid-template-columns: 4fr 1fr; border: 1px solid gray; margin: 4px;">
+        <form action="" method="" id="editAvartarSection" style="border: 1px solid gray; margin: 4px;">
           <input type="file" class="form-control" placeholder="new avartar image" style="margin: 16px;" />
-          <input type="submit" class="btn btn-info mb-3" value="edit" style="margin: 16px;" />
-        </form>
-        <form action="" method="" id="editNickNameSection" style="display: grid; grid-template-columns: 4fr 1fr; border: 1px solid gray; margin: 4px;">
           <input type="string" class="form-control" placeholder="new nickname" style="margin: 16px;" />
-          <input type="submit" class="btn btn-info mb-3" value="edit" style="margin: 16px;" />
-        </form>
-        <form action="" method="" id="editMemoSection" style="display: grid; grid-template-columns: 4fr 1fr; border: 1px solid gray; margin: 4px;">
           <input type="string" class="form-control" placeholder="new memo" style="margin: 16px;" />
           <input type="submit" class="btn btn-info mb-3" value="edit" style="margin: 16px;" />
         </form>
@@ -366,7 +360,7 @@ class GameQueuePage {
 
   static destroyGameQueuePage () {
     const gameQueueSection = document.getElementById("gameQueueSection");
-    gameQueueSection.innerHTML = "gameQueueSection";
+    gameQueueSection.innerHTML = "";
     gameQueueSection.parentNode.removeChild(gameQueueSection);
   }
 }
