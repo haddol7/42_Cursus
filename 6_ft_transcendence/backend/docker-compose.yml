@@ -28,6 +28,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    tty: true
+    init: true
+    restart: always
     volumes:
       - ./jwt:/server
   websocket:
@@ -39,9 +42,9 @@ services:
       - "7600:7600"
     networks:
       - postgresdb_network
-    # depends_on:
-    #   db:
-    #     condition: service_healthy
+    depends_on:
+      db:
+        condition: service_healthy
     tty: true
     init: true
     restart: always
@@ -86,13 +89,6 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-  test-container:
-    image: ubuntu:24.04
-    container_name: test-container
-    restart: always
-    networks:
-      - postgresdb_network
-    tty: true
   prometheus:
     build: ./prometheus
     volumes:
