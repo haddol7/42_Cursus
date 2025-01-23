@@ -34,24 +34,22 @@ const removeBodyProperty = () => {
 export class LoginPage {
   // 로그인 페이지를 화면에 렌더링한다.
   static renderLoginPage(/* 차후 42 oauth 페이지로의 url을 매개변수로 받아야 함 */) {
-    document.addEventListener("DOMContentLoaded", () => {
-      const centralBox = renderCentralBox();
+    const centralBox = renderCentralBox();
 
-      const linkTo42Oauth = document.createElement("a");
+    const linkTo42Oauth = document.createElement("a");
 
-      linkTo42Oauth.id = "linkTo42Oauth";
-      linkTo42Oauth.classList.add(..."btn btn-info".split(" "));
-      linkTo42Oauth.textContent = "42Oauth";
+    linkTo42Oauth.id = "linkTo42Oauth";
+    linkTo42Oauth.classList.add(..."btn btn-info".split(" "));
+    linkTo42Oauth.textContent = "42Oauth";
 
-      centralBox.appendChild(linkTo42Oauth);
+    centralBox.appendChild(linkTo42Oauth);
 
-      // 차후 42 oauth로의 링크 역할을 하도록 변경해야 함.
-      linkTo42Oauth.onclick = () => {
-        console.log("Authentification success!!!");
-        LoginPage.destroyLoginPage();
-        TwoFAPage.renderTwoFAPage();
-      };
-    });
+    // 차후 42 oauth로의 링크 역할을 하도록 변경해야 함.
+    linkTo42Oauth.onclick = () => {
+      console.log("Authentification success!!!");
+      LoginPage.destroyLoginPage();
+      TwoFAPage.renderTwoFAPage();
+    };
   }
 
   // 로그인 페이지를 화면에서 지운다.
@@ -98,6 +96,7 @@ export class TwoFAPage {
 const renderNavBar = () => {
   document.body.innerHTML = `
   <a id="title" href="#" class="nav justify-content-center" style="color:green; text-decoration: none;"><h1>Mighty Pong Contest</h1></a>
+  <a id="logoutLink" href="#" class="nav justify-content-center" style="color:skyblue; text-decoration: none;">logout</a>
   <hr />
   <ul class="nav justify-content-center">
     <li class="nav-item">
@@ -115,6 +114,7 @@ const renderNavBar = () => {
 
 const bindEventToNavBar = () => {
   const title = document.getElementById("title");
+  const logoutLink = document.getElementById("logoutLink");
   const myPageLink = document.getElementById("myPageLink");
   const dashBoardLink = document.getElementById("dashBoardLink");
   const gameLobbyLink = document.getElementById("gameLobbyLink");
@@ -123,7 +123,13 @@ const bindEventToNavBar = () => {
     console.log("go to main page!!!");
     clearBody();
     MainPage.renderMainPage();
-  })
+  });
+
+  logoutLink.addEventListener("click", () => {
+    clearBody();
+    console.log("logout!!");
+    LoginPage.renderLoginPage();
+  });
 
   myPageLink.addEventListener("click", () => {
     clearBody();

@@ -1,3 +1,5 @@
 import { LoginPage } from "./modules/page.mjs";
 
-LoginPage.renderLoginPage();
+document.addEventListener("DOMContentLoaded", () => {
+    LoginPage.renderLoginPage();
+});
