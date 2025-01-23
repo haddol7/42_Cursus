@@ -47,6 +47,9 @@ services:
     restart: always
     volumes:
       - ./websocket:/server
+    environment:
+      - WEBSOCKET_WORKER=${WEBSOCKET_WORKER}
+      - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
   auth:
     image: auth
     container_name: auth

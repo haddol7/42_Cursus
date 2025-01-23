@@ -3,29 +3,80 @@
     <head>
         <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
         <script>
-            const socket = io("ws://127.0.0.1:7600")
-            console.log(socket);
-
-            socket.on("broadcast_msg", (data) => {
-                console.log("broadcast_msg, data=", data);
-            });
+            let socket = null;
 
             function submitform(e) {
                 e.preventDefault();
                 const inputForm = document.querySelector("input#msg");
-                console.dir(inputForm)
-                console.log(inputForm.value)
-                socket.emit("send_msg", inputForm.value);
+                socket.emit("make_room", {"room_name": inputForm.value, "room_limit": 2});
             }
 
+            function listRooms(rooms) {
+                console.log("listRooms!", rooms);
+                const ul = document.querySelector(".room_list");
+                ul.innerHTML = "";
+                rooms.forEach(ele => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `${ele["room_id"]} / ${ele["room_name"]}, limit = ${ele["room_limit"]}`
+                    li.addEventListener("click", (e) => {
+                        console.log("room enter event");
+                        socket.emit("enter_room", {"room_id": ele["room_id"]});
+                    });
+                    ul.appendChild(li);
+                });
+            }
 
+            function onPressDebug() {
+                socket.emit("debug", (data) => {
+                    console.log(data);
+                });
+            }
+
+            function onLeaveButton() {
+                socket.emit("leave_room")
+            }
+            
+            function connectSocket(e) {
+                e.preventDefault();
+                console.dir(e);
+                user_id = e.target.elements["user_id"].value
+                user_name = e.target.elements["user_name"].value
+
+                console.log(user_id, user_name)
+                socket = io("ws://localhost:7600", {auth: {
+                    user_id: user_id,
+                    user_name: user_name
+                }});
+
+                socket.on("broadcast_msg", (data) => {
+                    console.log("broadcast_msg, data=", data);
+                });
+
+                socket.on("room_list", (data) => listRooms(data.room));
+            }
+
+            function startGame() {
+                socket.emit("start_game", (data) => { console.log("Game starts", data); })
+            }
         </script>
     </head>
     <body>
         <h1>Hello</h1>
+        <p>Connect to Socket:</p>
+        <form onsubmit="return connectSocket(event)">
+            user_id: <input type="number" name="user_id" />
+            user_name: <input type="text" name="user_name" />
+            <input type="submit" value="Submit">
+        </form>
         <form onsubmit="return submitform(event)">
             Text: <input type="text" name="msg" id="msg">
             <input type="submit">Submit</input>
         </form>
+
+        <button onclick="return onPressDebug()">Debug Button</button>
+        <button onclick="return onLeaveButton()">Leave Button</button>
+        <button onclick="return startGame()">Game start Button</button>
+
+        <ul class="room_list"></ul>
     </body>
 </html>
