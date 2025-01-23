@@ -3,6 +3,7 @@ const clearBody = () => {
   document.body.innerHTML = "";
 };
 
+
 // 로그인 페이지와 2fa 인증 페이지의 렌더링에 사용되는 박스를 렌더
 const renderCentralBox = () => {
   document.body.style.height = "100vh";
@@ -314,8 +315,6 @@ class GameQueueCreationPage {
         </form>
       </div>
     `;
-
-    bindEventToNavBar();
     
     const createQueueButton = document.getElementById("createQueueButton");
     const radioButtons = document.getElementsByName("numOfMembers");
@@ -354,8 +353,6 @@ class GameQueuePage {
         <a id="quitQueueLink" href="#" class="btn btn-info mb-3"; style="margin: 4px;" text-decoration: none;">Quit queue link</a>
       </div>
     `;
-
-    bindEventToNavBar();
 
     const quitQueueLink = document.getElementById("quitQueueLink");
     quitQueueLink.addEventListener("click", () => {
