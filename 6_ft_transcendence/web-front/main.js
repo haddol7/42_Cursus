@@ -1,5 +1,6 @@
-import { LoginPage } from "./modules/page.mjs";
+import { LoginPage, PageManager } from "./modules/page.mjs";
 
 document.addEventListener("DOMContentLoaded", () => {
-    LoginPage.renderLoginPage();
+    window.addEventListener("popstate", PageManager.popStateEvent);
+    LoginPage.renderLoginPageWithPushHistory();
 });

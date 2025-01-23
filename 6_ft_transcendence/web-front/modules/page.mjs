@@ -3,6 +3,61 @@ const clearBody = () => {
   document.body.innerHTML = "";
 };
 
+export class PageManager {
+  static pageStatus = {
+    login: { page: "loginPage" },
+    twoFA: { page: "twoFAPage" },
+    main: { page: "mainPage" },
+    my: { page: "myPage" },
+    editProfile: { page: "editProfilePage" },
+    dashBoard: { page: "dashBoardPage" },
+    gameLobby: { page: "gameLobbyPage" },
+    gameQueueCreation: { page: "gameQueueCreationPage" },
+    gameQueue: { page: "gameQueuePage" },
+    tournament: { page: "tournamentPage" },
+    pong: { page: "pongPage" },
+  };
+
+  static popStateEvent(event) {
+    console.log(history.length);
+
+    clearBody();
+    removeBodyProperty();
+    switch (event.state.page) {
+      case PageManager.pageStatus.login.page:
+        LoginPage.renderLoginPage();
+        break;
+      case PageManager.pageStatus.twoFA.page:
+        TwoFAPage.renderTwoFAPage();
+        break;
+      case PageManager.pageStatus.main.page:
+        MainPage.renderMainPage();
+        break;
+      case PageManager.pageStatus.my.page:
+        MyPage.renderMyPage();
+        break;
+      case PageManager.pageStatus.editProfile.page:
+        EditProfilePage.renderEditProfilePage();
+        break;
+      case PageManager.pageStatus.dashBoard.page:
+        DashBoardPage.renderDashBoardPage();
+        break;
+      case PageManager.pageStatus.gameLobby.page:
+        GameLobbyPage.renderGameLobbyPage();
+        break;
+      case PageManager.pageStatus.gameQueueCreation.page:
+        GameQueueCreationPage.renderGameQueueCreationPage();
+        break;
+      case PageManager.pageStatus.gameQueue.page:
+        GameQueuePage.renderGameQueuePage();
+        break;
+      case PageManager.pageStatus.tournament.page:
+        break;
+      case PageManager.pageStatus.pong.page:
+        break;
+    }
+  }
+}
 
 // 로그인 페이지와 2fa 인증 페이지의 렌더링에 사용되는 박스를 렌더
 const renderCentralBox = () => {
@@ -34,7 +89,7 @@ const removeBodyProperty = () => {
 
 export class LoginPage {
   // 로그인 페이지를 화면에 렌더링한다.
-  static renderLoginPage(/* 차후 42 oauth 페이지로의 url을 매개변수로 받아야 함 */) {
+  static renderLoginPage () {
     const centralBox = renderCentralBox();
 
     const linkTo42Oauth = document.createElement("a");
@@ -49,8 +104,14 @@ export class LoginPage {
     linkTo42Oauth.onclick = () => {
       console.log("Authentification success!!!");
       LoginPage.destroyLoginPage();
-      TwoFAPage.renderTwoFAPage();
+      TwoFAPage.renderTwoFAPageWithPushHistory();
     };
+  }
+  
+  // 히스토리를 갱신하며 로그인 페이지를 화면에 렌더링한다.
+  static renderLoginPageWithPushHistory(/* 차후 42 oauth 페이지로의 url을 매개변수로 받아야 함 */) {
+    LoginPage.renderLoginPage();
+    history.pushState(PageManager.pageStatus.login, "" , "#login");
   }
 
   // 로그인 페이지를 화면에서 지운다.
@@ -61,8 +122,7 @@ export class LoginPage {
 }
 
 export class TwoFAPage {
-  // 2fa 페이지를 렌더한다.
-  static renderTwoFAPage() {
+  static renderTwoFAPage () {
     const centralBox = renderCentralBox();
 
     const inputOtpField = document.createElement("input");
@@ -84,8 +144,13 @@ export class TwoFAPage {
     // 차후 실제로 백엔드로부터 2fa 인증을 받도록 변경해야 함
     submitButton.onclick = () => {
       TwoFAPage.destroyTwoFAPage();
-      MainPage.renderMainPage();
+      MainPage.renderMainPageWithPushHistory();
     };
+  }
+
+  static renderTwoFAPageWithPushHistory() {
+    TwoFAPage.renderTwoFAPage();
+    history.pushState(PageManager.pageStatus.twoFA, "", "#twoFa");
   }
 
   static destroyTwoFAPage() {
@@ -96,18 +161,18 @@ export class TwoFAPage {
 
 const renderNavBar = () => {
   document.body.innerHTML = `
-  <a id="title" href="#" class="nav justify-content-center" style="color:green; text-decoration: none;"><h1>Mighty Pong Contest</h1></a>
-  <a id="logoutLink" href="#" class="nav justify-content-center" style="color:skyblue; text-decoration: none;">logout</a>
+  <a id="title" class="nav justify-content-center" style="color:green; text-decoration: none;"><h1>Mighty Pong Contest</h1></a>
+  <a id="logoutLink" class="nav justify-content-center" style="color:skyblue; text-decoration: none;">logout</a>
   <hr />
   <ul class="nav justify-content-center">
     <li class="nav-item">
-      <a id="myPageLink" class="nav-link" href="#">My Page</a>
+      <a id="myPageLink" class="nav-link">My Page</a>
     </li>
     <li class="nav-item">
-      <a id="dashBoardLink" class="nav-link" href="#">Dash Board</a>
+      <a id="dashBoardLink" class="nav-link">Dash Board</a>
     </li>
     <li class="nav-item">
-      <a id="gameLobbyLink" class="nav-link" href="#">Game Lobby</a>
+      <a id="gameLobbyLink" class="nav-link">Game Lobby</a>
     </li>
   </ul>
   <hr />`;
@@ -120,56 +185,66 @@ const bindEventToNavBar = () => {
   const dashBoardLink = document.getElementById("dashBoardLink");
   const gameLobbyLink = document.getElementById("gameLobbyLink");
 
-  title.addEventListener("click", () => {
+  title.addEventListener("click", (event) => {
+    event.preventDefault();
     console.log("go to main page!!!");
     clearBody();
-    MainPage.renderMainPage();
+    MainPage.renderMainPageWithPushHistory();
   });
 
-  logoutLink.addEventListener("click", () => {
+  logoutLink.addEventListener("click", (event) => {
+    event.preventDefault();
     clearBody();
     console.log("logout!!");
-    LoginPage.renderLoginPage();
+    LoginPage.renderLoginPageWithPushHistory();
   });
 
-  myPageLink.addEventListener("click", () => {
+  myPageLink.addEventListener("click", (event) => {
+    event.preventDefault();
     clearBody();
-    MyPage.renderMyPage();
+    MyPage.renderMyPageWithPushHistory();
   });
 
-  dashBoardLink.addEventListener("click", () => {
+  dashBoardLink.addEventListener("click", (event) => {
+    event.preventDefault();
     clearBody();
-    DashBoardPage.renderDashBoardPage();
+    DashBoardPage.renderDashBoardPageWithPushHistory();
   });
 
-  gameLobbyLink.addEventListener("click", () => {
+  gameLobbyLink.addEventListener("click", (event) => {
+    event.preventDefault();
     clearBody();
-    GameLobbyPage.renderGameLobbyPage();
+    GameLobbyPage.renderGameLobbyPageWithPushHistory();
   });
-}
+};
 
 class MainPage {
-  static renderMainPage () {
+  static renderMainPage() {
     renderNavBar();
     bindEventToNavBar();
+  }
+
+  static renderMainPageWithPushHistory() {
+    MainPage.renderMainPage();
+    history.pushState(PageManager.pageStatus.main, "", "#main");
   }
 }
 
 class MyPage {
   static renderMyPage () {
     renderNavBar();
-    
+
     document.body.innerHTML += `
       <div id="mainPageSection" style="display: grid; grid-template-columns: 1fr 1fr;">
         <div id="leftSection">
           <div id="profileSection" style="display: grid; grid-template-columns: 1fr 2fr; border: 1px solid gray; margin: 4px;">
             <div style="margin: 4px;">
-              <a id="editProfileLink" href="#" style="margin-left: 60px; text-decoration: none;">edit profile</a>
+              <a id="editProfileLink" style="margin-left: 60px; text-decoration: none;">edit profile</a>
               <img src="sampleAvartar.avif" alt="avartar" width="200" />
             </div>
             <div style="border: 1px solid gray; margin: 4px;">
-              <p id="nickNameSection" style="border: 1px solid gray; margin: 16px;">this is nick name section.</p>
-              <p id="memoSection" style="border: 1px solid gray; margin: 16px;">this is memo section.</p>
+              <p id="nickNameSection" style="border: 1px solid gray; margin: 16px;">PageManager is nick name section.</p>
+              <p id="memoSection" style="border: 1px solid gray; margin: 16px;">PageManager is memo section.</p>
             </div>
           </div>
           <div id="gameHistorySection" style="border: 1px solid gray; margin: 4px;">gameHistorySection</div>
@@ -182,16 +257,22 @@ class MyPage {
         </div>
       </div>`;
 
-      bindEventToNavBar();
-      
-      const editProfileLink = document.getElementById("editProfileLink");
-      editProfileLink.addEventListener("click", () => {
-        clearBody();
-        EditProfilePage.renderEditProfilePage();
-      });
+    bindEventToNavBar();
+
+    const editProfileLink = document.getElementById("editProfileLink");
+    editProfileLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      clearBody();
+      EditProfilePage.renderEditProfilePageWithPushHistory();
+    });
   }
 
-  static destroyMyPage () {
+  static renderMyPageWithPushHistory() {
+    MyPage.renderMyPage();
+    history.pushState(PageManager.pageStatus.my, "", "#my");
+  }
+
+  static destroyMyPage() {
     const myPageSection = document.getElementById("mainPageSection");
     myPageSection.innerHTML = "";
     myPageSection.parentNode.removeChild(myPageSection);
@@ -226,7 +307,12 @@ class EditProfilePage {
     bindEventToNavBar();
   }
 
-  static destroyEditProfilePage () {
+  static renderEditProfilePageWithPushHistory() {
+    EditProfilePage.renderEditProfilePage();
+    history.pushState(PageManager.pageStatus.editProfile, "", "#editProfile");
+  }
+
+  static destroyEditProfilePage() {
     const editProfileSection = document.getElementById("editProfileSection");
     editProfileSection.innerHTML = "";
     editProfileSection.parentNode.removeChild(editProfileSection);
@@ -234,9 +320,9 @@ class EditProfilePage {
 }
 
 class DashBoardPage {
-  static renderDashBoardPage () {
+  static renderDashBoardPage() {
     renderNavBar();
-    
+
     document.body.innerHTML += `
       <div id="dashBoardSection" style="border: 1px solid gray; margin: 4px;">dash board section</div>
     `;
@@ -244,7 +330,12 @@ class DashBoardPage {
     bindEventToNavBar();
   }
 
-  static destroyDashBoardPage () {
+  static renderDashBoardPageWithPushHistory() {
+    DashBoardPage.renderDashBoardPage();
+    history.pushState(PageManager.pageStatus.dashBoard, "", "#dashBoard");
+  }
+
+  static destroyDashBoardPage() {
     const dashBoardSection = document.getElementById("dashBoardSection");
     dashBoardSection.innerHTML = "";
     dashBoardSection.parentNode.removeChild(dashBoardSection);
@@ -252,37 +343,45 @@ class DashBoardPage {
 }
 
 class GameLobbyPage {
-  static renderGameLobbyPage () {
+  static renderGameLobbyPage() {
     renderNavBar();
 
     document.body.innerHTML += `
       <div id="gameLobbySection" style="border: 1px solid gray; margin: 4px;">
         <div>
-          <a id="gameQueueCreationLink" class="btn btn-info mb-3" href="#" style="margin: 4px;">make new game queue</a>
+          <a id="gameQueueCreationLink" class="btn btn-info mb-3" style="margin: 4px;">make new game queue</a>
         </div>
         <div style="border: 1px solid gray; margin: 4px;">
-          <a id="gameQueueLink" href="#" style="margin-left: 60px; text-decoration: none;">game queue link</a>
+          <a id="gameQueueLink" style="margin-left: 60px; text-decoration: none;">game queue link</a>
         </div>
       </div>
     `;
 
     bindEventToNavBar();
 
-    const gameQueueCreationLink = document.getElementById("gameQueueCreationLink");
-    gameQueueCreationLink.addEventListener("click", () => {
+    const gameQueueCreationLink = document.getElementById(
+      "gameQueueCreationLink"
+    );
+    gameQueueCreationLink.addEventListener("click", (event) => {
+      event.preventDefault();
       clearBody();
-      GameQueueCreationPage.renderGameQueueCreationPage();
+      GameQueueCreationPage.renderGameQueueCreationPageWithPushHistory();
     });
 
     const gameQueueLink = document.getElementById("gameQueueLink");
-    gameQueueLink.addEventListener("click", () => {
+    gameQueueLink.addEventListener("click", (event) => {
+      event.preventDefault();
       clearBody();
-      GameQueuePage.renderGameQueuePage();
-    })
-
+      GameQueuePage.renderGameQueuePageWithPushHistory();
+    });
   }
 
-  static destroyGameLobbyPage () {
+  static renderGameLobbyPageWithPushHistory() {
+    GameLobbyPage.renderGameLobbyPage();
+    history.pushState(PageManager.pageStatus.gameLobby, "", "#gameLobby");
+  }
+
+  static destroyGameLobbyPage() {
     const gameLobbySection = document.getElementById("gameLobbyScetion");
     gameLobbySection.innerHTML = "";
     gameLobbySection.parentNode.removeChild(gameLobbySection);
@@ -290,12 +389,12 @@ class GameLobbyPage {
 }
 
 class GameQueueCreationPage {
-  static renderGameQueueCreationPage () {
+  static renderGameQueueCreationPage() {
     renderNavBar();
 
     document.body.innerHTML += `
       <div id="gameQueueCreationSection" style="border: 1px solid gray; margin: 4px;">
-        <p style="margin: 4px;">Please select the number of members of this Pong Tournament.</p>
+        <p style="margin: 4px;">Please select the number of members of PageManager Pong Tournament.</p>
         <form action="" method="" id="selectNumOfMembers">
           <label style="margin: 4px;">  
             <input type="radio" name="numOfMembers" value="2" /> 2
@@ -315,7 +414,7 @@ class GameQueueCreationPage {
         </form>
       </div>
     `;
-    
+
     const createQueueButton = document.getElementById("createQueueButton");
     const radioButtons = document.getElementsByName("numOfMembers");
 
@@ -324,24 +423,32 @@ class GameQueueCreationPage {
     radioButtons.forEach((rb) => {
       rb.addEventListener("click", () => {
         createQueueButton.disabled = false;
-      })
+      });
     });
 
-    createQueueButton.addEventListener("click", () => {
+    createQueueButton.addEventListener("click", (event) => {
+      event.preventDefault();
       clearBody();
-      GameQueuePage.renderGameQueuePage();
+      GameQueuePage.renderGameQueuePageWithPushHistory();
     });
   }
 
-  static destroyGameQueueCreationPage () {
-    const gameQueueCreationSection = document.getElementById("gameQueueCreationSection");
+  static renderGameQueueCreationPageWithPushHistory() {
+    GameQueueCreationPage.renderGameQueueCreationPage();
+    history.pushState(PageManager.pageStatus.gameQueueCreation, "", "#gameQueueCreation");
+  }
+
+  static destroyGameQueueCreationPage() {
+    const gameQueueCreationSection = document.getElementById(
+      "gameQueueCreationSection"
+    );
     gameQueueCreationSection.innerHTML = "";
     gameQueueCreationSection.parentNode.removeChild(gameQueueCreationSection);
   }
 }
 
 class GameQueuePage {
-  static renderGameQueuePage () {
+  static renderGameQueuePage() {
     renderNavBar();
 
     document.body.innerHTML += `
@@ -350,18 +457,25 @@ class GameQueuePage {
         <div style="border: 1px solid gray; margin: 4px;">
           <p>member 1</p>
         </div>
-        <a id="quitQueueLink" href="#" class="btn btn-info mb-3"; style="margin: 4px;" text-decoration: none;">Quit queue link</a>
+        <a id="quitQueueLink" class="btn btn-info mb-3"; style="margin: 4px;" text-decoration: none;">Quit queue link</a>
       </div>
     `;
 
     const quitQueueLink = document.getElementById("quitQueueLink");
-    quitQueueLink.addEventListener("click", () => {
+    quitQueueLink.addEventListener("click", (event) => {
+      event.preventDefault();
       clearBody();
-      GameLobbyPage.renderGameLobbyPage();
+      GameLobbyPage.renderGameLobbyPageWithPushHistory();
     });
+
   }
 
-  static destroyGameQueuePage () {
+  static renderGameQueuePageWithPushHistory() {
+    GameQueuePage.renderGameQueuePage();
+    history.pushState(PageManager.pageStatus.gameQueue, "", "#gameQueue");
+  }
+
+  static destroyGameQueuePage() {
     const gameQueueSection = document.getElementById("gameQueueSection");
     gameQueueSection.innerHTML = "";
     gameQueueSection.parentNode.removeChild(gameQueueSection);
