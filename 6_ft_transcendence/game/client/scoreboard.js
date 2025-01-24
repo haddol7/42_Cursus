@@ -11,7 +11,7 @@ export function updateScore(scene, player1Score, player2Score) {
     scene.remove(player1Outline, player2Outline);
 
   const fontLoader = new FontLoader();
-  fontLoader.load("../asset/pixelFont.json", (font) => {
+  fontLoader.load("/asset/pixelFont.json", (font) => {
     const outlineMaterial1 = new THREE.LineBasicMaterial({ color: 0x00ff00 });
     const outlineMaterial2 = new THREE.LineBasicMaterial({ color: 0x0000ff });
 
