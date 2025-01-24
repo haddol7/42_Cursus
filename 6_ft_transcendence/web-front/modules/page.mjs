@@ -1,3 +1,5 @@
+import { clientId } from "./authentication.mjs";
+
 // body의 모든 자식 요소들을 제거
 const clearBody = () => {
   document.body.innerHTML = "";
@@ -87,15 +89,16 @@ export class LoginPage {
     // 차후 42 oauth로의 링크 역할을 하도록 변경해야 함.
     linkTo42Oauth.onclick = () => {
       console.log("Authentification success!!!");
-      LoginPage.destroyLoginPage();
-      TwoFAPage.renderTwoFAPage();
+      /* window.location.replace("https://api.intra.42.fr/oauth/authorize" +
+        `?client_id=${clientId}` +
+        "&redirect_uri=http%3A%2F%2Flocalhost%3A5500%2F42-ascension%2Fweb-front%2F&response_type=code"); */
     };
   }
   
   // 히스토리를 갱신하며 로그인 페이지를 화면에 렌더링한다.
   static renderLoginPageWithPushHistory(/* 차후 42 oauth 페이지로의 url을 매개변수로 받아야 함 */) {
     LoginPage.renderLoginPage();
-    history.pushState(PageManager.pageStatus.login, "" , "#login");
+    history.pushState(PageManager.pageStatus.login, "");
   }
 
   // 로그인 페이지를 화면에서 지운다.
@@ -205,7 +208,7 @@ class MainPage {
 
   static renderMainPageWithPushHistory() {
     MainPage.renderMainPage();
-    history.pushState(PageManager.pageStatus.main, "", "#main");
+    history.pushState(PageManager.pageStatus.main, "");
   }
 }
 
@@ -248,7 +251,7 @@ class MyPage {
 
   static renderMyPageWithPushHistory() {
     MyPage.renderMyPage();
-    history.pushState(PageManager.pageStatus.my, "", "#my");
+    history.pushState(PageManager.pageStatus.my, "");
   }
 
   static destroyMyPage() {
@@ -288,7 +291,7 @@ class EditProfilePage {
 
   static renderEditProfilePageWithPushHistory() {
     EditProfilePage.renderEditProfilePage();
-    history.pushState(PageManager.pageStatus.editProfile, "", "#editProfile");
+    history.pushState(PageManager.pageStatus.editProfile, "");
   }
 
   static destroyEditProfilePage() {
@@ -311,7 +314,7 @@ class DashBoardPage {
 
   static renderDashBoardPageWithPushHistory() {
     DashBoardPage.renderDashBoardPage();
-    history.pushState(PageManager.pageStatus.dashBoard, "", "#dashBoard");
+    history.pushState(PageManager.pageStatus.dashBoard, "");
   }
 
   static destroyDashBoardPage() {
@@ -357,7 +360,7 @@ class GameLobbyPage {
 
   static renderGameLobbyPageWithPushHistory() {
     GameLobbyPage.renderGameLobbyPage();
-    history.pushState(PageManager.pageStatus.gameLobby, "", "#gameLobby");
+    history.pushState(PageManager.pageStatus.gameLobby, "");
   }
 
   static destroyGameLobbyPage() {
