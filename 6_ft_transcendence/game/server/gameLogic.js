@@ -103,13 +103,14 @@ function resetGame(roomName, scorer, io) {
     paddles: room.paddles,
   });
 
-  // 1초 대기 후 공 재시작
+  // 3초 대기 후 공 재시작
+  // TODO : 카운트 다운 기능 추가
   setTimeout(() => {
     const initialSpeed = 0.05;
     room.ball.vx = initialSpeed * (Math.random() % 2); // 랜덤 X 방향
     room.ball.vy = scorer === "paddle1" ? initialSpeed : -initialSpeed; // 득점 반대 방향
     io.to(roomName).emit("updateBall", room.ball);
-  }, 2000);
+  }, 3000);
 }
 
 module.exports = { startBallMovement, handlePaddleMove };
