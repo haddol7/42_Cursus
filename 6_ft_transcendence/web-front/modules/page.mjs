@@ -12,15 +12,9 @@ export class PageManager {
     editProfile: { page: "editProfilePage" },
     dashBoard: { page: "dashBoardPage" },
     gameLobby: { page: "gameLobbyPage" },
-    gameQueueCreation: { page: "gameQueueCreationPage" },
-    gameQueue: { page: "gameQueuePage" },
-    tournament: { page: "tournamentPage" },
-    pong: { page: "pongPage" },
   };
 
   static popStateEvent(event) {
-    console.log(history.length);
-
     clearBody();
     removeBodyProperty();
     switch (event.state.page) {
@@ -44,16 +38,6 @@ export class PageManager {
         break;
       case PageManager.pageStatus.gameLobby.page:
         GameLobbyPage.renderGameLobbyPage();
-        break;
-      case PageManager.pageStatus.gameQueueCreation.page:
-        GameQueueCreationPage.renderGameQueueCreationPage();
-        break;
-      case PageManager.pageStatus.gameQueue.page:
-        GameQueuePage.renderGameQueuePage();
-        break;
-      case PageManager.pageStatus.tournament.page:
-        break;
-      case PageManager.pageStatus.pong.page:
         break;
     }
   }
@@ -104,7 +88,7 @@ export class LoginPage {
     linkTo42Oauth.onclick = () => {
       console.log("Authentification success!!!");
       LoginPage.destroyLoginPage();
-      TwoFAPage.renderTwoFAPageWithPushHistory();
+      TwoFAPage.renderTwoFAPage();
     };
   }
   
@@ -146,11 +130,6 @@ export class TwoFAPage {
       TwoFAPage.destroyTwoFAPage();
       MainPage.renderMainPageWithPushHistory();
     };
-  }
-
-  static renderTwoFAPageWithPushHistory() {
-    TwoFAPage.renderTwoFAPage();
-    history.pushState(PageManager.pageStatus.twoFA, "", "#twoFa");
   }
 
   static destroyTwoFAPage() {
@@ -365,14 +344,14 @@ class GameLobbyPage {
     gameQueueCreationLink.addEventListener("click", (event) => {
       event.preventDefault();
       clearBody();
-      GameQueueCreationPage.renderGameQueueCreationPageWithPushHistory();
+      GameQueueCreationPage.renderGameQueueCreationPage();
     });
 
     const gameQueueLink = document.getElementById("gameQueueLink");
     gameQueueLink.addEventListener("click", (event) => {
       event.preventDefault();
       clearBody();
-      GameQueuePage.renderGameQueuePageWithPushHistory();
+      GameQueuePage.renderGameQueuePage();
     });
   }
 
@@ -429,13 +408,8 @@ class GameQueueCreationPage {
     createQueueButton.addEventListener("click", (event) => {
       event.preventDefault();
       clearBody();
-      GameQueuePage.renderGameQueuePageWithPushHistory();
+      GameQueuePage.renderGameQueuePage();
     });
-  }
-
-  static renderGameQueueCreationPageWithPushHistory() {
-    GameQueueCreationPage.renderGameQueueCreationPage();
-    history.pushState(PageManager.pageStatus.gameQueueCreation, "", "#gameQueueCreation");
   }
 
   static destroyGameQueueCreationPage() {
@@ -468,11 +442,6 @@ class GameQueuePage {
       GameLobbyPage.renderGameLobbyPageWithPushHistory();
     });
 
-  }
-
-  static renderGameQueuePageWithPushHistory() {
-    GameQueuePage.renderGameQueuePage();
-    history.pushState(PageManager.pageStatus.gameQueue, "", "#gameQueue");
   }
 
   static destroyGameQueuePage() {
