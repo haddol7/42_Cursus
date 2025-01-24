@@ -11,6 +11,7 @@ import os
 from typing import Dict, List, Tuple, TypedDict
 import socketio
 import socketio.exceptions
+from websocket.sio import sio
 
 from django.core.wsgi import get_wsgi_application
 
@@ -34,7 +35,6 @@ from websocket.decorators import event_on
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "websocket.settings")
 
 application = get_wsgi_application()
-sio = socketio.Server()
 application = socketio.WSGIApp(sio, application)
 
 
@@ -195,15 +195,14 @@ ROOM_MANAGER = RoomManager()
 USER_DICT: Dict[int, RoomUser] = {}
 
 
-def get_session_info(sid) -> Tuple[int, str]:
+def get_session_info(sid) -> int:
     with sio.session(sid) as sess:
         user_id: int | None = sess["user_id"]
-        user_name: str | None = sess["user_name"]
 
-    if user_id is None or user_name is None:
+    if user_id is None:
         raise UnauthenticatedException()
 
-    return user_id, user_name
+    return user_id
 
 
 @sio.event
@@ -212,12 +211,14 @@ def connect(sid, environ, auth):
     user_id = auth["user_id"]
     user_name = auth["user_name"]
 
-    if user_id is None or not isinstance(user_id, int):
+    if user_id is None:
         raise BadRequestFieldException("user_id")
+    user_id = int(user_id)
     if user_name is None or not isinstance(user_name, str):
         raise BadRequestFieldException("user_name")
 
     if user_id in USER_DICT:
+        print("userid is in dict")
         raise socketio.exceptions.ConnectionRefusedError("user.found")
     with sio.session(sid) as sess:
         sess["user_id"] = user_id
@@ -228,13 +229,18 @@ def connect(sid, environ, auth):
 
 @sio.event
 def disconnect(sid, reason):
-    user_id, _ = get_session_info(sid)
+    print(f"sid={sid} Disconnecting")
+    user_id = get_session_info(sid)
 
+    room_changed = False
     for r in sio.rooms(sid):
         if r == sid or r == ROOM_LISTENERS:
             continue
         ROOM_MANAGER.remove_user(r, user_id)
+        room_changed = True
         sio.emit(ROOM_CHANGED_EVENT, ROOM_MANAGER.people_list_to_json(r), to=r)
+
+    if room_changed:
         sio.emit(ROOM_LIST_EVENT, ROOM_MANAGER.room_list_to_json(), to=ROOM_LISTENERS)
 
     del USER_DICT[user_id]
@@ -242,7 +248,7 @@ def disconnect(sid, reason):
 
 @event_on("make_room")
 def sio_make_room(sid, data):
-    user_id, _ = get_session_info(sid)
+    user_id = get_session_info(sid)
 
     if "room_name" not in data:
         raise BadRequestFieldException("room_name")
@@ -280,7 +286,7 @@ def sio_make_room(sid, data):
 
 @event_on("enter_room")
 def sio_enter_room(sid, data):
-    user_id, _ = get_session_info(sid)
+    user_id = get_session_info(sid)
 
     if "room_id" not in data:
         raise BadRequestFieldException("room_id")
@@ -300,7 +306,7 @@ def sio_enter_room(sid, data):
 
 @event_on("leave_room")
 def sio_leave_room(sid):
-    user_id, _ = get_session_info(sid)
+    user_id = get_session_info(sid)
 
     joined_room = [r for r in sio.rooms(sid) if r != sid and r != ROOM_LISTENERS]
     if len(joined_room) == 0:
@@ -319,7 +325,7 @@ def sio_leave_room(sid):
 
 @event_on("start_game")
 def sio_start_game(sid):
-    user_id, _ = get_session_info(sid)
+    user_id = get_session_info(sid)
 
     joined_room = [r for r in sio.rooms(sid) if r != sid and r != ROOM_LISTENERS]
     if len(joined_room) == 0:

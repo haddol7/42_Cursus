@@ -8,7 +8,9 @@
             function submitform(e) {
                 e.preventDefault();
                 const inputForm = document.querySelector("input#msg");
-                socket.emit("make_room", {"room_name": inputForm.value, "room_limit": 2});
+                socket.emit("make_room", {"room_name": inputForm.value, "room_limit": 2}, (data) => {
+                    console.log("makeroom data = ", data);
+                });
             }
 
             function listRooms(rooms) {
@@ -27,13 +29,16 @@
             }
 
             function onPressDebug() {
+                console.log("emiting debug");
                 socket.emit("debug", (data) => {
                     console.log(data);
                 });
             }
 
             function onLeaveButton() {
-                socket.emit("leave_room")
+                socket.emit("leave_room", (data) => {
+                    console.log("Leave room data = ", data);
+                })
             }
             
             function connectSocket(e) {
@@ -42,21 +47,30 @@
                 user_id = e.target.elements["user_id"].value
                 user_name = e.target.elements["user_name"].value
 
-                console.log(user_id, user_name)
-                socket = io("ws://localhost:7600", {auth: {
-                    user_id: user_id,
-                    user_name: user_name
-                }});
+                console.log(user_id, user_name);
 
-                socket.on("broadcast_msg", (data) => {
-                    console.log("broadcast_msg, data=", data);
+                if (socket) socket.disconnect();
+                socket = io("http://localhost:7600", {
+                    forceNew: true,
+                    auth: {
+                        user_id: user_id,
+                        user_name: user_name
+                    }
                 });
+
+                socket.on("connect_error", (err)=> {
+                    console.log("connect error", err);
+                    socket = null;
+                })
 
                 socket.on("room_list", (data) => listRooms(data.room));
             }
 
             function startGame() {
-                socket.emit("start_game", (data) => { console.log("Game starts", data); })
+                socket.emit("start_game", (data) => {
+                    console.log("Start game data = ", data);
+                    console.log("Game starts", data);
+                })
             }
         </script>
     </head>
