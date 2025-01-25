@@ -1,5 +1,0 @@
-{
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "ms-python.black-formatter",
-    "python.analysis.typeCheckingMode": "standard"
-}
