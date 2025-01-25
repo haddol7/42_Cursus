@@ -89,9 +89,7 @@ export class LoginPage {
     // 차후 42 oauth로의 링크 역할을 하도록 변경해야 함.
     linkTo42Oauth.onclick = () => {
       console.log("Authentification success!!!");
-      /* window.location.replace("https://api.intra.42.fr/oauth/authorize" +
-        `?client_id=${clientId}` +
-        "&redirect_uri=http%3A%2F%2Flocalhost%3A5500%2F42-ascension%2Fweb-front%2F&response_type=code"); */
+      fetch("/auth/42/oauth");
     };
   }
   
