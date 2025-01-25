@@ -1,5 +1,4 @@
-import os
-from typing import Any, List
+import datetime
 import urllib.parse
 import urllib.request
 from django.http import (
@@ -23,49 +22,51 @@ from authapp.decorators import (
 )
 from authapp.envs import (
     JWT_URL,
+    OAUTH_42_URL,
     OAUTH_CLIENT_ID,
     OAUTH_CLIENT_SECRET,
     OAUTH_TOKEN_URL,
     OTP_ISSUER,
-    OAUTH_REDIRECT_URI,
 )
+from authapp.models import User
 from authapp.utils import (
     delete_jwt_secrets,
     get_totp_secret,
     set_totp_secret,
     update_2fa_passed,
 )
-from exceptions.CustomException import BadRequestFieldException, InternalException, UnauthenticatedException
+from exceptions.CustomException import (
+    BadRequestFieldException,
+    UnauthenticatedException,
+)
 from rest_framework.request import Request
 
 # Create your views here.
 
 
-# @api_get
-# def get_42_oauth(req: Request):
-#     redirect_to = req.GET.get("redirectTo")
-#     if redirect_to is None:
-#         raise BadRequestFieldException("redirectTo")
-#     redirect_to = urllib.parse.quote(redirect_to)
+APPLICATION_JSON = "application/json"
 
-#     # TODO: fix state to cache storage
-#     state = "complex_state"
-#     return HttpResponseRedirect(
-#         f"{OAUTH_42_URL}?"
-#         + f"client_id={OAUTH_CLIENT_ID}"
-#         + f"&redirect_uri={redirect_to}"
-#         + f"&response_type=code&state={state}"
-#     )
+
+@api_get
+def get_42_oauth(req: Request):
+    redirect_to = req.GET.get("redirectTo")
+    if redirect_to is None:
+        raise BadRequestFieldException("redirectTo")
+    redirect_to = urllib.parse.quote(redirect_to)
+
+    return HttpResponseRedirect(
+        f"{OAUTH_42_URL}?"
+        + f"client_id={OAUTH_CLIENT_ID}"
+        + f"&redirect_uri={redirect_to}"
+        + "&response_type=code"
+    )
 
 
 @api_get
 def get_42_code(req: HttpRequest):
     code = req.GET.get("code")
-    state = req.GET.get("state")
     if code is None:
         raise BadRequestFieldException("code")
-    elif state is None:
-        raise BadRequestFieldException("state")
 
     # ensure state is state
     res = requests.post(
@@ -74,17 +75,29 @@ def get_42_code(req: HttpRequest):
             "grant_type": "authorization_code",
             "client_id": OAUTH_CLIENT_ID,
             "client_secret": OAUTH_CLIENT_SECRET,
-            "redirect_uri": OAUTH_REDIRECT_URI,
+            "redirect_uri": "http://localhost:8200/auth/42/code",
             "code": code,
-            "state": state,
         },
     )
 
-    if not res.ok:
-        raise UnauthenticatedException()
     print(res.ok)
     print(res.content)
-    return HttpResponse()
+    if not res.ok:
+        raise UnauthenticatedException()
+    # Access token, Refresh Token, scope, created_at, secret_valid_until
+
+    # TODO: set username appropriately
+    user = User.objects.create(
+        username="username",
+        profile_url="None",
+        created_at=datetime.datetime.now(datetime.timezone.utc),
+    )
+
+    resp = requests.post(f"{JWT_URL}/jwt/new", json={"user_id": user.id})
+    if not resp.ok:
+        return JsonResponse(resp.json(), status=resp.status_code)
+
+    return JsonResponse(resp.json())
 
 
 @api_post
@@ -96,7 +109,7 @@ def refresh_token(req: Request, data: dict[str, str]):
         raise BadRequestFieldException("refreshToken")
     res = requests.post(f"{JWT_URL}/jwt/refresh", json={"refresh_token": refresh_token})
     if not res.ok:
-        return HttpResponse(res.content, status=res.status_code)
+        return JsonResponse(res.text, status=res.status_code)
     return HttpResponse()
 
 
