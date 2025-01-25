@@ -27,6 +27,7 @@ from authapp.envs import (
     OAUTH_CLIENT_SECRET,
     OAUTH_TOKEN_URL,
     OTP_ISSUER,
+    OAUTH_REDIRECT_URI,
 )
 from authapp.utils import (
     delete_jwt_secrets,
@@ -34,7 +35,7 @@ from authapp.utils import (
     set_totp_secret,
     update_2fa_passed,
 )
-from exceptions.CustomException import BadRequestFieldException, InternalException
+from exceptions.CustomException import BadRequestFieldException, InternalException, UnauthenticatedException
 from rest_framework.request import Request
 
 # Create your views here.
@@ -73,11 +74,14 @@ def get_42_code(req: HttpRequest):
             "grant_type": "authorization_code",
             "client_id": OAUTH_CLIENT_ID,
             "client_secret": OAUTH_CLIENT_SECRET,
-            "redirect_uri": "http://localhost:8000/api",
+            "redirect_uri": OAUTH_REDIRECT_URI,
             "code": code,
             "state": state,
         },
     )
+
+    if not res.ok:
+        raise UnauthenticatedException()
     print(res.ok)
     print(res.content)
     return HttpResponse()
