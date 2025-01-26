@@ -1,4 +1,4 @@
-import { clientId } from "./authentication.mjs";
+import { clientId, FTOauth, logout } from "./authentication.mjs";
 
 // body의 모든 자식 요소들을 제거
 const clearBody = () => {
@@ -6,6 +6,8 @@ const clearBody = () => {
 };
 
 export class PageManager {
+  static currentpageStatus = null;
+
   static pageStatus = {
     login: { page: "loginPage" },
     twoFA: { page: "twoFAPage" },
@@ -14,17 +16,24 @@ export class PageManager {
     editProfile: { page: "editProfilePage" },
     dashBoard: { page: "dashBoardPage" },
     gameLobby: { page: "gameLobbyPage" },
+    error: { page: "error" },
   };
 
   static popStateEvent(event) {
+    if (
+      PageManager.currentpageStatus?.page === PageManager.pageStatus.error.page
+    )
+      return;
+
     clearBody();
     removeBodyProperty();
+
     switch (event.state.page) {
       case PageManager.pageStatus.login.page:
         LoginPage.renderLoginPage();
         break;
       case PageManager.pageStatus.twoFA.page:
-        TwoFAPage.renderTwoFAPage();
+        history.back();
         break;
       case PageManager.pageStatus.main.page:
         MainPage.renderMainPage();
@@ -75,28 +84,62 @@ const removeBodyProperty = () => {
 
 export class LoginPage {
   // 로그인 페이지를 화면에 렌더링한다.
-  static renderLoginPage () {
+  static renderLoginPage() {
     const centralBox = renderCentralBox();
 
-    const linkTo42Oauth = document.createElement("a");
+    if (FTOauth.getJWTTokenFromCookie() === null) {
+      const linkTo42Oauth = document.createElement("a");
 
-    linkTo42Oauth.id = "linkTo42Oauth";
-    linkTo42Oauth.classList.add(..."btn btn-info".split(" "));
-    linkTo42Oauth.textContent = "42Oauth";
+      linkTo42Oauth.classList.add(..."btn btn-info".split(" "));
+      linkTo42Oauth.textContent = "42Oauth";
 
-    centralBox.appendChild(linkTo42Oauth);
+      centralBox.appendChild(linkTo42Oauth);
 
-    // 차후 42 oauth로의 링크 역할을 하도록 변경해야 함.
-    linkTo42Oauth.onclick = () => {
-      console.log("Authentification success!!!");
-      fetch("/auth/42/oauth");
-    };
+      linkTo42Oauth.onclick = event => {
+        event.preventDefault();
+        window.location.href =
+          "https://api.intra.42.fr/oauth/authorize" +
+          "?client_id=u-s4t2ud-402050bcc80fd44b22dd906bb1bf62221445ecf3d54505cccac61564a53428a2" +
+          `&redirect_uri=${window.location.href}` +
+          "&response_type=code";
+      };
+    } else {
+      const linkToMainPage = document.createElement("a");
+
+      linkToMainPage.classList.add(..."btn btn-info".split(" "));
+      linkToMainPage.textContent = "return to main page";
+      centralBox.appendChild(linkToMainPage);
+
+      linkToMainPage.onclick = event => {
+        event.preventDefault();
+        removeBodyProperty();
+        clearBody();
+        MainPage.renderMainPageWithPushHistory();
+      }
+      const logoutButton = document.createElement("a");
+
+      logoutButton.classList.add(..."btn btn-info".split(" "));
+      logoutButton.textContent = "logout";
+      centralBox.appendChild(logoutButton);
+
+      logoutButton.onclick = event => {
+        event.preventDefault();
+        logout();
+      }
+    }
+
+    PageManager.currentpageStatus = PageManager.pageStatus.login;
   }
-  
+
   // 히스토리를 갱신하며 로그인 페이지를 화면에 렌더링한다.
   static renderLoginPageWithPushHistory(/* 차후 42 oauth 페이지로의 url을 매개변수로 받아야 함 */) {
     LoginPage.renderLoginPage();
     history.pushState(PageManager.pageStatus.login, "");
+  }
+
+  static renderLoginPageWithReplaceHistory() {
+    LoginPage.renderLoginPage();
+    history.replaceState(PageManager.pageStatus.login, "");
   }
 
   // 로그인 페이지를 화면에서 지운다.
@@ -107,7 +150,7 @@ export class LoginPage {
 }
 
 export class TwoFAPage {
-  static renderTwoFAPage () {
+  static renderTwoFAPageWithReplaceHistroy(url) {
     const centralBox = renderCentralBox();
 
     const inputOtpField = document.createElement("input");
@@ -131,6 +174,9 @@ export class TwoFAPage {
       TwoFAPage.destroyTwoFAPage();
       MainPage.renderMainPageWithPushHistory();
     };
+
+    PageManager.currentpageStatus = PageManager.pageStatus.twoFA;
+    history.replaceState(PageManager.pageStatus.twoFA, "", url);
   }
 
   static destroyTwoFAPage() {
@@ -175,6 +221,7 @@ const bindEventToNavBar = () => {
   logoutLink.addEventListener("click", (event) => {
     event.preventDefault();
     clearBody();
+    logout();
     console.log("logout!!");
     LoginPage.renderLoginPageWithPushHistory();
   });
@@ -202,6 +249,7 @@ class MainPage {
   static renderMainPage() {
     renderNavBar();
     bindEventToNavBar();
+    PageManager.currentpageStatus = PageManager.pageStatus.main;
   }
 
   static renderMainPageWithPushHistory() {
@@ -211,7 +259,7 @@ class MainPage {
 }
 
 class MyPage {
-  static renderMyPage () {
+  static renderMyPage() {
     renderNavBar();
 
     document.body.innerHTML += `
@@ -245,6 +293,8 @@ class MyPage {
       clearBody();
       EditProfilePage.renderEditProfilePageWithPushHistory();
     });
+
+    PageManager.currentpageStatus = PageManager.pageStatus.my;
   }
 
   static renderMyPageWithPushHistory() {
@@ -260,7 +310,7 @@ class MyPage {
 }
 
 class EditProfilePage {
-  static renderEditProfilePage () {
+  static renderEditProfilePage() {
     renderNavBar();
 
     document.body.innerHTML += `
@@ -285,6 +335,7 @@ class EditProfilePage {
     `;
 
     bindEventToNavBar();
+    PageManager.currentpageStatus = PageManager.pageStatus.editProfile;
   }
 
   static renderEditProfilePageWithPushHistory() {
@@ -308,6 +359,7 @@ class DashBoardPage {
     `;
 
     bindEventToNavBar();
+    PageManager.currentpageStatus = PageManager.pageStatus.dashBoard;
   }
 
   static renderDashBoardPageWithPushHistory() {
@@ -354,6 +406,8 @@ class GameLobbyPage {
       clearBody();
       GameQueuePage.renderGameQueuePage();
     });
+
+    PageManager.currentpageStatus = PageManager.pageStatus.gameLobby;
   }
 
   static renderGameLobbyPageWithPushHistory() {
@@ -442,7 +496,6 @@ class GameQueuePage {
       clearBody();
       GameLobbyPage.renderGameLobbyPageWithPushHistory();
     });
-
   }
 
   static destroyGameQueuePage() {
@@ -455,3 +508,15 @@ class GameQueuePage {
 // 아래의 두 페이지는 서버와의 통신이 가능해야 진입할 수 있기 때문에 일단 구현을 보류합니다.
 class TournamentPage {}
 class PongPage {}
+
+export class ErrorPage {
+  static renderErrorPage(errorCode) {
+    removeBodyProperty();
+    clearBody();
+
+    document.body.innerHTML = `${errorCode}`;
+
+    PageManager.currentpageStatus = PageManager.pageStatus.error;
+    history.pushState(PageManager.pageStatus.error, "");
+  }
+}
