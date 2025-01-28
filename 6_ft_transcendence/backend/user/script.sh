@@ -1,9 +1,7 @@
 #!/bin/bash
-
 apt-get update -y &&  \
 apt-get install vim -y && \
 apt-get install lsof && \ 
-apt-get install net-tools -y && \
 apt-get install postgresql -y && \
 apt-get install curl -y
 
@@ -23,6 +21,6 @@ cd /server
 # cd tutorial 
 # python manage.py startapp snippets
 
-python manage.py makemigrations
-python manage.py migrate
+python manage.py makemigrations user
+python manage.py migrate user
 python manage.py runserver 0.0.0.0:8300
