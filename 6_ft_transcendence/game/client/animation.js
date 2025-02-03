@@ -2,13 +2,6 @@ import * as THREE from "three";
 
 let keyState = {};
 
-/*
-애니메이션 효과
-1. 별이 떨어지는 효과
-2. 패들 움직임 처리
-3. 공 회전 및 이동
-*/
-
 export function animate(scene, camera, composer, socket, paddleId) {
   const paddleSpeed = 0.7;
   const friction = 0.95; // 가속도 감소를 위한 마찰 계수
@@ -17,6 +10,7 @@ export function animate(scene, camera, composer, socket, paddleId) {
 
   const clock = new THREE.Clock();
 
+  // 별 생성
   const starCount = 500;
   const starGeometry = new THREE.BufferGeometry();
   const positions = new Float32Array(starCount * 3);
@@ -42,7 +36,7 @@ export function animate(scene, camera, composer, socket, paddleId) {
   const stars = new THREE.Points(starGeometry, starMaterial);
   scene.add(stars);
 
-  // 키 입력 처리
+  // 키 입력 처리 (키 누름)
   window.addEventListener("keydown", (event) => {
     if (event.key === "ArrowLeft")
       paddleDirection = paddleId === "paddle2" ? 1 : -1;
@@ -51,7 +45,7 @@ export function animate(scene, camera, composer, socket, paddleId) {
     keyState[event.key] = true;
   });
 
-  // 키 입력 처리
+  // 키 입력 처리 (키 뗌)
   window.addEventListener("keyup", (event) => {
     keyState[event.key] = false;
 
