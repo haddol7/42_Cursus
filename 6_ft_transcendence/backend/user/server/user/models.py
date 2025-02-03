@@ -11,11 +11,21 @@ class Profile(models.Model):
 
 
 class Friend(models.Model):
-    user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='friends')
-    friends = models.ManyToManyField('self', blank=True, symmetrical=False)
+    _user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='following') # 팔로우하는 유저
+    friend = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='followers', null=True) # 팔로우된 유저
 
     class Meta:
         db_table = "friends"
-    
-# response = requests.post('http://127.0.0.1:8100/jwt/check', json={"jwt": "value"})
-# print(response.json())
+        constraints = [
+            models.UniqueConstraint(fields=['_user', 'friend'], name='unique_friendship')
+        ]
+
+
+class DashBoard(models.Model):
+    _user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='dashboard')
+    win_cnt = models.PositiveIntegerField(default=0)
+    total_cnt = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        db_table = "dashboard"
+        ordering = ['-win_cnt', 'total_cnt'] # 승리수가 높은 유저부터 보여주기
