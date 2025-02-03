@@ -162,7 +162,7 @@ export class TwoFAPage {
       </form>
     `;
 
-    document.getElementById("otpUserNameSubmit").onclick = async (event) => {
+    document.getElementById("otpUserNameSubmit").onsubmit = async (event) => {
       event.preventDefault();
 
       const otpUserName = replaceAllScriptChar(event.target.previousElementSibling.value);
@@ -187,7 +187,7 @@ export class TwoFAPage {
         </form>
       `;
 
-      document.getElementById("otpCodeSubmit").onclick = async (event) => {
+      document.getElementById("otpCodeSubmit").onsubmit = async (event) => {
         event.preventDefault();
         const otpCode = replaceAllScriptChar(document.getElementById("otpCodeInput").value);
 
@@ -218,15 +218,16 @@ export class TwoFAPage {
       TwoFAPage.destroyTwoFAPage();
       MainPage.renderMainPageWithPushHistory();
     } else {
+      const text = await response.text();
       switch (response.status) {
         case 400:
           alert("wrong code. please input again");
           break;
-        case 403:
-          if (response.text() === "jwt.invalid") {
+        case 401:
+          if (text === "jwt.invalid") {
             alert("please login again");
             logout();
-          } else if (response.text() === "jwt.expired") {
+          } else if (text === "jwt.expired") {
             try {
               JWT.getNewToken();
               sendOTPCodeWhileResponseOk();
