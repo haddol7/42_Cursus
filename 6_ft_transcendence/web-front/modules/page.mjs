@@ -1,8 +1,17 @@
-import { clientId, FTOauth, logout } from "./authentication.mjs";
+import { CLIENT_ID, logout, JWT, TwoFA } from "./authentication.mjs";
+import { replaceAllScriptChar } from "./security.mjs";
 
 // body의 모든 자식 요소들을 제거
-const clearBody = () => {
+export const clearBody = () => {
   document.body.innerHTML = "";
+};
+
+// 박스를 중앙 정렬하기 위해 body에 부여했던 속성을 초기화한다.
+export const removeBodyProperty = () => {
+  document.body.style.removeProperty("display");
+  document.body.style.removeProperty("justify-content");
+  document.body.style.removeProperty("align-items");
+  document.body.style.removeProperty("height");
 };
 
 export class PageManager {
@@ -74,20 +83,13 @@ const renderCentralBox = () => {
   return cardBody;
 };
 
-// 박스를 중앙 정렬하기 위해 body에 부여했던 속성을 초기화한다.
-const removeBodyProperty = () => {
-  document.body.style.removeProperty("display");
-  document.body.style.removeProperty("justify-content");
-  document.body.style.removeProperty("align-items");
-  document.body.style.removeProperty("height");
-};
 
 export class LoginPage {
   // 로그인 페이지를 화면에 렌더링한다.
   static renderLoginPage() {
     const centralBox = renderCentralBox();
 
-    if (FTOauth.getJWTTokenFromCookie() === null) {
+    if (JWT.getJWTTokenFromCookie() === null) {
       const linkTo42Oauth = document.createElement("a");
 
       linkTo42Oauth.classList.add(..."btn btn-info".split(" "));
@@ -95,11 +97,11 @@ export class LoginPage {
 
       centralBox.appendChild(linkTo42Oauth);
 
-      linkTo42Oauth.onclick = event => {
+      linkTo42Oauth.onclick = (event) => {
         event.preventDefault();
         window.location.href =
           "https://api.intra.42.fr/oauth/authorize" +
-          "?client_id=u-s4t2ud-402050bcc80fd44b22dd906bb1bf62221445ecf3d54505cccac61564a53428a2" +
+          `?client_id=${CLIENT_ID}` +
           `&redirect_uri=${window.location.href}` +
           "&response_type=code";
       };
@@ -110,22 +112,22 @@ export class LoginPage {
       linkToMainPage.textContent = "return to main page";
       centralBox.appendChild(linkToMainPage);
 
-      linkToMainPage.onclick = event => {
+      linkToMainPage.onclick = (event) => {
         event.preventDefault();
         removeBodyProperty();
         clearBody();
         MainPage.renderMainPageWithPushHistory();
-      }
+      };
       const logoutButton = document.createElement("a");
 
       logoutButton.classList.add(..."btn btn-info".split(" "));
       logoutButton.textContent = "logout";
       centralBox.appendChild(logoutButton);
 
-      logoutButton.onclick = event => {
+      logoutButton.onclick = (event) => {
         event.preventDefault();
         logout();
-      }
+      };
     }
 
     PageManager.currentpageStatus = PageManager.pageStatus.login;
@@ -153,31 +155,92 @@ export class TwoFAPage {
   static renderTwoFAPageWithReplaceHistroy(url) {
     const centralBox = renderCentralBox();
 
-    const inputOtpField = document.createElement("input");
+    centralBox.innerHTML += `
+      <form id="twoFAUserNameForm" action="" method="">
+        <input type="password" class="form-control" placeholder="please input OTP user name" />
+        <input id="otpUserNameSubmit" type="submit" class="btn btn-info mb-3" value="submit" />
+      </form>
+    `;
 
-    inputOtpField.type = "password";
-    inputOtpField.classList.add("form-control");
-    inputOtpField.placeholder = "input OTP please";
+    document.getElementById("otpUserNameSubmit").onclick = async (event) => {
+      event.preventDefault();
 
-    centralBox.appendChild(inputOtpField);
+      const otpUserName = replaceAllScriptChar(event.target.previousElementSibling.value);
+      
+      console.log(otpUserName);
+      
+      const otpUrl = await TwoFA.sendOTPUserNameToServer(
+        JWT.getJWTTokenFromCookie().accessToken,
+        otpUserName
+      );
 
-    const submitButton = document.createElement("input");
+      console.log(otpUrl);
 
-    submitButton.type = "submit";
-    submitButton.classList.add(..."btn btn-info mb-3".split(" "));
-    submitButton.value = "submit";
+      const twoFAForm = document.getElementById("twoFAUserNameForm");
+      twoFAForm.innerHTML = "";
+      twoFAForm.parentNode.removeChild(twoFAForm);
 
-    centralBox.appendChild(submitButton);
+      centralBox.innerHTML += `
+        <form id="twoFAOTPCodeForm" action="" method="">
+          <input id="otpCodeInput" type="password" class="form-control" placeholder="please input otp code" />
+          <input id="otpCodeSubmit" type="submit" class="btn btn-info mb-3" value="submit" />
+        </form>
+      `;
 
-    // 차후 실제로 백엔드로부터 2fa 인증을 받도록 변경해야 함
-    submitButton.onclick = () => {
-      TwoFAPage.destroyTwoFAPage();
-      MainPage.renderMainPageWithPushHistory();
+      document.getElementById("otpCodeSubmit").onclick = async (event) => {
+        event.preventDefault();
+        const otpCode = replaceAllScriptChar(document.getElementById("otpCodeInput").value);
+
+        console.log(otpCode);
+
+        TwoFAPage.sendOTPCodeWhileResponseOk(otpCode);
+      };
+
+      QRCode.toCanvas(otpUrl, { width: 256 }, function (error, canvas) {
+        if (error) {
+          console.error(error);
+        } else {
+          centralBox.appendChild(canvas);
+        }
+      });
     };
 
     PageManager.currentpageStatus = PageManager.pageStatus.twoFA;
     history.replaceState(PageManager.pageStatus.twoFA, "", url);
   }
+
+  static sendOTPCodeWhileResponseOk = async (otpCode) => {
+    let response = await TwoFA.sendOTPCodeToServer(
+      JWT.getJWTTokenFromCookie().accessToken,
+      otpCode
+    );
+    if (response.ok) {
+      TwoFAPage.destroyTwoFAPage();
+      MainPage.renderMainPageWithPushHistory();
+    } else {
+      switch (response.status) {
+        case 400:
+          alert("wrong code. please input again");
+          break;
+        case 403:
+          if (response.text() === "jwt.invalid") {
+            alert("please login again");
+            logout();
+          } else if (response.text() === "jwt.expired") {
+            try {
+              JWT.getNewToken();
+              sendOTPCodeWhileResponseOk();
+            } catch (e) {
+              logout();
+            }
+            return;
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  };
 
   static destroyTwoFAPage() {
     removeBodyProperty();
