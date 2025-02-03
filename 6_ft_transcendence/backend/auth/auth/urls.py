@@ -20,8 +20,11 @@ from django.urls import include, path
 
 import authapp
 import authapp.urls
+import testapp
+import testapp.urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("auth/", include(authapp.urls.urlpatterns)),
+    path("test/", include(testapp.urls.urlpatterns)),
 ]
