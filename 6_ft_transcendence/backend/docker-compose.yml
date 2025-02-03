@@ -68,6 +68,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      auth:
+        condition: service_started
     tty: true
     init: true
     restart: always

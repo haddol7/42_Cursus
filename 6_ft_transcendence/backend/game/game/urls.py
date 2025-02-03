@@ -1,5 +1,5 @@
 """
-URL configuration for auth project.
+URL configuration for game project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
@@ -17,14 +17,16 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from django.conf.urls.static import static
 
-import authapp
-import authapp.urls
+from game import settings
+import gameapp
+import gameapp.urls
 import testapp
 import testapp.urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("auth/", include(authapp.urls.urlpatterns)),
+    path("_internal/", include(gameapp.urls.urlpatterns)),
     path("test/", include(testapp.urls.urlpatterns)),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

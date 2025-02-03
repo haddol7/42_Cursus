@@ -22,7 +22,7 @@
 
 - `{field}`가 올바르지 않은 경우: `bad_request:{field}` (400)
 - `code`로 42 oauth 인증을 실패할 경우: `unauthenticated` (401)
-- 기타 내부 서버 에러, `internal_error` (500)
+- 기타 내부 서버 에러: `internal_error` (500)
 
 ## POST /auth/refresh
 
