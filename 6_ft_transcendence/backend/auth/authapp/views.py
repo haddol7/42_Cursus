@@ -75,7 +75,7 @@ def get_42_code(req: HttpRequest):
             "grant_type": "authorization_code",
             "client_id": OAUTH_CLIENT_ID,
             "client_secret": OAUTH_CLIENT_SECRET,
-            "redirect_uri": "http://localhost:5500/42-ascension/web-front/",
+            "redirect_uri": "http://localhost:8200/auth/42/code",
             "code": code,
         },
     )
