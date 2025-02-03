@@ -1,58 +1,48 @@
-//TODO : 클라이언트 사이드 공 위치 계산 (공 벡터만 전송)
-//클라이언트 재접속 시 게임 상태 유지
-//패들 충돌 자연스럽게
-
 const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const path = require("path");
-const { initializeRoom } = require("./roomManager");
+const {
+  requestRoomIdfromClient,
+  initializeRoom,
+  handleDisconnect,
+} = require("./roomManager");
 const { startBallMovement, handlePaddleMove } = require("./gameLogic");
 
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
-const {
-  GAME_BOUNDS,
-  BALL_RADIUS,
-  PADDLE_HEIGHT,
-  PADDLE_WIDTH,
-  WINNING_SCORE,
-} = require("./constants");
-
-let roomCounter = 0;
-const rooms = {};
-
 app.use(express.static(path.join(__dirname, "../client")));
-
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/index.html"));
 });
 
-// 소켓 연결
-io.on("connection", (socket) => {
-  //TODO : Pair에 맞게 방에 접속할 수 있게 하도록 구현
-  //2명씩 방 생성
-  const { roomName, paddleId } = initializeRoom(socket, roomCounter);
-  console.log(`${roomName} - ${paddleId} connected`);
-  socket.emit("init", { roomName, paddleId });
-  roomCounter++;
+io.on("connection", async (socket) => {
+  // 클라이언트로부터 roomId 요청
+  // 디버그 : roomId은 client.js에서 정의한 DEBUG_ROOMCODE를 받습니다.
+  const roomId = await requestRoomIdfromClient(socket);
+
+  //방 생성 및 paddleId 할당
+  const { paddleId, roomCounter } = initializeRoom(roomId, socket);
+  console.log(`room : ${roomId} - ${paddleId} connected`);
+
+  // 클라이언트에 paddleId 전달 및 초기화
+  socket.emit("init", { paddleId });
+
+  // 방에 2명이 들어왔다면, 게임 시작
+  if (roomCounter === 2) {
+    startBallMovement(roomId, io);
+  }
 
   // 상대 패들 이동 시 상태 업데이트
   socket.on("paddleMove", (data) => {
-    handlePaddleMove(roomName, data, io);
+    handlePaddleMove(roomId, data, io);
   });
 
-  // 방에 2명이 들어왔다면, 게임 시작
-  if (roomCounter % 2 === 0) {
-    startBallMovement(roomName, io);
-  }
-
-  // 유저가 나갔을 때
-  // TODO : 모두 게임에서 나갔을 때 방을 삭제 해야 함
-  socket.on("disconnect", () => {
-    console.log("A user disconnected");
+  // 유저가 나갔을 때 (승리 처리 및 방 삭제)
+  socket.on("disconnect", (socket) => {
+    handleDisconnect(roomId, paddleId, socket, io);
   });
 });
 
