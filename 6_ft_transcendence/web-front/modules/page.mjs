@@ -1,9 +1,22 @@
+import { CLIENT_ID, logout, JWT, TwoFA } from "./authentication.mjs";
+import { replaceAllScriptChar } from "./security.mjs";
+
 // body의 모든 자식 요소들을 제거
-const clearBody = () => {
+export const clearBody = () => {
   document.body.innerHTML = "";
 };
 
+// 박스를 중앙 정렬하기 위해 body에 부여했던 속성을 초기화한다.
+export const removeBodyProperty = () => {
+  document.body.style.removeProperty("display");
+  document.body.style.removeProperty("justify-content");
+  document.body.style.removeProperty("align-items");
+  document.body.style.removeProperty("height");
+};
+
 export class PageManager {
+  static currentpageStatus = null;
+
   static pageStatus = {
     login: { page: "loginPage" },
     twoFA: { page: "twoFAPage" },
@@ -12,23 +25,24 @@ export class PageManager {
     editProfile: { page: "editProfilePage" },
     dashBoard: { page: "dashBoardPage" },
     gameLobby: { page: "gameLobbyPage" },
-    gameQueueCreation: { page: "gameQueueCreationPage" },
-    gameQueue: { page: "gameQueuePage" },
-    tournament: { page: "tournamentPage" },
-    pong: { page: "pongPage" },
+    error: { page: "error" },
   };
 
   static popStateEvent(event) {
-    console.log(history.length);
+    if (
+      PageManager.currentpageStatus?.page === PageManager.pageStatus.error.page
+    )
+      return;
 
     clearBody();
     removeBodyProperty();
+
     switch (event.state.page) {
       case PageManager.pageStatus.login.page:
         LoginPage.renderLoginPage();
         break;
       case PageManager.pageStatus.twoFA.page:
-        TwoFAPage.renderTwoFAPage();
+        history.back();
         break;
       case PageManager.pageStatus.main.page:
         MainPage.renderMainPage();
@@ -44,16 +58,6 @@ export class PageManager {
         break;
       case PageManager.pageStatus.gameLobby.page:
         GameLobbyPage.renderGameLobbyPage();
-        break;
-      case PageManager.pageStatus.gameQueueCreation.page:
-        GameQueueCreationPage.renderGameQueueCreationPage();
-        break;
-      case PageManager.pageStatus.gameQueue.page:
-        GameQueuePage.renderGameQueuePage();
-        break;
-      case PageManager.pageStatus.tournament.page:
-        break;
-      case PageManager.pageStatus.pong.page:
         break;
     }
   }
@@ -79,39 +83,65 @@ const renderCentralBox = () => {
   return cardBody;
 };
 
-// 박스를 중앙 정렬하기 위해 body에 부여했던 속성을 초기화한다.
-const removeBodyProperty = () => {
-  document.body.style.removeProperty("display");
-  document.body.style.removeProperty("justify-content");
-  document.body.style.removeProperty("align-items");
-  document.body.style.removeProperty("height");
-};
 
 export class LoginPage {
   // 로그인 페이지를 화면에 렌더링한다.
-  static renderLoginPage () {
+  static renderLoginPage() {
     const centralBox = renderCentralBox();
 
-    const linkTo42Oauth = document.createElement("a");
+    if (JWT.getJWTTokenFromCookie() === null) {
+      const linkTo42Oauth = document.createElement("a");
 
-    linkTo42Oauth.id = "linkTo42Oauth";
-    linkTo42Oauth.classList.add(..."btn btn-info".split(" "));
-    linkTo42Oauth.textContent = "42Oauth";
+      linkTo42Oauth.classList.add(..."btn btn-info".split(" "));
+      linkTo42Oauth.textContent = "42Oauth";
 
-    centralBox.appendChild(linkTo42Oauth);
+      centralBox.appendChild(linkTo42Oauth);
 
-    // 차후 42 oauth로의 링크 역할을 하도록 변경해야 함.
-    linkTo42Oauth.onclick = () => {
-      console.log("Authentification success!!!");
-      LoginPage.destroyLoginPage();
-      TwoFAPage.renderTwoFAPageWithPushHistory();
-    };
+      linkTo42Oauth.onclick = (event) => {
+        event.preventDefault();
+        window.location.href =
+          "https://api.intra.42.fr/oauth/authorize" +
+          `?client_id=${CLIENT_ID}` +
+          `&redirect_uri=${window.location.href}` +
+          "&response_type=code";
+      };
+    } else {
+      const linkToMainPage = document.createElement("a");
+
+      linkToMainPage.classList.add(..."btn btn-info".split(" "));
+      linkToMainPage.textContent = "return to main page";
+      centralBox.appendChild(linkToMainPage);
+
+      linkToMainPage.onclick = (event) => {
+        event.preventDefault();
+        removeBodyProperty();
+        clearBody();
+        MainPage.renderMainPageWithPushHistory();
+      };
+      const logoutButton = document.createElement("a");
+
+      logoutButton.classList.add(..."btn btn-info".split(" "));
+      logoutButton.textContent = "logout";
+      centralBox.appendChild(logoutButton);
+
+      logoutButton.onclick = (event) => {
+        event.preventDefault();
+        logout();
+      };
+    }
+
+    PageManager.currentpageStatus = PageManager.pageStatus.login;
   }
-  
+
   // 히스토리를 갱신하며 로그인 페이지를 화면에 렌더링한다.
   static renderLoginPageWithPushHistory(/* 차후 42 oauth 페이지로의 url을 매개변수로 받아야 함 */) {
     LoginPage.renderLoginPage();
-    history.pushState(PageManager.pageStatus.login, "" , "#login");
+    history.pushState(PageManager.pageStatus.login, "");
+  }
+
+  static renderLoginPageWithReplaceHistory() {
+    LoginPage.renderLoginPage();
+    history.replaceState(PageManager.pageStatus.login, "");
   }
 
   // 로그인 페이지를 화면에서 지운다.
@@ -122,36 +152,96 @@ export class LoginPage {
 }
 
 export class TwoFAPage {
-  static renderTwoFAPage () {
+  static renderTwoFAPageWithReplaceHistroy(url) {
     const centralBox = renderCentralBox();
 
-    const inputOtpField = document.createElement("input");
+    centralBox.innerHTML += `
+      <form id="twoFAUserNameForm" action="" method="">
+        <input type="password" class="form-control" placeholder="please input OTP user name" />
+        <input id="otpUserNameSubmit" type="submit" class="btn btn-info mb-3" value="submit" />
+      </form>
+    `;
 
-    inputOtpField.type = "password";
-    inputOtpField.classList.add("form-control");
-    inputOtpField.placeholder = "input OTP please";
+    document.getElementById("otpUserNameSubmit").onsubmit = async (event) => {
+      event.preventDefault();
 
-    centralBox.appendChild(inputOtpField);
+      const otpUserName = replaceAllScriptChar(event.target.previousElementSibling.value);
+      
+      console.log(otpUserName);
+      
+      const otpUrl = await TwoFA.sendOTPUserNameToServer(
+        JWT.getJWTTokenFromCookie().accessToken,
+        otpUserName
+      );
 
-    const submitButton = document.createElement("input");
+      console.log(otpUrl);
 
-    submitButton.type = "submit";
-    submitButton.classList.add(..."btn btn-info mb-3".split(" "));
-    submitButton.value = "submit";
+      const twoFAForm = document.getElementById("twoFAUserNameForm");
+      twoFAForm.innerHTML = "";
+      twoFAForm.parentNode.removeChild(twoFAForm);
 
-    centralBox.appendChild(submitButton);
+      centralBox.innerHTML += `
+        <form id="twoFAOTPCodeForm" action="" method="">
+          <input id="otpCodeInput" type="password" class="form-control" placeholder="please input otp code" />
+          <input id="otpCodeSubmit" type="submit" class="btn btn-info mb-3" value="submit" />
+        </form>
+      `;
 
-    // 차후 실제로 백엔드로부터 2fa 인증을 받도록 변경해야 함
-    submitButton.onclick = () => {
+      document.getElementById("otpCodeSubmit").onsubmit = async (event) => {
+        event.preventDefault();
+        const otpCode = replaceAllScriptChar(document.getElementById("otpCodeInput").value);
+
+        console.log(otpCode);
+
+        TwoFAPage.sendOTPCodeWhileResponseOk(otpCode);
+      };
+
+      QRCode.toCanvas(otpUrl, { width: 256 }, function (error, canvas) {
+        if (error) {
+          console.error(error);
+        } else {
+          centralBox.appendChild(canvas);
+        }
+      });
+    };
+
+    PageManager.currentpageStatus = PageManager.pageStatus.twoFA;
+    history.replaceState(PageManager.pageStatus.twoFA, "", url);
+  }
+
+  static sendOTPCodeWhileResponseOk = async (otpCode) => {
+    let response = await TwoFA.sendOTPCodeToServer(
+      JWT.getJWTTokenFromCookie().accessToken,
+      otpCode
+    );
+    if (response.ok) {
       TwoFAPage.destroyTwoFAPage();
       MainPage.renderMainPageWithPushHistory();
-    };
-  }
-
-  static renderTwoFAPageWithPushHistory() {
-    TwoFAPage.renderTwoFAPage();
-    history.pushState(PageManager.pageStatus.twoFA, "", "#twoFa");
-  }
+    } else {
+      const text = await response.text();
+      switch (response.status) {
+        case 400:
+          alert("wrong code. please input again");
+          break;
+        case 401:
+          if (text === "jwt.invalid") {
+            alert("please login again");
+            logout();
+          } else if (text === "jwt.expired") {
+            try {
+              JWT.getNewToken();
+              sendOTPCodeWhileResponseOk();
+            } catch (e) {
+              logout();
+            }
+            return;
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  };
 
   static destroyTwoFAPage() {
     removeBodyProperty();
@@ -195,6 +285,7 @@ const bindEventToNavBar = () => {
   logoutLink.addEventListener("click", (event) => {
     event.preventDefault();
     clearBody();
+    logout();
     console.log("logout!!");
     LoginPage.renderLoginPageWithPushHistory();
   });
@@ -222,16 +313,17 @@ class MainPage {
   static renderMainPage() {
     renderNavBar();
     bindEventToNavBar();
+    PageManager.currentpageStatus = PageManager.pageStatus.main;
   }
 
   static renderMainPageWithPushHistory() {
     MainPage.renderMainPage();
-    history.pushState(PageManager.pageStatus.main, "", "#main");
+    history.pushState(PageManager.pageStatus.main, "");
   }
 }
 
 class MyPage {
-  static renderMyPage () {
+  static renderMyPage() {
     renderNavBar();
 
     document.body.innerHTML += `
@@ -265,11 +357,13 @@ class MyPage {
       clearBody();
       EditProfilePage.renderEditProfilePageWithPushHistory();
     });
+
+    PageManager.currentpageStatus = PageManager.pageStatus.my;
   }
 
   static renderMyPageWithPushHistory() {
     MyPage.renderMyPage();
-    history.pushState(PageManager.pageStatus.my, "", "#my");
+    history.pushState(PageManager.pageStatus.my, "");
   }
 
   static destroyMyPage() {
@@ -280,7 +374,7 @@ class MyPage {
 }
 
 class EditProfilePage {
-  static renderEditProfilePage () {
+  static renderEditProfilePage() {
     renderNavBar();
 
     document.body.innerHTML += `
@@ -305,11 +399,12 @@ class EditProfilePage {
     `;
 
     bindEventToNavBar();
+    PageManager.currentpageStatus = PageManager.pageStatus.editProfile;
   }
 
   static renderEditProfilePageWithPushHistory() {
     EditProfilePage.renderEditProfilePage();
-    history.pushState(PageManager.pageStatus.editProfile, "", "#editProfile");
+    history.pushState(PageManager.pageStatus.editProfile, "");
   }
 
   static destroyEditProfilePage() {
@@ -328,11 +423,12 @@ class DashBoardPage {
     `;
 
     bindEventToNavBar();
+    PageManager.currentpageStatus = PageManager.pageStatus.dashBoard;
   }
 
   static renderDashBoardPageWithPushHistory() {
     DashBoardPage.renderDashBoardPage();
-    history.pushState(PageManager.pageStatus.dashBoard, "", "#dashBoard");
+    history.pushState(PageManager.pageStatus.dashBoard, "");
   }
 
   static destroyDashBoardPage() {
@@ -365,20 +461,22 @@ class GameLobbyPage {
     gameQueueCreationLink.addEventListener("click", (event) => {
       event.preventDefault();
       clearBody();
-      GameQueueCreationPage.renderGameQueueCreationPageWithPushHistory();
+      GameQueueCreationPage.renderGameQueueCreationPage();
     });
 
     const gameQueueLink = document.getElementById("gameQueueLink");
     gameQueueLink.addEventListener("click", (event) => {
       event.preventDefault();
       clearBody();
-      GameQueuePage.renderGameQueuePageWithPushHistory();
+      GameQueuePage.renderGameQueuePage();
     });
+
+    PageManager.currentpageStatus = PageManager.pageStatus.gameLobby;
   }
 
   static renderGameLobbyPageWithPushHistory() {
     GameLobbyPage.renderGameLobbyPage();
-    history.pushState(PageManager.pageStatus.gameLobby, "", "#gameLobby");
+    history.pushState(PageManager.pageStatus.gameLobby, "");
   }
 
   static destroyGameLobbyPage() {
@@ -429,13 +527,8 @@ class GameQueueCreationPage {
     createQueueButton.addEventListener("click", (event) => {
       event.preventDefault();
       clearBody();
-      GameQueuePage.renderGameQueuePageWithPushHistory();
+      GameQueuePage.renderGameQueuePage();
     });
-  }
-
-  static renderGameQueueCreationPageWithPushHistory() {
-    GameQueueCreationPage.renderGameQueueCreationPage();
-    history.pushState(PageManager.pageStatus.gameQueueCreation, "", "#gameQueueCreation");
   }
 
   static destroyGameQueueCreationPage() {
@@ -467,12 +560,6 @@ class GameQueuePage {
       clearBody();
       GameLobbyPage.renderGameLobbyPageWithPushHistory();
     });
-
-  }
-
-  static renderGameQueuePageWithPushHistory() {
-    GameQueuePage.renderGameQueuePage();
-    history.pushState(PageManager.pageStatus.gameQueue, "", "#gameQueue");
   }
 
   static destroyGameQueuePage() {
@@ -485,3 +572,15 @@ class GameQueuePage {
 // 아래의 두 페이지는 서버와의 통신이 가능해야 진입할 수 있기 때문에 일단 구현을 보류합니다.
 class TournamentPage {}
 class PongPage {}
+
+export class ErrorPage {
+  static renderErrorPage(errorCode) {
+    removeBodyProperty();
+    clearBody();
+
+    document.body.innerHTML = `${errorCode}`;
+
+    PageManager.currentpageStatus = PageManager.pageStatus.error;
+    history.pushState(PageManager.pageStatus.error, "");
+  }
+}
