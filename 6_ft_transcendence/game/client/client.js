@@ -10,16 +10,6 @@ let paddleId;
 let player1Score = 0;
 let player2Score = 0;
 
-/*
-
-1 - 1
-0 - 1
-
-1 - 1
-
-
-*/
-
 // 여기서 디버깅용으로 roomId를 설정할 수 있습니다.
 const DEBUG_ROOMCODE = 1234;
 // 미사용
