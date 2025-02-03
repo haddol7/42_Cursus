@@ -3,6 +3,7 @@ import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 
+//카메라 및 렌더러 초기화
 export function initScene(paddleId) {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x000000);

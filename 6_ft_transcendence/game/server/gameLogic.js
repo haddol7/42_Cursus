@@ -5,6 +5,7 @@ const {
   PADDLE_WIDTH,
   WINNING_SCORE,
   BALL_SIZE,
+  BALL_SPEED,
 } = require("./constants");
 
 function startBallMovement(roomName, io) {
@@ -69,7 +70,11 @@ function startBallMovement(roomName, io) {
     if (scores.paddle1 === WINNING_SCORE || scores.paddle2 === WINNING_SCORE) {
       room.gameOver = true;
       const winner = scores.paddle1 === WINNING_SCORE ? "paddle1" : "paddle2";
-      io.to(roomName).emit("gameOver", { winner });
+      io.to(roomName).emit("gameOver", {
+        winner,
+        paddle1: scores.paddle1,
+        paddle2: scores.paddle2,
+      });
       clearInterval(interval);
     }
 
@@ -94,22 +99,16 @@ function resetGame(roomName, scorer, io) {
   const room = rooms[roomName];
 
   // 공과 패들 위치 초기화
-  room.ball = { x: 0, y: 0, vx: 0, vy: 0 }; // 공 정지
+  room.ball = { x: 0, y: 0, vx: 0, vy: 0 };
   room.paddles.paddle1 = 0;
   room.paddles.paddle2 = 0;
 
-  io.to(roomName).emit("resetPositions", {
-    ball: room.ball,
-    paddles: room.paddles,
-  });
+  io.to(roomName).emit("resetPositions", {});
 
   // 3초 대기 후 공 재시작
-  // TODO : 카운트 다운 기능 추가
   setTimeout(() => {
-    const initialSpeed = 0.05;
-    room.ball.vx = initialSpeed * (Math.random() % 2); // 랜덤 X 방향
-    room.ball.vy = scorer === "paddle1" ? initialSpeed : -initialSpeed; // 득점 반대 방향
-    io.to(roomName).emit("updateBall", room.ball);
+    room.ball.vx = BALL_SPEED * (Math.random() - 0.5);
+    room.ball.vy = scorer === "paddle1" ? BALL_SPEED : -BALL_SPEED;
   }, 3000);
 }
 
