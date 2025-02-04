@@ -4,7 +4,7 @@ import threading
 from typing import Any, List, Tuple, TypedDict
 
 import requests
-from gameapp.envs import USER_URL
+from gameapp.envs import JWT_URL, USER_URL
 from gameapp.sio import sio
 from gameapp.models import (
     TempMatch,
@@ -15,7 +15,7 @@ from gameapp.models import (
 )
 from socketio.exceptions import ConnectionRefusedError
 
-from django.db.models import Subquery
+from gameapp.utils import get_str
 
 
 NAMESPACE = "/game"
@@ -378,16 +378,32 @@ def get_match_name(match: TempMatch):
     return f"{match.match_room.room_name}_{match.id}"
 
 
+def _get_user_id_from_jwt(jwt) -> int:
+    res = requests.post(f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": False})
+
+    if not res.ok:
+        raise ConnectionRefusedError(res.content)
+
+    json = res.json()
+    return json["user_id"]
+
+
 def on_connect(sid, auth):
     print(f"connected sid={sid}")
 
     # TODO: auth with JWT
-    user_id = int(auth["user_id"])
-    username = auth["user_name"]
+    if "jwt" in auth:
+        jwt = get_str(auth, "jwt")
+        user_id = _get_user_id_from_jwt(jwt)
+        # TODO: Fix username
+        user_name = str(user_id)
+    else:
+        user_id = int(auth["user_id"])
+        user_name = auth["user_name"]
 
     with sio.session(sid, namespace=NAMESPACE) as sess:
         sess["user_id"] = user_id
-        sess["user_name"] = username
+        sess["user_name"] = user_name
 
     room_user = get_room_user_or_none(user_id)
     if room_user is None or room_user.is_online:
@@ -404,7 +420,7 @@ def on_connect(sid, auth):
         raise ConnectionRefusedError("temp match user none")
     print(match_user)
 
-    join_match(sid, match_user, username=username)
+    join_match(sid, match_user, username=user_name)
 
 
 def get_match_user_or_none(user_id: int):
