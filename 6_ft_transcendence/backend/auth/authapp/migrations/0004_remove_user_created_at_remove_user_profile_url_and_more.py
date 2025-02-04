@@ -6,20 +6,20 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('authapp', '0003_delete_userinfo'),
+        ("authapp", "0003_delete_userinfo"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='user',
-            name='created_at',
+            model_name="user",
+            name="created_at",
         ),
         migrations.RemoveField(
-            model_name='user',
-            name='profile_url',
+            model_name="user",
+            name="profile_url",
         ),
         migrations.RemoveField(
-            model_name='user',
-            name='username',
+            model_name="user",
+            name="username",
         ),
     ]
