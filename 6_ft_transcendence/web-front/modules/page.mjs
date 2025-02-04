@@ -157,15 +157,15 @@ export class TwoFAPage {
 
     centralBox.innerHTML += `
       <form id="twoFAUserNameForm" action="" method="">
-        <input type="password" class="form-control" placeholder="please input OTP user name" />
+        <input id="otpUserNameInput" type="password" class="form-control" placeholder="please input OTP user name" />
         <input id="otpUserNameSubmit" type="submit" class="btn btn-info mb-3" value="submit" />
       </form>
     `;
 
-    document.getElementById("otpUserNameSubmit").onsubmit = async (event) => {
+    document.getElementById("twoFAUserNameForm").onsubmit = async (event) => {
       event.preventDefault();
 
-      const otpUserName = replaceAllScriptChar(event.target.previousElementSibling.value);
+      const otpUserName = replaceAllScriptChar(event.target.getElementById("otpUserNameInput").value);
       
       console.log(otpUserName);
       
@@ -187,7 +187,7 @@ export class TwoFAPage {
         </form>
       `;
 
-      document.getElementById("otpCodeSubmit").onsubmit = async (event) => {
+      document.getElementById("twoFAOTPCodeForm").onsubmit = async (event) => {
         event.preventDefault();
         const otpCode = replaceAllScriptChar(document.getElementById("otpCodeInput").value);
 
