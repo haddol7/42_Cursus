@@ -50,7 +50,8 @@
                 console.log(user_id, user_name);
 
                 if (socket) socket.disconnect();
-                socket = io("/", {
+                socket = io("https://localhost", {
+                    path: "/room-sio/",
                     forceNew: true,
                     auth: {
                         user_id: user_id,

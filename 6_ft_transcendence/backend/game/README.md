@@ -163,3 +163,18 @@ This endpoint will not check the user exists or not. Such validation should have
 - If the user is not in the game, safely disconnect the user
 - If the user is in the game, the game ends with opponent's win
 - If the user is in the game but the opponent is not connected, the game ends with opponent's win
+
+## To User Backend
+
+### POST /_internal/dashboard
+
+- Request
+
+```json
+{
+    "user_id": "int",
+    "result": "string: win | lose"
+}
+```
+
+게임이 끝날 때마다 보냅니다.

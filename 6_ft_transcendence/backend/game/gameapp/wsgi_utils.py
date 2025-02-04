@@ -2,6 +2,9 @@ import enum
 import random
 import threading
 from typing import Any, List, Tuple, TypedDict
+
+import requests
+from gameapp.envs import USER_URL
 from gameapp.sio import sio
 from gameapp.models import (
     TempMatch,
@@ -92,6 +95,10 @@ class Match:
         TempMatchRoomUser.objects.filter(
             user_id=loser["id"], temp_match_room_id=self.match.match_room.id
         ).delete()
+        requests.post(
+            f"{USER_URL}/_internal/dashboard",
+            json={"user_id": loser["id"], "result": "lose"},
+        )
         self.stage = MatchStage.FINISHED
 
     def __set_win(self, winner: MatchUser):
@@ -106,6 +113,10 @@ class Match:
                 temp_match_id=self.match.winner_match.id,
             )
             match_decided(winner, self.match.winner_match)
+        requests.post(
+            f"{USER_URL}/_internal/dashboard",
+            json={"user_id": winner["id"], "result": "win"},
+        )
         self.stage = MatchStage.FINISHED
 
     def user_decided(self, user: MatchUser) -> bool:

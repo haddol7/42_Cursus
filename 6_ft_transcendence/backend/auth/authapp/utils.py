@@ -3,7 +3,7 @@ from typing import Any, Dict, Tuple
 
 from django.http import HttpResponse, QueryDict
 import requests
-from authapp.envs import FORTY_TWO_API_URL, JWT_URL
+from authapp.envs import FORTY_TWO_API_URL, JWT_URL, USER_URL
 from authapp.models import User
 from exceptions.CustomException import CustomException
 from exceptions.CustomException import BadRequestFieldException, InternalException
@@ -73,14 +73,13 @@ def get_username_from_42(access_token) -> Tuple[int, str]:
 
 
 def create_user(id_42: int, username: str) -> Tuple[str, str, bool]:
-    user, _ = User.objects.get_or_create(
-        id_42=id_42,
-        defaults={
-            "username": username,
-            "profile_url": "",
-            "created_at": now(),
-        },
-    )
+    user, created = User.objects.get_or_create(id_42=id_42)
+
+    if created:
+        requests.post(
+            f"{USER_URL}/_internal/user",
+            json={"user_id": user.id, "user_name": username},
+        )
 
     resp = requests.post(f"{JWT_URL}/jwt/token", json={"user_id": user.id})
     if not resp.ok:
