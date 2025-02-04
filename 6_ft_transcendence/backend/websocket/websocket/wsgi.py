@@ -8,7 +8,7 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 """
 
 import os
-from typing import Dict, List, Tuple, TypedDict
+from typing import Dict, List, TypedDict
 import socketio
 import socketio.exceptions
 from websocket.sio import sio
@@ -43,6 +43,7 @@ sid_list = []
 ROOM_LISTENERS = "room_listeners"
 ROOM_LIST_EVENT = "room_list"
 ROOM_CHANGED_EVENT = "room_changed"
+START_GAME_EVENT = "start_game"
 
 ROOM_LIMIT_VALID_VALUES = [2, 4, 8, 16]
 
@@ -344,8 +345,7 @@ def sio_start_game(sid):
     elif not room.is_admin(user_id):
         raise WebSocketRoomNotAdminException()
 
-    user_ids = room.user_list
-    return user_ids
+    sio.emit(START_GAME_EVENT, to=room_id)
 
 
 @event_on("debug")

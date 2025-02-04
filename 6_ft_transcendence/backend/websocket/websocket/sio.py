@@ -1,3 +1,3 @@
 import socketio
 
-sio = socketio.Server()
+sio = socketio.Server(cors_allowed_origins=["https://localhost"])

@@ -24,3 +24,4 @@ OAUTH_REDIRECT_URI = get_os_str("OAUTH_REDIRECT_URI")
 
 JWT_URL = get_os_str("JWT_URL")
 TWOFA_URL = get_os_str("TWOFA_URL")
+USER_URL = get_os_str("USER_URL")

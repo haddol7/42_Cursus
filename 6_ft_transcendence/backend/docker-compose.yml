@@ -29,6 +29,7 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - JWT_ALGORITHM=${JWT_ALGORITHM}
       - TWOFA_URL=${TWOFA_URL}
+      - JWT_PORT=${JWT_PORT}
   websocket:
     image: websocket
     container_name: websocket
@@ -54,6 +55,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - WEBSOCKET_WORKER=${WEBSOCKET_WORKER}
       - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
+      - WS_PORT=${WS_PORT}
   game:
     image: game
     container_name: game
@@ -81,7 +83,9 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - WEBSOCKET_WORKER=${WEBSOCKET_WORKER}
       - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
+      - USER_URL=${USER_URL}
       - JWT_URL=${JWT_URL}
+      - GAME_PORT=${GAME_PORT}
   auth:
     image: auth
     container_name: auth
@@ -105,6 +109,8 @@ services:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - WEBSOCKET_WORKER=${WEBSOCKET_WORKER}
+      - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
       - FORTY_TWO_API_URL=${FORTY_TWO_API_URL}
       - OAUTH_42_URL=${OAUTH_42_URL}
       - OAUTH_TOKEN_URL=${OAUTH_TOKEN_URL}
@@ -113,6 +119,8 @@ services:
       - OAUTH_REDIRECT_URI=${OAUTH_REDIRECT_URI}
       - JWT_URL=${JWT_URL}
       - TWOFA_URL=${TWOFA_URL}
+      - USER_URL=${USER_URL}
+      - AUTH_PORT=${AUTH_PORT}
   twofa:
     image: twofa
     container_name: twofa
@@ -144,6 +152,7 @@ services:
       - JWT_URL=${JWT_URL}
       - OTP_SECRET=${OTP_SECRET}
       - OTP_ISSUER=${OTP_ISSUER}
+      - TWOFA_PORT=${TWOFA_PORT}
   db:
     image: postgres:17.1-alpine3.20
     container_name: postgresdb
@@ -162,6 +171,27 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    restart: always
+    init: true
+    ports:
+      - 443:443
+    networks:
+      - postgresdb_network
+    volumes:
+      - ./nginx/cert:/cert
+      - ./nginx/html:/usr/share/nginx/html
+    depends_on:
+      - auth
+      - game
+      - websocket
+    environment:
+      - KEY_FILEPATH=${KEY_FILEPATH}
+      - CRT_FILEPATH=${CRT_FILEPATH}
+      - SERVER_NAME=${SERVER_NAME}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
 
 networks:
   postgresdb_network:

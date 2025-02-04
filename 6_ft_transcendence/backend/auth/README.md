@@ -129,3 +129,18 @@ JWT 체크할 때 2FA를 통과했는지는 체크하지 않습니다.
 
 - JWT 토큰이 올바르지 않은 경우, `jwt.invalid`, `2fa.register`, `2fa.required`, `jwt.expired` (401)
 - 기타 내부 서버 에러, `internal_error` (500)
+
+# To User Backend
+
+## POST /_internal/user
+
+- Request
+
+```json
+{
+    "user_id": "int",
+    "user_name": "string"
+}
+```
+
+회원가입이 될 때마다 요청을 보냅니다. `user_name`은 인트라 아이디입니다.
