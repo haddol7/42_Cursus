@@ -129,7 +129,7 @@ from pathlib import Path
 import os
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (

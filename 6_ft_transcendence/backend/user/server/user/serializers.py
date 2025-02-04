@@ -6,19 +6,18 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile 
         fields = ['user_id', 'user_name', 'memo', 'image_url']
 
+
 class FriendSerializer(serializers.ModelSerializer):
-    friend = ProfileSerializer()
+    user_name = serializers.CharField(source='friend.user_name')
 
     class Meta:
         model = Friend 
-        fields = ['friend']
+        fields = ['user_name'] 
 
 
 class TopRankingSerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source='_user.user_name')
     image_url = serializers.ImageField(source='_user.image_url')
-    win_cnt = serializers.IntegerField(source='win_cnt')
-    total_cnt = serializers.IntegerField(source='total_cnt')
 
     class Meta:
         model = DashBoard
@@ -32,7 +31,7 @@ class DashBoardSerializer(serializers.ModelSerializer):
         model = DashBoard
         fields = ['win_cnt', 'total_cnt', 'top_ranking']
 
-    def get_top_ranking(self, obj):
-        # 승리 수 기준 상위 3명의 유저를 반환
-        top_users = DashBoard.objects.order_by('-win_cnt', 'total_cnt')[:3]
+    @staticmethod
+    def get_top_ranking(obj):
+        top_users = DashBoard.objects.select_related('_user').order_by('-win_cnt', 'total_cnt')[:3]
         return TopRankingSerializer(top_users, many=True).data
