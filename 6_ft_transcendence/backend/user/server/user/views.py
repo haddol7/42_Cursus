@@ -42,13 +42,13 @@ class ProfileDetail(APIView, JWTAuthenticationMixin):
             user = Profile.objects.filter(user_name=user_name).first()
 
             #Todo: fix to Response 404 NOT FOUND
-            # if not user:
-            #     profile = Profile.objects.create(user_id=user_id, user_name=user_name)
-            #     profile.save()
-            #     serializer = ProfileSerializer(profile)
-            #     return Response(serializer.data, status=status.HTTP_201_CREATED)
             if not user:
-                return Response({'error':'user_name is not found.'}, status=status.HTTP_404_NOT_FOUND)
+                profile = Profile.objects.create(user_id=user_id, user_name=user_name)
+                profile.save()
+                serializer = ProfileSerializer(profile)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # if not user:
+            #     return Response({'error':'user_name is not found.'}, status=status.HTTP_404_NOT_FOUND)
 
             serializer = ProfileSerializer(user)
             return Response(serializer.data)
