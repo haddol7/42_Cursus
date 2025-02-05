@@ -1,5 +1,7 @@
-import { LoginPage, PageManager, TwoFAPage } from "./modules/page.mjs";
-import { FTOauth } from "./modules/authentication.mjs";
+import { LoginPage } from "./modules/page/login.mjs";
+import { PageManager } from "./modules/page/manager.mjs";
+import { TwoFAPage } from "./modules/page/twoFA.mjs";
+import { FTOauth } from "./modules/authentication/ftOauth.mjs";
 
 document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("popstate", PageManager.popStateEvent);
@@ -15,9 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const url = FTOauth.removeCodeFromUrl();
-      TwoFAPage.renderTwoFAPageWithReplaceHistroy(url);
+      TwoFAPage.renderAndReplaceHistroy(url);
     } else {
-      LoginPage.renderLoginPageWithReplaceHistory();
+      LoginPage.renderAndReplaceHistory();
     }
   } else if (history.state.page === PageManager.pageStatus.twoFA.page)
     history.forward();
