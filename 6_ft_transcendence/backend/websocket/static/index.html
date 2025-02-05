@@ -50,7 +50,7 @@
                 console.log(user_id, user_name);
 
                 if (socket) socket.disconnect();
-                socket = io("http://localhost:7600", {
+                socket = io("/", {
                     forceNew: true,
                     auth: {
                         user_id: user_id,

@@ -19,7 +19,8 @@ RUN python -m pip install \
     markdown \
     django-filter \
     drf-spectacular \
-    requests
+    requests \
+    gunicorn
 
 
 # Move Script File

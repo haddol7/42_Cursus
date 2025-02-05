@@ -1,6 +1,6 @@
-import datetime
+import random
+from typing import Any, Dict
 import urllib.parse
-import urllib.request
 from django.http import (
     HttpRequest,
     HttpResponse,
@@ -8,14 +8,11 @@ from django.http import (
     HttpResponseRedirect,
     JsonResponse,
 )
-from django.shortcuts import render
-import pyotp
 import requests
 import urllib
 
 from authapp.decorators import (
     api_delete,
-    api_endpoint,
     api_get,
     api_post,
     authenticated,
@@ -25,48 +22,39 @@ from authapp.envs import (
     OAUTH_42_URL,
     OAUTH_CLIENT_ID,
     OAUTH_CLIENT_SECRET,
+    OAUTH_REDIRECT_URI,
     OAUTH_TOKEN_URL,
-    OTP_ISSUER,
+    TWOFA_URL,
 )
 from authapp.models import User
-from authapp.utils import (
-    delete_jwt_secrets,
-    get_totp_secret,
-    set_totp_secret,
-    update_2fa_passed,
-)
+from authapp.utils import create_user, get_str, get_username_from_42, now
 from exceptions.CustomException import (
-    BadRequestFieldException,
+    InternalException,
     UnauthenticatedException,
 )
 from rest_framework.request import Request
 
+from django.db import transaction
+
 # Create your views here.
 
 
-APPLICATION_JSON = "application/json"
+# @api_get
+# def get_42_oauth(req: Request):
+#     redirect_to = get_str(req.query_params, "redirectTo")
+#     redirect_to = urllib.parse.quote(redirect_to)
+
+#     return HttpResponseRedirect(
+#         f"{OAUTH_42_URL}?"
+#         + f"client_id={OAUTH_CLIENT_ID}"
+#         + f"&redirect_uri={redirect_to}"
+#         + "&response_type=code"
+#     )
 
 
 @api_get
-def get_42_oauth(req: Request):
-    redirect_to = req.GET.get("redirectTo")
-    if redirect_to is None:
-        raise BadRequestFieldException("redirectTo")
-    redirect_to = urllib.parse.quote(redirect_to)
-
-    return HttpResponseRedirect(
-        f"{OAUTH_42_URL}?"
-        + f"client_id={OAUTH_CLIENT_ID}"
-        + f"&redirect_uri={redirect_to}"
-        + "&response_type=code"
-    )
-
-
-@api_get
-def get_42_code(req: HttpRequest):
-    code = req.GET.get("code")
-    if code is None:
-        raise BadRequestFieldException("code")
+def get_42_code(req: Request):
+    code = get_str(req.query_params, "code")
 
     # ensure state is state
     res = requests.post(
@@ -75,42 +63,83 @@ def get_42_code(req: HttpRequest):
             "grant_type": "authorization_code",
             "client_id": OAUTH_CLIENT_ID,
             "client_secret": OAUTH_CLIENT_SECRET,
-            "redirect_uri": "http://localhost:8200/auth/42/code",
+            "redirect_uri": OAUTH_REDIRECT_URI,
             "code": code,
         },
     )
-
-    print(res.ok)
-    print(res.content)
     if not res.ok:
         raise UnauthenticatedException()
-    # Access token, Refresh Token, scope, created_at, secret_valid_until
 
-    # TODO: set username appropriately
-    user = User.objects.create(
-        username="username",
-        profile_url="None",
-        created_at=datetime.datetime.now(datetime.timezone.utc),
+    res_json = res.json()
+    id_42, username = get_username_from_42(res_json["access_token"])
+    access_token, refresh_token, isnew = create_user(id_42, username)
+
+    return JsonResponse(
+        {
+            "accessToken": access_token,
+            "refreshToken": refresh_token,
+            "isnew": isnew,
+        }
     )
-
-    resp = requests.post(f"{JWT_URL}/jwt/new", json={"user_id": user.id})
-    if not resp.ok:
-        return JsonResponse(resp.json(), status=resp.status_code)
-
-    return JsonResponse(resp.json())
 
 
 @api_post
-def refresh_token(req: Request, data: dict[str, str]):
-    if "refreshToken" not in data:
-        raise BadRequestFieldException("refreshToken")
-    refresh_token = data["refreshToken"]
-    if refresh_token is None:
-        raise BadRequestFieldException("refreshToken")
+def refresh_token(req: Request, data: Dict[str, Any]):
+    refresh_token = get_str(data, "refreshToken")
+
     res = requests.post(f"{JWT_URL}/jwt/refresh", json={"refresh_token": refresh_token})
     if not res.ok:
-        return JsonResponse(res.text, status=res.status_code)
-    return HttpResponse()
+        return HttpResponse(res.content, status=res.status_code)
+    res_json = res.json()
+    return JsonResponse(
+        {
+            "accessToken": res_json["access_token"],
+            "refreshToken": res_json["refresh_token"],
+        }
+    )
+
+
+@authenticated(skip_2fa=True)
+@api_get
+def get_2fa(req: Request, user_id: int):
+    # Safety: user_id is authenticated with jwt token, so it is safe to call GET
+    res = requests.get(f"{TWOFA_URL}/twofa/info", params={"user_id": user_id})
+
+    if not res.ok:
+        return HttpResponse(res.content, status=res.status_code)
+
+    res_json = res.json()
+    return JsonResponse({"name": res_json["twofa_name"]})
+
+
+@authenticated(skip_2fa=True)
+@api_post
+def post_2fa_new(req: Request, user_id: int, data: Dict[str, Any]):
+    name = get_str(data, "name")
+
+    # Safety: user is authenticated with JWT token, so it is safe to call POST
+    res = requests.post(
+        f"{TWOFA_URL}/twofa/info", json={"user_id": user_id, "name": name}
+    )
+
+    if not res.ok:
+        return HttpResponse(res.content, status=res.status_code)
+
+    res_json = res.json()
+    return JsonResponse({"url": res_json["url"]})
+
+
+@authenticated(skip_2fa=True)
+@api_post
+def post_2fa(req: Request, user_id: int, data: Dict[str, Any]):
+    code = get_str(data, "code")
+    res = requests.post(
+        f"{TWOFA_URL}/twofa/code", json={"user_id": user_id, "code": code}
+    )
+
+    if not res.ok:
+        return HttpResponse(res.content, status=res.status_code)
+    return JsonResponse({})
 
 
 def handle_2fa(req: HttpRequest):
@@ -122,43 +151,33 @@ def handle_2fa(req: HttpRequest):
         return HttpResponseNotAllowed(["GET", "POST"])
 
 
-@authenticated(skip_2fa=True)
-@api_get
-def get_2fa(req: Request, user_id: int):
-    print("userid = ", user_id)
+@authenticated()
+@api_delete
+def logout(req: Request, user_id: int):
+    res = requests.delete(f"{JWT_URL}/jwt/token", params={"user_id": user_id})
+    if not res.ok:
+        raise InternalException()
+    return JsonResponse({})
 
-    if "name" not in req.query_params:
-        raise BadRequestFieldException("name")
 
-    name = req.query_params["name"]
-    if type(name) != str:
-        raise BadRequestFieldException("name")
+@api_post
+def post_auth(req: Request, data: Dict[str, Any]):
+    user_name = get_str(data, "user_name")
+    id_42 = int(random.random() * 1000000) + 1000000
 
-    secret = pyotp.random_base32()
-    set_totp_secret(user_id, secret, name)
-    url = pyotp.totp.TOTP(secret).provisioning_uri(name=name, issuer_name=OTP_ISSUER)
-
-    return JsonResponse({"url": url})
+    access_token, refresh_token, isnew = create_user(id_42, user_name)
+    return JsonResponse(
+        {"accessToken": access_token, "refreshToken": refresh_token, "isnew": isnew}
+    )
 
 
 @authenticated(skip_2fa=True)
 @api_post
-def post_2fa(req: Request, user_id: int, data: dict[str, str]):
-    print("post 2fa, user_id=", user_id)
-    if "code" not in data:
-        raise BadRequestFieldException("code")
-
-    code = data["code"]
-    totp_secret = get_totp_secret(user_id)
-    totp_now = pyotp.TOTP(totp_secret).now()
-    if totp_now != code:
-        raise BadRequestFieldException("code")
-    update_2fa_passed(user_id)
-    return HttpResponse()
-
-
-@authenticated()
-@api_delete
-def logout(req: Request, user_id: int):
-    delete_jwt_secrets(user_id)
-    return HttpResponse()
+def mock_2fa(req: Request, user_id: int, data: Dict[str, Any]):
+    res = requests.post(
+        f"{TWOFA_URL}/twofa/code",
+        json={"user_id": user_id, "code": "1234", "skip": True},
+    )
+    if not res.ok:
+        return HttpResponse(res.content, status=res.status_code)
+    return JsonResponse({})

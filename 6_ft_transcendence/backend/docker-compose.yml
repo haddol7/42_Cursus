@@ -4,13 +4,17 @@ services:
     container_name: jwt
     pull_policy: never
     build: ./jwt
+    expose:
+      - ${JWT_PORT}
     ports:
-      - "8100:8100"
+      - "${JWT_PORT}:${JWT_PORT}"
     networks:
       - postgresdb_network
     depends_on:
       db:
         condition: service_healthy
+      auth:
+        condition: service_started
     tty: true
     init: true
     restart: always
@@ -24,13 +28,17 @@ services:
       - JWT_REFRESH_EXPIRE_SECONDS=${JWT_REFRESH_EXPIRE_SECONDS}
       - JWT_SECRET=${JWT_SECRET}
       - JWT_ALGORITHM=${JWT_ALGORITHM}
+      - TWOFA_URL=${TWOFA_URL}
+      - JWT_PORT=${JWT_PORT}
   websocket:
     image: websocket
     container_name: websocket
     pull_policy: never
     build: ./websocket
+    expose:
+      - ${ROOM_PORT}
     ports:
-      - "7600:7600"
+      - "${ROOM_PORT}:${ROOM_PORT}"
     networks:
       - postgresdb_network
     depends_on:
@@ -42,15 +50,52 @@ services:
     volumes:
       - ./websocket:/server
     environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - WEBSOCKET_WORKER=${WEBSOCKET_WORKER}
       - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
+      - ROOM_PORT=${ROOM_PORT}
+      - JWT_URL=${JWT_URL}
+  game:
+    image: game
+    container_name: game
+    pull_policy: never
+    build: ./game
+    expose:
+      - ${GAME_PORT}
+    ports:
+      - "${GAME_PORT}:${GAME_PORT}"
+    networks:
+      - postgresdb_network
+    depends_on:
+      db:
+        condition: service_healthy
+      auth:
+        condition: service_started
+    tty: true
+    init: true
+    restart: always
+    volumes:
+      - ./game:/server
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - WEBSOCKET_WORKER=${WEBSOCKET_WORKER}
+      - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
+      - USER_URL=${USER_URL}
+      - JWT_URL=${JWT_URL}
+      - GAME_PORT=${GAME_PORT}
   auth:
     image: auth
     container_name: auth
     pull_policy: never
     build: ./auth
+    expose:
+      - ${AUTH_PORT}
     ports:
-      - "8200:8200"
+      - "${AUTH_PORT}:${AUTH_PORT}"
     networks:
       - postgresdb_network
     depends_on:
@@ -62,13 +107,53 @@ services:
     volumes:
       - ./auth:/server
     environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - WEBSOCKET_WORKER=${WEBSOCKET_WORKER}
+      - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
+      - FORTY_TWO_API_URL=${FORTY_TWO_API_URL}
       - OAUTH_42_URL=${OAUTH_42_URL}
+      - OAUTH_TOKEN_URL=${OAUTH_TOKEN_URL}
+      - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
+      - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
+      - OAUTH_REDIRECT_URI=${OAUTH_REDIRECT_URI}
+      - JWT_URL=${JWT_URL}
+      - TWOFA_URL=${TWOFA_URL}
+      - USER_URL=${USER_URL}
+      - AUTH_PORT=${AUTH_PORT}
+  twofa:
+    image: twofa
+    container_name: twofa
+    pull_policy: never
+    build: ./twofa
+    expose:
+      - ${TWOFA_PORT}
+    ports:
+      - "${TWOFA_PORT}:${TWOFA_PORT}"
+    networks:
+      - postgresdb_network
+    depends_on:
+      db:
+        condition: service_healthy
+      auth:
+        condition: service_started
+    tty: true
+    init: true
+    restart: always
+    volumes:
+      - ./twofa:/server
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - OAUTH_TOKEN_URL=${OAUTH_TOKEN_URL}
       - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
       - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
       - JWT_URL=${JWT_URL}
       - OTP_SECRET=${OTP_SECRET}
       - OTP_ISSUER=${OTP_ISSUER}
+      - TWOFA_PORT=${TWOFA_PORT}
   db:
     image: postgres:17.1-alpine3.20
     container_name: postgresdb
@@ -76,8 +161,8 @@ services:
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
-    ports:
-      - "5432:5432"
+    expose:
+      - ${DB_PORT}
     networks:
       - postgresdb_network
     volumes:
@@ -87,6 +172,34 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    restart: always
+    init: true
+    ports:
+      - 443:443
+    networks:
+      - postgresdb_network
+    volumes:
+      - ./nginx/cert:/cert
+      - ./nginx/html:/usr/share/nginx/html
+    depends_on:
+      - auth
+      - game
+      - websocket
+      - jwt
+      - twofa
+    environment:
+      - KEY_FILEPATH=${KEY_FILEPATH}
+      - CRT_FILEPATH=${CRT_FILEPATH}
+      - SERVER_NAME=${SERVER_NAME}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - AUTH_PORT=${AUTH_PORT}
+      - JWT_PORT=${JWT_PORT}
+      - ROOM_PORT=${ROOM_PORT}
+      - GAME_PORT=${GAME_PORT}
+      - TWOFA_PORT=${TWOFA_PORT}
 
 networks:
   postgresdb_network:
