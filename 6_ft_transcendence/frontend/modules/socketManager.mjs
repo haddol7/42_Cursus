@@ -25,7 +25,14 @@ export class SocketManager {
   };
 
   static disconnect = () => {
-    if (SocketManager.socket !== null) SocketManager.socket.disconnect();
+    if (SocketManager.socket !== null)
+    {
+      SocketManager.socket.disconnect();
+      SocketManager.socket = null;
+      SocketManager.roomList = null;
+      SocketManager.participantList = null;
+      SocketManager.maxNumOfParticipant = null;
+    }
   };
 
   static onRoomListEvent = () => {
@@ -58,6 +65,8 @@ export class SocketManager {
 
   static emitLeaveRoom = () => {
     SocketManager.socket.emit("leave_room");
+    SocketManager.participantList = null;
+    SocketManager.maxNumOfParticipant = null;
   }
 
   static getNumOfParticipants = () => {

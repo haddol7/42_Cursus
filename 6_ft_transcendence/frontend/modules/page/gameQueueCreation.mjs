@@ -11,7 +11,7 @@ export class GameQueueCreationPage {
     document.body.innerHTML += `
       <div id="gameQueueCreationSection" style="border: 1px solid gray; margin: 4px;">
         <p style="margin: 4px;">Please select the number of members of PageManager Pong Tournament.</p>
-        <form id="createQueueForm" action="" method="" id="selectNumOfMembers">
+        <form id="createQueueForm" action="" method="">
           <label style="margin: 4px;">  
             <input class="choice" type="radio" name="numOfMembers" value="2" /> 2
           </label><br />
