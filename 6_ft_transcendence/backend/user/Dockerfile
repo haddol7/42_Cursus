@@ -8,7 +8,7 @@ ARG DEV=false
 
 COPY requirements.txt /home/requirements.txt
 COPY ./script.sh /home/script.sh
-COPY ./default.png /media/default.png
+COPY ./default.png /server/media/default.png
 
 RUN chmod 755 /home/script.sh
 
