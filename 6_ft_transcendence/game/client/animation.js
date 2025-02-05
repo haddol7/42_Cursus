@@ -3,9 +3,6 @@ import * as THREE from "three";
 let keyState = {};
 
 export function animate(scene, camera, composer, socket, paddleId) {
-  const paddleSpeed = 0.7;
-  const friction = 0.95; // 가속도 감소를 위한 마찰 계수
-  let paddleVelocity = 0;
   let paddleDirection = 0;
 
   const clock = new THREE.Clock();
@@ -77,20 +74,9 @@ export function animate(scene, camera, composer, socket, paddleId) {
 
     // 패들 움직임 처리
     const paddle = scene.getObjectByName(paddleId);
-    if (paddle) {
-      paddleVelocity += paddleDirection * paddleSpeed * deltaTime;
-      paddleVelocity *= friction; // 속도 감소를 위한 마찰 적용
-
-      // 패들 위치 업데이트
-      paddle.position.x += paddleVelocity;
-      // 패들이 화면 밖으로 나가지 않도록 제한
-      paddle.position.x = Math.max(
-        Math.min(paddle.position.x, 5 - 0.5),
-        -5 + 0.5
-      );
-
+    if (paddle && paddleDirection !== 0) {
       // 패들 위치 전송
-      socket.emit("paddleMove", { paddleId, position: paddle.position.x });
+      socket.emit("paddleMove", { paddleId, paddleDirection });
     }
 
     // 별 위치 업데이트
