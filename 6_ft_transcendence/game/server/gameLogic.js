@@ -86,13 +86,30 @@ function handlePaddleMove(roomName, data, io) {
   const room = rooms[roomName];
   if (!room) return;
 
-  const { paddleId, position } = data;
+  const { paddleId, paddleDirection } = data;
+
+  //방향값을 0.075, -0.075로 고정. (클라 쪽에서 악의적으로 큰 값이 들어올 수 있음)
+  let normalizedPaddleDirection;
+  if (paddleDirection != 0) {
+    normalizedPaddleDirection =
+      (paddleDirection * 0.075) / Math.abs(paddleDirection);
+  } else {
+    // 방향값이 0이면 패들을 움직이지 않기에 return
+    // 클라 쪽에서도 0이 들어오지 않을 것임
+    return;
+  }
+
+  const position = room.paddles[paddleId] + normalizedPaddleDirection;
+  console.log(paddleId, position);
   room.paddles[paddleId] = Math.max(
     -GAME_BOUNDS.x + PADDLE_WIDTH / 2,
     Math.min(GAME_BOUNDS.x - PADDLE_WIDTH / 2, position)
   );
 
-  io.to(roomName).emit("updatePaddle", { paddleId, position });
+  io.to(roomName).emit("updatePaddle", {
+    paddleId,
+    position: room.paddles[paddleId],
+  });
 }
 
 function resetGame(roomName, scorer, io) {
