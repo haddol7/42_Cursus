@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.parsers import FileUploadParser, JSONParser
+from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser
 from rest_framework.request import Request
 from rest_framework import status
 import requests
@@ -30,7 +30,7 @@ class JWTAuthenticationMixin:
 
 # /user
 class ProfileDetail(APIView, JWTAuthenticationMixin):
-    parser_classes = [JSONParser, FileUploadParser]
+    parser_classes = [JSONParser, MultiPartParser]
 
     def get(self, req: Request):
         try:
@@ -63,11 +63,7 @@ class ProfileDetail(APIView, JWTAuthenticationMixin):
             user_profile = Profile.objects.filter(user_id=user_id).first()
             if not user_profile:
                 return Response({'error': 'user_profile is not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-            user_name = req.data.get('user_name')
-            if Profile.objects.filter(user_name=user_name).exists():
-                return Response({'error': f'{user_name} is already exist.'}, status=status.HTTP_400_BAD_REQUEST)
-
+            
             serializer = ProfileSerializer(user_profile, data=req.data, partial=True)  # partial=True로 일부분 업데이트 허용
             if serializer.is_valid():
                 serializer.save()

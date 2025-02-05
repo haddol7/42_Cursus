@@ -6,6 +6,12 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile 
         fields = ['user_id', 'user_name', 'memo', 'image_url']
 
+    def validate_user_name(self, value):
+        instance = self.instance
+        if Profile.objects.exclude(pk=instance.pk).filter(user_name=value).exists():
+            raise serializers.ValidationError("It is already exist name.")
+        return value
+
 
 class FriendSerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source='friend.user_name')

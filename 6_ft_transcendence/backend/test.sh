@@ -45,4 +45,4 @@ echo ''
 
 #curl -X POST -H "Content-Type:application/json" -d '{"user_id":"8", "result":"win"}' http://127.0.0.1:8300/_internal/dashboard -
 
-#curl -X POST -F "image_url=@/home/kapustin/tsen/backend/backend/mice.png" -H "Authorization: Bearer <token>" http://127.0.0.1:8300/user/
+#curl -X PUT -F "image_url=@/home/kapustin/tsen/backend/backend/mice.png" -F "user_name=chansjeo" -H "Authorization: Bearer <token>" http://127.0.0.1:8300/user/
