@@ -6,9 +6,3 @@ pyjwt
 python-dotenv
 pillow
 psycopg2
-# djangorestframework-simplejwt
-# djangorestframework-queryfields
-# django-cors-headers
-# django-otp
-# django-two-factor-auth
-# qrcode
