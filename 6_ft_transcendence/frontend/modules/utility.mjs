@@ -1,4 +1,4 @@
-import { ErrorPage } from "./page.mjs";
+import { ErrorPage } from "./page/error.mjs"
 
 export const safe_fetch = async (...param) => {
     const response = await fetch(...param);
@@ -6,5 +6,5 @@ export const safe_fetch = async (...param) => {
     if (response.ok)
         return response;
 
-    ErrorPage.renderErrorPage(response.status);
+    ErrorPage.render(response.status);
 }
