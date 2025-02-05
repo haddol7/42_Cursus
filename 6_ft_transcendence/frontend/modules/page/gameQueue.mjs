@@ -9,8 +9,8 @@ export class GameQueuePage {
     renderNavBar();
 
     document.body.innerHTML += `
-        <div id= style="border: 1px solid gray; margin: 4px;">
-          <a id="quitQueueLink" class="btn btn-info mb-3"; style="margin: 4px;" text-decoration: none;">Quit queue link</a>
+        <div style="border: 1px solid gray; margin: 4px;">
+          <a id="quitQueueLink" class="btn btn-info mb-3"; style="margin: 4px; text-decoration: none;">Quit queue link</a>
         </div>
         <div id="gameQueueSection" style="border: 1px solid gray; margin: 4px;">
         </div>

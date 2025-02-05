@@ -27,7 +27,7 @@ export class MyPage {
           </div>
           <div id="rightSection">
             <form action="" method="" id="userSearchBar" style="display: grid; grid-template-columns: 4fr 1fr; border: 1px solid gray; margin: 4px;">
-              <input type="string" class="form-control" placeholder="user search bar" style="margin: 16px;" />
+              <input type="text" class="form-control" placeholder="user search bar" style="margin: 16px;" />
               <input type="submit" class="btn btn-info mb-3" value="search" style="margin: 16px;" />
             </form>
           </div>
