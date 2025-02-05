@@ -67,10 +67,11 @@ def post_code(req: Request, data: Dict[str, Any]):
     if user_info is None:
         raise TwoFARegisterException()
 
-    totp_secret = user_info.twofa_secret
-    totp_now = pyotp.TOTP(totp_secret).now()
-    if totp_now != code:
-        raise BadRequestFieldException("code")
+    if "skip" not in data or data["skip"] == False:
+        totp_secret = user_info.twofa_secret
+        totp_now = pyotp.TOTP(totp_secret).now()
+        if totp_now != code:
+            raise BadRequestFieldException("code")
 
     user_info.twofa_passed = True
     user_info.save()

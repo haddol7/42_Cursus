@@ -1,11 +1,8 @@
 import datetime
 from typing import Any, Dict, List
-from django.db import transaction
 from django.http import QueryDict
 
 from exceptions.CustomException import BadRequestFieldException
-from gameapp.models import TempMatch, TempMatchRoom, TempMatchRoomUser, TempMatchUser
-from gameapp.wsgi_utils import init_matches
 
 
 def now() -> datetime.datetime:
@@ -59,58 +56,3 @@ def get_list(dict: Dict[str, Any] | QueryDict, key: str) -> List[Any]:
     if not isinstance(val, list):
         raise BadRequestFieldException(key)
     return val
-
-
-def make_rooms(room_name: str, user_id: List[int]):
-    with transaction.atomic():
-        temp_match_room = TempMatchRoom.objects.create(room_name=room_name)
-
-        temp_match_room_users: list[TempMatchRoomUser] = []
-        for id in user_id:
-            temp_match_user = TempMatchRoomUser.objects.create(
-                user_id=id, temp_match_room_id=temp_match_room.id
-            )
-            temp_match_room_users.append(temp_match_user)
-
-        user_len = len(user_id)
-
-        prev_match = [
-            TempMatch.objects.create(
-                match_room_id=temp_match_room.id, round=2, winner_match=None
-            )
-        ]
-
-        for round in [4, 8, 16]:
-            if round > user_len:
-                break
-
-            match_len = round // 2
-            cur_match = []
-
-            for m in range(match_len):
-                cur_match.append(
-                    TempMatch.objects.create(
-                        match_room_id=temp_match_room.id,
-                        round=round,
-                        winner_match_id=prev_match[m // 2].id,
-                    )
-                )
-
-            prev_match = cur_match
-
-        temp_match_users: list[TempMatchUser] = []
-        for idx, match in enumerate(prev_match):
-            temp_match_users.append(
-                TempMatchUser.objects.create(
-                    user_id=user_id[idx * 2],
-                    temp_match_id=match.id,
-                )
-            )
-            temp_match_users.append(
-                TempMatchUser.objects.create(
-                    user_id=user_id[idx * 2 + 1],
-                    temp_match_id=match.id,
-                )
-            )
-
-        init_matches(temp_match_users)

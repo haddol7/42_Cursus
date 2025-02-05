@@ -5,9 +5,9 @@ from django.shortcuts import render
 from rest_framework.request import Request
 
 from exceptions.CustomException import BadRequestFieldException
-from gameapp.wsgi_utils import clear_match_dict, clear_room
+from gameapp.wsgi_utils import clear_match_dict, clear_room, make_rooms
 from gameapp.decorators import api_delete, api_post
-from gameapp.utils import get_int, get_list, get_str, make_rooms
+from gameapp.utils import get_int, get_list, get_str
 
 
 # Create your views here.

@@ -14,6 +14,7 @@ from gameapp.models import (
     User,
 )
 from socketio.exceptions import ConnectionRefusedError
+from django.db import transaction
 
 from gameapp.utils import get_str
 
@@ -27,6 +28,61 @@ PADDLE_HEIGHT = 0.2
 BALL_RADIUS = 0.2
 WINNING_SCORE = 2
 BALL_SIZE = {"x": 0.4, "y": 0.4, "z": 0.4}
+
+
+def make_rooms(room_name: str, user_id: List[int]):
+    with transaction.atomic():
+        temp_match_room = TempMatchRoom.objects.create(room_name=room_name)
+
+        temp_match_room_users: list[TempMatchRoomUser] = []
+        for id in user_id:
+            temp_match_user = TempMatchRoomUser.objects.create(
+                user_id=id, temp_match_room_id=temp_match_room.id
+            )
+            temp_match_room_users.append(temp_match_user)
+
+        user_len = len(user_id)
+
+        prev_match = [
+            TempMatch.objects.create(
+                match_room_id=temp_match_room.id, round=2, winner_match=None
+            )
+        ]
+
+        for round in [4, 8, 16]:
+            if round > user_len:
+                break
+
+            match_len = round // 2
+            cur_match = []
+
+            for m in range(match_len):
+                cur_match.append(
+                    TempMatch.objects.create(
+                        match_room_id=temp_match_room.id,
+                        round=round,
+                        winner_match_id=prev_match[m // 2].id,
+                    )
+                )
+
+            prev_match = cur_match
+
+        temp_match_users: list[TempMatchUser] = []
+        for idx, match in enumerate(prev_match):
+            temp_match_users.append(
+                TempMatchUser.objects.create(
+                    user_id=user_id[idx * 2],
+                    temp_match_id=match.id,
+                )
+            )
+            temp_match_users.append(
+                TempMatchUser.objects.create(
+                    user_id=user_id[idx * 2 + 1],
+                    temp_match_id=match.id,
+                )
+            )
+
+        init_matches(temp_match_users)
 
 
 def _get_from_sess(sid: str) -> Tuple[int, str]:
@@ -84,10 +140,14 @@ class Match:
 
     def __set_win_and_lose(self, winner: MatchUser, loser: MatchUser):
         self.stage = MatchStage.FINISHED
-        sio.emit("gameOver", {"winner": winner["name"]}, namespace=NAMESPACE)
+        sio.emit(
+            "gameOver",
+            {"winner": winner["name"]},
+            to=self.room_name,
+            namespace=NAMESPACE,
+        )
 
         self.__set_win(winner)
-
         self.__set_lose(loser)
         sio.disconnect(loser["sid"], namespace=NAMESPACE)
 
@@ -95,10 +155,13 @@ class Match:
         TempMatchRoomUser.objects.filter(
             user_id=loser["id"], temp_match_room_id=self.match.match_room.id
         ).delete()
-        requests.post(
-            f"{USER_URL}/_internal/dashboard",
-            json={"user_id": loser["id"], "result": "lose"},
-        )
+        try:
+            requests.post(
+                f"{USER_URL}/_internal/dashboard",
+                json={"user_id": loser["id"], "result": "lose"},
+            )
+        except:
+            pass
         self.stage = MatchStage.FINISHED
 
     def __set_win(self, winner: MatchUser):
@@ -113,10 +176,23 @@ class Match:
                 temp_match_id=self.match.winner_match.id,
             )
             match_decided(winner, self.match.winner_match)
-        requests.post(
-            f"{USER_URL}/_internal/dashboard",
-            json={"user_id": winner["id"], "result": "win"},
-        )
+        else:
+            print(f"deleting winner id = {winner['id']}")
+            TempMatchRoomUser.objects.filter(user_id=winner["id"]).delete()
+
+            # Dependency on CASCADE
+            print(f"Deleting match room name ={self.match.match_room.room_name}")
+            TempMatchRoom.objects.filter(
+                room_name=self.match.match_room.room_name
+            ).delete()
+        try:
+            requests.post(
+                f"{USER_URL}/_internal/dashboard",
+                json={"user_id": winner["id"], "result": "win"},
+            )
+        except:
+            pass
+        del match_dict_2[self.match.id]
         self.stage = MatchStage.FINISHED
 
     def user_decided(self, user: MatchUser) -> bool:
@@ -142,6 +218,7 @@ class Match:
             if self.online[idx]:
                 return True
             self.users[idx]["sid"] = user["sid"]
+            self.users[idx]["name"] = user["name"]
             self.online[idx] = True
             if len(self.online) != 1:
                 if not self.online[0] or not self.online[1]:
@@ -436,13 +513,17 @@ def on_disconnect(sid, reason):
 
     with sio.session(sid, namespace=NAMESPACE) as sess:
         user_id: int = sess["user_id"]
+        username: str = sess["user_name"]
 
     match_user = get_match_user_or_none(user_id)
     if match_user:
         match_id = match_user.temp_match.id
-        user = MatchUser(id=match_user.user.id, name=match_user.user.username, sid=sid)
-        match_dict_2[match_id].user_disconnected(user)
-        print(f"setting lose for user_id={user_id}")
+        if match_id in match_dict_2:
+            user = MatchUser(id=match_user.user.id, name=username, sid=sid)
+            match_dict_2[match_id].user_disconnected(user)
+            print(f"setting lose for user_id={user_id}")
+        else:
+            print("disconnecting... but match_user not found")
     else:
         print("disconnecting... but match_user not found")
 
@@ -521,6 +602,6 @@ def init_matches(users: List[TempMatchUser]):
         if match_id not in match_dict_2:
             match_dict_2[match_id] = Match(u.temp_match)
 
-        user = MatchUser(id=u.user.id, name=u.user.username, sid="")
+        user = MatchUser(id=u.user.id, name="", sid="")
         print(user)
         match_dict_2[match_id].user_decided(user)

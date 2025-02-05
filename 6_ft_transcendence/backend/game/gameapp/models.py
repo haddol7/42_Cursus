@@ -6,7 +6,6 @@ from django.utils.timezone import now
 
 class User(models.Model):
     id = models.BigAutoField(primary_key=True)
-    username = models.CharField(max_length=10, unique=True)
 
     class Meta:
         db_table = "user"
