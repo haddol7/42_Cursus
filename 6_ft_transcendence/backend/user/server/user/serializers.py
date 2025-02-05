@@ -4,7 +4,7 @@ from user.models import Profile, Friend, DashBoard
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile 
-        fields = ['user_id', 'user_name', 'memo', 'image_url']
+        fields = ['user_name', 'memo', 'image_url']
 
     def validate_user_name(self, value):
         instance = self.instance
