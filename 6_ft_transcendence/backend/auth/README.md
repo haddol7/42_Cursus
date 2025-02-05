@@ -130,6 +130,36 @@ JWT 체크할 때 2FA를 통과했는지는 체크하지 않습니다.
 - JWT 토큰이 올바르지 않은 경우, `jwt.invalid`, `2fa.register`, `2fa.required`, `jwt.expired` (401)
 - 기타 내부 서버 에러, `internal_error` (500)
 
+## POST /auth/42/code/mock
+
+- Request
+
+```json
+{
+    "user_name": "string"
+}
+```
+
+- Response
+
+```json
+{
+    "accessToken": "string",
+    "refreshToken": "string",
+    "isnew": "boolean"
+}
+```
+
+`user_name` 의 사용자를 생성합니다. intra에 요청날리는 과정이 생략됩니다.
+
+`/auth/42/code`의 응답 형식을 그대로 따라합니다.
+
+## POST /auth/2fa/mock (JWT)
+
+코드로 인증했다 치고 내부 상태를 인증 된 것으로 바꿉니다. 코드를 보내든, 안 보내든 상관 없습니다. 그냥 인증을 시켜줍니다.
+
+`/auth/2fa`의 동작을 따라합니다.
+
 # To User Backend
 
 ## POST /_internal/user

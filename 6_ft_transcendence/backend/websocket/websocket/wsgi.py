@@ -9,8 +9,10 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 
 import os
 from typing import Dict, List, TypedDict
+import requests
 import socketio
 import socketio.exceptions
+from websocket.envs import JWT_URL
 from websocket.sio import sio
 
 from django.core.wsgi import get_wsgi_application
@@ -31,6 +33,7 @@ import random
 import string
 
 from websocket.decorators import event_on
+from websocket.utils import get_str
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "websocket.settings")
 
@@ -206,11 +209,29 @@ def get_session_info(sid) -> int:
     return user_id
 
 
+def _get_user_id_from_jwt(jwt: str) -> int:
+    res = requests.post(f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": False})
+
+    if not res.ok:
+        raise ConnectionRefusedError(res.content)
+
+    json = res.json()
+    return json["user_id"]
+
+
 @sio.event
 def connect(sid, environ, auth):
     print("auth=", auth)
-    user_id = auth["user_id"]
-    user_name = auth["user_name"]
+
+    if "jwt" in auth:
+        jwt = get_str(auth, "jwt")
+        user_id = _get_user_id_from_jwt(jwt)
+
+        # TODO: Fix user_name
+        user_name = str(user_id)
+    else:
+        user_id = auth["user_id"]
+        user_name = auth["user_name"]
 
     if user_id is None:
         raise BadRequestFieldException("user_id")
@@ -223,6 +244,7 @@ def connect(sid, environ, auth):
         raise socketio.exceptions.ConnectionRefusedError("user.found")
     with sio.session(sid) as sess:
         sess["user_id"] = user_id
+
     USER_DICT[user_id] = RoomUser(sid, user_id, user_name)
     sio.enter_room(sid, ROOM_LISTENERS)
     sio.emit(ROOM_LIST_EVENT, ROOM_MANAGER.room_list_to_json(), to=sid)

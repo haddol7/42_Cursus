@@ -6,13 +6,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jwtapp', '0001_initial'),
+        ("jwtapp", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='userstatus',
-            old_name='user_id',
-            new_name='user',
+            model_name="userstatus",
+            old_name="user_id",
+            new_name="user",
         ),
     ]

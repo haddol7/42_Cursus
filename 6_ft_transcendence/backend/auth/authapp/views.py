@@ -1,3 +1,4 @@
+import random
 from typing import Any, Dict
 import urllib.parse
 from django.http import (
@@ -83,7 +84,7 @@ def get_42_code(req: Request):
 
 
 @api_post
-def refresh_token(req: Request, data: Dict[str, str]):
+def refresh_token(req: Request, data: Dict[str, Any]):
     refresh_token = get_str(data, "refreshToken")
 
     res = requests.post(f"{JWT_URL}/jwt/refresh", json={"refresh_token": refresh_token})
@@ -130,7 +131,7 @@ def post_2fa_new(req: Request, user_id: int, data: Dict[str, Any]):
 
 @authenticated(skip_2fa=True)
 @api_post
-def post_2fa(req: Request, user_id: int, data: Dict[str, str]):
+def post_2fa(req: Request, user_id: int, data: Dict[str, Any]):
     code = get_str(data, "code")
     res = requests.post(
         f"{TWOFA_URL}/twofa/code", json={"user_id": user_id, "code": code}
@@ -156,4 +157,27 @@ def logout(req: Request, user_id: int):
     res = requests.delete(f"{JWT_URL}/jwt/token", params={"user_id": user_id})
     if not res.ok:
         raise InternalException()
+    return JsonResponse({})
+
+
+@api_post
+def post_auth(req: Request, data: Dict[str, Any]):
+    user_name = get_str(data, "user_name")
+    id_42 = int(random.random() * 1000000) + 1000000
+
+    access_token, refresh_token, isnew = create_user(id_42, user_name)
+    return JsonResponse(
+        {"accessToken": access_token, "refreshToken": refresh_token, "isnew": isnew}
+    )
+
+
+@authenticated(skip_2fa=True)
+@api_post
+def mock_2fa(req: Request, user_id: int, data: Dict[str, Any]):
+    res = requests.post(
+        f"{TWOFA_URL}/twofa/code",
+        json={"user_id": user_id, "code": "1234", "skip": True},
+    )
+    if not res.ok:
+        return HttpResponse(res.content, status=res.status_code)
     return JsonResponse({})

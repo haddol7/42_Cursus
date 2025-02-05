@@ -62,7 +62,8 @@
 ```json
 {
     "user_id": "int",
-    "code": "str"
+    "code": "str",
+    "skip": "optional, bool"
 }
 ```
 

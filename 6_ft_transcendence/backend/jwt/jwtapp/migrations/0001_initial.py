@@ -8,30 +8,37 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='User',
+            name="User",
             fields=[
-                ('id', models.BigAutoField(primary_key=True, serialize=False)),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
             ],
             options={
-                'db_table': 'user',
-                'managed': False,
+                "db_table": "user",
+                "managed": False,
             },
         ),
         migrations.CreateModel(
-            name='UserStatus',
+            name="UserStatus",
             fields=[
-                ('user_id', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='jwtapp.user')),
-                ('jwt_secret', models.CharField(max_length=10)),
-                ('refresh_secret', models.CharField(max_length=10)),
-                ('expired_at', models.DateTimeField()),
+                (
+                    "user_id",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        serialize=False,
+                        to="jwtapp.user",
+                    ),
+                ),
+                ("jwt_secret", models.CharField(max_length=10)),
+                ("refresh_secret", models.CharField(max_length=10)),
+                ("expired_at", models.DateTimeField()),
             ],
             options={
-                'db_table': 'user_status',
+                "db_table": "user_status",
             },
         ),
     ]

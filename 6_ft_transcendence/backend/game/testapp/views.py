@@ -5,7 +5,7 @@ from gameapp.decorators import api_post
 
 from rest_framework.request import Request
 
-from gameapp.utils import make_rooms
+from gameapp.wsgi_utils import make_rooms
 
 
 # Create your views here.

@@ -76,10 +76,13 @@ def create_user(id_42: int, username: str) -> Tuple[str, str, bool]:
     user, created = User.objects.get_or_create(id_42=id_42)
 
     if created:
-        requests.post(
-            f"{USER_URL}/_internal/user",
-            json={"user_id": user.id, "user_name": username},
-        )
+        try:
+            requests.post(
+                f"{USER_URL}/_internal/user",
+                json={"user_id": user.id, "user_name": username},
+            )
+        except:
+            pass
 
     resp = requests.post(f"{JWT_URL}/jwt/token", json={"user_id": user.id})
     if not resp.ok:

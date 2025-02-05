@@ -8,32 +8,39 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='User',
+            name="User",
             fields=[
-                ('id', models.BigAutoField(primary_key=True, serialize=False)),
-                ('username', models.CharField(max_length=10)),
-                ('profile_url', models.CharField(max_length=128)),
-                ('created_at', models.DateTimeField()),
+                ("id", models.BigAutoField(primary_key=True, serialize=False)),
+                ("username", models.CharField(max_length=10)),
+                ("profile_url", models.CharField(max_length=128)),
+                ("created_at", models.DateTimeField()),
             ],
             options={
-                'db_table': 'user',
+                "db_table": "user",
             },
         ),
         migrations.CreateModel(
-            name='UserInfo',
+            name="UserInfo",
             fields=[
-                ('user_id', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='authapp.user')),
-                ('twofa_secret', models.CharField(max_length=32)),
-                ('twofa_name', models.CharField(max_length=32)),
+                (
+                    "user_id",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        serialize=False,
+                        to="authapp.user",
+                    ),
+                ),
+                ("twofa_secret", models.CharField(max_length=32)),
+                ("twofa_name", models.CharField(max_length=32)),
             ],
             options={
-                'db_table': 'userinfo',
-                'managed': False,
+                "db_table": "userinfo",
+                "managed": False,
             },
         ),
     ]

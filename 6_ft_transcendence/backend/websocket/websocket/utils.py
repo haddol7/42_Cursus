@@ -1,7 +1,7 @@
 import datetime
 from typing import Any, Dict, List
-from django.http import QueryDict
 
+from django.http import QueryDict
 from exceptions.CustomException import BadRequestFieldException
 
 

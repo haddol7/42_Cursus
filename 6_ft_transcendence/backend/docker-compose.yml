@@ -36,9 +36,9 @@ services:
     pull_policy: never
     build: ./websocket
     expose:
-      - ${WS_PORT}
+      - ${ROOM_PORT}
     ports:
-      - "${WS_PORT}:${WS_PORT}"
+      - "${ROOM_PORT}:${ROOM_PORT}"
     networks:
       - postgresdb_network
     depends_on:
@@ -55,7 +55,8 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - WEBSOCKET_WORKER=${WEBSOCKET_WORKER}
       - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
-      - WS_PORT=${WS_PORT}
+      - ROOM_PORT=${ROOM_PORT}
+      - JWT_URL=${JWT_URL}
   game:
     image: game
     container_name: game
@@ -187,11 +188,18 @@ services:
       - auth
       - game
       - websocket
+      - jwt
+      - twofa
     environment:
       - KEY_FILEPATH=${KEY_FILEPATH}
       - CRT_FILEPATH=${CRT_FILEPATH}
       - SERVER_NAME=${SERVER_NAME}
       - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - AUTH_PORT=${AUTH_PORT}
+      - JWT_PORT=${JWT_PORT}
+      - ROOM_PORT=${ROOM_PORT}
+      - GAME_PORT=${GAME_PORT}
+      - TWOFA_PORT=${TWOFA_PORT}
 
 networks:
   postgresdb_network:

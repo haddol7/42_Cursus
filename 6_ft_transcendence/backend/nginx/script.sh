@@ -3,6 +3,11 @@
 sed -i 's/${SERVER_NAME}/'$SERVER_NAME'/g' /etc/nginx/nginx.conf
 sed -i 's/${CRT_FILEPATH}/'$(echo $CRT_FILEPATH | sed 's/\//\\\//g')'/g' /etc/nginx/nginx.conf
 sed -i 's/${KEY_FILEPATH}/'$(echo $KEY_FILEPATH | sed 's/\//\\\//g')'/g' /etc/nginx/nginx.conf
+sed -i 's/${AUTH_PORT}/'$AUTH_PORT'/g' /etc/nginx/nginx.conf
+sed -i 's/${JWT_PORT}/'$JWT_PORT'/g' /etc/nginx/nginx.conf
+sed -i 's/${TWOFA_PORT}/'$TWOFA_PORT'/g' /etc/nginx/nginx.conf
+sed -i 's/${ROOM_PORT}/'$ROOM_PORT'/g' /etc/nginx/nginx.conf
+sed -i 's/${GAME_PORT}/'$GAME_PORT'/g' /etc/nginx/nginx.conf
 
 if [ ! -f $KEY_FILEPATH ] || [ ! -f $CRT_FILEPATH ]; then
   mkdir -p $(dirname $KEY_FILEPATH)
