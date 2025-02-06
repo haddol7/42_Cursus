@@ -68,6 +68,7 @@ def get_42_code(req: Request):
         },
     )
     if not res.ok:
+        print(f"{res.content}")
         raise UnauthenticatedException()
 
     res_json = res.json()

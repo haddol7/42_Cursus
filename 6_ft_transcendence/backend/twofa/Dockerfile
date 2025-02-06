@@ -25,9 +25,6 @@ RUN python -m pip install \
 COPY ./run_server.sh /server/run_server.sh
 RUN chmod +x /server/run_server.sh
 
-# Move Server File
-# COPY . /server
-
 # Execute Script
 WORKDIR /server
 ENTRYPOINT ["sh", "./run_server.sh"]
