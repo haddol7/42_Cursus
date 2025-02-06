@@ -31,7 +31,8 @@ SECRET_KEY = "django-insecure-^#q++_b99ot3u0o0*iz@a29gur@1^ko@ze$-3w^u%l_zj#2lhv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+FRONTEND_URL = os.environ["FRONTEND_URL"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "websocket", FRONTEND_URL]
 
 
 # Application definition

@@ -16,3 +16,4 @@ def get_os_int(key: str) -> int:
 
 JWT_URL = get_os_str("JWT_URL")
 USER_URL = get_os_str("USER_URL")
+FRONTEND_URL = get_os_str("FRONTEND_URL")
