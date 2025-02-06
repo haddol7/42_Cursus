@@ -17,7 +17,7 @@ export class GameLobbyPage {
         <div>
           <a id="gameQueueCreationLink" class="btn btn-info mb-3" style="margin: 4px;">make new game queue</a>
         </div>
-        <div id="gameQueueList" style="border: 1px solid gray; margin: 4px;">
+        <div id="gameQueueList">
         </div>
       </div>
     `;
@@ -58,14 +58,15 @@ export class GameLobbyPage {
 
     let gameQueueList = document.getElementById("gameQueueList");
     gameQueueList.innerHTML = "";
+    gameQueueList.style = "border: 1px solid gray; margin: 4px;";
 
     roomList.room.forEach((value) => {
       const gameQueue = document.createElement("div");
       gameQueue.style = "border: 1px solid gray; margin: 4px;";
       gameQueue.textContent = `
-      room id : ${value.room_id}
-      room name : ${value.room_name}
-      room limit : ${value.room_limit}
+      room id : ${value.room_id}\n
+      room name : ${value.room_name}\n
+      room limit : ${value.room_limit}\n
       current number of members : ${value.room_cur_people}`;
       gameQueueList.appendChild(gameQueue);
 
@@ -77,6 +78,7 @@ export class GameLobbyPage {
 
       enterQueue.addEventListener("click", () => {
         clearBody();
+        console.log(`room name : ${value.roon_name}, room limit : ${value.room_limit}`);
         SocketManager.emitEnterRoom(value.room_name);
         SocketManager.maxNumOfParticipant = value.room_limit;
         GameQueuePage.render();

@@ -21,8 +21,6 @@ export class SocketManager {
     });
     SocketManager.onRoomListEvent();
     SocketManager.onRoomChangedEvent();
-    // if (SocketManager.socket.ok) {
-    // } else throw new Error("socket connection error");
   };
 
   static disconnect = () => {
