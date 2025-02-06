@@ -68,6 +68,7 @@ def get_42_code(req: Request):
         },
     )
     if not res.ok:
+        print(f"{res.content}")
         raise UnauthenticatedException()
 
     res_json = res.json()
@@ -160,9 +161,9 @@ def logout(req: Request, user_id: int):
     return JsonResponse({})
 
 
-@api_post
-def post_auth(req: Request, data: Dict[str, Any]):
-    user_name = get_str(data, "user_name")
+@api_get
+def get_42_code_mock(req: Request):
+    user_name = get_str(req.query_params, "user_name")
     id_42 = int(random.random() * 1000000) + 1000000
 
     access_token, refresh_token, isnew = create_user(id_42, user_name)

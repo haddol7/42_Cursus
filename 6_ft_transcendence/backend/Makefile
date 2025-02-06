@@ -7,4 +7,5 @@ clean:
 	docker compose down -t 1
 
 fclean:
-	docker compose down -v -t 1 --rmi
+	docker compose down -v -t 1 --rmi local
+	docker system prune -af
