@@ -9,11 +9,12 @@ export class SocketManager {
   static maxNumOfParticipant = null;
 
   static connect = () => {
-    SocketManager.socket = io("http://localhost:7600", {
+    SocketManager.socket = io("/", {
       auth: {
         user_id: 4242,
         user_name: "temp name",
       },
+      path: "/room-sio/",
     });
     SocketManager.socket.on("connect", () => {
       console.log("successfully connected!!!");
@@ -25,8 +26,7 @@ export class SocketManager {
   };
 
   static disconnect = () => {
-    if (SocketManager.socket !== null)
-    {
+    if (SocketManager.socket !== null) {
       SocketManager.socket.disconnect();
       SocketManager.socket = null;
       SocketManager.roomList = null;
@@ -37,42 +37,50 @@ export class SocketManager {
 
   static onRoomListEvent = () => {
     SocketManager.socket.on("room_list", (list) => {
-        console.log(list);
-        SocketManager.roomList = list;
-        
-        if (PageManager.currentpageStatus.page === PageManager.pageStatus.gameLobby.page)
-            GameLobbyPage.updateGameLobbySection(SocketManager.roomList);
-      });
+      console.log(list);
+      SocketManager.roomList = list;
+
+      if (
+        PageManager.currentpageStatus.page ===
+        PageManager.pageStatus.gameLobby.page
+      )
+        GameLobbyPage.updateGameLobbySection(SocketManager.roomList);
+    });
   };
 
   static onRoomChangedEvent = () => {
     SocketManager.socket.on("room_changed", (list) => {
-        console.log(list);
-        SocketManager.participantList = list;
-        
-        if (PageManager.currentpageStatus.page === PageManager.pageStatus.gameQueue.page)
-            GameQueuePage.updateQueueMemberSection();
-      });
+      console.log(list);
+      SocketManager.participantList = list;
+
+      if (
+        PageManager.currentpageStatus.page ===
+        PageManager.pageStatus.gameQueue.page
+      )
+        GameQueuePage.updateQueueMemberSection();
+    });
   };
 
   static emitMakeRoom = (roomName, roomLimit) => {
-    SocketManager.socket.emit("make_room", {room_name: roomName, room_limit: roomLimit});
-  }
+    SocketManager.socket.emit("make_room", {
+      room_name: roomName,
+      room_limit: roomLimit,
+    });
+  };
 
   static emitEnterRoom = (roomId) => {
-    SocketManager.socket.emit("enter_room", {room_id: roomId});
-  }
+    SocketManager.socket.emit("enter_room", { room_id: roomId });
+  };
 
   static emitLeaveRoom = () => {
     SocketManager.socket.emit("leave_room");
     SocketManager.participantList = null;
     SocketManager.maxNumOfParticipant = null;
-  }
+  };
 
   static getNumOfParticipants = () => {
     if (SocketManager.participantList === null)
-        throw new Error("you should enter the room before request");
-    else
-        return (SocketManager.participantList.people.length);
-  }
+      throw new Error("you should enter the room before request");
+    else return SocketManager.participantList.people.length;
+  };
 }

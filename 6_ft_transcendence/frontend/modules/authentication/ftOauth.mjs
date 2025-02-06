@@ -4,10 +4,7 @@ import { JWT } from "./jwt.mjs";
 
 export class FTOauth {
   static isAlreadyOauth() {
-    if (
-      window.location.href === "http://localhost:5500/42-ascension/web-front/"
-    )
-      return false;
+    if (window.location.href === "https://localhost/") return false;
     return true;
   }
 
@@ -25,11 +22,12 @@ export class FTOauth {
 
   static sendFTOauthCodeToServer = async () => {
     const code = FTOauth.getFtOauthCodeFromUrl();
-    const response = await safe_fetch(`${AUTH_CONTAINER}auth/42/code` + code);
+    const response = await safe_fetch(`${AUTH_CONTAINER}42/code` + code);
 
     if (response === null) throw new Error("Wrong Code");
 
     const json = await response.json();
-    JWT.setNewJWTTokenOnCookie(json.access_token, json.refresh_token);
+    alert(json);
+    JWT.setNewJWTTokenOnCookie(json.accessToken, json.refreshToken);
   };
 }

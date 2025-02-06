@@ -4,9 +4,9 @@ import { safe_fetch } from "../utility.mjs";
 
 export class TwoFA {
     static sendOTPUserNameToServer = async (token, otpUserName) => {
-      const option = JWT.getOptionWithToken(token, "GET");
+      const option = JWT.getOptionWithToken(token, "POST", JSON.stringify({name:otpUserName}));
       const response = await safe_fetch(
-        `${AUTH_CONTAINER}auth/2fa?name=${otpUserName}`,
+        `${AUTH_CONTAINER}2fa/new`,
         option
       );
       const json = await response.json();
@@ -19,7 +19,7 @@ export class TwoFA {
         "POST",
         JSON.stringify({ code: otpCode })
       );
-      const response = await fetch(`${AUTH_CONTAINER}auth/2fa`, option);
+      const response = await fetch(`${AUTH_CONTAINER}2fa`, option);
       return response;
     };
   }

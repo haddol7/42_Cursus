@@ -47,7 +47,7 @@ export class JWT {
 
   static getNewToken = async () => {
     const refresh_token = JWT.getJWTTokenFromCookie().refreshToken;
-    const response = await fetch(`${AUTH_CONTAINER}auth/refresh`, {
+    const response = await fetch(`${AUTH_CONTAINER}refresh`, {
       method: "POST",
       headers: { "content-Type": "application/json" },
       body: JSON.stringify({ refreshToken: refresh_token }),
