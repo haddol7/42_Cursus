@@ -37,9 +37,7 @@ services:
     build: ./websocket
     expose:
       - ${ROOM_PORT}
-      - ${ROOM_PORT}
     ports:
-      - "${ROOM_PORT}:${ROOM_PORT}"
       - "${ROOM_PORT}:${ROOM_PORT}"
     networks:
       - postgresdb_network
@@ -57,8 +55,6 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - WEBSOCKET_WORKER=${WEBSOCKET_WORKER}
       - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
-      - ROOM_PORT=${ROOM_PORT}
-      - JWT_URL=${JWT_URL}
       - ROOM_PORT=${ROOM_PORT}
       - JWT_URL=${JWT_URL}
   game:
