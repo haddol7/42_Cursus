@@ -1,7 +1,6 @@
 #!/bin/bash
 apt-get update -y &&  \
 apt-get install vim -y && \
-apt-get install lsof && \ 
 apt-get install postgresql -y && \
 apt-get install curl -y
 
