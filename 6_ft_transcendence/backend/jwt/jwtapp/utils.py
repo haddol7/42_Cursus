@@ -126,11 +126,11 @@ def _decode_payload(encoded_jwt: str) -> JwtPayload:
             options={"require": ["exp"], "verify_exp": True},
         )
         payload: JwtPayload = _dictToPayload(decoded_jwt)
-    except (jwt.exceptions.InvalidSignatureError, jwt.exceptions.DecodeError):
-        print("Jwt Invalid Signaturre")
+    except (jwt.exceptions.InvalidSignatureError, jwt.exceptions.DecodeError) as e:
+        print("Jwt Invalid Signature", type(e))
         raise JwtInvalidException()
-    except jwt.exceptions.ExpiredSignatureError:
-        print("Jwt Expired Signaturre")
+    except jwt.exceptions.ExpiredSignatureError as e:
+        print("Jwt Expired Signature", type(e))
         raise JwtExpiredException()
     except Exception as e:
         raise e
