@@ -12,7 +12,7 @@ export class GameQueuePage {
         <div style="border: 1px solid gray; margin: 4px;">
           <a id="quitQueueLink" class="btn btn-info mb-3"; style="margin: 4px; text-decoration: none;">Quit queue link</a>
         </div>
-        <div id="gameQueueSection">
+        <div id="gameQueueSection" style="border: 1px solid gray; margin: 4px;">
         </div>
       `;
 
@@ -30,7 +30,6 @@ export class GameQueuePage {
   static updateQueueMemberSection = () => {
     const gameQueueSection = document.getElementById("gameQueueSection");
     gameQueueSection.innerHTML = "";
-    gameQueueSection.style = "border: 1px solid gray; margin: 4px;"
 
     const queueStatus = document.createElement("p");
     queueStatus.textContent = `${SocketManager.getNumOfParticipants()} / ${
@@ -38,7 +37,7 @@ export class GameQueuePage {
     }`;
     gameQueueSection.appendChild(queueStatus);
 
-    SocketManager.participantList.people.forEach((value) => {
+    Array.from(SocketManager.participantList).forEach((value) => {
       const participant = document.createElement("div");
       participant.textContent = `user id : ${value.user_id}, user name : ${value.user_name}`;
       gameQueueSection.appendChild(participant);

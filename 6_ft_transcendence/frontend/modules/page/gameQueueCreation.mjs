@@ -44,17 +44,18 @@ export class GameQueueCreationPage {
 
     createQueueForm.addEventListener("submit", (event) => {
       event.preventDefault();
-      
+
       Array.from(document.getElementsByClassName("choice")).forEach(
         (choice) => {
           if (choice.checked) {
-            clearBody();
-            GameQueuePage.render();
-            SocketManager.maxNumOfParticipant = choice.value;
             SocketManager.emitMakeRoom("test name", Number(choice.value));
+            SocketManager.maxNumOfParticipant = choice.value;
           }
         }
       );
+
+      clearBody();
+      GameQueuePage.render();
     });
 
     PageManager.currentpageStatus = PageManager.pageStatus.gameQueueCreation;

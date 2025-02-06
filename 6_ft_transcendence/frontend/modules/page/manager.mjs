@@ -39,7 +39,6 @@ export class PageManager {
       PageManager.pageStatus.gameQueueCreation.page
     ) {
       GameLobbyPage.renderAndPushHistory();
-      GameLobbyPage.updateGameLobbySection(SocketManager.roomList);
       return;
     }
     if (
@@ -48,7 +47,6 @@ export class PageManager {
     ) {
       SocketManager.emitLeaveRoom();
       GameLobbyPage.renderAndPushHistory();
-      GameLobbyPage.updateGameLobbySection(SocketManager.roomList);
       return;
     }
 
