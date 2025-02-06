@@ -30,6 +30,7 @@ services:
       - JWT_ALGORITHM=${JWT_ALGORITHM}
       - TWOFA_URL=${TWOFA_URL}
       - JWT_PORT=${JWT_PORT}
+      - FRONTEND_URL=${FRONTEND_URL}
   websocket:
     image: websocket
     container_name: websocket
@@ -57,6 +58,7 @@ services:
       - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
       - ROOM_PORT=${ROOM_PORT}
       - JWT_URL=${JWT_URL}
+      - FRONTEND_URL=${FRONTEND_URL}
   game:
     image: game
     container_name: game
@@ -87,6 +89,7 @@ services:
       - USER_URL=${USER_URL}
       - JWT_URL=${JWT_URL}
       - GAME_PORT=${GAME_PORT}
+      - FRONTEND_URL=${FRONTEND_URL}
   auth:
     image: auth
     container_name: auth
@@ -122,6 +125,7 @@ services:
       - TWOFA_URL=${TWOFA_URL}
       - USER_URL=${USER_URL}
       - AUTH_PORT=${AUTH_PORT}
+      - FRONTEND_URL=${FRONTEND_URL}
   twofa:
     image: twofa
     container_name: twofa
@@ -154,6 +158,7 @@ services:
       - OTP_SECRET=${OTP_SECRET}
       - OTP_ISSUER=${OTP_ISSUER}
       - TWOFA_PORT=${TWOFA_PORT}
+      - FRONTEND_URL=${FRONTEND_URL}
   user:
     init: true
     image: user
@@ -177,6 +182,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - JWT_URL=${JWT_URL}
       - USER_PORT=${USER_PORT}
+      - FRONTEND_URL=${FRONTEND_URL}
 
   db:
     image: postgres:17.1-alpine3.20
@@ -208,7 +214,7 @@ services:
       - postgresdb_network
     volumes:
       - ./nginx/cert:/cert
-      - ./nginx/html:/usr/share/nginx/html
+      - ../frontend/:/usr/share/nginx/html
     depends_on:
       - auth
       - game

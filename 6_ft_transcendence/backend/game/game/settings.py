@@ -31,7 +31,8 @@ SECRET_KEY = "django-insecure-huhgh&(@b@w#nhigf^ql=0npykn2p-ggrp=t36h5f9=rkz**a-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "game"]
+FRONTEND_URL = os.environ["FRONTEND_URL"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "game", FRONTEND_URL]
 
 
 # Application definition
