@@ -20,6 +20,7 @@ export class GameQueuePage {
     quitQueueLink.addEventListener("click", (event) => {
       event.preventDefault();
       clearBody();
+      SocketManager.disconnect();
       GameLobbyPage.renderAndPushHistory();
     });
 

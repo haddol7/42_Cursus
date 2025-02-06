@@ -7,7 +7,7 @@ import { LoginPage } from "../page/login.mjs";
 // 그러므로 logout()을 호출했다면 그 이후에 어떠한 처리도(DOM, 이벤트 관련 처리 등등) 없어야 한다.
 export const logout = async () => {
   const response = await fetch(
-    `${AUTH_CONTAINER}auth/logout`,
+    `${AUTH_CONTAINER}logout`,
     JWT.getOptionWithToken(JWT.getJWTTokenFromCookie().accessToken, "DELETE")
   );
 
