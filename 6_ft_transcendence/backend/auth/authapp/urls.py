@@ -10,6 +10,6 @@ urlpatterns = [
     path("2fa", views.handle_2fa),
     path("2fa/new", views.post_2fa_new),
     path("logout", views.logout),
-    path("42/code/mock", views.post_auth),
+    path("42/code/mock", views.get_42_code_mock),
     path("2fa/mock", views.mock_2fa),
 ]

@@ -130,15 +130,11 @@ JWT 체크할 때 2FA를 통과했는지는 체크하지 않습니다.
 - JWT 토큰이 올바르지 않은 경우, `jwt.invalid`, `2fa.register`, `2fa.required`, `jwt.expired` (401)
 - 기타 내부 서버 에러, `internal_error` (500)
 
-## POST /auth/42/code/mock
+## GET /auth/42/code/mock
 
-- Request
-
-```json
-{
-    "user_name": "string"
-}
-```
+- Query Param
+    - `code`: `str`, 무시합니다.
+    - `user_name`: `str`
 
 - Response
 
