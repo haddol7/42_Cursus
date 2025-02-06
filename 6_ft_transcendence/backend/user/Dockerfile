@@ -12,7 +12,7 @@ COPY ./default.png /server/media/default.png
 
 RUN chmod 755 /home/script.sh
 
-EXPOSE 8300
+EXPOSE 11111
 
 WORKDIR /rest
 

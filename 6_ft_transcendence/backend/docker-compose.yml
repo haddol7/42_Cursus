@@ -37,7 +37,9 @@ services:
     build: ./websocket
     expose:
       - ${ROOM_PORT}
+      - ${ROOM_PORT}
     ports:
+      - "${ROOM_PORT}:${ROOM_PORT}"
       - "${ROOM_PORT}:${ROOM_PORT}"
     networks:
       - postgresdb_network
@@ -55,6 +57,8 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - WEBSOCKET_WORKER=${WEBSOCKET_WORKER}
       - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
+      - ROOM_PORT=${ROOM_PORT}
+      - JWT_URL=${JWT_URL}
       - ROOM_PORT=${ROOM_PORT}
       - JWT_URL=${JWT_URL}
   game:
@@ -154,6 +158,30 @@ services:
       - OTP_SECRET=${OTP_SECRET}
       - OTP_ISSUER=${OTP_ISSUER}
       - TWOFA_PORT=${TWOFA_PORT}
+  user:
+    init: true
+    image: user
+    build: ./user
+    container_name: user
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      auth:
+        condition: service_started
+    networks:
+      - postgresdb_network
+    ports:
+      - "${USER_PORT}:${USER_PORT}"
+    volumes:
+      - ./user/server:/server
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - JWT_URL=${JWT_URL}
+      - USER_PORT=${USER_PORT}
+
   db:
     image: postgres:17.1-alpine3.20
     container_name: postgresdb
@@ -191,6 +219,7 @@ services:
       - websocket
       - jwt
       - twofa
+      - user
     environment:
       - KEY_FILEPATH=${KEY_FILEPATH}
       - CRT_FILEPATH=${CRT_FILEPATH}
@@ -201,6 +230,7 @@ services:
       - ROOM_PORT=${ROOM_PORT}
       - GAME_PORT=${GAME_PORT}
       - TWOFA_PORT=${TWOFA_PORT}
+      - USER_PORT=${USER_PORT}
 
 networks:
   postgresdb_network:
