@@ -36,19 +36,21 @@ class ProfileDetail(APIView, JWTAuthenticationMixin):
         try:
             user_id = self.check_jwt(req)
             user_name: str = req.query_params.get('user_name')  # ?user_name=<name>에서 <name> 가져오기
-            if not user_name:
-                return Response({"error": "user_name query parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
-            
-            user = Profile.objects.filter(user_name=user_name).first()
-            if not user:
-                return Response({'error':'user_name is not found.'}, status=status.HTTP_404_NOT_FOUND)
+            if user_name:
+                user = Profile.objects.filter(user_name=user_name).first()
+                if not user:
+                    return Response({"error": "user_name is not found."}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                user = Profile.objects.filter(user_id=user_id).first()
+                if not user:
+                    return Response({"error": "profile is not found."}, status=status.HTTP_404_NOT_FOUND)
 
             serializer = ProfileSerializer(user)
             return Response(serializer.data)
         except PermissionError as e:
-            return Response({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            return Response({'error': 'Internal Server Error.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": "Internal Server Error."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, req: Request):
         try:
