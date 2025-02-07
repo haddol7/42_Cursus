@@ -67,7 +67,7 @@ export class GameLobbyPage {
       room id : ${value.room_id}\n
       room name : ${value.room_name}\n
       room limit : ${value.room_limit}\n
-      current number of members : ${value.room_cur_people}`;
+      current number of members : ${value.room_cur_people}\n`;
       gameQueueList.appendChild(gameQueue);
 
       const enterQueue = document.createElement("a");
@@ -78,7 +78,7 @@ export class GameLobbyPage {
 
       enterQueue.addEventListener("click", () => {
         clearBody();
-        console.log(`room name : ${value.roon_name}, room limit : ${value.room_limit}`);
+        console.log(`room name : ${value.room_name}, room limit : ${value.room_limit}`);
         SocketManager.emitEnterRoom(value.room_name);
         SocketManager.maxNumOfParticipant = value.room_limit;
         GameQueuePage.render();

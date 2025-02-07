@@ -38,8 +38,8 @@ export class PageManager {
       PageManager.currentpageStatus?.page ===
       PageManager.pageStatus.gameQueueCreation.page
     ) {
+      SocketManager.disconnect();
       GameLobbyPage.renderAndPushHistory();
-      GameLobbyPage.updateGameLobbySection(SocketManager.roomList);
       return;
     }
     if (
@@ -47,8 +47,8 @@ export class PageManager {
       PageManager.pageStatus.gameQueue.page
     ) {
       SocketManager.emitLeaveRoom();
+      SocketManager.disconnect();
       GameLobbyPage.renderAndPushHistory();
-      GameLobbyPage.updateGameLobbySection(SocketManager.roomList);
       return;
     }
 
