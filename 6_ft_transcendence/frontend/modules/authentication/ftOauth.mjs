@@ -1,4 +1,4 @@
-import { AUTH_CONTAINER } from "./globalConstants.mjs";
+import { AUTH_URL  } from "./globalConstants.mjs";
 import { safe_fetch } from "../utility.mjs";
 import { JWT } from "./jwt.mjs";
 
@@ -21,8 +21,11 @@ export class FTOauth {
   }
 
   static sendFTOauthCodeToServer = async () => {
-    const code = FTOauth.getFtOauthCodeFromUrl();
-    const response = await safe_fetch(`${AUTH_CONTAINER}42/code` + code);
+    // 테스트를 위해 일시적으로 code query 문을 변경
+    // const code = FTOauth.getFtOauthCodeFromUrl();
+    const code = `?code=temp&user_name=${Math.trunc(Math.random() * 10000).toString()}`;
+    // 테스트를 위해 일시적으로 요청을 변경 42/code -> 42/code/mock
+    const response = await safe_fetch(`${AUTH_URL}42/code/mock` + code);
 
     if (response === null) throw new Error("Wrong Code");
 

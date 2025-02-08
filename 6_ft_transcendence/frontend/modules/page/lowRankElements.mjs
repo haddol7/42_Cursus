@@ -4,7 +4,7 @@ import { MyPage } from "./my.mjs";
 import { DashBoardPage } from "./dashboard.mjs";
 import { GameLobbyPage } from "./gamelobby.mjs";
 import { logout } from "../authentication/logout.mjs";
-import { SocketManager } from "../socketManager.mjs";
+import { RoomSocketManager } from "../socketManager.mjs";
 import { PageManager } from "./manager.mjs";
 
 // body의 모든 자식 요소들을 제거
@@ -78,7 +78,7 @@ export const bindEventToNavBar = () => {
         PageManager.currentpageStatus.page ===
         PageManager.pageStatus.gameLobby.page
       )
-        SocketManager.disconnect();
+        RoomSocketManager.disconnect();
 
       MainPage.renderAndPushHistory();
     }
@@ -92,7 +92,7 @@ export const bindEventToNavBar = () => {
       PageManager.currentpageStatus.page ===
       PageManager.pageStatus.gameLobby.page
     )
-      SocketManager.disconnect();
+      RoomSocketManager.disconnect();
 
     logout();
     LoginPage.renderAndPushHistory();
@@ -107,7 +107,7 @@ export const bindEventToNavBar = () => {
         PageManager.currentpageStatus.page ===
         PageManager.pageStatus.gameLobby.page
       )
-        SocketManager.disconnect();
+        RoomSocketManager.disconnect();
 
       MyPage.renderAndPushHistory();
     }
@@ -125,7 +125,7 @@ export const bindEventToNavBar = () => {
         PageManager.currentpageStatus.page ===
         PageManager.pageStatus.gameLobby.page
       )
-        SocketManager.disconnect();
+        RoomSocketManager.disconnect();
 
       DashBoardPage.renderAndPushHistory();
     }

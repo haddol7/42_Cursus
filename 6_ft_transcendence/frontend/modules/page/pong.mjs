@@ -1,1 +1,1 @@
-class PongPage {}
+export class PongPage {}

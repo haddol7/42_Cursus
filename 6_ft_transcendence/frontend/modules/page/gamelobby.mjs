@@ -6,7 +6,7 @@ import {
 import { GameQueueCreationPage } from "./gameQueueCreation.mjs";
 import { GameQueuePage } from "./gameQueue.mjs";
 import { PageManager } from "./manager.mjs";
-import { SocketManager } from "../socketManager.mjs";
+import { RoomSocketManager } from "../socketManager.mjs";
 
 export class GameLobbyPage {
   static render() {
@@ -36,7 +36,7 @@ export class GameLobbyPage {
     PageManager.currentpageStatus = PageManager.pageStatus.gameLobby;
 
     try {
-      SocketManager.connect();
+      RoomSocketManager.connect();
     } catch (e) {
       console.error(e);
     }
@@ -78,10 +78,12 @@ export class GameLobbyPage {
 
       enterQueue.addEventListener("click", () => {
         clearBody();
-        console.log(`room name : ${value.room_name}, room limit : ${value.room_limit}`);
-        SocketManager.emitEnterRoom(value.room_name);
-        SocketManager.maxNumOfParticipant = value.room_limit;
+        console.log(
+          `room id : ${value.room_id} room name : ${value.room_name}, room limit : ${value.room_limit}`
+        );
+        RoomSocketManager.maxNumOfParticipant = Number(value.room_limit);
         GameQueuePage.render();
+        RoomSocketManager.emitEnterRoom(value.room_id);
       });
     });
   };

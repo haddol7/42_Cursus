@@ -2,54 +2,64 @@ import { PageManager } from "./page/manager.mjs";
 import { GameLobbyPage } from "./page/gamelobby.mjs";
 import { GameQueuePage } from "./page/gameQueue.mjs";
 
-export class SocketManager {
+export class RoomSocketManager {
   static socket = null;
   static roomList = null;
   static participantList = null;
   static maxNumOfParticipant = null;
+  static isOperator = false;
 
   static connect = () => {
-    SocketManager.socket = io("/", {
+    RoomSocketManager.socket = io("/", {
       auth: {
-        user_id: 4242,
-        user_name: "temp name",
+        user_id: Math.trunc(Math.random() * 10000),
+        user_name: Math.trunc(Math.random() * 10000).toString(),
       },
       path: "/room-sio/",
     });
-    SocketManager.socket.on("connect", () => {
+    RoomSocketManager.socket.on("connect", () => {
       console.log("successfully connected!!!");
     });
-    SocketManager.onRoomListEvent();
-    SocketManager.onRoomChangedEvent();
+    RoomSocketManager.#onDisconnect();
+    RoomSocketManager.#onRoomListEvent();
+    RoomSocketManager.#onRoomChangedEvent();
+    RoomSocketManager.#onStartGame();
+    RoomSocketManager.socket.on("error", (error) => {
+      console.log(error.toString());
+    });
   };
 
   static disconnect = () => {
-    if (SocketManager.socket !== null) {
-      SocketManager.socket.disconnect();
-      SocketManager.socket = null;
-      SocketManager.roomList = null;
-      SocketManager.participantList = null;
-      SocketManager.maxNumOfParticipant = null;
+    if (RoomSocketManager.socket !== null) {
+      RoomSocketManager.socket.disconnect();
+      RoomSocketManager.#whenDisconnect();
     }
   };
 
-  static onRoomListEvent = () => {
-    SocketManager.socket.on("room_list", (list) => {
+  static #onDisconnect = () => {
+    RoomSocketManager.socket.on(
+      "disconnect",
+      RoomSocketManager.#whenDisconnect
+    );
+  };
+
+  static #onRoomListEvent = () => {
+    RoomSocketManager.socket.on("room_list", (list) => {
       console.log(list);
-      SocketManager.roomList = list;
+      RoomSocketManager.roomList = list;
 
       if (
         PageManager.currentpageStatus.page ===
         PageManager.pageStatus.gameLobby.page
       )
-        GameLobbyPage.updateGameLobbySection(SocketManager.roomList);
+        GameLobbyPage.updateGameLobbySection(RoomSocketManager.roomList);
     });
   };
 
-  static onRoomChangedEvent = () => {
-    SocketManager.socket.on("room_changed", (list) => {
+  static #onRoomChangedEvent = () => {
+    RoomSocketManager.socket.on("room_changed", (list) => {
       console.log(list);
-      SocketManager.participantList = list;
+      RoomSocketManager.participantList = list;
 
       if (
         PageManager.currentpageStatus.page ===
@@ -59,26 +69,79 @@ export class SocketManager {
     });
   };
 
+  static #onStartGame = () => {
+    RoomSocketManager.socket.on("start_game", () => {
+      console.log("on start game");
+      RoomSocketManager.disconnect();
+      GameSocketManager.connect();
+      GameSocketManager.emitNextGame();
+    });
+  };
+
   static emitMakeRoom = (roomName, roomLimit) => {
-    SocketManager.socket.emit("make_room", {
+    RoomSocketManager.isOperator = true;
+    RoomSocketManager.socket.emit("make_room", {
       room_name: roomName,
       room_limit: roomLimit,
     });
   };
 
   static emitEnterRoom = (roomId) => {
-    SocketManager.socket.emit("enter_room", { room_id: roomId });
+    RoomSocketManager.socket.emit("enter_room", { room_id: roomId });
   };
 
   static emitLeaveRoom = () => {
-    SocketManager.socket.emit("leave_room");
-    SocketManager.participantList = null;
-    SocketManager.maxNumOfParticipant = null;
+    RoomSocketManager.socket.emit("leave_room");
+    RoomSocketManager.participantList = null;
+    RoomSocketManager.maxNumOfParticipant = null;
+  };
+
+  static emitStartGame = () => {
+    console.log("emit start game");
+    RoomSocketManager.socket.emit("start_game", (data) => {
+      if (data) {
+        console.error(data);
+      }
+    });
+  };
+
+  static #whenDisconnect = () => {
+    RoomSocketManager.socket = null;
+    RoomSocketManager.roomList = null;
+    RoomSocketManager.participantList = null;
+    RoomSocketManager.maxNumOfParticipant = null;
   };
 
   static getNumOfParticipants = () => {
-    if (SocketManager.participantList === null)
+    if (RoomSocketManager.participantList === null)
       throw new Error("you should enter the room before request");
-    else return SocketManager.participantList.people.length;
+    else return RoomSocketManager.participantList.people.length;
+  };
+}
+
+export class GameSocketManager {
+  static socket = null;
+
+  static connect = () => {
+    GameSocketManager.socket = io("/game", {
+      auth: {
+        user_id: Math.trunc(Math.random() * 10000),
+        user_name: Math.trunc(Math.random() * 10000).toString(),
+      },
+      path: "/game-sio/",
+    });
+  };
+
+  static disconnect = () => {
+    if (GameSocketManager.socket !== null) {
+      GameSocketManager.socket.disconnect();
+      GameSocketManager.socket = null;
+    }
+  };
+
+  static emitNextGame = () => {
+    console.log("emit next game");
+    GameSocketManager.socket.emit("nextGame");
+    document.body.innerHTML += `<iframe src="../../game/client/index.html" width="100%" height="500px"></iframe>`;
   };
 }
