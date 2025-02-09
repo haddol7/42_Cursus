@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser
+from rest_framework.parsers import JSONParser, MultiPartParser
 from rest_framework.request import Request
 from rest_framework import status
 import requests
@@ -23,7 +23,8 @@ class JWTAuthenticationMixin:
             f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": True}
         )
         if not res.ok:
-            raise PermissionError("error: No login user.")
+            error_message = f"JWT_Error: {res.content.decode()} (Status Code: {res.status_code})"
+            raise PermissionError(error_message)
         res = res.json()
         return int(res["user_id"]) 
 
@@ -35,20 +36,22 @@ class ProfileDetail(APIView, JWTAuthenticationMixin):
     def get(self, req: Request):
         try:
             user_id = self.check_jwt(req)
-            user_name: str = req.query_params.get('user_name')  # ?user_name=<name>에서 <name> 가져오기
-            if not user_name:
-                return Response({"error": "user_name query parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
-            
-            user = Profile.objects.filter(user_name=user_name).first()
-            if not user:
-                return Response({'error':'user_name is not found.'}, status=status.HTTP_404_NOT_FOUND)
+            user_name: str = req.query_params.get('user_name')
+            if user_name:
+                user_profile = Profile.objects.filter(user_name=user_name).first()
+                if not user_profile:
+                    return Response({"error": f"{user_name} is not found."}, status=status.HTTP_404_NOT_FOUND)
+            else:
+                user_profile = Profile.objects.filter(user_id=user_id).first() # 쿼리가 없는 경우, 본인 프로필 반환
+                if not user_profile:
+                    return Response({"error": "profile is not found."}, status=status.HTTP_404_NOT_FOUND)
 
-            serializer = ProfileSerializer(user)
+            serializer = ProfileSerializer(user_profile)
             return Response(serializer.data)
         except PermissionError as e:
-            return Response({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            return Response({'error': 'Internal Server Error.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": "Internal Server Error."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, req: Request):
         try:
@@ -56,8 +59,13 @@ class ProfileDetail(APIView, JWTAuthenticationMixin):
             user_profile = Profile.objects.filter(user_id=user_id).first()
             if not user_profile:
                 return Response({'error': 'user_profile is not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+            image = req.FILES.get('image_url') # 이미지만 따로 처리하고 나머지는 serializer가 처리
+            if image:
+                user_profile.image_url = image
+                user_profile.save()
             
-            serializer = ProfileSerializer(user_profile, data=req.data, partial=True)  # partial=True로 일부분 업데이트 허용
+            serializer = ProfileSerializer(user_profile, data=req.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)
@@ -98,7 +106,7 @@ class FriendView(APIView, JWTAuthenticationMixin):
 
             friend_profile = Profile.objects.filter(user_name=friend_name).first()
             if not friend_profile:
-                return Response({'error': 'friend_name is not found.'}, status=status.HTTP_404_NOT_FOUND)
+                return Response({'error': f'{friend_name} is not found.'}, status=status.HTTP_404_NOT_FOUND)
 
             if user_profile.user_id == friend_profile.user_id:
                 return Response({'error': 'You cannot add yourself as a friend.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -186,8 +194,13 @@ class InternalDashBoardView(APIView):
             profile = Profile.objects.filter(user_id=user_id).first()
             dashboard, created = DashBoard.objects.get_or_create(_user=profile)
             dashboard.total_cnt += 1
+            profile.total_cnt += 1
             if result == 'win':
                 dashboard.win_cnt += 1
+                profile.win_cnt += 1
+            else:
+                dashboard.lose_cnt += 1
+                profile.lose_cnt += 1
             dashboard.save()
             return Response({'message': 'User stats updated successfully'})
         except Exception as e:

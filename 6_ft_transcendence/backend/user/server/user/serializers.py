@@ -4,9 +4,9 @@ from user.models import Profile, Friend, DashBoard
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile 
-        fields = ['user_name', 'memo', 'image_url']
+        fields = ['user_name', 'memo', 'image_url', 'win_cnt', 'lose_cnt', 'total_cnt']
 
-    def validate_user_name(self, value):
+    def validate_user_name(self, value): # serializer.is_valid() 에서 호출
         instance = self.instance
         if Profile.objects.exclude(pk=instance.pk).filter(user_name=value).exists():
             raise serializers.ValidationError("It is already exist name.")
@@ -35,7 +35,7 @@ class DashBoardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DashBoard
-        fields = ['win_cnt', 'total_cnt', 'top_ranking']
+        fields = ['win_cnt', 'lose_cnt', 'total_cnt', 'top_ranking']
 
     @staticmethod
     def get_top_ranking(obj):

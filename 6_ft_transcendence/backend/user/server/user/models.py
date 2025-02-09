@@ -4,8 +4,11 @@ class Profile(models.Model):
     user_id = models.AutoField(primary_key=True)
     user_name = models.CharField(max_length=50, null=True, unique=True)
     memo = models.TextField(max_length=500, blank=True)
-    image_url = models.ImageField(default='default.png', upload_to='images/')
+    win_cnt = models.PositiveIntegerField(default=0)
+    lose_cnt = models.PositiveIntegerField(default=0)
+    total_cnt = models.PositiveIntegerField(default=0)
 
+    image_url = models.ImageField(upload_to='images/', default='default.png')
     class Meta:
         db_table = "profile"
 
@@ -24,6 +27,7 @@ class Friend(models.Model):
 class DashBoard(models.Model):
     _user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='dashboard')
     win_cnt = models.PositiveIntegerField(default=0)
+    lose_cnt = models.PositiveIntegerField(default=0)
     total_cnt = models.PositiveIntegerField(default=0)
 
     class Meta:
