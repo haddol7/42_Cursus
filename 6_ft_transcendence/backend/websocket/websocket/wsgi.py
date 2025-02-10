@@ -213,7 +213,7 @@ def _get_user_id_from_jwt(jwt: str) -> int:
     res = requests.post(f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": False})
 
     if not res.ok:
-        raise ConnectionRefusedError(res.content)
+        raise socketio.exceptions.ConnectionRefusedError(res.content)
 
     json = res.json()
     return json["user_id"]

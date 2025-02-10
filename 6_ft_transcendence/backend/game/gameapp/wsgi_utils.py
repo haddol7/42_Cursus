@@ -140,12 +140,6 @@ class Match:
 
     def __set_win_and_lose(self, winner: MatchUser, loser: MatchUser):
         self.stage = MatchStage.FINISHED
-        sio.emit(
-            "gameOver",
-            {"winner": winner["name"]},
-            to=self.room_name,
-            namespace=NAMESPACE,
-        )
 
         self.__set_win(winner)
         self.__set_lose(loser)
@@ -217,6 +211,9 @@ class Match:
                 return False
             if self.online[idx]:
                 return True
+
+            sio.emit("init", {"paddleId": "paddle1" if idx == 0 else "paddle2"})
+
             self.users[idx]["sid"] = user["sid"]
             self.users[idx]["name"] = user["name"]
             self.online[idx] = True
@@ -311,7 +308,7 @@ class MatchProcess(threading.Thread):
     def user_decided(self, user: MatchUser):
         self.users.append(user)
 
-    def set_paddle(self, user_id: int, x: float):
+    def set_paddle(self, user_id: int, paddle_direction: float):
         idx = -1
         if user_id == self.users[0]["id"]:
             idx = 0
@@ -321,6 +318,13 @@ class MatchProcess(threading.Thread):
             # TODO: throw error
             return
 
+        if paddle_direction == 0:
+            return
+
+        with self.lock:
+            paddle_pos = self.paddle[idx]
+        normalized_direction = (paddle_direction * 0.075) / abs(paddle_direction)
+        x = paddle_pos + normalized_direction
         x = max(
             -GAME_BOUNDS["x"] + PADDLE_WIDTH / 2,
             min(GAME_BOUNDS["x"] - PADDLE_WIDTH / 2, x),
@@ -329,7 +333,14 @@ class MatchProcess(threading.Thread):
         with self.lock:
             self.paddle[idx] = x
 
-    def reset_game(self, scorer: str):
+        sio.emit(
+            "updatePaddle",
+            {"paddleId": "paddle1" if idx == 0 else "paddle2", "positiion": x},
+            to=self.room_name,
+            namespace=NAMESPACE,
+        )
+
+    def reset_game(self, scorer_idx: int):
         self.ball = {"x": 0.0, "y": 0.0, "vx": 0.0, "vy": 0.0}
 
         paddle = [0.0, 0.0]
@@ -338,7 +349,7 @@ class MatchProcess(threading.Thread):
 
         sio.emit(
             "resetPositions",
-            {"ball": self.ball, "paddles": paddle},
+            {},
             to=self.room_name,
             namespace="/game",
         )
@@ -348,9 +359,7 @@ class MatchProcess(threading.Thread):
             self.ball["vx"] = initial_speed * (
                 (int(random.random() * 10000) % 2) * 2 - 1
             )
-            self.ball["vy"] = (
-                initial_speed if scorer == self.users[0]["name"] else -initial_speed
-            )
+            self.ball["vy"] = initial_speed if scorer_idx == 0 else -initial_speed
             sio.emit("updateBall", self.ball, to=self.room_name, namespace="/game")
 
         t = threading.Timer(3.0, start_game_func)
@@ -398,23 +407,44 @@ class MatchProcess(threading.Thread):
             if hit_bottom_paddle or hit_top_paddle:
                 ball["vy"] *= -1.1
 
+            scorer = -1
             if ball["y"] >= GAME_BOUNDS["y"] - BALL_SIZE["y"] / 2:
-                score[0] += 1
-                sio.emit("updateScore", score, to=self.room_name, namespace=NAMESPACE)
-                self.reset_game(self.users[0]["name"])
+                scorer = 0
             elif ball["y"] <= -GAME_BOUNDS["y"] + BALL_SIZE["y"] / 2:
-                score[1] += 1
-                sio.emit("updateScore", score, to=self.room_name, namespace=NAMESPACE)
-                self.reset_game(self.users[1]["name"])
+                scorer = 1
 
-            elif score[0] == WINNING_SCORE or score[1] == WINNING_SCORE:
-                self.game_over = True
+            if scorer != -1:
+                score[scorer] += 1
+                sio.emit(
+                    "updateScore",
+                    {"paddle1": score[0], "paddle2": score[1]},
+                    to=self.room_name,
+                    namespace=NAMESPACE,
+                )
+                self.reset_game(scorer)
+
+            if score[0] == WINNING_SCORE or score[1] == WINNING_SCORE:
+                winner_idx = 0 if score[0] == WINNING_SCORE else 1
+
+                with self.lock:
+                    self.game_over = True
+
                 winner = (
                     self.users[0]["name"]
                     if score[0] == WINNING_SCORE
                     else self.users[1]["name"]
                 )
                 self.event.set()
+                sio.emit(
+                    "gameOver",
+                    {
+                        "winner": "paddle1" if winner_idx == 0 else "paddle2",
+                        "paddle1": self.score[0],
+                        "paddle2": self.score[1],
+                    },
+                    to=self.room_name,
+                    namespace=NAMESPACE,
+                )
                 self.match_manager.alert_winner(winner)
             else:
                 sio.emit("updateBall", ball, to=self.room_name, namespace="/game")
