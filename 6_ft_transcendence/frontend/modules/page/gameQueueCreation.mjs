@@ -1,7 +1,7 @@
 import { renderNavBar } from "./lowRankElements.mjs";
 import { GameQueuePage } from "./gameQueue.mjs";
 import { PageManager } from "./manager.mjs";
-import { SocketManager } from "../socketManager.mjs";
+import { RoomSocketManager } from "../socketManager.mjs";
 import { clearBody } from "./lowRankElements.mjs";
 
 export class GameQueueCreationPage {
@@ -48,14 +48,16 @@ export class GameQueueCreationPage {
       Array.from(document.getElementsByClassName("choice")).forEach(
         (choice) => {
           if (choice.checked) {
-            SocketManager.emitMakeRoom("test name", Number(choice.value));
-            SocketManager.maxNumOfParticipant = choice.value;
+            clearBody();
+            GameQueuePage.render();
+            RoomSocketManager.maxNumOfParticipant = Number(choice.value);
+            RoomSocketManager.emitMakeRoom(
+              Math.trunc(Math.random() * 10000).toString(),
+              Number(choice.value)
+            );
           }
         }
       );
-
-      clearBody();
-      GameQueuePage.render();
     });
 
     PageManager.currentpageStatus = PageManager.pageStatus.gameQueueCreation;

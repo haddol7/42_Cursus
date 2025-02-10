@@ -1,5 +1,5 @@
 import { clearBody, removeBodyProperty } from "./lowRankElements.mjs";
-import { SocketManager } from "../socketManager.mjs";
+import { RoomSocketManager } from "../socketManager.mjs";
 import { LoginPage } from "./login.mjs";
 import { MainPage } from "./main.mjs";
 import { MyPage } from "./my.mjs";
@@ -38,6 +38,7 @@ export class PageManager {
       PageManager.currentpageStatus?.page ===
       PageManager.pageStatus.gameQueueCreation.page
     ) {
+      RoomSocketManager.disconnect();
       GameLobbyPage.renderAndPushHistory();
       return;
     }
@@ -45,7 +46,8 @@ export class PageManager {
       PageManager.currentpageStatus?.page ===
       PageManager.pageStatus.gameQueue.page
     ) {
-      SocketManager.emitLeaveRoom();
+      RoomSocketManager.emitLeaveRoom();
+      RoomSocketManager.disconnect();
       GameLobbyPage.renderAndPushHistory();
       return;
     }
@@ -54,7 +56,7 @@ export class PageManager {
       PageManager.currentpageStatus?.page ===
       PageManager.pageStatus.gameLobby.page
     )
-      SocketManager.disconnect();
+      RoomSocketManager.disconnect();
 
     switch (event.state.page) {
       case PageManager.pageStatus.login.page:

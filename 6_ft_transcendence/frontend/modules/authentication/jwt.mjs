@@ -1,4 +1,4 @@
-import { AUTH_CONTAINER } from "./globalConstants.mjs";
+import { AUTH_URL } from "./globalConstants.mjs";
 
 export const ACCESS_TOKEN_STRING = "accessToken=";
 export const REFRESH_TOKEN_STRING = "refreshToken=";
@@ -47,7 +47,7 @@ export class JWT {
 
   static getNewToken = async () => {
     const refresh_token = JWT.getJWTTokenFromCookie().refreshToken;
-    const response = await fetch(`${AUTH_CONTAINER}refresh`, {
+    const response = await fetch(`${AUTH_URL}refresh`, {
       method: "POST",
       headers: { "content-Type": "application/json" },
       body: JSON.stringify({ refreshToken: refresh_token }),
