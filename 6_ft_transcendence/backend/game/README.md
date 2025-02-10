@@ -170,10 +170,16 @@ This endpoint will not check the user exists or not. Such validation should have
 
 - Request
 
+
 ```json
 {
-    "user_id": "int",
-    "result": "string: win | lose"
+  "player1_id": "int",
+  "player2_id": "int",
+  "player1_score" : "int, obtained score",
+  "player2_score" : "int, obtained score",
+  "winner_id" : "int, winner's id, will be one of player1_id and player2_id",
+  "match_date" : "date", // ex) "2025-02-10T14.30:00Z"
+  "play_time" : "int, in seconds"
 }
 ```
 

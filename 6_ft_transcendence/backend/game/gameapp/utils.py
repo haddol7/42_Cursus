@@ -3,10 +3,20 @@ from typing import Any, Dict, List
 from django.http import QueryDict
 
 from exceptions.CustomException import BadRequestFieldException
+from gameapp.models import TempMatch
 
 
 def now() -> datetime.datetime:
     return datetime.datetime.now(datetime.timezone.utc)
+
+
+def get_match_name(match: TempMatch):
+    return f"{match.match_room.room_name}_{match.id}"
+
+
+def assign_kv(target: dict[Any, Any], source: dict[Any, Any]):
+    for k, v in source.items():
+        target[k] = v
 
 
 def _get_any(dict: Dict[str, Any] | QueryDict, key: str) -> Any:
