@@ -3,16 +3,16 @@ import { PageManager } from "./modules/page/manager.mjs";
 import { TwoFAPage } from "./modules/page/twoFA.mjs";
 import { FTOauth } from "./modules/authentication/ftOauth.mjs";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   window.addEventListener("popstate", PageManager.popStateEvent);
-  /*
+
   if (
     history.state === null ||
     history.state.page === PageManager.pageStatus.login.page
   ) {
     if (FTOauth.isAlreadyOauth()) {
       try {
-        FTOauth.sendFTOauthCodeToServer();
+        await FTOauth.sendFTOauthCodeToServer();
       } catch (e) {
         console.error(e);
       }
@@ -24,9 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   } else if (history.state.page === PageManager.pageStatus.twoFA.page)
     history.forward();
-    */
-   // test를 위한 일시 수정
-   FTOauth.sendFTOauthCodeToServer();
-   const url = FTOauth.removeCodeFromUrl();
-   TwoFAPage.renderAndReplaceHistroy(url);
+
+  // test를 위한 일시 수정
+  //  await FTOauth.sendFTOauthCodeToServer();
+  //  const url = FTOauth.removeCodeFromUrl();
+  //  TwoFAPage.renderAndReplaceHistroy(url);
 });

@@ -44,18 +44,13 @@ export class EditProfilePage {
         imgData.append("user_name", newNick.value);
         imgData.append("memo", newMemo.value);
 
-        const response = await fetch(
-          `${USER_URL}`,
-          {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${
-                JWT.getJWTTokenFromCookie().accessToken
-              }`,
-            },
-            body: imgData,
-          }
-        )
+        const response = await fetch(`${USER_URL}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${JWT.getJWTTokenFromCookie().accessToken}`,
+          },
+          body: imgData,
+        });
 
         if (!response.ok) {
           const json = await response.json();
