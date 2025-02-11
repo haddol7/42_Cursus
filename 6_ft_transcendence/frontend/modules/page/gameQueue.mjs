@@ -12,7 +12,7 @@ export class GameQueuePage {
     document.body.innerHTML += `
     <div id="gameQueueSection" class = "box">
     </div>
-    <a id="quitQueueLink" class="nav justify-content-center link";>Quit queue link</a>
+    <a id="quitQueueLink" class="nav justify-content-center link">Quit queue link</a>
       `;
 
     const quitQueueLink = document.getElementById("quitQueueLink");

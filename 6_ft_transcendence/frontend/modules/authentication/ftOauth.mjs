@@ -31,7 +31,6 @@ export class FTOauth {
     if (response === null) throw new Error("Wrong Code");
 
     const json = await response.json();
-    alert(json);
     JWT.setNewJWTTokenOnCookie(json.accessToken, json.refreshToken);
     TwoFA.isNewUser = json.isnew;
     console.log(`isNewUser : ${TwoFA.isNewUser}, isnew : ${json.isnew}`);

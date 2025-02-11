@@ -161,6 +161,8 @@ export class MyPage {
       friendList = document.createElement("div");
       friendList.id = "friendList";
       friendList.classList.add("box");
+      document.getElementById("rightSection").appendChild(friendList);
+      
     }
 
     fl.forEach((value) => {
