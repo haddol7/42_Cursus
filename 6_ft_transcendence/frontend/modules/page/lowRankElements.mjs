@@ -42,18 +42,18 @@ export const renderCentralBox = () => {
 
 export const renderNavBar = () => {
   document.body.innerHTML = `
-    <a id="title" class="nav justify-content-center" style="color:green; text-decoration: none;"><h1>Mighty Pong Contest</h1></a>
-    <a id="logoutLink" class="nav justify-content-center" style="color:skyblue; text-decoration: none;">logout</a>
+    <a id="title" class="nav justify-content-center home"><h1>Mighty Pong Contest</h1></a>
+    <a id="logoutLink" class="nav justify-content-center sublink">logout</a>
     <hr />
     <ul class="nav justify-content-center">
       <li class="nav-item">
-        <a id="myPageLink" class="nav-link">My Page</a>
+        <a id="myPageLink" class="nav-link sublink">My Page</a>
       </li>
       <li class="nav-item">
-        <a id="dashBoardLink" class="nav-link">Dash Board</a>
+        <a id="dashBoardLink" class="nav-link sublink">Dash Board</a>
       </li>
       <li class="nav-item">
-        <a id="gameLobbyLink" class="nav-link">Game Lobby</a>
+        <a id="gameLobbyLink" class="nav-link sublink">Game Lobby</a>
       </li>
     </ul>
     <hr />`;

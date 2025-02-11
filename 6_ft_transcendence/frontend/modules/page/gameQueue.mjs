@@ -10,11 +10,9 @@ export class GameQueuePage {
     renderNavBar();
 
     document.body.innerHTML += `
-        <div style="border: 1px solid gray; margin: 4px;">
-          <a id="quitQueueLink" class="btn btn-info mb-3"; style="margin: 4px; text-decoration: none;">Quit queue link</a>
-        </div>
-        <div id="gameQueueSection">
-        </div>
+    <div id="gameQueueSection" class = "box">
+    </div>
+    <a id="quitQueueLink" class="nav justify-content-center link">Quit queue link</a>
       `;
 
     const quitQueueLink = document.getElementById("quitQueueLink");
@@ -31,22 +29,36 @@ export class GameQueuePage {
   static updateQueueMemberSection = () => {
     const gameQueueSection = document.getElementById("gameQueueSection");
     gameQueueSection.innerHTML = "";
-    gameQueueSection.style = "border: 1px solid gray; margin: 4px;";
 
-    const queueStatus = document.createElement("p");
-    queueStatus.textContent = `${RoomSocketManager.getNumOfParticipants()} / ${
-      RoomSocketManager.maxNumOfParticipant
-    }`;
+    const queueStatus = document.createElement("div");
+    queueStatus.innerHTML = `
+      <div class="oneToOneRatioWrapher">
+        <h6 class="leftAlignedTitle">Current Number Of Member : </h6>
+        <p class="paragraph">${RoomSocketManager.getNumOfParticipants()}</p>
+      </div>
+      <div class="oneToOneRatioWrapher">
+        <h6 class="leftAlignedTitle">Max Number Of Member : </h6>
+        <p class="paragraph">${RoomSocketManager.maxNumOfParticipant}</p>
+      </div>
+    `;
     gameQueueSection.appendChild(queueStatus);
 
     RoomSocketManager.participantList.people.forEach((value) => {
       const participant = document.createElement("div");
-      participant.textContent = `user id : ${value.user_id}, user name : ${value.user_name}`;
+      participant.classList.add("box");
+      participant.innerHTML = `
+        <div class="oneToOneRatioWrapher">
+          <h6 class="leftAlignedTitle">user id : </h6>
+          <p class="paragraph">${value.user_id}</p>
+        </div>
+        <div class="oneToOneRatioWrapher">
+          <h6 class="leftAlignedTitle">user name : </h6>
+          <p class="paragraph">${value.user_name}</p>
+        </div>
+      `;
       gameQueueSection.appendChild(participant);
     });
 
-    console.log(`num : ${typeof(RoomSocketManager.getNumOfParticipants())}`);
-    console.log(`max : ${typeof(RoomSocketManager.maxNumOfParticipant)}`);
     if (
       RoomSocketManager.getNumOfParticipants() ===
       RoomSocketManager.maxNumOfParticipant

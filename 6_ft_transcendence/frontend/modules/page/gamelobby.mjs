@@ -13,13 +13,9 @@ export class GameLobbyPage {
     renderNavBar();
 
     document.body.innerHTML += `
-      <div id="gameLobbySection" style="border: 1px solid gray; margin: 4px;">
-        <div>
-          <a id="gameQueueCreationLink" class="btn btn-info mb-3" style="margin: 4px;">make new game queue</a>
-        </div>
-        <div id="gameQueueList">
-        </div>
+      <div id="gameLobbySection" class="box">
       </div>
+      <a id="gameQueueCreationLink" class="nav justify-content-center link">Make New Game Room</a>
     `;
 
     bindEventToNavBar();
@@ -56,23 +52,34 @@ export class GameLobbyPage {
   static updateGameLobbySection = (roomList) => {
     if (roomList === null) return;
 
-    let gameQueueList = document.getElementById("gameQueueList");
-    gameQueueList.innerHTML = "";
-    gameQueueList.style = "border: 1px solid gray; margin: 4px;";
+    let gameLobbySection = document.getElementById("gameLobbySection");
+    gameLobbySection.innerHTML = "";
 
     roomList.room.forEach((value) => {
       const gameQueue = document.createElement("div");
-      gameQueue.style = "border: 1px solid gray; margin: 4px;";
-      gameQueue.textContent = `
-      room id : ${value.room_id}\n
-      room name : ${value.room_name}\n
-      room limit : ${value.room_limit}\n
-      current number of members : ${value.room_cur_people}\n`;
-      gameQueueList.appendChild(gameQueue);
+      gameQueue.classList.add("box");
+      gameQueue.innerHTML = `
+        <div class="oneToOneRatioWrapher">
+          <h6 class="leftAlignedTitle">room id : </h6>
+          <p class="paragraph">${value.room_id}</p>
+        </div>
+        <div class="oneToOneRatioWrapher">
+          <h6 class="leftAlignedTitle">room name : </h6>
+          <p class="paragraph">${value.room_name}</p>
+        </div>
+        <div class="oneToOneRatioWrapher">
+          <h6 class="leftAlignedTitle">room limit : </h6>
+          <p class="paragraph">${value.room_limit}</p>
+        </div>
+        <div class="oneToOneRatioWrapher">
+          <h6 class="leftAlignedTitle">current number of members : </h6>
+          <p class="paragraph">${value.room_cur_people}</p>
+        </div>
+      `;
+      gameLobbySection.appendChild(gameQueue);
 
       const enterQueue = document.createElement("a");
-      enterQueue.classList.add(..."btn btn-info mb-3".split(" "));
-      enterQueue.style = "margin: 4px;";
+      enterQueue.classList.add(..."link".split(" "));
       enterQueue.textContent = "enter Queue";
       gameQueue.appendChild(enterQueue);
 
