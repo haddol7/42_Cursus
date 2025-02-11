@@ -5,14 +5,14 @@ const rooms = {};
 function requestRoomIdfromClient(socket) {
   return new Promise((resolve) => {
     socket.emit("requestRoomId");
-    socket.once("roomId", (roomId) => {
-      resolve(roomId);
+    socket.once("roomId", (roomId, isAIMode) => {
+      resolve(roomId, isAIMode);
     });
   });
 }
 
 // 방 초기화 : 방 생성 및 paddleId 할당
-function initializeRoom(roomId, socket) {
+function initializeRoom(roomId, socket, isAIMode) {
   // 방이 이미 존재하고, 게임이 이미 끝났다면 연결을 끊습니다.
   // 예) 새로고침을 했을 때
   if (rooms[roomId] && rooms[roomId].gameOver) {
@@ -26,6 +26,7 @@ function initializeRoom(roomId, socket) {
       scores: { paddle1: 0, paddle2: 0 },
       gameOver: false,
       count: 1,
+      isAIMode: isAIMode, //AI 모드여부에 따라 설정이 달라지므로 room 정보에 추가했습니다.
     };
   } else if (rooms[roomId].count === 1) rooms[roomId].count = 2;
   else {
@@ -35,7 +36,7 @@ function initializeRoom(roomId, socket) {
     return { paddleId: null, roomCounter: rooms[roomId].count };
   }
   socket.join(roomId);
-  const paddleId = rooms[roomId].count % 2 === 0 ? "paddle1" : "paddle2";
+  const paddleId = rooms[roomId].count % 2 === 1 ? "paddle1" : "paddle2"; //먼저 들어온 사람이 paddle1
   return { paddleId, roomCounter: rooms[roomId].count };
 }
 
