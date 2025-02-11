@@ -1,7 +1,7 @@
 from typing import Any
 import socketio
 
-from gameapp.envs import FRONTEND_URL
+from gameapp.envs import FRONTEND_URL, GAME_URL
 
 NAMESPACE = "/game"
 
@@ -13,7 +13,11 @@ UPDATE_BALL_EVENT = "updateBall"
 RESET_POSITIONS_EVENT = "resetPositions"
 
 sio = socketio.Server(
-    cors_allowed_origins=["https://localhost", f"https://{FRONTEND_URL}"]
+    cors_allowed_origins=[
+        "https://localhost",
+        f"https://{FRONTEND_URL}",
+        GAME_URL,
+    ]
 )
 
 

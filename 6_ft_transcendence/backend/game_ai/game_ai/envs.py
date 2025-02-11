@@ -14,7 +14,6 @@ def get_os_int(key: str) -> int:
     return int(get_os_str(key))
 
 
-GAME_URL = get_os_str("GAME_URL")
 JWT_URL = get_os_str("JWT_URL")
-USER_URL = get_os_str("USER_URL")
+GAME_URL = get_os_str("GAME_URL")
 FRONTEND_URL = get_os_str("FRONTEND_URL")

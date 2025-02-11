@@ -31,6 +31,8 @@ services:
       - TWOFA_URL=${TWOFA_URL}
       - JWT_PORT=${JWT_PORT}
       - FRONTEND_URL=${FRONTEND_URL}
+      - AI_USERID=${AI_USERID}
+      - JWT_AI_EXPIRE_SECONDS=${JWT_AI_EXPIRE_SECONDS}
   websocket:
     image: websocket
     container_name: websocket
@@ -90,6 +92,42 @@ services:
       - JWT_URL=${JWT_URL}
       - GAME_PORT=${GAME_PORT}
       - FRONTEND_URL=${FRONTEND_URL}
+      - GAME_URL=${GAME_URL}
+  game-ai:
+    image: game-ai
+    container_name: game-ai
+    pull_policy: never
+    build: ./game_ai
+    expose:
+      - ${GAMEAI_PORT}
+    ports:
+      - "${GAMEAI_PORT}:${GAMEAI_PORT}"
+    networks:
+      - postgresdb_network
+    depends_on:
+      db:
+        condition: service_healthy
+      game:
+        condition: service_started
+      auth:
+        condition: service_started
+    tty: true
+    init: true
+    restart: always
+    volumes:
+      - ./game_ai:/server
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - WEBSOCKET_WORKER=${WEBSOCKET_WORKER}
+      - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
+      - USER_URL=${USER_URL}
+      - JWT_URL=${JWT_URL}
+      - GAME_PORT=${GAME_PORT}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - GAME_URL=${GAME_URL}
+      - GAMEAI_PORT=${GAMEAI_PORT}
   auth:
     image: auth
     container_name: auth

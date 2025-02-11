@@ -84,6 +84,15 @@ def clear_match_dict():
     match_dict.clear()
 
 
+def _get_match_id_from_jwt(jwt) -> int:
+    res = requests.post(f"{JWT_URL}/jwt/check/ai", json={"jwt": jwt})
+    if not res.ok:
+        raise ConnectionRefusedError(res.content)
+
+    json = res.json()
+    return json["match_id"]
+
+
 def _get_user_id_from_jwt(jwt) -> int:
     res = requests.post(f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": False})
 
@@ -98,7 +107,12 @@ def on_connect(sid, auth):
     print(f"connected sid={sid}")
 
     # TODO: auth with JWT
-    if "jwt" in auth:
+    if "ai" in auth:
+        jwt = get_str(auth, "jwt")
+        match_id = _get_match_id_from_jwt(jwt)
+        print(f"AI joined with match_id={match_id}")
+        return
+    elif "jwt" in auth:
         jwt = get_str(auth, "jwt")
         user_id = _get_user_id_from_jwt(jwt)
         # TODO: Fix username
