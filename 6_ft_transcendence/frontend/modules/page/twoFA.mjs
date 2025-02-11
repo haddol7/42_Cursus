@@ -66,7 +66,7 @@ export class TwoFAPage {
       centralBox.innerHTML += `
           <p id="otpName"></p>
           <form id="twoFAOTPCodeForm" action="" method="">
-            <input id="otpCodeInput" type="password" class="form-control" placeholder="please input otp code" />
+            <input id="otpCodeInput" type="text" class="form-control" placeholder="please input otp code" />
             <input id="otpCodeSubmit" type="submit" class="btn btn-info mb-3" value="submit" />
           </form>
         `;

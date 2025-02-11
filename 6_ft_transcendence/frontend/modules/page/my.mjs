@@ -15,29 +15,35 @@ export class MyPage {
     document.body.innerHTML += `
         <div id="mainPageSection" style="display: grid; grid-template-columns: 1fr 1fr;">
           <div id="leftSection">
-            <div id="profileSection" style="display: grid; grid-template-columns: 1fr 2fr; border: 1px solid gray; margin: 4px;">
-              <div style="margin: 4px;">
-                <a id="editProfileLink" style="margin-left: 60px; text-decoration: none;">edit profile</a>
-                <img id="myAvartar" alt="avartar" width="200" />
+            <div id="profileSection" class="box">
+              <h5 class="centerAlignedTitle">User Profile</h5>
+              <img id="myAvartar" class="image" alt="avartar" width="200" />
+              <div class="oneToOneRatioWrapher">
+                <h6 class="leftAlignedTitle">Nick : </h6>
+                <p id="myNick" class="paragraph"></p>
               </div>
-              <div style="border: 1px solid gray; margin: 4px;">
-                <h6>Nick</h6>
-                <p id="myNick" style="margin: 16px;"></p>
-                <h6>Memo</h6>
-                <p id="myMemo" style="margin: 16px;"></p>
-                <p id="winCnt" style="margin: 16px;"></p>
-                <p id="loseCnt" style="margin: 16px;"></p>
+              <div class="oneToOneRatioWrapher">
+                <h6 class="leftAlignedTitle">Memo : </h6>
+                <p id="myMemo" class="paragraph"></p>
+              </div>
+              <div class="oneToOneRatioWrapher">
+                <h6 class="leftAlignedTitle">win count : </h6>
+                <p id="winCnt" class="paragraph"></p>
+              </div>
+              <div class="oneToOneRatioWrapher">
+                <h6 class="leftAlignedTitle">lose count : </h6>
+                <p id="loseCnt" class="paragraph"></p>
               </div>
             </div>
           </div>
-          <div id="rightSection">
-            <form id="addNewFriend" action="" method="" style="display: grid; grid-template-columns: 4fr 1fr; border: 1px solid gray; margin: 4px;">
-              <input id="newFriendName" type="text" class="form-control" placeholder="user search bar" style="margin: 16px;" />
-              <input type="submit" class="btn btn-info mb-3" value="search" style="margin: 16px;" />
+          <div id="rightSection" class="box">
+            <form id="addNewFriend" class="rowAlignedForm" action="" method="">
+              <input id="newFriendName" class="textInput" type="text" placeholder="search user"/>
+              <input class="submitInput" type="submit" value="search"/>
             </form>
-            <div id="friendList" style="border: 1px solid gray; margin: 4px;"></div>
           </div>
-        </div>`;
+        </div>
+        <a id="editProfileLink" class="nav justify-content-center link">edit profile</a>`;
 
     bindEventToNavBar();
 
@@ -140,8 +146,26 @@ export class MyPage {
   };
 
   static #updateFriendList(fl) {
-    const friendList = document.getElementById("friendList");
-    friendList.innerHTML = "";
+    let friendList = document.getElementById("friendList");
+
+    if (fl.length === 0)
+    {
+      if (friendList !== null)
+      {
+        friendList.innerHTML = "";
+        friendList.parentNode.replaceChild(friendList);
+      }
+      return ;
+    }
+
+    if (friendList !== null)
+      friendList.innerHTML = "";
+    else
+    {
+      friendList = document.createElement("div");
+      friendList.id = "friendList";
+      friendList.classList.add("box");
+    }
 
     fl.forEach((value) => {
       const friendInfo = document.createElement("p");
