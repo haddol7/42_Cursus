@@ -11,7 +11,7 @@ let player1Score = 0;
 let player2Score = 0;
 
 // 여기서 디버깅용으로 roomId를 설정할 수 있습니다.
-const DEBUG_ROOMCODE = 1234;
+const DEBUG_ROOMCODE = "4242";
 // 미사용
 const DEBUG_PLAYERNAME = "daeha";
 
@@ -54,7 +54,23 @@ function handleSocketEvents(socket, scene) {
     if (paddle) paddle.position.x = data.position;
   });
 
-  // 공 이동
+  // 디버그  : AI 시점 공 이동 (1초 마다 리프레쉬)
+  //   let lastUpdateTime = 0;
+
+  //   socket.on("updateBall", (ballData) => {
+  //     const currentTime = Date.now();
+  //     if (paddleId !== "spectator" && currentTime - lastUpdateTime < 1000) {
+  //       return;
+  //     }
+  //     lastUpdateTime = currentTime;
+
+  //     const ball = scene.getObjectByName("ball");
+  //     if (ball) {
+  //       ball.position.set(ballData.x, ballData.y, 0.2);
+  //     }
+  //   });
+  //
+
   socket.on("updateBall", (ballData) => {
     const ball = scene.getObjectByName("ball");
     ball.position.set(ballData.x, ballData.y, 0.2);

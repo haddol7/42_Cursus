@@ -81,8 +81,14 @@ export function animate(scene, camera, composer, socket, paddleId) {
 
     // 별 위치 업데이트
     const starPositions = stars.geometry.attributes.position.array;
+    // 공이 부딪힐수록 별이 더 빠르게 움직이도록 만들었습니다.
+    let starVelocity = (Math.abs(ball.vx) * 4 + Math.abs(ball.vy) * 6) * 10;
+    if (isNaN(starVelocity) || starVelocity < 1) {
+      starVelocity = 2;
+    }
+    console.log(deltaTime, starVelocity);
     for (let i = 0; i < starCount * 3; i += 3) {
-      starPositions[i + 1] += 100 * deltaTime;
+      starPositions[i + 1] += 50 * deltaTime * starVelocity;
       if (starPositions[i + 1] > 600) {
         starPositions[i + 1] = (Math.random() - 0.5) * 1000 - 500;
       }
