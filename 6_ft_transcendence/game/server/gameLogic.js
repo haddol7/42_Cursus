@@ -19,6 +19,7 @@ function startBallMovement(roomName, io) {
     const ball = room.ball;
     const paddles = room.paddles;
     const scores = room.scores;
+    const isAIMode = room.isAIMode;
 
     ball.x += ball.vx;
     ball.y += ball.vy;
@@ -63,15 +64,19 @@ function startBallMovement(roomName, io) {
     if (ball.y >= GAME_BOUNDS.y - BALL_SIZE.y / 2) {
       scores.paddle1++;
       io.to(roomName).emit("updateScore", scores);
-      resetGame(roomName, "paddle1", io);
+      resetGame(roomName, "paddle1", io, isAIMode);
     } else if (ball.y <= -GAME_BOUNDS.y + BALL_SIZE.y / 2) {
       scores.paddle2++;
       io.to(roomName).emit("updateScore", scores);
-      resetGame(roomName, "paddle2", io);
+      resetGame(roomName, "paddle2", io, isAIMode);
     }
 
     // 게임 종료 체크
-    if (scores.paddle1 === WINNING_SCORE || scores.paddle2 === WINNING_SCORE) {
+    if (
+      room.gameOver ||
+      (isAIMode === false &&
+        (scores.paddle1 === WINNING_SCORE || scores.paddle2 === WINNING_SCORE))
+    ) {
       room.gameOver = true;
       const winner = scores.paddle1 === WINNING_SCORE ? "paddle1" : "paddle2";
       io.to(roomName).emit("gameOver", {
@@ -82,7 +87,6 @@ function startBallMovement(roomName, io) {
       clearInterval(interval);
     }
 
-    //TODO : 해당 부분 AI 서버 구현 후 삭제
     //AI는 항상 paddle2로 설정
     ball.AI_pos = paddles.paddle2;
     io.to(roomName).emit("updateBall", ball);
@@ -118,7 +122,7 @@ function handlePaddleMove(roomName, data, io) {
   });
 }
 
-function resetGame(roomName, scorer, io) {
+function resetGame(roomName, scorer, io, isAIMode) {
   const room = rooms[roomName];
 
   // 공과 패들 위치 초기화
@@ -133,7 +137,9 @@ function resetGame(roomName, scorer, io) {
     let rand = Math.random() - 0.5;
     if (Math.abs(rand) < 0.2) rand > 0 ? (rand = 0.2) : (rand = -0.2);
     room.ball.vx = BALL_SPEED * rand;
-    room.ball.vy = scorer === "paddle1" ? BALL_SPEED : -BALL_SPEED;
+    // AI 모드일 때, 공을 항상 player 쪽으로 보내기
+    if (isAIMode === true) room.ball.vy = -BALL_SPEED;
+    else room.ball.vy = scorer === "paddle1" ? BALL_SPEED : -BALL_SPEED;
   }, 3000);
 }
 
