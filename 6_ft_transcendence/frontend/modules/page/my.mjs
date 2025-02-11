@@ -205,7 +205,7 @@ export class MyPage {
       if (response.status === 401 && json.error === WHEN_EXPIRED) {
         try {
           await JWT.getNewToken();
-          await MyPage.#addFriend();
+          await MyPage.#addFriend(name);
         } catch (e) {
           alert(e);
         }
