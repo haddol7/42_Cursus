@@ -90,6 +90,8 @@ def refresh_token(req: Request, data: Dict[str, Any]):
 
     res = requests.post(f"{JWT_URL}/jwt/refresh", json={"refresh_token": refresh_token})
     if not res.ok:
+        if res.content == "jwt.expired":
+            return HttpResponse("jwt.invalid", res.status_code)
         return HttpResponse(res.content, status=res.status_code)
     res_json = res.json()
     return JsonResponse(
