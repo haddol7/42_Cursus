@@ -159,7 +159,7 @@ class InternalUserView(APIView):
             serializer = ProfileSerializer(profile)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:
-            return Response({'error': 'Internal Server Error.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': f'Internal Server Error. : {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
