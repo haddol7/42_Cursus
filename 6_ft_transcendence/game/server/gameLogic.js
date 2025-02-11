@@ -52,7 +52,11 @@ function startBallMovement(roomName, io) {
       ball.x - BALL_SIZE.x / 2 <= paddles.paddle2 + PADDLE_WIDTH / 2;
 
     if (hitBottomPaddle || hitTopPaddle) {
-      ball.vy *= -1.1;
+      ball.vy *= -1.05;
+      ball.vx *= 1.05;
+
+      if (Math.abs(ball.vy) > 0.2)
+        ball.vy > 0 ? (ball.vy = 0.2) : (ball.vy = -0.2);
     }
 
     // 득점 체크
@@ -78,6 +82,9 @@ function startBallMovement(roomName, io) {
       clearInterval(interval);
     }
 
+    //TODO : 해당 부분 AI 서버 구현 후 삭제
+    //AI는 항상 paddle2로 설정
+    ball.AI_pos = paddles.paddle2;
     io.to(roomName).emit("updateBall", ball);
   }, 16); // 60 FPS
 }
@@ -100,7 +107,6 @@ function handlePaddleMove(roomName, data, io) {
   }
 
   const position = room.paddles[paddleId] + normalizedPaddleDirection;
-  console.log(paddleId, position);
   room.paddles[paddleId] = Math.max(
     -GAME_BOUNDS.x + PADDLE_WIDTH / 2,
     Math.min(GAME_BOUNDS.x - PADDLE_WIDTH / 2, position)
@@ -124,7 +130,9 @@ function resetGame(roomName, scorer, io) {
 
   // 3초 대기 후 공 재시작
   setTimeout(() => {
-    room.ball.vx = BALL_SPEED * (Math.random() - 0.5);
+    let rand = Math.random() - 0.5;
+    if (Math.abs(rand) < 0.2) rand > 0 ? (rand = 0.2) : (rand = -0.2);
+    room.ball.vx = BALL_SPEED * rand;
     room.ball.vy = scorer === "paddle1" ? BALL_SPEED : -BALL_SPEED;
   }, 3000);
 }
