@@ -148,20 +148,16 @@ export class MyPage {
   static #updateFriendList(fl) {
     let friendList = document.getElementById("friendList");
 
-    if (fl.length === 0)
-    {
-      if (friendList !== null)
-      {
+    if (fl.length === 0) {
+      if (friendList !== null) {
         friendList.innerHTML = "";
-        friendList.parentNode.replaceChild(friendList);
+        friendList.parentNode.removeChild(friendList);
       }
-      return ;
+      return;
     }
 
-    if (friendList !== null)
-      friendList.innerHTML = "";
-    else
-    {
+    if (friendList !== null) friendList.innerHTML = "";
+    else {
       friendList = document.createElement("div");
       friendList.id = "friendList";
       friendList.classList.add("box");
