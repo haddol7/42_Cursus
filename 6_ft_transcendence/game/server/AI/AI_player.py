@@ -61,7 +61,7 @@ def run_trained_ai(room_id):
     
     @sio.event
     def connect():
-        sio.emit("roomId", {"roomId": room_id, "isAI": False})
+        sio.emit("roomId", {"roomId": room_id, "isAIMode": False})
 
     @sio.event
     def init(data):
