@@ -6,7 +6,7 @@ import {
 import { PageManager } from "./manager.mjs";
 import { EditProfilePage } from "./editProfile.mjs";
 import { JWT } from "../authentication/jwt.mjs";
-import { USER_URL } from "../authentication/globalConstants.mjs";
+import { USER_URL, WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 
 export class MyPage {
   static render() {
@@ -21,8 +21,12 @@ export class MyPage {
                 <img id="myAvartar" alt="avartar" width="200" />
               </div>
               <div style="border: 1px solid gray; margin: 4px;">
-                <p id="myNick" style="border: 1px solid gray; margin: 16px;"></p>
-                <p id="myMemo" style="border: 1px solid gray; margin: 16px;"></p>
+                <h6>Nick</h6>
+                <p id="myNick" style="margin: 16px;"></p>
+                <h6>Memo</h6>
+                <p id="myMemo" style="margin: 16px;"></p>
+                <p id="winCnt" style="margin: 16px;"></p>
+                <p id="loseCnt" style="margin: 16px;"></p>
               </div>
             </div>
           </div>
@@ -52,8 +56,9 @@ export class MyPage {
         MyPage.#addFriend(document.getElementById("newFriendName").value);
       });
 
-    MyPage.#requestProfileToServer();
-    MyPage.#requestFriendListToServer();
+    MyPage.#requestProfileToServer().then((v) => {
+      MyPage.#requestFriendListToServer();
+    });
 
     PageManager.currentpageStatus = PageManager.pageStatus.my;
   }
@@ -71,27 +76,45 @@ export class MyPage {
 
   static #requestProfileToServer = async () => {
     const response = await fetch(
-      `${USER_URL}`,
+      USER_URL,
       JWT.getOptionWithToken(JWT.getJWTTokenFromCookie().accessToken, "GET")
     );
 
     const json = await response.json();
 
     if (response.ok) {
-      MyPage.#updateProfile();
+      MyPage.#updateProfile(
+        json.image_url,
+        json.user_name,
+        json.memo,
+        json.win_cnt,
+        json.lose_cnt
+      );
     } else {
-      alert(json.error);
+      if (response.status === 401 && json.error === WHEN_EXPIRED) {
+        try {
+          await JWT.getNewToken();
+          await MyPage.#requestProfileToServer();
+        } catch (e) {
+          alert(e);
+        }
+      } else alert(json.error);
     }
   };
 
-  static #updateProfile(image_url, user_name, memo) {
+  static #updateProfile(image_url, user_name, memo, win_cnt, lose_cnt) {
     const myAvartar = document.getElementById("myAvartar");
     const myNick = document.getElementById("myNick");
     const myMemo = document.getElementById("myMemo");
+    const winCnt = document.getElementById("winCnt");
+    const loseCnt = document.getElementById("loseCnt");
 
-    myAvartar.src = image_url;
+    // FIXME: 백엔드의 오류가 수정되면 아래의 주석을 해제해야 함
+    // myAvartar.src = image_url;
     myNick.textContent = user_name;
     myMemo.textContent = memo;
+    winCnt.textContent = win_cnt;
+    loseCnt.textContent = lose_cnt;
   }
 
   static #requestFriendListToServer = async () => {
@@ -105,7 +128,14 @@ export class MyPage {
     if (response.ok) {
       MyPage.#updateFriendList(json);
     } else {
-      alert(json.error);
+      if (response.status === 401 && json.error === WHEN_EXPIRED) {
+        try {
+          await JWT.getNewToken();
+          await MyPage.#requestFriendListToServer();
+        } catch (e) {
+          alert(e);
+        }
+      } else alert(json.error);
     }
   };
 
@@ -121,24 +151,39 @@ export class MyPage {
       friendInfo.appendChild(friendLink);
 
       friendLink.textContent = String(value.user_name);
-      friendLink.addEventListener("click", async (event) => {
-        event.preventDefault();
 
-        // 나중에 아예 새로운 friend page로 넘어가도록 변경
-        const response = await fetch(
-          `${USER_URL}?user_name=${value.user_name}`,
-          JWT.getOptionWithToken(JWT.getJWTTokenFromCookie().accessToken, "GET")
-        );
-        const json = await response.json();
-
-        if (response.ok) {
-          MyPage.#updateProfile(json.image_url, json.user_name, json.memo);
-        } else {
-          alert(json.error);
-        }
-      });
+      friendLink.addEventListener("click", MyPage.#bindEventToFriendList);
     });
   }
+
+  static #bindEventToFriendList = async (event) => {
+    event.preventDefault();
+    // 나중에 아예 새로운 friend page로 넘어가도록 변경
+    const response = await fetch(
+      `${USER_URL}?user_name=${value.user_name}`,
+      JWT.getOptionWithToken(JWT.getJWTTokenFromCookie().accessToken, "GET")
+    );
+    const json = await response.json();
+
+    if (response.ok) {
+      MyPage.#updateProfile(
+        json.image_url,
+        json.user_name,
+        json.memo,
+        json.win_cnt,
+        json.lose_cnt
+      );
+    } else {
+      if (response.status === 401 && json.error === WHEN_EXPIRED) {
+        try {
+          await JWT.getNewToken();
+          await MyPage.#bindEventToFriendList(event);
+        } catch (e) {
+          alert(e);
+        }
+      } else alert(json.error);
+    }
+  };
 
   static #addFriend = async (name) => {
     const response = await fetch(
@@ -155,9 +200,16 @@ export class MyPage {
     const json = await response.json();
 
     if (response.ok) {
-      MyPage.#requestFriendListToServer();
+      await MyPage.#requestFriendListToServer();
     } else {
-      alert(json.error);
+      if (response.status === 401 && json.error === WHEN_EXPIRED) {
+        try {
+          await JWT.getNewToken();
+          await MyPage.#addFriend();
+        } catch (e) {
+          alert(e);
+        }
+      } else alert(json.error);
     }
   };
 }

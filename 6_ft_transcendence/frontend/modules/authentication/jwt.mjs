@@ -21,6 +21,8 @@ export class JWT {
   }
 
   static setNewJWTTokenOnCookie(access_token, refresh_token) {
+    console.log(`access : ${access_token}`);
+    console.log(`refresh : ${refresh_token}`);
     document.cookie = `${ACCESS_TOKEN_STRING}${access_token};`;
     document.cookie = `${REFRESH_TOKEN_STRING}${refresh_token};`;
   }
@@ -55,9 +57,9 @@ export class JWT {
 
     if (response.ok) {
       const json = await response.json();
-      JWT.setNewJWTTokenOnCookie(json.access_token, json.refresh_token);
+      JWT.setNewJWTTokenOnCookie(json.accessToken, json.refreshToken);
     } else {
-      const text = response.text();
+      const text = await response.text();
       throw new Error(text);
     }
   };
