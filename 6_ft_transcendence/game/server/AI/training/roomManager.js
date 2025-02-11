@@ -5,8 +5,8 @@ const rooms = {};
 function requestRoomIdfromClient(socket) {
   return new Promise((resolve) => {
     socket.emit("requestRoomId");
-    socket.once("roomId", (roomId) => {
-      resolve(roomId);
+    socket.once("roomId", ({ roomId, isAI }) => {
+      resolve({ roomId, isAI });
     });
   });
 }

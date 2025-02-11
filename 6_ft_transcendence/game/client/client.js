@@ -12,12 +12,13 @@ let player2Score = 0;
 
 // 여기서 디버깅용으로 roomId를 설정할 수 있습니다.
 const DEBUG_ROOMCODE = "4242";
+const DEBUG_AI = true;
 // 미사용
 const DEBUG_PLAYERNAME = "daeha";
 
 // 서버로부터 roomId를 요청받았을 때 roomId를 전송
 socket.on("requestRoomId", () => {
-  socket.emit("roomId", DEBUG_ROOMCODE);
+  socket.emit("roomId", { roomId: DEBUG_ROOMCODE, isAIMode: DEBUG_AI });
 });
 
 // 서버에게 paddleId를 할당 받은 뒤, three.js 및 게임 초기화

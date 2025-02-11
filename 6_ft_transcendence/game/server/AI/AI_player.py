@@ -3,6 +3,7 @@ import socketio
 import pickle
 import time
 import numpy as np
+import sys
 
 SERVER_URL = "http://localhost:3000"
 
@@ -32,13 +33,13 @@ def predict_ball_position(ball_data):
     
     return {"x": predicted_x, "y": predicted_y, "vx": vx, "vy": vy, "AI_pos": g_paddle_x}
 
-def run_trained_ai():
+def run_trained_ai(room_id):
     global g_paddle_x
 
-    with open("data.pkl", "rb") as f:
+    with open("server/AI/data.pkl", "rb") as f:
         best_genome = pickle.load(f)
 
-    config_path = "config-feedforward"
+    config_path = "server/AI/config-feedforward"
     config = neat.Config(
         neat.DefaultGenome,
         neat.DefaultReproduction,
@@ -60,8 +61,7 @@ def run_trained_ai():
     
     @sio.event
     def connect():
-        # TODO : 방 코드를 받아오는 코드 적용
-        sio.emit("roomId", "4242")
+        sio.emit("roomId", {"roomId": room_id, "isAIMode": False})
 
     @sio.event
     def init(data):
@@ -122,5 +122,9 @@ def run_trained_ai():
     except Exception as e:
         print(f"❌ AI 서버 연결 실패: {e}")
 
-if __name__ == "__main__":
-    run_trained_ai()
+if __name__ == "__main__":    
+    if len(sys.argv) < 2:
+        sys.exit(1)
+    
+    room_id = sys.argv[1]
+    run_trained_ai(room_id)

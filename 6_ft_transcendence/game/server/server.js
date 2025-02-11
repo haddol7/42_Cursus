@@ -8,6 +8,7 @@ const {
   handleDisconnect,
 } = require("./roomManager");
 const { startBallMovement, handlePaddleMove } = require("./gameLogic");
+const { spawnAI, stopAI } = require("./spawn_ai");
 
 const app = express();
 const httpServer = createServer(app);
@@ -21,18 +22,23 @@ app.get("/", (req, res) => {
 io.on("connection", async (socket) => {
   // 클라이언트로부터 roomId 요청
   // 디버그 : roomId은 client.js에서 정의한 DEBUG_ROOMCODE를 받습니다.
-  const roomId = await requestRoomIdfromClient(socket);
+  const { roomId, isAIMode } = await requestRoomIdfromClient(socket);
 
   //방 생성 및 paddleId 할당
-  const { paddleId, roomCounter } = initializeRoom(roomId, socket);
+  const { paddleId, roomCounter } = initializeRoom(roomId, socket, isAIMode);
   console.log(`room : ${roomId} - ${paddleId} connected`);
 
   // 클라이언트에 paddleId 전달 및 초기화
   socket.emit("init", { paddleId });
 
+  // AI 생성
+  if (isAIMode) spawnAI(roomId);
+
   // 방에 2명이 들어왔다면, 게임 시작
   if (roomCounter === 2) {
-    startBallMovement(roomId, io);
+    setTimeout(() => {
+      startBallMovement(roomId, io, isAIMode);
+    }, 3000);
   }
 
   // 상대 패들 이동 시 상태 업데이트
@@ -42,6 +48,7 @@ io.on("connection", async (socket) => {
 
   // 유저가 나갔을 때 (승리 처리 및 방 삭제)
   socket.on("disconnect", (socket) => {
+    if (isAIMode) stopAI(roomId);
     handleDisconnect(roomId, paddleId, socket, io);
   });
 });
