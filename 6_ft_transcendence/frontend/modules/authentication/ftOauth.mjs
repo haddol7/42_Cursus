@@ -32,7 +32,7 @@ export class FTOauth {
 
     const json = await response.json();
     alert(json);
-    await JWT.setNewJWTTokenOnCookie(json.accessToken, json.refreshToken);
+    JWT.setNewJWTTokenOnCookie(json.accessToken, json.refreshToken);
     TwoFA.isNewUser = json.isnew;
     console.log(`isNewUser : ${TwoFA.isNewUser}, isnew : ${json.isnew}`);
   };

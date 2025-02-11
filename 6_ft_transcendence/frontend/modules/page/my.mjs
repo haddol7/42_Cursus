@@ -56,7 +56,7 @@ export class MyPage {
         MyPage.#addFriend(document.getElementById("newFriendName").value);
       });
 
-    MyPage.#requestProfileToServer().then((v) => {
+    MyPage.#requestProfileToServer().then(() => {
       MyPage.#requestFriendListToServer();
     });
 
