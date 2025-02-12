@@ -142,6 +142,7 @@ def on_connect(sid, auth):
         jwt = get_str(auth, "jwt")
         match_id = _get_match_id_from_jwt(jwt)
         print(f"AI joined with match_id={match_id}")
+        join_match_ai(sid, match_id)
         return
     elif "jwt" in auth:
         jwt = get_str(auth, "jwt")
@@ -209,6 +210,10 @@ def get_room_user_or_none(user_id: int):
     except:
         temp_match_room_user = None
     return temp_match_room_user
+
+
+def join_match_ai(sid: str, match_id: int):
+    match_dict[match_id].ai_connected(sid)
 
 
 def join_match(sid: str, match_user: TempMatchUser, username: str):

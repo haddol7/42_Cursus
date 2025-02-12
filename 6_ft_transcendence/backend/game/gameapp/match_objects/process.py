@@ -103,7 +103,7 @@ class MatchProcess(threading.Thread):
         t.start()
 
     def run(self):
-        if len(self.users) != 2:
+        if not self.is_with_ai and len(self.users) != 2:
             return
         self.match.start_at = now()
         self.match.save()

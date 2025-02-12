@@ -40,8 +40,7 @@ class AiClient:
 
         self.net = neat.nn.FeedForwardNetwork.create(best_genome, config)
 
-        sio = socketio.Client()
-        sio.connect(f"{GAME_URL}", namespaces=["/game"], auth={"ai": True, "jwt": jwt})
+        sio = socketio.Client(logger=True, engineio_logger=True)
 
         self.g_paddle_x = 0
 
@@ -49,12 +48,14 @@ class AiClient:
         self.last_update_time = 0
         self.last_ball_data = None
 
-        @sio.event  # type: ignore
+        @sio.event(namespace="/game")  # type: ignore
         def init(data):
+            print("ai got init")
             self.paddle_id = data["paddleId"]
 
-        @sio.event  # type: ignore
+        @sio.event(namespace="/game")  # type: ignore
         def updateBall(ball_data):
+            print("ai got updateBall")
             if not sio.connected or self.paddle_id is None:
                 return
 
@@ -82,13 +83,17 @@ class AiClient:
             except Exception as e:
                 print(f"⚠️ AI 오류: {e}")
 
-        @sio.event  # type: ignore
+        @sio.event(namespace="/game")  # type: ignore
         def hitPaddle(data):
             pass
 
-        @sio.event  # type: ignore
+        @sio.event(namespace="/game")  # type: ignore
         def gameOver(data):
+            print("ai got gameover")
             sio.disconnect()
+
+        sio.connect(f"{GAME_URL}", namespaces=["/game"], auth={"ai": True, "jwt": jwt})
+        self.sio = sio
 
     def predict_ball_position(self, ball_data):
         ball_x = ball_data["x"]

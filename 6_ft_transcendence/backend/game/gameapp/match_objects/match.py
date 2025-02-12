@@ -173,8 +173,8 @@ class Match:
         return True
 
     def user_connected(self, user: MatchUser) -> bool:
+        print(f"user={user} is connected to {self.room_name}")
         with self.lock:
-            print(f"user={user} is connected to {self.room_name}")
             idx = self.__get_user_idx(user)
             if idx == -1:
                 return False
@@ -203,6 +203,24 @@ class Match:
                     self.match_process.start()
                     self.stage = MatchStage.MATCH
         return True
+
+    def ai_connected(self, sid: str):
+        print(f"ai is connected! self.room_name={self.room_name}")
+        self.online.append(True)
+        with self.lock:
+            print("emit init paddleId=paddle2")
+            sio_emit(
+                "init",
+                {"paddleId": "paddle2"},
+                to=sid,
+            )
+            sio_enter_room(sid, self.room_name)
+
+            print("waiting process stop")
+            self.waiting_process.stop()
+            print("match process start")
+            self.match_process.start()
+            self.stage = MatchStage.MATCH
 
     def timed_out(self):
         print("Match - timed out")
