@@ -21,7 +21,9 @@ RUN python -m pip install \
     drf-spectacular \
     python-socketio \
     gunicorn \
-    "python-socketio[client]"
+    "python-socketio[client]" \
+    numpy \
+    neat-python
 
 
 # Move Script File

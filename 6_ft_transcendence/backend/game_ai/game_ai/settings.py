@@ -33,7 +33,7 @@ SECRET_KEY = "django-insecure-w*ttv*6(_u2)&z85)cbt-h8xt=$fq8j@k=0shg=*r13ak&o6vl
 DEBUG = True
 
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "game_ai", FRONTEND_URL]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "game-ai", FRONTEND_URL]
 
 
 # Application definition

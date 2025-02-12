@@ -5,7 +5,7 @@ from django.db import transaction
 
 from socketio.exceptions import ConnectionRefusedError
 
-from gameapp.envs import JWT_URL
+from gameapp.envs import GAMEAI_URL, JWT_URL
 from gameapp.sio import sio_session
 from gameapp.models import (
     TempMatch,
@@ -13,8 +13,11 @@ from gameapp.models import (
     TempMatchRoomUser,
     TempMatchUser,
 )
-from gameapp.match_objects import Match, MatchUser, match_dict
+from gameapp.match_objects import Match, MatchUser, match_dict, matchuser
 from gameapp.utils import get_str
+
+import random
+import string
 
 
 def make_rooms(room_name: str, user_id: List[int]):
@@ -70,6 +73,34 @@ def make_rooms(room_name: str, user_id: List[int]):
             )
 
         init_matches(temp_match_users)
+
+
+def generate_secret() -> str:
+    LEN = 10
+    ret: str = ""
+    for _ in range(LEN):
+        ret += random.choice(string.ascii_letters + string.digits)
+    return ret
+
+
+def make_airoom(user_id: int):
+    room_name = generate_secret()
+    with transaction.atomic():
+        temp_match_room = TempMatchRoom.objects.create(room_name=room_name)
+        temp_match_room_user = TempMatchRoomUser.objects.create(
+            user_id=user_id, temp_match_room_id=temp_match_room.id
+        )
+
+        temp_match = TempMatch.objects.create(
+            match_room_id=temp_match_room.id,
+            round=2,
+            winner_match=None,
+            is_with_ai=True,
+        )
+
+        temp_match_user = TempMatchUser.objects.create(
+            user_id=user_id, temp_match_id=temp_match.id
+        )
 
 
 def _get_from_sess(sid: str) -> Tuple[int, str]:
@@ -182,11 +213,19 @@ def get_room_user_or_none(user_id: int):
 
 def join_match(sid: str, match_user: TempMatchUser, username: str):
     room_id = match_user.temp_match.id
+    created = False
+    is_with_ai = False
     if room_id not in match_dict.get_dict():
-        match_dict[room_id] = Match(match_user.temp_match)
+        is_with_ai = match_user.temp_match.is_with_ai
+        match_dict[room_id] = Match(match_user.temp_match, is_with_ai)
+        created = True
 
     user = MatchUser(id=match_user.user.id, name=username, sid=sid)
     match_dict[room_id].user_connected(user)
+
+    if created and is_with_ai:
+        resp = requests.post(f"{GAMEAI_URL}/ai/", json={"match_id": room_id})
+        print(f"request to ai has returned! OK={resp.ok}")
 
 
 def clear_room(room_name: str):

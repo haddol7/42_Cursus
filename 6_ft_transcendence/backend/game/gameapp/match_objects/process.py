@@ -31,8 +31,9 @@ BALL_SIZE = {"x": 0.4, "y": 0.4, "z": 0.4}
 
 
 class MatchProcess(threading.Thread):
-    def __init__(self, match: TempMatch, match_manager: "Match"):
+    def __init__(self, match: TempMatch, match_manager: "Match", is_with_ai: bool):
         super().__init__()
+        self.is_with_ai = is_with_ai
         self.match_manager = match_manager
         self.room_name = get_match_name(match)
         self.users: list[MatchUser] = []
@@ -161,7 +162,9 @@ class MatchProcess(threading.Thread):
 
                 self.reset_game(scorer)
 
-            if score[0] == WINNING_SCORE or score[1] == WINNING_SCORE:
+            if not self.is_with_ai and (
+                score[0] == WINNING_SCORE or score[1] == WINNING_SCORE
+            ):
                 winner_idx = 0 if score[0] == WINNING_SCORE else 1
 
                 with self.lock:

@@ -39,7 +39,7 @@ class MatchStage(enum.Enum):
 
 
 class Match:
-    def __init__(self, match: TempMatch) -> None:
+    def __init__(self, match: TempMatch, is_with_ai: bool = False) -> None:
         self.stage = MatchStage.NOT_STARTED
         self.match = match
         self.room_name = get_match_name(match)
@@ -47,7 +47,7 @@ class Match:
         self.users: list[MatchUser] = []
         self.online: list[bool] = []
 
-        self.match_process = MatchProcess(match, self)
+        self.match_process = MatchProcess(match, self, is_with_ai)
         self.waiting_process = WaitingProcess(self)
 
         self.lock = threading.Lock()

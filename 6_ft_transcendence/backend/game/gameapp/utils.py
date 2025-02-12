@@ -66,3 +66,10 @@ def get_list(dict: Dict[str, Any] | QueryDict, key: str) -> List[Any]:
     if not isinstance(val, list):
         raise BadRequestFieldException(key)
     return val
+
+
+def get_dict(dict: Dict[str, Any] | QueryDict, key: str) -> Dict[str, Any]:
+    val = _get_any(dict, key)
+    if not isinstance(val, Dict):
+        raise BadRequestFieldException(key)
+    return val

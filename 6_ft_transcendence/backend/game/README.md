@@ -147,6 +147,19 @@ This endpoint will not check the user exists or not. Such validation should have
 - If the value of `room_name` already exists: `bad_request:room_name` (400)
 - Otherwise in case of internal error: `internal_error` (500)
 
+### POST /_internal/aigame
+
+```json
+{
+    "user": {
+        "user_id": "int",
+        "user_name": "string"
+    }
+}
+```
+
+Specify one user to do a practice match with ai. The user should not be one of the match already, and the user will be in the practice match when the user connects to the match. The match with ai will be started immediately.
+
 ## Pseudocode
 
 ### on connect
