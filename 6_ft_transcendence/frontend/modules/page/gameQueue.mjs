@@ -44,6 +44,7 @@ export class GameQueuePage {
     gameQueueSection.appendChild(queueStatus);
 
     RoomSocketManager.participantList.people.forEach((value) => {
+      console.log(`us id : ${value.user_id} us name : ${value.user_name}`);
       const participant = document.createElement("div");
       participant.classList.add("box");
       participant.innerHTML = `

@@ -38,8 +38,8 @@ export class MyPage {
           </div>
           <div id="rightSection" class="box">
             <form id="addNewFriend" class="rowAlignedForm" action="" method="">
-              <input id="newFriendName" class="textInput" type="text" placeholder="search user"/>
-              <input class="submitInput" type="submit" value="search"/>
+              <input id="newFriendName" class="textInput" type="text" placeholder="Please input friend's name"/>
+              <input class="submitInput" type="submit" value="Add Friend"/>
             </form>
           </div>
         </div>
@@ -81,10 +81,7 @@ export class MyPage {
   }
 
   static #requestProfileToServer = async () => {
-    const response = await fetch(
-      USER_URL,
-      JWT.getOptionWithToken(JWT.getJWTTokenFromCookie().accessToken, "GET")
-    );
+    const response = await fetch(USER_URL, JWT.getOptionWithAccessToken("GET"));
 
     const json = await response.json();
 
@@ -126,7 +123,7 @@ export class MyPage {
   static #requestFriendListToServer = async () => {
     const response = await fetch(
       `${USER_URL}friend`,
-      JWT.getOptionWithToken(JWT.getJWTTokenFromCookie().accessToken, "GET")
+      JWT.getOptionWithAccessToken("GET")
     );
 
     const json = await response.json();
@@ -162,7 +159,6 @@ export class MyPage {
       friendList.id = "friendList";
       friendList.classList.add("box");
       document.getElementById("rightSection").appendChild(friendList);
-      
     }
 
     fl.forEach((value) => {
@@ -183,7 +179,7 @@ export class MyPage {
     // 나중에 아예 새로운 friend page로 넘어가도록 변경
     const response = await fetch(
       `${USER_URL}?user_name=${value.user_name}`,
-      JWT.getOptionWithToken(JWT.getJWTTokenFromCookie().accessToken, "GET")
+      JWT.getOptionWithAccessToken("GET")
     );
     const json = await response.json();
 
@@ -210,13 +206,9 @@ export class MyPage {
   static #addFriend = async (name) => {
     const response = await fetch(
       `${USER_URL}friend`,
-      JWT.getOptionWithToken(
-        JWT.getJWTTokenFromCookie().accessToken,
-        "POST",
-        JSON.stringify({
-          user_name: name,
-        })
-      )
+      JWT.getOptionWithAccessToken("POST", {
+        user_name: name,
+      })
     );
 
     const json = await response.json();

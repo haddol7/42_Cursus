@@ -1,4 +1,5 @@
 import { AUTH_URL } from "./globalConstants.mjs";
+import { logout } from "./logout.mjs";
 
 export const ACCESS_TOKEN_STRING = "accessToken=";
 export const REFRESH_TOKEN_STRING = "refreshToken=";
@@ -34,15 +35,15 @@ export class JWT {
       REFRESH_TOKEN_STRING + "; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
   }
 
-  static getOptionWithToken(token, _method, _body) {
+  static getOptionWithAccessToken(_method, _body) {
     const option = {
       method: _method,
       headers: {
         "content-type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${JWT.getJWTTokenFromCookie().accessToken}`,
       },
     };
-    if (_body !== undefined) option.body = _body;
+    if (_body !== undefined) option.body = JSON.stringify(_body);
 
     return option;
   }
@@ -60,7 +61,10 @@ export class JWT {
       JWT.setNewJWTTokenOnCookie(json.accessToken, json.refreshToken);
     } else {
       const text = await response.text();
-      throw new Error(text);
+      if (text === "jwt.expired" || text === "jwt.invalid") {
+        await logout();
+        throw new Error(text);
+      }
     }
   };
 }

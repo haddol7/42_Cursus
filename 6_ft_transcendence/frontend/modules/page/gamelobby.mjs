@@ -16,6 +16,7 @@ export class GameLobbyPage {
       <div id="gameLobbySection" class="box">
       </div>
       <a id="gameQueueCreationLink" class="nav justify-content-center link">Make New Game Room</a>
+      <a id="aiMatchLink" class="nav justify-content-center link">Match With AI</a>
     `;
 
     bindEventToNavBar();
@@ -50,12 +51,19 @@ export class GameLobbyPage {
   }
 
   static updateGameLobbySection = (roomList) => {
-    if (roomList === null) return;
+    if (roomList === null) {
+      console.log("null!!!!!");
+      return;
+    }
 
     let gameLobbySection = document.getElementById("gameLobbySection");
     gameLobbySection.innerHTML = "";
 
     roomList.room.forEach((value) => {
+      console.log(
+        `id : ${value.room_id} name : ${value.room_name} limit : ${value.room_limit} cur : ${value.room_cur_people}`
+      );
+
       const gameQueue = document.createElement("div");
       gameQueue.classList.add("box");
       gameQueue.innerHTML = `

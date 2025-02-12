@@ -95,7 +95,6 @@ export const bindEventToNavBar = () => {
       RoomSocketManager.disconnect();
 
     logout();
-    LoginPage.renderAndPushHistory();
   });
 
   myPageLink.addEventListener("click", (event) => {

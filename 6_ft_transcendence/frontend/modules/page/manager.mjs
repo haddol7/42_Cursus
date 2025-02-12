@@ -62,9 +62,9 @@ export class PageManager {
       case PageManager.pageStatus.login.page:
         LoginPage.render();
         break;
-      case PageManager.pageStatus.twoFA.page:
-        history.back();
-        break;
+      // case PageManager.pageStatus.twoFA.page:
+      //   history.back();
+      //   break;
       case PageManager.pageStatus.main.page:
         MainPage.render();
         break;

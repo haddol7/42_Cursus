@@ -6,9 +6,15 @@ import { LoginPage } from "../page/login.mjs";
 // logout()은 jwt 토큰을 전부 지우고 로그인 페이지를 새로 로드한다.
 // 그러므로 logout()을 호출했다면 그 이후에 어떠한 처리도(DOM, 이벤트 관련 처리 등등) 없어야 한다.
 export const logout = async () => {
+  if (JWT.getJWTTokenFromCookie().accessToken === null) {
+    clearBody();
+    removeBodyProperty();
+    LoginPage.renderAndReplaceHistory();
+  }
+
   const response = await fetch(
     `${AUTH_URL}logout`,
-    JWT.getOptionWithToken(JWT.getJWTTokenFromCookie().accessToken, "DELETE")
+    JWT.getOptionWithAccessToken("DELETE")
   );
 
   if (!response.ok) {
@@ -16,7 +22,7 @@ export const logout = async () => {
     if (text === "jwt.expired") {
       try {
         await JWT.getNewToken();
-        logout();
+        await logout();
       } catch (e) {
         alert(e);
       } finally {
@@ -28,5 +34,5 @@ export const logout = async () => {
   JWT.clearCookie();
   clearBody();
   removeBodyProperty();
-  LoginPage.renderAndReplaceHistory();
+  LoginPage.renderAndPushHistory();
 };
