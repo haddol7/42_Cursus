@@ -7,6 +7,7 @@ import { PageManager } from "./manager.mjs";
 import { EditProfilePage } from "./editProfile.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { USER_URL, WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
+import { replaceAllScriptChar } from "../security.mjs";
 
 export class MyPage {
   static render() {
@@ -41,6 +42,7 @@ export class MyPage {
               <input id="newFriendName" class="textInput" type="text" placeholder="Please input friend's name"/>
               <input class="submitInput" type="submit" value="Add Friend"/>
             </form>
+            <h5 class="centerAlignedTitle" style="margin-top: 20px;">Friend List</h5>
           </div>
         </div>
         <a id="editProfileLink" class="nav justify-content-center link">edit profile</a>`;
@@ -112,8 +114,7 @@ export class MyPage {
     const winCnt = document.getElementById("winCnt");
     const loseCnt = document.getElementById("loseCnt");
 
-    // FIXME: 백엔드의 오류가 수정되면 아래의 주석을 해제해야 함
-    // myAvartar.src = image_url;
+    myAvartar.src = image_url;
     myNick.textContent = user_name;
     myMemo.textContent = memo;
     winCnt.textContent = win_cnt;
@@ -207,7 +208,7 @@ export class MyPage {
     const response = await fetch(
       `${USER_URL}friend`,
       JWT.getOptionWithAccessToken("POST", {
-        user_name: name,
+        user_name: replaceAllScriptChar(name),
       })
     );
 

@@ -77,7 +77,6 @@ export class RoomSocketManager {
   static #onStartGame = () => {
     RoomSocketManager.socket.on("start_game", () => {
       RoomSocketManager.disconnect();
-      // GameSocketManager.connect();
       document.body.innerHTML = `
         <div id="gameOverPopup">
           <div id="popupContent">
@@ -131,24 +130,3 @@ export class RoomSocketManager {
     else return RoomSocketManager.participantList.people.length;
   };
 }
-
-// export class GameSocketManager {
-//   static socket = null;
-
-//   static connect = () => {
-//     GameSocketManager.socket = io("/game", {
-//       auth: {
-//         user_id: Math.trunc(Math.random() * 10000),
-//         user_name: Math.trunc(Math.random() * 10000).toString(),
-//       },
-//       path: "/game-sio/",
-//     });
-//   };
-
-//   static disconnect = () => {
-//     if (GameSocketManager.socket !== null) {
-//       GameSocketManager.socket.disconnect();
-//       GameSocketManager.socket = null;
-//     }
-//   };
-// }

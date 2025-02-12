@@ -3,6 +3,7 @@ import { PageManager } from "./manager.mjs";
 import { USER_URL } from "../authentication/globalConstants.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
+import { replaceAllScriptChar } from "../security.mjs";
 
 export class EditProfilePage {
   static render() {
@@ -76,8 +77,8 @@ export class EditProfilePage {
     const imgData = new FormData();
     console.log(newAvartar.files[0]);
     imgData.append("image_url", newAvartar.files[0]);
-    imgData.append("user_name", newNick.value);
-    imgData.append("memo", newMemo.value);
+    imgData.append("user_name", replaceAllScriptChar(newNick.value));
+    imgData.append("memo", replaceAllScriptChar(newMemo.value));
 
     const response = await fetch(`${USER_URL}`, {
       method: "PUT",

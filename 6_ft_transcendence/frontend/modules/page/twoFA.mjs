@@ -3,9 +3,7 @@ import {
   clearBody,
   removeBodyProperty,
 } from "./lowRankElements.mjs";
-import { JWT } from "../authentication/jwt.mjs";
 import { TwoFA } from "../authentication/twoFA.mjs";
-import { logout } from "../authentication/logout.mjs";
 import { replaceAllScriptChar } from "../security.mjs";
 import { PageManager } from "./manager.mjs";
 import { MainPage } from "./main.mjs";

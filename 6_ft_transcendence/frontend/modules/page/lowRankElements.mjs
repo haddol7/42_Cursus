@@ -1,4 +1,3 @@
-import { LoginPage } from "./login.mjs";
 import { MainPage } from "./main.mjs";
 import { MyPage } from "./my.mjs";
 import { DashBoardPage } from "./dashboard.mjs";
