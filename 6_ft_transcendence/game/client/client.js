@@ -28,7 +28,7 @@ socket.on("init", (data) => {
   // three.js 오브젝트, 점수판 초기화
   const { scene, camera, renderer, composer } = initScene(paddleId);
   createGeometry(scene);
-  updateScore(scene, player1Score, player2Score);
+  updateScore(scene, player1Score, player2Score, paddleId);
 
   // socket.io 이벤트 처리
   handleSocketEvents(socket, scene);
@@ -81,7 +81,7 @@ function handleSocketEvents(socket, scene) {
   socket.on("updateScore", (scores) => {
     player1Score = scores.paddle1;
     player2Score = scores.paddle2;
-    updateScore(scene, player1Score, player2Score);
+    updateScore(scene, player1Score, player2Score, paddleId);
   });
 
   // 위치 초기화
@@ -93,6 +93,7 @@ function handleSocketEvents(socket, scene) {
     paddle1.position.set(0, -6.5, 0.2);
     paddle2.position.set(0, 6.5, 0.2);
     ball.position.set(0, 0, 0.2);
+    ball.vel = 0;
   });
 
   // 게임 종료
