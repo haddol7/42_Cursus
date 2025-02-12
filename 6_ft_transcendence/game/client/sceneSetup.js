@@ -17,11 +17,11 @@ export function initScene(paddleId) {
 
   // 카메라 위치 설정
   if (paddleId === "paddle1") {
-    camera.position.set(0, -9.5, 4);
-    camera.lookAt(0, 0, 0);
+    camera.position.set(0, -10.5, 3);
+    camera.lookAt(0, 0, 1);
   } else if (paddleId === "paddle2") {
-    camera.position.set(0, 9.5, 4);
-    camera.lookAt(0, 0, 0);
+    camera.position.set(0, 10.5, 3);
+    camera.lookAt(0, 0, 1);
     camera.rotation.z = Math.PI;
   }
 
@@ -29,7 +29,7 @@ export function initScene(paddleId) {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
-  renderer.physicallyCorrectLights = true;
+  renderer.useLegacyLights = false; // 최신 조명 모델 사용
   document.body.appendChild(renderer.domElement);
 
   // Postprocessing 설정 - 블룸 효과
