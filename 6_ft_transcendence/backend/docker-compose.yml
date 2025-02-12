@@ -176,7 +176,7 @@ services:
       - "${USER_PORT}:${USER_PORT}"
     volumes:
       - ./user/server:/server
-      - media_data:/server/user/media
+      - media-data:/usr/share/nginx/html/media
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -215,8 +215,8 @@ services:
       - postgresdb_network
     volumes:
       - ./nginx/cert:/cert
-      - ../frontend/:/usr/share/nginx/html
-      - media_data:/usr/share/nginx/html/media
+      - ../../frontend-test/frontend:/usr/share/nginx/html
+      - media-data:/usr/share/nginx/html/media
     depends_on:
       - auth
       - game
@@ -242,4 +242,4 @@ networks:
 
 volumes:
   postgresql-data:
-  media_data:
+  media-data:

@@ -131,9 +131,10 @@ from pathlib import Path
 import os
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '/usr/share/nginx/html/media'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-FILE_UPLOAD_MAX_SIZE='2621440'
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
 
 REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': (

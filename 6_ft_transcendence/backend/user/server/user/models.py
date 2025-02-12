@@ -2,8 +2,8 @@ from django.db import models
 
 class Profile(models.Model):
     user_id = models.AutoField(primary_key=True)
-    user_name = models.CharField(max_length=50, null=True, unique=True)
-    memo = models.TextField(max_length=500, blank=True)
+    user_name = models.CharField(max_length=50, unique=True, blank=False, default='default_user')
+    memo = models.TextField(blank=True) 
     win_cnt = models.PositiveIntegerField(default=0)
     lose_cnt = models.PositiveIntegerField(default=0)
     total_cnt = models.PositiveIntegerField(default=0)
@@ -38,7 +38,6 @@ class UserStats(models.Model):
 
 
 class MatchHistory(models.Model):
-    """ 경기 기록을 저장하는 모델 """
     player1_id = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="player1_matches")
     player2_id = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="player2_matches")
     player1_score = models.PositiveIntegerField()
@@ -49,11 +48,10 @@ class MatchHistory(models.Model):
 
     class Meta:
         db_table = "match_history"
-        ordering = ["-match_date"]  # 최신 경기부터 정렬
+        ordering = ["-match_date"]
 
 
 class WinRateTrend(models.Model):
-    """ 승률 변화를 저장하는 모델 """
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="win_rate_trend")
     game_number = models.PositiveIntegerField()
     win_rate = models.FloatField()
