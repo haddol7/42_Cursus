@@ -7,6 +7,7 @@ import { PageManager } from "./manager.mjs";
 import { EditProfilePage } from "./editProfile.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { USER_URL, WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
+import { replaceAllScriptChar } from "../security.mjs";
 
 export class MyPage {
   static render() {
@@ -38,9 +39,10 @@ export class MyPage {
           </div>
           <div id="rightSection" class="box">
             <form id="addNewFriend" class="rowAlignedForm" action="" method="">
-              <input id="newFriendName" class="textInput" type="text" placeholder="search user"/>
-              <input class="submitInput" type="submit" value="search"/>
+              <input id="newFriendName" class="textInput" type="text" placeholder="Please input friend's name"/>
+              <input class="submitInput" type="submit" value="Add Friend"/>
             </form>
+            <h5 class="centerAlignedTitle" style="margin-top: 20px;">Friend List</h5>
           </div>
         </div>
         <a id="editProfileLink" class="nav justify-content-center link">edit profile</a>`;
@@ -81,10 +83,7 @@ export class MyPage {
   }
 
   static #requestProfileToServer = async () => {
-    const response = await fetch(
-      USER_URL,
-      JWT.getOptionWithToken(JWT.getJWTTokenFromCookie().accessToken, "GET")
-    );
+    const response = await fetch(USER_URL, JWT.getOptionWithAccessToken("GET"));
 
     const json = await response.json();
 
@@ -115,8 +114,7 @@ export class MyPage {
     const winCnt = document.getElementById("winCnt");
     const loseCnt = document.getElementById("loseCnt");
 
-    // FIXME: 백엔드의 오류가 수정되면 아래의 주석을 해제해야 함
-    // myAvartar.src = image_url;
+    myAvartar.src = image_url;
     myNick.textContent = user_name;
     myMemo.textContent = memo;
     winCnt.textContent = win_cnt;
@@ -126,7 +124,7 @@ export class MyPage {
   static #requestFriendListToServer = async () => {
     const response = await fetch(
       `${USER_URL}friend`,
-      JWT.getOptionWithToken(JWT.getJWTTokenFromCookie().accessToken, "GET")
+      JWT.getOptionWithAccessToken("GET")
     );
 
     const json = await response.json();
@@ -162,7 +160,6 @@ export class MyPage {
       friendList.id = "friendList";
       friendList.classList.add("box");
       document.getElementById("rightSection").appendChild(friendList);
-      
     }
 
     fl.forEach((value) => {
@@ -183,7 +180,7 @@ export class MyPage {
     // 나중에 아예 새로운 friend page로 넘어가도록 변경
     const response = await fetch(
       `${USER_URL}?user_name=${value.user_name}`,
-      JWT.getOptionWithToken(JWT.getJWTTokenFromCookie().accessToken, "GET")
+      JWT.getOptionWithAccessToken("GET")
     );
     const json = await response.json();
 
@@ -210,13 +207,9 @@ export class MyPage {
   static #addFriend = async (name) => {
     const response = await fetch(
       `${USER_URL}friend`,
-      JWT.getOptionWithToken(
-        JWT.getJWTTokenFromCookie().accessToken,
-        "POST",
-        JSON.stringify({
-          user_name: name,
-        })
-      )
+      JWT.getOptionWithAccessToken("POST", {
+        user_name: replaceAllScriptChar(name),
+      })
     );
 
     const json = await response.json();

@@ -1,4 +1,3 @@
-import { LoginPage } from "./login.mjs";
 import { MainPage } from "./main.mjs";
 import { MyPage } from "./my.mjs";
 import { DashBoardPage } from "./dashboard.mjs";
@@ -95,7 +94,6 @@ export const bindEventToNavBar = () => {
       RoomSocketManager.disconnect();
 
     logout();
-    LoginPage.renderAndPushHistory();
   });
 
   myPageLink.addEventListener("click", (event) => {

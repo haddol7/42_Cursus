@@ -3,15 +3,14 @@ import {
   clearBody,
   removeBodyProperty,
 } from "./lowRankElements.mjs";
-import { JWT } from "../authentication/jwt.mjs";
 import { TwoFA } from "../authentication/twoFA.mjs";
-import { logout } from "../authentication/logout.mjs";
 import { replaceAllScriptChar } from "../security.mjs";
 import { PageManager } from "./manager.mjs";
 import { MainPage } from "./main.mjs";
 
 export class TwoFAPage {
-  static renderAndReplaceHistroy(url) {
+  // static renderAndReplaceHistroy(url) {
+  static render(url) {
     const centralBox = renderCentralBox();
 
     console.log(TwoFA.isNewUser);
@@ -71,13 +70,9 @@ export class TwoFAPage {
           </form>
         `;
 
-      // document.getElementById(
-      //   "otpName"
-      // ).textContent = `Your Otp Name: ${TwoFA.getOTPUserNameFromServer().then()}`;
-      TwoFA.getOTPUserNameFromServer()
-        .then(v => {
-          document.getElementById("otpName").textContent = `Your Otp Name : ${v}`
-        })
+      TwoFA.getOTPUserNameFromServer().then((v) => {
+        document.getElementById("otpName").textContent = `Your Otp Name : ${v}`;
+      });
 
       document.getElementById("twoFAOTPCodeForm").onsubmit = async (event) => {
         event.preventDefault();
@@ -89,42 +84,19 @@ export class TwoFAPage {
       };
     }
 
-    PageManager.currentpageStatus = PageManager.pageStatus.twoFA;
-    history.replaceState(PageManager.pageStatus.twoFA, "", url);
+    // PageManager.currentpageStatus = PageManager.pageStatus.twoFA;
+    history.replaceState(PageManager.pageStatus.login, "", url);
   }
 
   static sendOTPCodeWhileResponseOk = async (otpCode) => {
-    let response = await TwoFA.sendOTPCodeToServer(
-      JWT.getJWTTokenFromCookie().accessToken,
-      otpCode
-    );
-    if (response.ok) {
+    try {
+      await TwoFA.sendOTPCodeToServer(otpCode);
       TwoFAPage.destroy();
       MainPage.renderAndPushHistory();
-    } else {
-      const text = await response.text();
-      console.log(`status : ${response.status}, text : ${text}`);
-      switch (response.status) {
-        case 400:
-          alert("wrong code. please input again");
-          break;
-        case 401:
-          if (text === "jwt.invalid") {
-            alert("please login again");
-            logout();
-          } else if (text === "jwt.expired") {
-            try {
-              await JWT.getNewToken();
-              console.log("Throw!!!!!!!!!!!!!!!");
-              await TwoFAPage.sendOTPCodeWhileResponseOk(otpCode);
-            } catch (e) {
-              logout();
-            }
-            return;
-          }
-          break;
-        default:
-          break;
+    } catch (e) {
+      if (e.message === "bad_request:code") {
+        document.getElementById("otpCodeInput").value = "";
+        alert("wrong code. please input again");
       }
     }
   };

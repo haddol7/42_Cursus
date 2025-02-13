@@ -1,6 +1,8 @@
 import { PageManager } from "./page/manager.mjs";
 import { GameLobbyPage } from "./page/gamelobby.mjs";
 import { GameQueuePage } from "./page/gameQueue.mjs";
+import { runPongGame } from "../game/client.js";
+import { JWT } from "./authentication/jwt.mjs";
 
 export class RoomSocketManager {
   static socket = null;
@@ -12,8 +14,7 @@ export class RoomSocketManager {
   static connect = () => {
     RoomSocketManager.socket = io("/", {
       auth: {
-        user_id: Math.trunc(Math.random() * 10000),
-        user_name: Math.trunc(Math.random() * 10000).toString(),
+        jwt: JWT.getJWTTokenFromCookie().accessToken,
       },
       path: "/room-sio/",
     });
@@ -51,8 +52,10 @@ export class RoomSocketManager {
       if (
         PageManager.currentpageStatus.page ===
         PageManager.pageStatus.gameLobby.page
-      )
+      ) {
+        console.log(RoomSocketManager.roomList);
         GameLobbyPage.updateGameLobbySection(RoomSocketManager.roomList);
+      }
     });
   };
 
@@ -64,17 +67,26 @@ export class RoomSocketManager {
       if (
         PageManager.currentpageStatus.page ===
         PageManager.pageStatus.gameQueue.page
-      )
+      ) {
+        console.log(RoomSocketManager.participantList);
         GameQueuePage.updateQueueMemberSection();
+      }
     });
   };
 
   static #onStartGame = () => {
     RoomSocketManager.socket.on("start_game", () => {
-      console.log("on start game");
       RoomSocketManager.disconnect();
-      GameSocketManager.connect();
-      GameSocketManager.emitNextGame();
+      document.body.innerHTML = `
+        <div id="gameOverPopup">
+          <div id="popupContent">
+            <h2>게임 종료!</h2>
+            <p id="gameResult"></p>
+            <button id="restartButton">나가기</button>
+          </div>
+        </div>
+      `;
+      runPongGame(JWT.getJWTTokenFromCookie().accessToken);
     });
   };
 
@@ -116,32 +128,5 @@ export class RoomSocketManager {
     if (RoomSocketManager.participantList === null)
       throw new Error("you should enter the room before request");
     else return RoomSocketManager.participantList.people.length;
-  };
-}
-
-export class GameSocketManager {
-  static socket = null;
-
-  static connect = () => {
-    GameSocketManager.socket = io("/game", {
-      auth: {
-        user_id: Math.trunc(Math.random() * 10000),
-        user_name: Math.trunc(Math.random() * 10000).toString(),
-      },
-      path: "/game-sio/",
-    });
-  };
-
-  static disconnect = () => {
-    if (GameSocketManager.socket !== null) {
-      GameSocketManager.socket.disconnect();
-      GameSocketManager.socket = null;
-    }
-  };
-
-  static emitNextGame = () => {
-    console.log("emit next game");
-    GameSocketManager.socket.emit("nextGame");
-    document.body.innerHTML += `<iframe src="../../game/client/index.html" width="100%" height="500px"></iframe>`;
   };
 }

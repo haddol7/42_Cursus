@@ -3,6 +3,7 @@ import { PageManager } from "./manager.mjs";
 import { USER_URL } from "../authentication/globalConstants.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
+import { replaceAllScriptChar } from "../security.mjs";
 
 export class EditProfilePage {
   static render() {
@@ -13,16 +14,16 @@ export class EditProfilePage {
         <div id="currentProfileInfo" class="box" style="display: grid; grid-template-columns: 1fr 1fr;">
           <div>
             <h5 class="centerAlignedTitle">Current Avartar</h5>
-            <img src="default.png" class="image" width="200px"/>
+            <img id="currentAvartar" src="default.png" class="image" width="200px"/>
           </div>
           <div>
             <div class="blockWrapher">
               <h6 class="leftAlignedTitle">current nickname : </h6>
-              <p class="paragraph"></p>
+              <p id="currentNick" class="paragraph"></p>
             </div>
             <div class="blockWrapher">
               <h6 class="leftAlignedTitle">current memo : </h6>
-              <p class="paragraph"></p>
+              <p id="currentMemo" class="paragraph"></p>
             </div>
           </div>
         </div>
@@ -38,13 +39,33 @@ export class EditProfilePage {
     `;
 
     bindEventToNavBar();
-
+    EditProfilePage.#showCurrentProfile();
     document
       .getElementById("editProfileForm")
       .addEventListener("submit", EditProfilePage.#submitEditedProfile);
 
     PageManager.currentpageStatus = PageManager.pageStatus.editProfile;
   }
+
+  static #showCurrentProfile = async () => {
+    const response = await fetch(USER_URL, JWT.getOptionWithAccessToken("GET"));
+
+    const json = await response.json();
+    if (response.ok) {
+      document.getElementById("currentAvartar").src = json.image_url;
+      document.getElementById("currentNick").textContent = json.user_name;
+      document.getElementById("currentMemo").memo = json.memo;
+    } else {
+      if (response.status === 401 && json.error === WHEN_EXPIRED) {
+        try {
+          await JWT.getNewToken();
+          await EditProfilePage.#showCurrentProfile();
+        } catch (e) {
+          alert(e.message);
+        }
+      } else alert(json.error);
+    }
+  };
 
   static #submitEditedProfile = async (event) => {
     event.preventDefault();
@@ -54,9 +75,10 @@ export class EditProfilePage {
     const newMemo = document.getElementById("newMemo");
 
     const imgData = new FormData();
+    console.log(newAvartar.files[0]);
     imgData.append("image_url", newAvartar.files[0]);
-    imgData.append("user_name", newNick.value);
-    imgData.append("memo", newMemo.value);
+    imgData.append("user_name", replaceAllScriptChar(newNick.value));
+    imgData.append("memo", replaceAllScriptChar(newMemo.value));
 
     const response = await fetch(`${USER_URL}`, {
       method: "PUT",
