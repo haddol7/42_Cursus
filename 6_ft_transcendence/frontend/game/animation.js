@@ -86,7 +86,7 @@ export function animate(scene, camera, composer, socket, paddleId) {
     if (isNaN(starVelocity) || starVelocity < 1) {
       starVelocity = 2;
     }
-    console.log(deltaTime, starVelocity);
+    // console.log(deltaTime, starVelocity);
     for (let i = 0; i < starCount * 3; i += 3) {
       starPositions[i + 1] += 50 * deltaTime * starVelocity;
       if (starPositions[i + 1] > 600) {
