@@ -215,7 +215,7 @@ services:
       - postgresdb_network
     volumes:
       - ./nginx/cert:/cert
-      - ../../frontend-test/frontend:/usr/share/nginx/html
+      - ../frontend:/usr/share/nginx/html
       - media-data:/usr/share/nginx/html/media
     depends_on:
       - auth
