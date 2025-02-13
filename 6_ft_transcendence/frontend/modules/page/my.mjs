@@ -159,9 +159,11 @@ export class MyPage {
 
     fl.forEach((value) => {
       const friendInfo = document.createElement("p");
+      friendInfo.classList.add("paragraph");
       friendList.appendChild(friendInfo);
 
       const friendLink = document.createElement("a");
+      friendLink.classList.add("link");
       friendInfo.appendChild(friendLink);
 
       friendLink.textContent = String(value.user_name);
