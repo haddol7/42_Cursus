@@ -55,9 +55,18 @@ export const runPongGame = (jwtToken) => {
   });
 
   // 연결 종료 이벤트 감지
-  socket.on("disconnect", (reason) => {
+  socket.on("disconnect", (reason, details) => {
     console.log("서버와의 연결이 종료되었습니다.", reason);
     alert(reason);
+
+    // the reason of the disconnection, for example "transport error"
+    console.log(reason);
+    // the low-level reason of the disconnection, for example "xhr post error"
+    console.log(details.message);
+    // some additional description, for example the status code of the HTTP response
+    console.log(details.description);
+    // some additional context, for example the XMLHttpRequest object
+    console.log(details.context);
   });
 
   function handleSocketEvents(socket, scene) {

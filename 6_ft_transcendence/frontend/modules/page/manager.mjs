@@ -6,6 +6,7 @@ import { MyPage } from "./my.mjs";
 import { EditProfilePage } from "./editProfile.mjs";
 import { DashBoardPage } from "./dashboard.mjs";
 import { GameLobbyPage } from "./gamelobby.mjs";
+import { FriendPage } from "./friend.mjs";
 
 export class PageManager {
   static currentpageStatus = null;
@@ -15,11 +16,14 @@ export class PageManager {
     twoFA: { page: "twoFAPage" },
     main: { page: "mainPage" },
     my: { page: "myPage" },
+    friend: { page: "friendPage" },
     editProfile: { page: "editProfilePage" },
     dashBoard: { page: "dashBoardPage" },
     gameLobby: { page: "gameLobbyPage" },
     gameQueueCreation: { page: "gameQueueCreation" },
     gameQueue: { page: "gameQueue" },
+    pong: { page: "pong" },
+    aiMatch: { page: "aiMatch" },
     error: { page: "error" },
   };
 
@@ -43,6 +47,21 @@ export class PageManager {
       return;
     }
     if (
+      PageManager.currentpageStatus?.page === PageManager.pageStatus.pong.page
+    ) {
+      // 추후 게임 소켓 연결을 해제하는 코드가 들어가야 함
+      GameLobbyPage.renderAndPushHistory();
+      return;
+    }
+    if (
+      PageManager.currentpageStatus?.page ===
+      PageManager.pageStatus.aiMatch.page
+    ) {
+      // 추후 ai 게임 소켓 연결을 해제하는 코드가 들어가야 함
+      GameLobbyPage.renderAndPushHistory();
+      return;
+    }
+    if (
       PageManager.currentpageStatus?.page ===
       PageManager.pageStatus.gameQueue.page
     ) {
@@ -51,7 +70,6 @@ export class PageManager {
       GameLobbyPage.renderAndPushHistory();
       return;
     }
-
     if (
       PageManager.currentpageStatus?.page ===
       PageManager.pageStatus.gameLobby.page
@@ -67,6 +85,9 @@ export class PageManager {
         break;
       case PageManager.pageStatus.my.page:
         MyPage.render();
+        break;
+      case PageManager.pageStatus.friend.page:
+        FriendPage.render();
         break;
       case PageManager.pageStatus.editProfile.page:
         EditProfilePage.render();

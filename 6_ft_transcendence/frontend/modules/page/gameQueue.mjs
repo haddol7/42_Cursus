@@ -3,7 +3,7 @@ import { PageManager } from "./manager.mjs";
 import { RoomSocketManager } from "../socketManager.mjs";
 import { clearBody } from "./lowRankElements.mjs";
 import { GameLobbyPage } from "./gamelobby.mjs";
-import { TournamentPage } from "./tournament.mjs";
+import { PongPage } from "./pong.mjs";
 
 export class GameQueuePage {
   static render() {
@@ -67,7 +67,7 @@ export class GameQueuePage {
       console.log("congraturation!!!");
       clearBody();
 
-      TournamentPage.render();
+      PongPage.play();
     }
   };
 
