@@ -204,6 +204,13 @@ class Match:
                     self.stage = MatchStage.MATCH
         return True
 
+    def is_user_connected(self, user_id: int) -> bool:
+        with self.lock:
+            for idx, user in enumerate(self.users):
+                if user["id"] == user_id and self.online[idx]:
+                    return True
+        return False
+
     def ai_connected(self, sid: str):
         print(f"ai is connected! self.room_name={self.room_name}")
         self.online.append(True)

@@ -1,3 +1,6 @@
+import random
+import string
+
 import datetime
 from typing import Any, Dict, List
 from django.http import QueryDict
@@ -73,3 +76,11 @@ def get_dict(dict: Dict[str, Any] | QueryDict, key: str) -> Dict[str, Any]:
     if not isinstance(val, Dict):
         raise BadRequestFieldException(key)
     return val
+
+
+def generate_secret() -> str:
+    LEN = 10
+    ret: str = ""
+    for _ in range(LEN):
+        ret += random.choice(string.ascii_letters + string.digits)
+    return ret

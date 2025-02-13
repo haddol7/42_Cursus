@@ -52,33 +52,46 @@ class MatchProcess(threading.Thread):
         self.users.append(user)
 
     def set_paddle(self, user_id: int, paddle_direction: float):
+        with self.lock:
+            print(
+                f"user_id={user_id}, room_name={self.room_name}, direction={paddle_direction}"
+            )
         idx = -1
-        if user_id == self.users[0]["id"]:
-            idx = 0
-        elif user_id == self.users[1]["id"]:
-            idx = 1
-        else:
-            # TODO: throw error
-            return
+        with self.lock:
+            if user_id == self.users[0]["id"]:
+                idx = 0
+            elif user_id == self.users[1]["id"]:
+                idx = 1
+            else:
+                print(f"user_id={user_id}, idx is not found")
+                # TODO: throw error
+                return
 
+        print(f"user_id={user_id}, idx={idx}")
         if paddle_direction == 0:
             return
 
         with self.lock:
             paddle_pos = self.paddle[idx]
-        normalized_direction = (paddle_direction * 0.075) / abs(paddle_direction)
+
+        is_pos = 1.0 if paddle_direction > 0 else -1.0
+        normalized_direction = is_pos * 0.075
+        print(f"user_id={user_id} normalized_direction={normalized_direction}")
         x = paddle_pos + normalized_direction
         x = max(
             -GAME_BOUNDS["x"] + PADDLE_WIDTH / 2,
             min(GAME_BOUNDS["x"] - PADDLE_WIDTH / 2, x),
         )
+        print(f"user_id={user_id}, prev val={paddle_pos}, become x={x}")
 
         with self.lock:
             self.paddle[idx] = x
 
+        emit_json = {"paddleId": "paddle1" if idx == 0 else "paddle2", "positiion": x}
+        print(f"user_id={user_id}, emitting event={UPDATE_PADDLE_EVENT}")
         sio_emit(
             UPDATE_PADDLE_EVENT,
-            {"paddleId": "paddle1" if idx == 0 else "paddle2", "positiion": x},
+            emit_json,
             self.room_name,
         )
 
@@ -96,7 +109,10 @@ class MatchProcess(threading.Thread):
             self.ball["vx"] = initial_speed * (
                 (int(random.random() * 10000) % 2) * 2 - 1
             )
-            self.ball["vy"] = initial_speed if scorer_idx == 0 else -initial_speed
+            if self.is_with_ai:
+                self.ball["vy"] = initial_speed if scorer_idx == 0 else -initial_speed
+            else:
+                self.ball["vy"] = -initial_speed
             sio_emit(UPDATE_BALL_EVENT, self.ball, self.room_name)
 
         t = threading.Timer(3.0, start_game_func)
@@ -144,7 +160,11 @@ class MatchProcess(threading.Thread):
             )
 
             if hit_bottom_paddle or hit_top_paddle:
-                ball["vy"] *= -1.1
+                ball["vy"] *= -1.05
+                ball["vx"] *= 1.05
+
+                ball["vy"] = min(ball["vy"], 0.2)
+                ball["vy"] = max(ball["vy"], -0.2)
 
             scorer = -1
             if ball["y"] >= GAME_BOUNDS["y"] - BALL_SIZE["y"] / 2:

@@ -1,7 +1,10 @@
 from typing import Any
 import socketio
+import json
+
 
 from gameapp.envs import FRONTEND_URL, GAME_URL
+
 
 NAMESPACE = "/game"
 
@@ -22,6 +25,7 @@ sio = socketio.Server(
 
 
 def sio_emit(event: str, data: dict[str, Any], to: str):
+    print(f"sio_emit: event={event}, data={json.dumps(data)}, to={to}")
     sio.emit(event, data, to=to, namespace=NAMESPACE)
 
 
@@ -30,8 +34,10 @@ def sio_session(sid: str):
 
 
 def sio_disconnect(sid: str):
+    print(f"sid={sid} disconnect")
     sio.disconnect(sid, namespace=NAMESPACE)
 
 
 def sio_enter_room(sid: str, room_name: str):
+    print(f"sid={sid} enters room to {room_name}")
     sio.enter_room(sid, room_name, namespace=NAMESPACE)

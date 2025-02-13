@@ -1,10 +1,10 @@
-from typing import List, Tuple
-
+from typing import List, Tuple, Any
 import requests
 from django.db import transaction
-
+from django.db.models import Min
 from socketio.exceptions import ConnectionRefusedError
 
+from exceptions.CustomException import InternalException
 from gameapp.envs import GAMEAI_URL, JWT_URL
 from gameapp.sio import sio_session
 from gameapp.models import (
@@ -14,10 +14,7 @@ from gameapp.models import (
     TempMatchUser,
 )
 from gameapp.match_objects import Match, MatchUser, match_dict, matchuser
-from gameapp.utils import get_str
-
-import random
-import string
+from gameapp.utils import get_int, get_str, generate_secret
 
 
 def make_rooms(room_name: str, user_id: List[int]):
@@ -73,14 +70,6 @@ def make_rooms(room_name: str, user_id: List[int]):
             )
 
         init_matches(temp_match_users)
-
-
-def generate_secret() -> str:
-    LEN = 10
-    ret: str = ""
-    for _ in range(LEN):
-        ret += random.choice(string.ascii_letters + string.digits)
-    return ret
 
 
 def make_airoom(user_id: int):
@@ -247,15 +236,29 @@ def clear_room(room_name: str):
     temp_room.delete()
 
 
-def on_paddle_move(sid: str, data):
+def on_paddle_move(sid: str, data: dict[str, Any]):
     print(f"paddle_move event received! sid={sid}, data={data}")
+    # paddle_id = get_str(data, "paddleId")
+
+    with sio_session(sid) as sess:
+        user_id = sess["user_id"]
+
+    print(f"sid={sid}, user_id={user_id}")
+
+    room = match_dict.get_room_by_userid(user_id)
+    if room is None:
+        print(f"user_id={user_id} room not found")
+        raise InternalException()
+
+    paddle_direction = get_int(data, "paddleDirection")
+    print(f"sid={sid}, paddle_direction={paddle_direction}")
+
+    room.match_process.set_paddle(user_id, paddle_direction)
 
 
 def on_next_game(sid: str):
     user_id, username = _get_from_sess(sid)
     print(f"next_game: sid={sid}, user_id={user_id}")
-
-    from django.db.models import Min
 
     user_min_match = TempMatch.objects.filter(tempmatchuser__user_id=user_id).aggregate(
         round=Min("round")
