@@ -15,8 +15,8 @@ class Profile(models.Model):
 
 
 class Friend(models.Model):
-    _user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='following') # 팔로우하는 유저
-    friend = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='followers', null=True) # 팔로우된 유저
+    _user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='following')
+    friend = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='followers', null=True)
 
     class Meta:
         db_table = "friends"
@@ -26,12 +26,11 @@ class Friend(models.Model):
 
 
 class UserStats(models.Model):
-    """ 유저의 총 경기 수, 승리 수, 패배 수, 총 플레이 시간을 저장 """
     user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name="stats")
     total_games = models.PositiveIntegerField(default=0)
     win_cnt = models.PositiveIntegerField(default=0)
     lose_cnt = models.PositiveIntegerField(default=0)
-    total_play_time = models.PositiveIntegerField(default=0)  # 초 단위
+    total_play_time = models.PositiveIntegerField(default=0)
 
     class Meta:
         db_table = "user_stats"
@@ -44,7 +43,7 @@ class MatchHistory(models.Model):
     player2_score = models.PositiveIntegerField()
     winner_id = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="won_matches")
     match_date = models.DateTimeField()
-    play_time = models.PositiveIntegerField()  # 초 단위
+    play_time = models.PositiveIntegerField()
 
     class Meta:
         db_table = "match_history"

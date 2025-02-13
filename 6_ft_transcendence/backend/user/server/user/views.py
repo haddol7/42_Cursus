@@ -7,13 +7,14 @@ import requests
 
 from django.core.files.uploadedfile import UploadedFile
 from django.utils.dateparse import parse_datetime
-from django.db.models import Avg, F, ExpressionWrapper, FloatField, Q
+from django.db.models import Avg, Q
 from user.models import Profile, Friend, MatchHistory, UserStats 
 from user.serializers import ProfileSerializer, FriendSerializer 
 from user.envs import JWT_URL
 
 from PIL import Image
 import os
+
 
 
 class JWTAuthenticationMixin:
@@ -67,7 +68,7 @@ class ProfileDetail(APIView, JWTAuthenticationMixin):
             if not user_profile:
                 return Response({'error': 'user_profile is not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-            image = req.FILES.get('image_url') # 이미지 처리
+            image = req.FILES.get('image_url')
             if image:
                 if not self.validated_image(image):
                     return Response({'error': 'Invalid image file.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -91,24 +92,23 @@ class ProfileDetail(APIView, JWTAuthenticationMixin):
     
     def validated_image(self, image : UploadedFile) -> bool:
         try:
-            valid_extensions = ['.jpg', '.jpeg', '.png', '.gif'] # 이미지 확장자 검사
+            valid_extensions = ['.jpg', '.jpeg', '.png', '.gif']
+
             ext = os.path.splitext(image.name)[1].lower()
             if ext not in valid_extensions:
                 print(f"Invalid file extension: {ext}")
                 return False
 
-            with Image.open(image) as img:
-                img.load()  #이미지를 실제로 메모리에 로드하여 유효성 검사
-                if img.format not in ['JPEG', 'PNG', 'GIF']:  # 포맷 확인
-                    print(f"Invalid image format: {img.format}")
+            with Image.open(image) as im:
+                im.load()
+                if im.format not in ['JPEG', 'PNG', 'GIF']:
+                    print(f"Invalid image format: {im.format}")
                     return False
             return True
         except Exception as e:
             print("Invalid image:", e)
             return False
     
-
-
 
 # /user/friend
 class FriendView(APIView, JWTAuthenticationMixin):
@@ -213,8 +213,6 @@ class InternalDashboardView(APIView):
             if any(field is None for field in [player1_id, player2_id, player1_score, player2_score, winner_id, match_date, play_time]):
                 return Response({"error": "All fields are required."}, status=status.HTTP_400_BAD_REQUEST)
 
-
-            # MatchHistory 모델 업데이트
             player1 = Profile.objects.get(pk=player1_id)
             player2 = Profile.objects.get(pk=player2_id)
             winner = Profile.objects.get(pk=winner_id)
@@ -229,17 +227,15 @@ class InternalDashboardView(APIView):
                 play_time=play_time
             )
             match.save()
-
-            # 양쪽 플레이어의 Profile과 UserStats 업데이트
-            self.update_user_stats(player1_id, winner_id, play_time)
-            self.update_user_stats(player2_id, winner_id, play_time)
-
+            self.update_user_info(player1_id, winner_id, play_time)
+            self.update_user_info(player2_id, winner_id, play_time)
             return Response({"message": "Match recorded successfully."}, status=status.HTTP_201_CREATED)
 
         except Exception as e:
             return Response({'error': f'Internal Server Error -> {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    def update_user_stats(self, user_id, winner_id, play_time):
+    def update_user_info(self, user_id, winner_id, play_time):
+        # user profile
         user_profile = Profile.objects.filter(user_id=user_id).first()
         if not user_profile:
             return
@@ -251,7 +247,7 @@ class InternalDashboardView(APIView):
             user_profile.lose_cnt += 1
         user_profile.save()
 
-        # UserStats 업데이트
+        # user stat
         user_stats, created = UserStats.objects.get_or_create(user=user_profile)
         user_stats.total_games += 1
         if user_id == winner_id:
@@ -264,59 +260,7 @@ class InternalDashboardView(APIView):
 
 # /user/dashboard
 class DashboardView(APIView, JWTAuthenticationMixin):
-    """ GET 요청시 반환되는 대시보드 데이터 (json)
-    {
-        "user_session": {
-            "user_stats": { "user_name": <str>, "total_games": <int> },
-            "user_win_rate": { "wins": <int>, "losses": <int> },
-            "win_rate_trend": {
-                "current_user": [float, float, float, float, float],
-                "top_user": [float, float, float, float, float]
-            },
-            "total_game_time": {
-                "user_total_time": <float>,   # 유저 총 게임 시간 (분)
-                "avg_total_time": <float>       # 유저 전체 평균 게임 시간 (분)
-            },
-            "recent_user_matches": [
-                {
-                    "user_name": <str>,
-                    "opponent_name": <str>,
-                    "win": <bool>,
-                    "user_score": <int>,
-                    "opponent_score": <int>,
-                    "game_time": <int>
-                },
-                ...
-            ]
-        },
-        "game_session": {
-            "top_5_winners": [
-                {
-                    "user_name": <str>,
-                    "win_count": <int>
-                },
-                ...
-            ],
-            "top_5_game_time": [
-                {
-                    "user_name": <str>,
-                    "game_time": <float>      # 총 게임 시간 (분)
-                },
-                ...
-            ],
-            "recent_matches": [
-                {
-                    "winner_name": <str>,
-                    "loser_name": <str>,
-                    "winner_score": <int>,
-                    "loser_score": <int>,
-                    "match_playtime": <int>
-                },
-                ...
-            ]
-        }
-    }
-    """
+    parser_classes = [JSONParser]
 
     def get(self, req: Request):
         try:
@@ -385,7 +329,7 @@ class DashboardView(APIView, JWTAuthenticationMixin):
 
     def _compute_win_rate_trend(self, user: Profile) -> list:
         """
-        해당 유저가 참여한 경기들의 누적 승률을 계산하고, 
+        유저가 참여한 경기들의 누적 승률을 계산하고, 
         마지막 5경기의 승률 추세를 반환
         """
         matches = MatchHistory.objects.filter(
@@ -423,7 +367,7 @@ class DashboardView(APIView, JWTAuthenticationMixin):
 
     def _get_recent_user_matches(self, user: Profile) -> list:
         """
-        해당 유저가 참여한 최근 10경기의 정보를 반환
+        유저가 참여한 최근 10경기의 정보를 반환
         """
         qs = MatchHistory.objects.filter(
             Q(player1_id=user) | Q(player2_id=user)
@@ -445,13 +389,13 @@ class DashboardView(APIView, JWTAuthenticationMixin):
                 "win": (match.winner_id == user),
                 "user_score": user_score,
                 "opponent_score": opponent_score,
-                "game_time": match.play_time,  # 초 단위
+                "game_time": match.play_time,
             })
         return matches
 
     def _get_top_5_winners(self) -> list:
         """
-        승리 횟수 기준 상위 5명의 정보를 반환
+        상위 5명의 유저네임과 승리 횟수 반환
         """
         qs = UserStats.objects.order_by('-win_cnt')[:5]
         return [{
@@ -460,7 +404,9 @@ class DashboardView(APIView, JWTAuthenticationMixin):
         } for stat in qs]
 
     def _get_top_5_game_time(self) -> list:
-
+        """
+        상위 5명의 유저네임과 총 게임 이용 시간 반환 
+        """
         qs = UserStats.objects.filter(total_games__gt=0).order_by('-win_cnt')[:5]
         return [{
             "user_name": stat.user.user_name,
@@ -488,6 +434,6 @@ class DashboardView(APIView, JWTAuthenticationMixin):
                 "loser_name": loser_name,
                 "winner_score": winner_score,
                 "loser_score": loser_score,
-                "match_playtime": match.play_time,  # 초 단위
+                "match_playtime": match.play_time,
             })
         return matches
