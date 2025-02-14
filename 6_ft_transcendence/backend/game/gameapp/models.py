@@ -50,7 +50,7 @@ class TempMatch(models.Model):
 
     winner_match = models.ForeignKey("self", on_delete=models.CASCADE, null=True)
 
-    joined_user = models.IntegerField(default=0)
+    is_with_ai = models.BooleanField(default=False)
 
     class Meta:
         db_table = "temp_match"

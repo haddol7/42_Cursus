@@ -39,7 +39,7 @@ class MatchStage(enum.Enum):
 
 
 class Match:
-    def __init__(self, match: TempMatch) -> None:
+    def __init__(self, match: TempMatch, is_with_ai: bool = False) -> None:
         self.stage = MatchStage.NOT_STARTED
         self.match = match
         self.room_name = get_match_name(match)
@@ -47,7 +47,7 @@ class Match:
         self.users: list[MatchUser] = []
         self.online: list[bool] = []
 
-        self.match_process = MatchProcess(match, self)
+        self.match_process = MatchProcess(match, self, is_with_ai)
         self.waiting_process = WaitingProcess(self)
 
         self.lock = threading.Lock()
@@ -173,8 +173,8 @@ class Match:
         return True
 
     def user_connected(self, user: MatchUser) -> bool:
+        print(f"user={user} is connected to {self.room_name}")
         with self.lock:
-            print(f"user={user} is connected to {self.room_name}")
             idx = self.__get_user_idx(user)
             if idx == -1:
                 return False
@@ -203,6 +203,31 @@ class Match:
                     self.match_process.start()
                     self.stage = MatchStage.MATCH
         return True
+
+    def is_user_connected(self, user_id: int) -> bool:
+        with self.lock:
+            for idx, user in enumerate(self.users):
+                if user["id"] == user_id and self.online[idx]:
+                    return True
+        return False
+
+    def ai_connected(self, sid: str):
+        print(f"ai is connected! self.room_name={self.room_name}")
+        self.online.append(True)
+        with self.lock:
+            print("emit init paddleId=paddle2")
+            sio_emit(
+                "init",
+                {"paddleId": "paddle2"},
+                to=sid,
+            )
+            sio_enter_room(sid, self.room_name)
+
+            print("waiting process stop")
+            self.waiting_process.stop()
+            print("match process start")
+            self.match_process.start()
+            self.stage = MatchStage.MATCH
 
     def timed_out(self):
         print("Match - timed out")

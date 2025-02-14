@@ -1,6 +1,6 @@
 all:
 	docker compose up -d db \
-	&& docker compose up -d --build auth jwt twofa game websocket nginx \
+	&& docker compose up -d --build auth jwt twofa game websocket nginx game-ai \
 	&& docker compose logs -f
 
 clean:

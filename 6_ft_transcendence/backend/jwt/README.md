@@ -120,3 +120,48 @@ Response:
 
 - `{field}`가 올바르지 않은 경우, `bad_request:{field}` (400)
 - 기타 내부 서버 에러, `internal_error` (500)
+
+### POST /jwt/token/ai
+
+```json
+Request:
+{
+    "match_id": "int",
+}
+
+Response:
+{
+    "access_token": "string"
+}
+```
+
+!!! 올바른 사용자가 요청하는지 체크하지 않습니다 !!!
+
+아예 새로운 JWT를 생성해 반환합니다. 단, 이 JWT는 AI임을 인증합니다.
+
+- `{field}`가 올바르지 않은 경우, `bad_request:{field}` (400)
+- 기타 내부 서버 에러, `internal_error` (500)
+
+### POST /jwt/check/ai
+
+```json
+Request:
+{
+    "jwt": "string"
+}
+
+Response:
+{
+    "match_id": "int"
+}
+```
+
+jwt가 유효한지를 체크합니다. 이는 access token을 의미합니다.
+
+jwt가 유효한 경우 200대 응답 코드와 `match_id`를 반환합니다.
+
+단, AI를 위한 JWT여야 합니다.
+
+- `{field}`가 올바르지 않은 경우, `bad_request:{field}`(400)
+- `jwt`가 유효하지 않은 경우, `jwt.invalid` (401)
+- 이외 내부 서버 에러인 경우, `internal_error` (500)

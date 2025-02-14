@@ -16,6 +16,8 @@ from exceptions.CustomException import (
     TwoFARegisterException,
 )
 from jwtapp.envs import (
+    AI_USERID,
+    JWT_AI_EXPIRE_SECONDS,
     JWT_ALGORITHM,
     JWT_EXPIRE_SECONDS,
     JWT_REFRESH_EXPIRE_SECONDS,
@@ -97,7 +99,7 @@ def _payloadToDict(payload: JwtPayload) -> Dict[str, Any]:
     }
 
 
-def _dictToPayload(decoded_jwt: Dict[str, Any]) -> JwtPayload:
+def _dict_to_payload(decoded_jwt: Dict[str, Any]) -> JwtPayload:
     for key in JwtPayload.__required_keys__:
         if key not in decoded_jwt:
             raise JwtInvalidException()
@@ -117,7 +119,7 @@ def _make_jwt(user_id: int, user_secret: str, exp: datetime.datetime) -> str:
     return token
 
 
-def _decode_payload(encoded_jwt: str) -> JwtPayload:
+def _decode_payload(encoded_jwt: str) -> Dict[str, Any]:
     try:
         decoded_jwt: Dict[str, Any] = jwt.decode(
             jwt=encoded_jwt,
@@ -125,7 +127,6 @@ def _decode_payload(encoded_jwt: str) -> JwtPayload:
             algorithms=JWT_ALGORITHM,
             options={"require": ["exp"], "verify_exp": True},
         )
-        payload: JwtPayload = _dictToPayload(decoded_jwt)
     except (jwt.exceptions.InvalidSignatureError, jwt.exceptions.DecodeError) as e:
         print("Jwt Invalid Signature", type(e))
         raise JwtInvalidException()
@@ -134,7 +135,7 @@ def _decode_payload(encoded_jwt: str) -> JwtPayload:
         raise JwtExpiredException()
     except Exception as e:
         raise e
-    return payload
+    return decoded_jwt
 
 
 def set_user_secret(
@@ -190,7 +191,8 @@ def make_token_pair(user_id: int) -> Tuple[str, str, bool]:
 
 
 def check_jwt(encoded_jwt: str, skip_2fa: bool) -> JwtPayload:
-    payload = _decode_payload(encoded_jwt)
+    payload_dict = _decode_payload(encoded_jwt)
+    payload = _dict_to_payload(payload_dict)
 
     user_status = _get_user_status_or_none(payload["user_id"])
     if user_status is None:
@@ -213,7 +215,8 @@ def check_jwt(encoded_jwt: str, skip_2fa: bool) -> JwtPayload:
 
 
 def check_refresh_token(encoded_jwt: str) -> JwtPayload:
-    payload = _decode_payload(encoded_jwt)
+    payload_dict = _decode_payload(encoded_jwt)
+    payload = _dict_to_payload(payload_dict)
 
     user_status = _get_user_status_or_none(payload["user_id"])
     if user_status is None:
@@ -241,3 +244,31 @@ def delete_token_secret(user_id: int):
     user_status.refresh_secret = ""
     user_status.expired_at = _now() - datetime.timedelta(seconds=1)
     user_status.save()
+
+
+def get_ai_token(match_id: int) -> str:
+    jwt_str = jwt.encode(
+        {
+            "user_id": AI_USERID,
+            "match_id": match_id,
+            "exp": _now() + datetime.timedelta(seconds=JWT_AI_EXPIRE_SECONDS),
+        },
+        key=JWT_SECRET,
+        algorithm=JWT_ALGORITHM,
+    )
+    return jwt_str
+
+
+def check_ai_token(encoded_jwt: str) -> int:
+    try:
+        decoded_dict = _decode_payload(encoded_jwt)
+    except (JwtInvalidException, JwtExpiredException):
+        raise JwtInvalidException()
+    except Exception as e:
+        raise e
+
+    if "user_id" not in decoded_dict or decoded_dict["user_id"] != AI_USERID:
+        raise JwtInvalidException()
+
+    match_id: int = decoded_dict["match_id"]
+    return match_id

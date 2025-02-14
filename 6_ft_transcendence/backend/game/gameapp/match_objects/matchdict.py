@@ -25,6 +25,12 @@ class MatchDict:
             return self.match_dict_2[match_id]
         return None
 
+    def get_room_by_userid(self, user_id: int) -> "Match | None":
+        for match in self.match_dict_2.values():
+            if match.is_user_connected(user_id):
+                return match
+        return None
+
     def __getitem__(self, match_id: int) -> "Match":
         ret = self.get(match_id)
         if ret is None:
