@@ -26,7 +26,7 @@ export class RoomSocketManager {
     RoomSocketManager.#onRoomChangedEvent();
     RoomSocketManager.#onStartGame();
     RoomSocketManager.socket.on("error", (error) => {
-      console.log(error.toString());
+      console.error(error.toString());
     });
   };
 

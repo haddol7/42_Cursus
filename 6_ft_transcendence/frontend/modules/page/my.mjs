@@ -9,6 +9,7 @@ import { JWT } from "../authentication/jwt.mjs";
 import { USER_URL, WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 import { replaceAllScriptChar } from "../security.mjs";
 import { FriendPage } from "./friend.mjs";
+import { logout } from "../authentication/logout.mjs";
 
 export class MyPage {
   static render() {
@@ -103,6 +104,7 @@ export class MyPage {
           await MyPage.#requestProfileToServer();
         } catch (e) {
           alert(e);
+          logout();
         }
       } else alert(json.error);
     }
@@ -133,6 +135,7 @@ export class MyPage {
           await MyPage.#requestFriendListToServer();
         } catch (e) {
           alert(e);
+          logout();
         }
       } else alert(json.error);
     }
@@ -195,6 +198,7 @@ export class MyPage {
           await MyPage.#addFriend(name);
         } catch (e) {
           alert(e);
+          logout();
         }
       } else alert(json.error);
     }

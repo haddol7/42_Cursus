@@ -1,5 +1,6 @@
 import { AUTH_URL } from "./globalConstants.mjs";
 import { JWT } from "./jwt.mjs";
+import { logout } from "./logout.mjs";
 // import { safe_fetch } from "../utility.mjs";
 
 export class TwoFA {
@@ -20,6 +21,7 @@ export class TwoFA {
           return TwoFA.sendOTPUserNameToServer(otpUserName);
         } catch (e) {
           alert(e);
+          logout();
         }
       }
     }
@@ -40,6 +42,7 @@ export class TwoFA {
           return TwoFA.getOTPUserNameFromServer();
         } catch (e) {
           alert(e);
+          logout();
         }
       }
     }

@@ -1,5 +1,6 @@
 import { USER_URL, WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 import { JWT } from "../authentication/jwt.mjs";
+import { logout } from "../authentication/logout.mjs";
 import {
   bindEventToNavBar,
   clearBody,
@@ -79,6 +80,7 @@ export class FriendPage {
           await FriendPage.#showFriendProfile(friendName);
         } catch (e) {
           alert(e);
+          logout();
         }
       } else alert(json.error);
     }
