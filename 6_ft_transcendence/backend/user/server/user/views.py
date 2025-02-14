@@ -16,7 +16,6 @@ from PIL import Image
 import os
 
 
-
 class JWTAuthenticationMixin:
     def check_jwt(self, req: Request):
         if "Authorization" not in req._request.headers:
@@ -35,6 +34,7 @@ class JWTAuthenticationMixin:
             raise PermissionError(error_message)
         res = res.json()
         return int(res["user_id"]) 
+    
 
 
 # /user
