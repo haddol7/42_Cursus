@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       await FTOauth.sendFTOauthCodeToServer();
     } catch (e) {
-      console.error(e);
+      alert(e);
     }
 
     const url = FTOauth.removeCodeFromUrl();

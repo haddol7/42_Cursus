@@ -4,6 +4,7 @@ import { USER_URL } from "../authentication/globalConstants.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 import { replaceAllScriptChar } from "../security.mjs";
+import { logout } from "../authentication/logout.mjs";
 
 export class EditProfilePage {
   static render() {
@@ -59,7 +60,8 @@ export class EditProfilePage {
           await JWT.getNewToken();
           await EditProfilePage.#showCurrentProfile();
         } catch (e) {
-          alert(e.message);
+          alert(e);
+          logout();
         }
       } else alert(json.error);
     }
@@ -90,8 +92,13 @@ export class EditProfilePage {
       const json = await response.json();
 
       if (response.status === 401 && json.error === WHEN_EXPIRED) {
-        await JWT.getNewToken();
-        await EditProfilePage.#submitEditedProfile(event);
+        try {
+          await JWT.getNewToken();
+          await EditProfilePage.#submitEditedProfile(event);
+        } catch (e) {
+          alert(e);
+          logout();
+        }
       } else alert(json.error);
     }
   };

@@ -38,11 +38,7 @@ export class GameLobbyPage {
 
     PageManager.currentpageStatus = PageManager.pageStatus.gameLobby;
 
-    try {
-      RoomSocketManager.connect();
-    } catch (e) {
-      console.error(e);
-    }
+    RoomSocketManager.connect();
   }
 
   static renderAndPushHistory() {
