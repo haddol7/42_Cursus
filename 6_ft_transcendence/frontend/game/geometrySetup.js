@@ -33,7 +33,6 @@ export function createGeometry(scene) {
   );
   ballEdges.name = "ball";
   ballEdges.position.set(0, 0, 0.2);
-  ballEdges.vel = 0;
   scene.add(ballEdges);
 
   // 바닥 설정

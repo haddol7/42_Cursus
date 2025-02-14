@@ -1,40 +1,13 @@
 import * as THREE from "three";
 
-let shouldAnimate = true; // 애니메이션 실행 여부 플래그
 let keyState = {};
-let paddleDirection = 0;
-
-export function handleKeyDown(event, paddleId) {
-  if (event.key === "ArrowLeft")
-    paddleDirection = paddleId === "paddle2" ? 1 : -1;
-  else if (event.key === "ArrowRight")
-    paddleDirection = paddleId === "paddle2" ? -1 : 1;
-
-  keyState[event.key] = true;
-}
-
-export function handleKeyUp(event, paddleId) {
-  keyState[event.key] = false;
-
-  if (event.key === "ArrowRight") {
-    paddleDirection = keyState["ArrowLeft"]
-      ? paddleId === "paddle2"
-        ? 1
-        : -1
-      : 0;
-  } else if (event.key === "ArrowLeft") {
-    paddleDirection = keyState["ArrowRight"]
-      ? paddleId === "paddle2"
-        ? -1
-        : 1
-      : 0;
-  }
-}
 
 export function animate(scene, camera, composer, socket, paddleId) {
-  shouldAnimate = true; // 애니메이션 시작
+  let paddleDirection = 0;
+
   const clock = new THREE.Clock();
 
+  // 별 생성
   const starCount = 500;
   const starGeometry = new THREE.BufferGeometry();
   const positions = new Float32Array(starCount * 3);
@@ -60,33 +33,60 @@ export function animate(scene, camera, composer, socket, paddleId) {
   const stars = new THREE.Points(starGeometry, starMaterial);
   scene.add(stars);
 
-  function update() {
-    if (!shouldAnimate) {
-      scene.remove(stars);
-      return; // 애니메이션 중단 체크
+  // 키 입력 처리 (키 누름)
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft")
+      paddleDirection = paddleId === "paddle2" ? 1 : -1;
+    else if (event.key === "ArrowRight")
+      paddleDirection = paddleId === "paddle2" ? -1 : 1;
+    keyState[event.key] = true;
+  });
+
+  // 키 입력 처리 (키 뗌)
+  window.addEventListener("keyup", (event) => {
+    keyState[event.key] = false;
+
+    if (event.key === "ArrowRight") {
+      if (keyState["ArrowLeft"] === true) {
+        paddleDirection = paddleId === "paddle2" ? 1 : -1;
+      } else {
+        paddleDirection = 0;
+      }
+    } else if (event.key === "ArrowLeft") {
+      if (keyState["ArrowRight"] === true) {
+        paddleDirection = paddleId === "paddle2" ? -1 : 1;
+      } else {
+        paddleDirection = 0;
+      }
     }
+  });
+
+  function update() {
     requestAnimationFrame(update);
     const deltaTime = clock.getDelta();
 
+    // 공 회전
     const ball = scene.getObjectByName("ball");
     if (ball) {
       ball.rotation.x += 5 * deltaTime;
       ball.rotation.y += 5 * deltaTime;
-      ball.vel += 0.1 * deltaTime;
-      ball.vel = Math.min(ball.vel, 3);
     }
 
+    // 패들 움직임 처리
     const paddle = scene.getObjectByName(paddleId);
     if (paddle && paddleDirection !== 0) {
-      console.log(paddleId, paddleDirection);
+      // 패들 위치 전송
       socket.emit("paddleMove", { paddleId, paddleDirection });
     }
 
+    // 별 위치 업데이트
     const starPositions = stars.geometry.attributes.position.array;
-    let starVelocity = ball.vel * 10;
+    // 공이 부딪힐수록 별이 더 빠르게 움직이도록 만들었습니다.
+    let starVelocity = (Math.abs(ball.vx) * 4 + Math.abs(ball.vy) * 6) * 10;
     if (isNaN(starVelocity) || starVelocity < 1) {
       starVelocity = 2;
     }
+    // console.log(deltaTime, starVelocity);
     for (let i = 0; i < starCount * 3; i += 3) {
       starPositions[i + 1] += 50 * deltaTime * starVelocity;
       if (starPositions[i + 1] > 600) {
@@ -96,11 +96,5 @@ export function animate(scene, camera, composer, socket, paddleId) {
     stars.geometry.attributes.position.needsUpdate = true;
     composer.render();
   }
-
   update();
-}
-
-// 애니메이션 중단 함수
-export function stopAnimation() {
-  shouldAnimate = false;
 }

@@ -1,7 +1,7 @@
 import { renderNavBar } from "./lowRankElements.mjs";
 import { GameQueuePage } from "./gameQueue.mjs";
 import { PageManager } from "./manager.mjs";
-import { SocketManager } from "../socketManager.mjs";
+import { RoomSocketManager } from "../socketManager.mjs";
 import { clearBody } from "./lowRankElements.mjs";
 
 export class GameQueueCreationPage {
@@ -9,24 +9,26 @@ export class GameQueueCreationPage {
     renderNavBar();
 
     document.body.innerHTML += `
-      <div id="gameQueueCreationSection" style="border: 1px solid gray; margin: 4px;">
-        <p style="margin: 4px;">Please select the number of members of PageManager Pong Tournament.</p>
-        <form id="createQueueForm" action="" method="">
-          <label style="margin: 4px;">  
-            <input class="choice" type="radio" name="numOfMembers" value="2" /> 2
-          </label><br />
-          <label style="margin: 4px;">  
-            <input class="choice" type="radio" name="numOfMembers" value="4" /> 4
-          </label><br />
-          <label style="margin: 4px;">  
-            <input class="choice" type="radio" name="numOfMembers" value="8" /> 8
-          </label><br />
-          <label style="margin: 4px;">  
-            <input class="choice" type="radio" name="numOfMembers" value="16" /> 16
-          </label><br />
-          <label style="margin: 4px;">
-            <input id="createQueueButton" type="submit" class="btn btn-info mb-3" value="create queue" />
-          </label>
+      <div id="gameQueueCreationSection" class="box">
+        <p style="color: #2e8b57; font-size: 16px; text-align: center; margin-bottom: 0px;">Please select the number of members of PageManager Pong Tournament.</p><br/>
+        <form id="createQueueForm" class="columnAlignedForm" action="" method="">
+          <div>
+          <input type="radio" class="choice" name="numOfMembers" value="2" />
+          <label class="green">2</label><br />
+          </div>
+          <div>
+          <input type="radio" class="choice" name="numOfMembers" value="4" />
+          <label class="green">4</label><br />
+          </div>
+          <div>
+          <input type="radio" class="choice" name="numOfMembers" value="8" />
+          <label class="green">8</label><br />
+          </div>
+          <div>
+          <input type="radio" class="choice" name="numOfMembers" value="16" />
+          <label class="green">16</label><br />
+          </div>
+          <input id="createQueueButton" class="submitInput" type="submit" value="create queue" />
         </form>
       </div>
     `;
@@ -48,14 +50,16 @@ export class GameQueueCreationPage {
       Array.from(document.getElementsByClassName("choice")).forEach(
         (choice) => {
           if (choice.checked) {
-            SocketManager.emitMakeRoom("test name", Number(choice.value));
-            SocketManager.maxNumOfParticipant = choice.value;
+            clearBody();
+            GameQueuePage.render();
+            RoomSocketManager.maxNumOfParticipant = Number(choice.value);
+            RoomSocketManager.emitMakeRoom(
+              Math.trunc(Math.random() * 10000).toString(),
+              Number(choice.value)
+            );
           }
         }
       );
-
-      clearBody();
-      GameQueuePage.render();
     });
 
     PageManager.currentpageStatus = PageManager.pageStatus.gameQueueCreation;

@@ -17,7 +17,7 @@ export class LoginPage {
     if (JWT.getJWTTokenFromCookie() === null) {
       const linkTo42Oauth = document.createElement("a");
 
-      linkTo42Oauth.classList.add(..."btn btn-info".split(" "));
+      linkTo42Oauth.classList.add("submitInput");
       linkTo42Oauth.textContent = "42Oauth";
 
       centralBox.appendChild(linkTo42Oauth);
@@ -33,7 +33,7 @@ export class LoginPage {
     } else {
       const linkToMainPage = document.createElement("a");
 
-      linkToMainPage.classList.add(..."btn btn-info".split(" "));
+      linkToMainPage.classList.add("submitInput");
       linkToMainPage.textContent = "return to main page";
       centralBox.appendChild(linkToMainPage);
 
@@ -45,7 +45,7 @@ export class LoginPage {
       };
       const logoutButton = document.createElement("a");
 
-      logoutButton.classList.add(..."btn btn-info".split(" "));
+      logoutButton.classList.add("submitInput");
       logoutButton.textContent = "logout";
       centralBox.appendChild(logoutButton);
 

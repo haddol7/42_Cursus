@@ -1,10 +1,9 @@
-import { LoginPage } from "./login.mjs";
 import { MainPage } from "./main.mjs";
 import { MyPage } from "./my.mjs";
 import { DashBoardPage } from "./dashboard.mjs";
 import { GameLobbyPage } from "./gamelobby.mjs";
 import { logout } from "../authentication/logout.mjs";
-import { SocketManager } from "../socketManager.mjs";
+import { RoomSocketManager } from "../socketManager.mjs";
 import { PageManager } from "./manager.mjs";
 
 // body의 모든 자식 요소들을 제거
@@ -42,18 +41,18 @@ export const renderCentralBox = () => {
 
 export const renderNavBar = () => {
   document.body.innerHTML = `
-    <a id="title" class="nav justify-content-center" style="color:green; text-decoration: none;"><h1>Mighty Pong Contest</h1></a>
-    <a id="logoutLink" class="nav justify-content-center" style="color:skyblue; text-decoration: none;">logout</a>
+    <a id="title" class="nav justify-content-center home"><h1>Mighty Pong Contest</h1></a>
+    <a id="logoutLink" class="nav justify-content-center sublink">logout</a>
     <hr />
     <ul class="nav justify-content-center">
       <li class="nav-item">
-        <a id="myPageLink" class="nav-link">My Page</a>
+        <a id="myPageLink" class="nav-link sublink">My Page</a>
       </li>
       <li class="nav-item">
-        <a id="dashBoardLink" class="nav-link">Dash Board</a>
+        <a id="dashBoardLink" class="nav-link sublink">Dash Board</a>
       </li>
       <li class="nav-item">
-        <a id="gameLobbyLink" class="nav-link">Game Lobby</a>
+        <a id="gameLobbyLink" class="nav-link sublink">Game Lobby</a>
       </li>
     </ul>
     <hr />`;
@@ -78,7 +77,7 @@ export const bindEventToNavBar = () => {
         PageManager.currentpageStatus.page ===
         PageManager.pageStatus.gameLobby.page
       )
-        SocketManager.disconnect();
+        RoomSocketManager.disconnect();
 
       MainPage.renderAndPushHistory();
     }
@@ -92,10 +91,9 @@ export const bindEventToNavBar = () => {
       PageManager.currentpageStatus.page ===
       PageManager.pageStatus.gameLobby.page
     )
-      SocketManager.disconnect();
+      RoomSocketManager.disconnect();
 
     logout();
-    LoginPage.renderAndPushHistory();
   });
 
   myPageLink.addEventListener("click", (event) => {
@@ -107,7 +105,7 @@ export const bindEventToNavBar = () => {
         PageManager.currentpageStatus.page ===
         PageManager.pageStatus.gameLobby.page
       )
-        SocketManager.disconnect();
+        RoomSocketManager.disconnect();
 
       MyPage.renderAndPushHistory();
     }
@@ -125,7 +123,7 @@ export const bindEventToNavBar = () => {
         PageManager.currentpageStatus.page ===
         PageManager.pageStatus.gameLobby.page
       )
-        SocketManager.disconnect();
+        RoomSocketManager.disconnect();
 
       DashBoardPage.renderAndPushHistory();
     }

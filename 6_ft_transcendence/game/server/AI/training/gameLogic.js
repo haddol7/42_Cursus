@@ -19,7 +19,6 @@ function startBallMovement(roomName, io) {
     const ball = room.ball;
     const paddles = room.paddles;
     const scores = room.scores;
-    const isAIMode = room.isAIMode;
 
     ball.x += ball.vx;
     ball.y += ball.vy;
@@ -29,54 +28,41 @@ function startBallMovement(roomName, io) {
       ball.x >= GAME_BOUNDS.x - BALL_SIZE.x / 2 ||
       ball.x <= -GAME_BOUNDS.x + BALL_SIZE.x / 2
     ) {
-      ball.vx *= -1;
+      ball.vx *= -1.03;
       ball.x =
         ball.x > 0
           ? GAME_BOUNDS.x - BALL_SIZE.x / 2
           : -GAME_BOUNDS.x + BALL_SIZE.x / 2;
     }
 
-    // 디버그용 코드, 스코어 발생 안하게 함
-    // if (ball.y >= GAME_BOUNDS.y - 1 || ball.y <= -GAME_BOUNDS.y + 1) {
-    //   ball.vy *= -1.1;
-    // }
-
-    // Paddle 충돌
-    const hitBottomPaddle =
-      ball.y - BALL_SIZE.y / 2 <= -GAME_BOUNDS.y + PADDLE_HEIGHT &&
-      ball.x + BALL_SIZE.x / 2 >= paddles.paddle1 - PADDLE_WIDTH / 2 &&
-      ball.x - BALL_SIZE.x / 2 <= paddles.paddle1 + PADDLE_WIDTH / 2;
-
     const hitTopPaddle =
-      ball.y + BALL_SIZE.y / 2 >= GAME_BOUNDS.y - PADDLE_HEIGHT &&
+      ball.y + BALL_SIZE.y / 2 >= GAME_BOUNDS.y - 0.5 - PADDLE_HEIGHT &&
       ball.x + BALL_SIZE.x / 2 >= paddles.paddle2 - PADDLE_WIDTH / 2 &&
       ball.x - BALL_SIZE.x / 2 <= paddles.paddle2 + PADDLE_WIDTH / 2;
 
-    if (hitBottomPaddle || hitTopPaddle) {
+    if (ball.y <= -GAME_BOUNDS.y + 0.9 || hitTopPaddle) {
       ball.vy *= -1.05;
-      ball.vx *= 1.05;
 
+      //옮길거
       if (Math.abs(ball.vy) > 0.2)
         ball.vy > 0 ? (ball.vy = 0.2) : (ball.vy = -0.2);
     }
 
-    // 득점 체크
+    if (hitTopPaddle) io.to(roomName).emit("hitPaddle", { paddle: "paddle2" });
+
+    //득점 체크
     if (ball.y >= GAME_BOUNDS.y - BALL_SIZE.y / 2) {
       scores.paddle1++;
       io.to(roomName).emit("updateScore", scores);
-      resetGame(roomName, "paddle1", io, isAIMode);
+      resetGame(roomName, "paddle1", io);
     } else if (ball.y <= -GAME_BOUNDS.y + BALL_SIZE.y / 2) {
       scores.paddle2++;
       io.to(roomName).emit("updateScore", scores);
-      resetGame(roomName, "paddle2", io, isAIMode);
+      resetGame(roomName, "paddle2", io);
     }
 
     // 게임 종료 체크
-    if (
-      room.gameOver ||
-      (isAIMode === false &&
-        (scores.paddle1 === WINNING_SCORE || scores.paddle2 === WINNING_SCORE))
-    ) {
+    if (scores.paddle1 === WINNING_SCORE || scores.paddle2 === WINNING_SCORE) {
       room.gameOver = true;
       const winner = scores.paddle1 === WINNING_SCORE ? "paddle1" : "paddle2";
       io.to(roomName).emit("gameOver", {
@@ -87,7 +73,6 @@ function startBallMovement(roomName, io) {
       clearInterval(interval);
     }
 
-    //AI는 항상 paddle2로 설정
     ball.AI_pos = paddles.paddle2;
     io.to(roomName).emit("updateBall", ball);
   }, 16); // 60 FPS
@@ -99,7 +84,7 @@ function handlePaddleMove(roomName, data, io) {
 
   const { paddleId, paddleDirection } = data;
 
-  //방향값을 0.075, -0.075로 고정. (클라 쪽에서 악의적으로 큰 값이 들어올 수 있음)
+  //옮길 것 방향값을 0.075, -0.075로 고정. (클라 쪽에서 악의적으로 큰 값이 들어올 수 있음)
   let normalizedPaddleDirection;
   if (paddleDirection != 0) {
     normalizedPaddleDirection =
@@ -122,7 +107,7 @@ function handlePaddleMove(roomName, data, io) {
   });
 }
 
-function resetGame(roomName, scorer, io, isAIMode) {
+function resetGame(roomName, scorer, io) {
   const room = rooms[roomName];
 
   // 공과 패들 위치 초기화
@@ -131,16 +116,10 @@ function resetGame(roomName, scorer, io, isAIMode) {
   room.paddles.paddle2 = 0;
 
   io.to(roomName).emit("resetPositions", {});
-
-  // 3초 대기 후 공 재시작
-  setTimeout(() => {
-    let rand = Math.random() - 0.5;
-    if (Math.abs(rand) < 0.2) rand > 0 ? (rand = 0.2) : (rand = -0.2);
-    room.ball.vx = BALL_SPEED * rand;
-    // AI 모드일 때, 공을 항상 player 쪽으로 보내기
-    if (isAIMode === true) room.ball.vy = -BALL_SPEED;
-    else room.ball.vy = scorer === "paddle1" ? BALL_SPEED : -BALL_SPEED;
-  }, 3000);
+  let rand = Math.random() - 0.5;
+  if (Math.abs(rand) < 0.2) rand > 0 ? (rand = 0.2) : (rand = -0.2);
+  room.ball.vx = BALL_SPEED * rand;
+  room.ball.vy = scorer === "paddle1" ? BALL_SPEED : -BALL_SPEED;
 }
 
 module.exports = { startBallMovement, handlePaddleMove };
