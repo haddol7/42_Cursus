@@ -6,7 +6,7 @@ from rest_framework.request import Request
 
 from exceptions.CustomException import BadRequestFieldException
 from gameapp.wsgi_utils import clear_match_dict, clear_room, make_airoom, make_rooms
-from gameapp.decorators import api_delete, api_post
+from gameapp.decorators import api_delete, api_post, authenticated
 from gameapp.utils import get_dict, get_int, get_list, get_str
 
 
@@ -56,11 +56,8 @@ def handle_game(req: HttpRequest):
         return HttpResponseNotAllowed(["POST", "DELETE"])
 
 
+@authenticated()
 @api_post
-def post_aigame(req: Request, data: dict[str, Any]):
-    user = get_dict(data, "user")
-    user_id = get_int(user, "user_id")
-    user_name = get_str(user, "user_name")
-
+def post_aigame(req: Request, user_id: int, data: dict[str, Any]):
     make_airoom(user_id)
     return JsonResponse({})

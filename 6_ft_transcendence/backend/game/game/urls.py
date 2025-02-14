@@ -28,5 +28,6 @@ import testapp.urls
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("_internal/", include(gameapp.urls.urlpatterns)),
+    path("game/", include(gameapp.urls.public_patterns)),
     path("test/", include(testapp.urls.urlpatterns)),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
