@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from user.models import Profile, Friend
+import requests
 import re
+from user.envs import JWT_URL
+
 
 class ProfileSerializer(serializers.ModelSerializer):
 
@@ -33,8 +36,22 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 
 class FriendSerializer(serializers.ModelSerializer):
-    user_name = serializers.CharField(source='friend.user_name')
+    user_name = serializers.CharField(source='friend.user_name', read_only=True)
+    online_status = serializers.SerializerMethodField()
 
     class Meta:
         model = Friend 
-        fields = ['user_name'] 
+        fields = ['user_name', 'online_status'] 
+
+    def get_online_status(self, value: Friend) -> bool:
+        user_id = value.friend.user_id
+        try:
+            response = requests.get(f"{JWT_URL}/jwt/online/?user_id={user_id}", timeout=2)
+            if response.ok:
+                res = response.json()
+                return res["isonline"]
+        except requests.RequestException:
+            return False
+        return False
+
+
