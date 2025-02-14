@@ -86,7 +86,7 @@ export class RoomSocketManager {
           </div>
         </div>
       `;
-      runPongGame(JWT.getJWTTokenFromCookie().accessToken);
+      runPongGame();
     });
   };
 
