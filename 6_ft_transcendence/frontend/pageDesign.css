@@ -32,6 +32,7 @@
   color: #2e8b57; /* 초록색 글씨 */
   margin-bottom: 0px;
   display: inline;
+  overflow: auto;
 }
 
 .blockWrapher {
@@ -54,7 +55,7 @@
 
 .smallRowAlignedForm {
   display: grid;
-  grid-template-columns: 2  fr 1fr;
+  grid-template-columns: 2 fr 1fr;
   gap: 5px;
   align-items: center; /* 가운데 정렬 */
 }
