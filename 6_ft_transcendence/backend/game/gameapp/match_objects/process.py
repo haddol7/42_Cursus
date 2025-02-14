@@ -87,7 +87,7 @@ class MatchProcess(threading.Thread):
         with self.lock:
             self.paddle[idx] = x
 
-        emit_json = {"paddleId": "paddle1" if idx == 0 else "paddle2", "positiion": x}
+        emit_json = {"paddleId": "paddle1" if idx == 0 else "paddle2", "position": x}
         print(f"user_id={user_id}, emitting event={UPDATE_PADDLE_EVENT}")
         sio_emit(
             UPDATE_PADDLE_EVENT,
