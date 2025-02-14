@@ -45,12 +45,12 @@ class TempMatch(models.Model):
     winner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, default=None)
     match_room = models.ForeignKey(TempMatchRoom, on_delete=models.CASCADE)
     round = models.IntegerField(choices=RoundEnum.choices)
-    start_at = models.DateTimeField(default=now)
+    start_at = models.DateTimeField(default=None, null=True)
     end_at = models.DateTimeField(null=True, default=None)
 
     winner_match = models.ForeignKey("self", on_delete=models.CASCADE, null=True)
 
-    joined_user = models.IntegerField(default=0)
+    is_with_ai = models.BooleanField(default=False)
 
     class Meta:
         db_table = "temp_match"

@@ -1,12 +1,25 @@
+import random
+import string
+
 import datetime
 from typing import Any, Dict, List
 from django.http import QueryDict
 
 from exceptions.CustomException import BadRequestFieldException
+from gameapp.models import TempMatch
 
 
 def now() -> datetime.datetime:
     return datetime.datetime.now(datetime.timezone.utc)
+
+
+def get_match_name(match: TempMatch):
+    return f"{match.match_room.room_name}_{match.id}"
+
+
+def assign_kv(target: dict[Any, Any], source: dict[Any, Any]):
+    for k, v in source.items():
+        target[k] = v
 
 
 def _get_any(dict: Dict[str, Any] | QueryDict, key: str) -> Any:
@@ -56,3 +69,18 @@ def get_list(dict: Dict[str, Any] | QueryDict, key: str) -> List[Any]:
     if not isinstance(val, list):
         raise BadRequestFieldException(key)
     return val
+
+
+def get_dict(dict: Dict[str, Any] | QueryDict, key: str) -> Dict[str, Any]:
+    val = _get_any(dict, key)
+    if not isinstance(val, Dict):
+        raise BadRequestFieldException(key)
+    return val
+
+
+def generate_secret() -> str:
+    LEN = 10
+    ret: str = ""
+    for _ in range(LEN):
+        ret += random.choice(string.ascii_letters + string.digits)
+    return ret
