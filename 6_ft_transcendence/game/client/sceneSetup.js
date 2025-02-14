@@ -4,7 +4,7 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 
 //카메라 및 렌더러 초기화
-export function initScene(paddleId) {
+export function initScene() {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x000000);
 
@@ -14,16 +14,6 @@ export function initScene(paddleId) {
     0.1,
     1000
   );
-
-  // 카메라 위치 설정
-  if (paddleId === "paddle1") {
-    camera.position.set(0, -10.5, 3);
-    camera.lookAt(0, 0, 1);
-  } else if (paddleId === "paddle2") {
-    camera.position.set(0, 10.5, 3);
-    camera.lookAt(0, 0, 1);
-    camera.rotation.z = Math.PI;
-  }
 
   // 렌더러 설정
   const renderer = new THREE.WebGLRenderer({ antialias: true });
