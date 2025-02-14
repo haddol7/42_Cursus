@@ -13,7 +13,7 @@ from gameapp.models import (
     TempMatchRoomUser,
     TempMatchUser,
 )
-from gameapp.match_objects import Match, MatchUser, match_dict, matchuser
+from gameapp.match_objects import Match, MatchUser, match_dict
 from gameapp.utils import get_int, get_str, generate_secret
 
 
