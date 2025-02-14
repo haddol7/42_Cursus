@@ -10,7 +10,12 @@ import { PageManager } from "./manager.mjs";
 import { MyPage } from "./my.mjs";
 
 export class FriendPage {
+  static lastfriendName = "Dumm";
   static render(friendName) {
+    if (friendName === null || friendName === undefined)
+      friendName = FriendPage.lastfriendName;
+    else FriendPage.lastfriendName = friendName;
+
     renderNavBar();
 
     document.body.innerHTML += `
