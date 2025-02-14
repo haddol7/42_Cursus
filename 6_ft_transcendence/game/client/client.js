@@ -23,7 +23,7 @@ let keyUpHandler;
 let scene, camera, renderer, composer;
 
 socket = io();
-({ scene, camera, renderer, composer } = initScene(paddleId));
+({ scene, camera, renderer, composer } = initScene());
 createGeometry(scene);
 
 window.addEventListener("resize", () => {
