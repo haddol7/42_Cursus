@@ -140,7 +140,9 @@ def _decode_payload(encoded_jwt: str) -> Dict[str, Any]:
         logger.exception(e)
         raise JwtExpiredException()
     except Exception as e:
-        logger.error(f"while decode payload, unknown exception occurred, type={type(e)}")
+        logger.error(
+            f"while decode payload, unknown exception occurred, type={type(e)}"
+        )
         logger.exception(e)
         raise e
     return decoded_jwt
@@ -163,7 +165,9 @@ def set_user_secret(
         },
     )
     logger.info(f"created={created}")
-    logger.info(f"set_user_secret = {user_id}, {jwt_secret}, {refresh_secret}, {access_exp}")
+    logger.info(
+        f"set_user_secret = {user_id}, {jwt_secret}, {refresh_secret}, {access_exp}"
+    )
 
     if created:
         return created

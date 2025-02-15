@@ -79,7 +79,8 @@ def fetch_username(user_id: int) -> str:
         raise InternalException()
 
     resp_json = resp.json()
-    return resp_json["user_name"]
+    logger.info(f"resp_json got {resp_json}")
+    return resp_json
 
 
 def generate_random(len: int) -> str:

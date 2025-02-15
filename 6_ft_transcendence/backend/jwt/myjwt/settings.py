@@ -150,3 +150,29 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
     # OTHER SETTINGS
 }
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": "general.log",
+            "formatter": "verbose",
+        },
+        "stdout": {"class": "logging.StreamHandler", "formatter": "simple"},
+    },
+    "formatters": {
+        "verbose": {
+            "format": "{name} {levelname} {asctime} {module}:{lineno:d} {process:d} {thread:d}  |  {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "[{asctime}] {levelname:5s}  |  {message}",
+            "datefmt": "%d/%b/%Y %H:%M:%S",
+            "style": "{",
+        },
+    },
+    "loggers": {"": {"level": "DEBUG", "handlers": ["file", "stdout"]}},
+}
