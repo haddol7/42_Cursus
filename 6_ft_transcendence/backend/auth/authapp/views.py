@@ -1,15 +1,15 @@
 import random
-from typing import Any, Dict
-import urllib.parse
+import requests
 from django.http import (
     HttpRequest,
     HttpResponse,
     HttpResponseNotAllowed,
-    HttpResponseRedirect,
     JsonResponse,
 )
-import requests
-import urllib
+from logging import Logger
+from rest_framework.request import Request
+from typing import Any, Dict
+
 
 from authapp.decorators import (
     api_delete,
@@ -19,37 +19,21 @@ from authapp.decorators import (
 )
 from authapp.envs import (
     JWT_URL,
-    OAUTH_42_URL,
     OAUTH_CLIENT_ID,
     OAUTH_CLIENT_SECRET,
     OAUTH_REDIRECT_URI,
     OAUTH_TOKEN_URL,
     TWOFA_URL,
 )
-from authapp.models import User
-from authapp.utils import create_user, get_str, get_username_from_42, now
+from authapp.utils import create_user, get_str, get_username_from_42
 from exceptions.CustomException import (
     InternalException,
     UnauthenticatedException,
 )
-from rest_framework.request import Request
-
-from django.db import transaction
 
 # Create your views here.
 
-
-# @api_get
-# def get_42_oauth(req: Request):
-#     redirect_to = get_str(req.query_params, "redirectTo")
-#     redirect_to = urllib.parse.quote(redirect_to)
-
-#     return HttpResponseRedirect(
-#         f"{OAUTH_42_URL}?"
-#         + f"client_id={OAUTH_CLIENT_ID}"
-#         + f"&redirect_uri={redirect_to}"
-#         + "&response_type=code"
-#     )
+logger = Logger(__name__)
 
 
 @api_get
@@ -68,7 +52,7 @@ def get_42_code(req: Request):
         },
     )
     if not res.ok:
-        print(f"{res.content}")
+        logger.error(f"{res.text}")
         raise UnauthenticatedException()
 
     res_json = res.json()

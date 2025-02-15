@@ -8,6 +8,7 @@ from gameapp.envs import FRONTEND_URL, GAME_URL
 
 NAMESPACE = "/game"
 
+INIT_EVENT = "init"
 UPDATE_BALL_EVENT = "updateBall"
 UPDATE_SCORE_EVENT = "updateScore"
 UPDATE_PADDLE_EVENT = "updatePaddle"

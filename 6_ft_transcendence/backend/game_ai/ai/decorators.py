@@ -36,13 +36,11 @@ def api_post(func):
 
 
 def api_delete(func):
-    _func = api_endpoint(["DELETE"])
-    return _func(func)
+    return api_endpoint(["DELETE"])(func)
 
 
 def api_get(func):
-    _func = api_endpoint(["GET"])
-    return _func(func)
+    return api_endpoint(["GET"])(func)
 
 
 def authenticated(skip_2fa=False):

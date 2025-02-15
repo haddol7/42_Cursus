@@ -7,37 +7,51 @@ For more information on this file, see
 https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 """
 
+import json
 import os
-from typing import Dict, List, TypedDict
-from psycopg import InternalError
-import requests
 import socketio
-import socketio.exceptions
-from websocket.envs import JWT_URL
-from websocket.sio import sio
+
+from logging import Logger
+from typing import Any, List, TypedDict
 
 from django.core.wsgi import get_wsgi_application
+from socketio.exceptions import ConnectionRefusedError
+
 
 from exceptions.CustomException import (
+    CustomException,
     BadRequestFieldException,
     InternalException,
     UnauthenticatedException,
     WebSocketAlreadyRoomJoinedException,
-    WebSocketRoomFullException,
     WebSocketRoomNotAdminException,
     WebSocketRoomNotFoundException,
     WebSocketRoomNotFullException,
     WebSocketRoomNotJoinedException,
 )
 
-import json
-import random
-import string
-
-from .envs import GAME_URL
-
+from websocket.envs import JWT_URL, GAME_URL
+from websocket.requests import post
+from websocket.room import Room
+from websocket.roomuser import RoomUser, RoomUserJson
+from websocket.sio import (
+    ROOM_CHANGED_EVENT,
+    ROOM_LIMIT_VALID_VALUES,
+    ROOM_LIST_EVENT,
+    ROOM_LISTENERS,
+    START_GAME_EVENT,
+    sio,
+    sio_emit,
+)
 from websocket.decorators import event_on
-from websocket.utils import get_str
+from websocket.userdict import UserDict
+from websocket.utils import (
+    fetch_username,
+    get_int,
+    get_joined_room,
+    get_str,
+)
+
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "websocket.settings")
 
@@ -45,105 +59,9 @@ application = get_wsgi_application()
 application = socketio.WSGIApp(sio, application)
 
 
+logger = Logger(__name__)
+
 sid_list = []
-
-ROOM_LISTENERS = "room_listeners"
-ROOM_LIST_EVENT = "room_list"
-ROOM_CHANGED_EVENT = "room_changed"
-START_GAME_EVENT = "start_game"
-
-ROOM_LIMIT_VALID_VALUES = [2, 4, 8, 16]
-
-
-class RoomJson(TypedDict):
-    room_id: str
-    room_name: str
-    room_limit: int
-    room_cur_people: int
-
-
-class RoomUserJson(TypedDict):
-    user_id: int
-    user_name: str
-
-
-class RoomUser:
-    sid: str
-    user_id: int
-    user_name: str
-    room_name: str
-
-    def __init__(self, sid: str, user_id: int, user_name: str) -> None:
-        self.sid = sid
-        self.user_id = user_id
-        self.user_name = user_name
-
-    def to_json(self) -> RoomUserJson:
-        return {"user_id": self.user_id, "user_name": self.user_name}
-
-
-class Room:
-    room_id: str
-    room_name: str
-    room_limit: int
-    user_list: List[int]
-
-    def _get_random_str(self, n: int) -> str:
-        ret: str = ""
-        for _ in range(n):
-            ret += random.choice(string.ascii_letters + string.digits)
-        return ret
-
-    def __init__(self, room_name: str, room_limit: int, admin: int) -> None:
-        self.room_id = self._get_random_str(21)
-        self.room_name = room_name
-        self.room_limit = room_limit
-        self.user_list = [admin]
-
-    def to_json(self) -> RoomJson:
-        return {
-            "room_id": self.room_id,
-            "room_name": self.room_name,
-            "room_cur_people": len(self.user_list),
-            "room_limit": self.room_limit,
-        }
-
-    def add_user(self, user_id: int) -> None:
-        if not self.is_valid():
-            raise WebSocketRoomNotFoundException()
-        if len(self.user_list) >= self.room_limit:
-            raise WebSocketRoomFullException()
-        if user_id in self.user_list:
-            raise WebSocketAlreadyRoomJoinedException()
-
-        self.user_list.append(user_id)
-
-    def remove_user(self, user_id: int) -> None:
-        if not self.is_valid():
-            raise WebSocketRoomNotFoundException()
-        if user_id not in self.user_list:
-            raise WebSocketRoomNotJoinedException()
-
-        self.user_list.remove(user_id)
-
-    def is_valid(self) -> bool:
-        return len(self.user_list) > 0
-
-    def people_list_to_json(self) -> List[RoomUserJson]:
-        ret = []
-        for u in self.user_list:
-            ret.append(USER_DICT[u].to_json())
-        return ret
-
-    def is_full(self) -> bool:
-        if not self.is_valid():
-            return False
-        return len(self.user_list) == self.room_limit
-
-    def is_admin(self, user_id: int) -> bool:
-        if not self.is_valid():
-            return False
-        return self.user_list[0] == user_id
 
 
 class PeopleListJson(TypedDict):
@@ -165,9 +83,6 @@ class RoomManager:
             raise InternalException()
         self.room_list.append(room)
 
-    # def remove_room_by_name(self, room_id: str):
-    #     self.room_list = [r for r in self.room_list if r.room_id != room_id]
-
     def remove_room(self, room: Room):
         self.room_list.remove(room)
 
@@ -181,12 +96,19 @@ class RoomManager:
         room = self._get_room(room_id)
         if room is None:
             raise WebSocketRoomNotFoundException()
+        if not room.is_valid():
+            self.remove_room(room)
+            raise WebSocketRoomNotFoundException()
         room.add_user(user_id)
 
     def remove_user(self, room_id: str, user_id: int):
         room = self._get_room(room_id)
         if room is None:
             raise WebSocketRoomNotFoundException()
+        if not room.is_valid():
+            self.remove_room(room)
+            raise WebSocketRoomNotFoundException()
+
         room.remove_user(user_id)
         if not room.is_valid():
             self.remove_room(room)
@@ -194,13 +116,13 @@ class RoomManager:
     def people_list_to_json(self, room_id: str) -> PeopleListJson:
         room = self._get_room(room_id)
         if room is None:
-            return {"people": []}
-        return {"people": room.people_list_to_json()}
+            raise WebSocketRoomNotFoundException()
+        return {"people": room.people_list_to_json(user_dict)}
 
 
 ROOM_MANAGER = RoomManager()
 
-USER_DICT: Dict[int, RoomUser] = {}
+user_dict = UserDict()
 
 
 def get_session_info(sid) -> int:
@@ -214,51 +136,69 @@ def get_session_info(sid) -> int:
 
 
 def _get_user_id_from_jwt(jwt: str) -> int:
-    res = requests.post(f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": False})
-
+    res = post(f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": False})
     if not res.ok:
-        raise socketio.exceptions.ConnectionRefusedError(res.content)
+        logger.error(f"post failed, content={res.text}")
+        raise ConnectionRefusedError(res.text)
 
     json = res.json()
     return json["user_id"]
 
 
-@sio.event
-def connect(sid, environ, auth):
-    print("auth=", auth)
+def _connect(sid: str, environ, auth: dict[str, Any]):
+
+    logger.info(f"auth={json.dumps(auth)}")
 
     if "jwt" in auth:
         jwt = get_str(auth, "jwt")
         user_id = _get_user_id_from_jwt(jwt)
-        print(f"from _get_user_id_from_Jwt: user_id={user_id}")
-
-        # TODO: Fix user_name
-        user_name = str(user_id)
+        user_name = fetch_username(user_id)
+        logger.info(
+            f"from _get_user_id_from_Jwt: user_id={user_id}, user_name={user_name}"
+        )
     else:
+        logger.info("using deprecated method, user_id and user_name")
         user_id = auth["user_id"]
+        if user_id is None:
+            raise ConnectionRefusedError("bad_request:user_id")
+        try:
+            user_id = int(user_id)
+        except:
+            raise ConnectionRefusedError("bad_request:user_id")
         user_name = auth["user_name"]
+        if user_name is None or not isinstance(user_name, str):
+            raise ConnectionRefusedError("bad_request:user_name")
 
-    if user_id is None:
-        raise socketio.exceptions.ConnectionRefusedError("bad_request:user_id")
-    user_id = int(user_id)
-    if user_name is None or not isinstance(user_name, str):
-        raise socketio.exceptions.ConnectionRefusedError("bad_request:user_name")
-
-    if user_id in USER_DICT:
-        print("userid is in dict -> user.found")
-        raise socketio.exceptions.ConnectionRefusedError("user.found")
     with sio.session(sid) as sess:
         sess["user_id"] = user_id
 
-    USER_DICT[user_id] = RoomUser(sid, user_id, user_name)
-    print(f"sid is entered to {ROOM_LISTENERS}")
+    user_add_ret = user_dict.add(user_id, RoomUser(sid, user_id, user_name))
+    if not user_add_ret:
+        logger.info(f"userid={user_id} is in dict -> user.found")
+        raise ConnectionRefusedError("user.found")
+
+    logger.info(f"sid={sid} is entered to {ROOM_LISTENERS}")
     sio.enter_room(sid, ROOM_LISTENERS)
-    sio.emit(ROOM_LIST_EVENT, ROOM_MANAGER.room_list_to_json(), to=sid)
+    sio_emit(ROOM_LIST_EVENT, ROOM_MANAGER.room_list_to_json(), to=sid)
 
 
-@sio.event
+@event_on("connect")
+def connect(sid, environ, auth):
+    try:
+        return _connect(sid, environ, auth)
+    except CustomException as e:
+        raise ConnectionRefusedError(e.msg)
+    except ConnectionRefusedError as e:
+        raise e
+    except Exception as e:
+        logger.error(f"While connecting, type = {type(e)}")
+        logger.exception(e)
+        raise ConnectionRefusedError("internal_error")
+
+
+@event_on("disconnect")
 def disconnect(sid, reason):
-    print(f"sid={sid} Disconnecting")
+    logger.info(f"sid={sid} Disconnecting")
     user_id = get_session_info(sid)
 
     room_changed = False
@@ -267,48 +207,40 @@ def disconnect(sid, reason):
             continue
         ROOM_MANAGER.remove_user(r, user_id)
         room_changed = True
-        sio.emit(ROOM_CHANGED_EVENT, ROOM_MANAGER.people_list_to_json(r), to=r)
+        sio_emit(ROOM_CHANGED_EVENT, ROOM_MANAGER.people_list_to_json(r), to=r)  # type: ignore
 
     if room_changed:
-        sio.emit(ROOM_LIST_EVENT, ROOM_MANAGER.room_list_to_json(), to=ROOM_LISTENERS)
+        sio_emit(ROOM_LIST_EVENT, ROOM_MANAGER.room_list_to_json(), to=ROOM_LISTENERS)
 
-    del USER_DICT[user_id]
+    user_dict.remove(user_id)
 
 
 @event_on("make_room")
-def sio_make_room(sid, data):
+def sio_make_room(sid: str, data: dict[str, Any]):
     user_id = get_session_info(sid)
 
-    if "room_name" not in data:
-        raise BadRequestFieldException("room_name")
-    elif "room_limit" not in data:
-        raise BadRequestFieldException("room_limit")
-
-    room_name = data["room_name"]
-    if room_name == "":
-        raise BadRequestFieldException("room_name")
-
-    room_limit = int(data["room_limit"])
+    room_name = get_str(data, "room_name", blank=False)
+    room_limit = get_int(data, "room_limit")
     if room_limit not in ROOM_LIMIT_VALID_VALUES:
         raise BadRequestFieldException("room_limit")
 
-    joined_room = [r for r in sio.rooms(sid) if r != sid and r != ROOM_LISTENERS]
-    if len(joined_room) >= 1:
+    joined_room_id = get_joined_room(sid)
+    if joined_room_id is not None:
         raise WebSocketAlreadyRoomJoinedException()
 
-    print(
+    logger.info(
         f"Server got make_room! title={room_name}, room_limit={room_limit}, user_id={user_id}"
     )
     room = Room(room_name=room_name, room_limit=room_limit, admin=user_id)
     ROOM_MANAGER.add_room(room)
 
     sio.leave_room(sid, room=ROOM_LISTENERS)
-    sio.emit(ROOM_LIST_EVENT, ROOM_MANAGER.room_list_to_json(), to=ROOM_LISTENERS)
+    sio_emit(ROOM_LIST_EVENT, ROOM_MANAGER.room_list_to_json(), to=ROOM_LISTENERS)
 
     sio.enter_room(sid, room=room.room_id)
-    sio.emit(
+    sio_emit(
         ROOM_CHANGED_EVENT,
-        ROOM_MANAGER.people_list_to_json(room.room_id),
+        ROOM_MANAGER.people_list_to_json(room.room_id),  # type: ignore
         to=room.room_id,
     )
 
@@ -317,74 +249,66 @@ def sio_make_room(sid, data):
 def sio_enter_room(sid, data):
     user_id = get_session_info(sid)
 
-    if "room_id" not in data:
-        raise BadRequestFieldException("room_id")
-    joined_room = [r for r in sio.rooms(sid) if r != sid and r != ROOM_LISTENERS]
-    if len(joined_room) >= 1:
+    room_id = get_str(data, "room_id")
+    joined_room_id = get_joined_room(sid)
+    if joined_room_id is not None:
         raise WebSocketAlreadyRoomJoinedException()
 
-    room_id = data["room_id"]
     ROOM_MANAGER.add_user(room_id, user_id)
 
     sio.leave_room(sid, ROOM_LISTENERS)
-    sio.emit(ROOM_LIST_EVENT, data=ROOM_MANAGER.room_list_to_json(), to=ROOM_LISTENERS)
+    sio_emit(ROOM_LIST_EVENT, ROOM_MANAGER.room_list_to_json(), to=ROOM_LISTENERS)
 
     sio.enter_room(sid, room_id)
-    sio.emit(ROOM_CHANGED_EVENT, ROOM_MANAGER.people_list_to_json(room_id), to=room_id)
+    sio_emit(ROOM_CHANGED_EVENT, ROOM_MANAGER.people_list_to_json(room_id), to=room_id)  # type: ignore
 
 
 @event_on("leave_room")
 def sio_leave_room(sid):
     user_id = get_session_info(sid)
 
-    joined_room = [r for r in sio.rooms(sid) if r != sid and r != ROOM_LISTENERS]
-    if len(joined_room) == 0:
+    room_id = get_joined_room(sid)
+    if room_id is None:
+        logger.info("joined_room len = 0, user is not joined in any room")
         raise WebSocketRoomNotJoinedException()
-    elif len(joined_room) > 1:
-        raise InternalException()
-    room_id = joined_room[0]
 
     ROOM_MANAGER.remove_user(room_id, user_id)
     sio.leave_room(sid, room_id)
-    sio.emit(ROOM_CHANGED_EVENT, ROOM_MANAGER.people_list_to_json(room_id), to=room_id)
+    sio_emit(ROOM_CHANGED_EVENT, ROOM_MANAGER.people_list_to_json(room_id), to=room_id)  # type: ignore
 
     sio.enter_room(sid, ROOM_LISTENERS)
-    sio.emit(ROOM_LIST_EVENT, ROOM_MANAGER.room_list_to_json(), to=ROOM_LISTENERS)
+    sio_emit(ROOM_LIST_EVENT, ROOM_MANAGER.room_list_to_json(), to=ROOM_LISTENERS)
 
 
 @event_on("start_game")
 def sio_start_game(sid):
     user_id = get_session_info(sid)
 
-    joined_room = [r for r in sio.rooms(sid) if r != sid and r != ROOM_LISTENERS]
-    if len(joined_room) == 0:
+    room_id = get_joined_room(sid)
+    if room_id is None:
+        logger.info("joined_room len = 0, user is not joined in any room")
         raise WebSocketRoomNotJoinedException()
-    elif len(joined_room) > 1:
-        raise InternalException()
 
-    room_id = joined_room[0]
     room = ROOM_MANAGER._get_room(room_id)
-
     if room is None:
         raise InternalException()
-
-    if not room.is_full():
+    elif not room.is_full():
         raise WebSocketRoomNotFullException()
     elif not room.is_admin(user_id):
         raise WebSocketRoomNotAdminException()
 
-    request_json = {"room_name": room.room_name, "users": room.people_list_to_json()}
-    print(f"post to _internal/game: {json.dumps(request_json)}")
-    resp = requests.post(
+    resp = post(
         f"{GAME_URL}/_internal/game",
-        json={"room_name": room.room_name, "users": room.people_list_to_json()},
+        json={
+            "room_name": room.room_name,
+            "users": room.people_list_to_json(user_dict),
+        },
     )
-
     if not resp.ok:
-        print(f"resp error! {resp.content}")
-        raise InternalError()
+        logger.error(f"resp error! {resp.text}")
+        raise InternalException()
 
-    sio.emit(START_GAME_EVENT, to=room_id)
+    sio_emit(START_GAME_EVENT, {}, to=room_id)
 
 
 @event_on("debug")

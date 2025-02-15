@@ -1,24 +1,24 @@
-from typing import Any, Dict
-from django.http import HttpRequest, HttpResponseNotAllowed, JsonResponse
-from django.shortcuts import render
 import pyotp
+from django.shortcuts import render
+from django.http import HttpRequest, HttpResponseNotAllowed, JsonResponse
+from logging import Logger
+from rest_framework.request import Request
+from typing import Any, Dict
+
 
 from exceptions.CustomException import (
     BadRequestFieldException,
-    InternalException,
-    NotFoundSthException,
     TwoFARegisterException,
     TwoFARequiredException,
-    UnauthenticatedException,
 )
-from twofaapp.decorators import api_delete, api_get, api_post
-from rest_framework.request import Request
 
+from twofaapp.decorators import api_delete, api_get, api_post
 from twofaapp.envs import OTP_ISSUER
-from twofaapp.models import UserInfo
 from twofaapp.utils import get_int, get_str, get_userinfo_or_none, set_totp_secret
 
 # Create your views here.
+
+logger = Logger(__name__)
 
 
 @api_get
@@ -35,7 +35,7 @@ def get_info(req: Request):
 @api_post
 def post_info(req: Request, data: Dict[str, Any]):
     user_id = get_int(data, "user_id")
-    print("userid = ", user_id)
+    logger.info(f"userid = {user_id}")
 
     name = get_str(data, "name")
 

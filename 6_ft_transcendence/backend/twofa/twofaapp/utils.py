@@ -42,7 +42,6 @@ def set_totp_secret(user_id: int, totp_secret: str, totp_name: str):
             defaults={"twofa_secret": totp_secret, "twofa_name": totp_name},
             create_defaults={"twofa_secret": totp_secret, "twofa_name": totp_name},
         )
-        print("user_obj, crated = ", user_obj, created)
     except IntegrityError:
         raise NotFoundSthException("user")
 
@@ -52,5 +51,4 @@ def get_userinfo_or_none(user_id: int):
         user_info = UserInfo.objects.get(user_id=user_id)
     except UserInfo.DoesNotExist:
         user_info = None
-
     return user_info
