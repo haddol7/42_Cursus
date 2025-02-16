@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "twofaapp",
     "rest_framework",
-    "drf_spectacular",
 ]
 
 MIDDLEWARE = [

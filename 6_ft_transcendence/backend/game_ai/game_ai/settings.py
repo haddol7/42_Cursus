@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     "socketio",
     "ai",
     "rest_framework",
-    "drf_spectacular",
 ]
 
 MIDDLEWARE = [

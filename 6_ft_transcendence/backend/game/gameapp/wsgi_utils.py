@@ -1,6 +1,5 @@
 from logging import Logger
 from typing import List, Tuple, Any
-import requests
 from django.db import transaction
 from django.db.models import Min
 from socketio.exceptions import ConnectionRefusedError
@@ -8,6 +7,7 @@ from socketio.exceptions import ConnectionRefusedError
 from exceptions.CustomException import InternalException
 from gameapp.envs import GAMEAI_URL, JWT_URL
 from gameapp.match_objects.matchuser import RealUser
+from gameapp.requests import post
 from gameapp.sio import sio_enter_room, sio_session
 from gameapp.models import (
     TempMatch,
@@ -116,7 +116,7 @@ def clear_match_dict():
 
 
 def _get_match_id_from_jwt(jwt) -> int:
-    res = requests.post(f"{JWT_URL}/jwt/check/ai", json={"jwt": jwt})
+    res = post(f"{JWT_URL}/jwt/check/ai", json={"jwt": jwt})
     if not res.ok:
         raise ConnectionRefusedError(res.content)
 
@@ -125,7 +125,7 @@ def _get_match_id_from_jwt(jwt) -> int:
 
 
 def _get_user_id_from_jwt(jwt) -> int:
-    res = requests.post(f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": False})
+    res = post(f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": False})
 
     if not res.ok:
         raise ConnectionRefusedError(res.content)
@@ -211,9 +211,8 @@ def join_match_ai(sid: str, match_id: int):
 def join_match(sid: str, match_user: TempMatchUser, username: str):
     room_id = match_user.temp_match.id
     created = False
-    is_with_ai = False
+    is_with_ai = match_user.temp_match.is_with_ai
     if room_id not in match_dict.get_dict():
-        is_with_ai = match_user.temp_match.is_with_ai
         match_dict[room_id] = Match(match_user.temp_match, is_with_ai)
         created = True
 
@@ -221,8 +220,8 @@ def join_match(sid: str, match_user: TempMatchUser, username: str):
     match_dict[room_id].user_connected(user)
 
     if created and is_with_ai:
-        resp = requests.post(f"{GAMEAI_URL}/ai/", json={"match_id": room_id})
-        print(f"request to ai has returned! OK={resp.ok}")
+        resp = post(f"{GAMEAI_URL}/ai/", json={"match_id": room_id})
+        logger.info(f"request to ai has returned! OK={resp.ok}")
 
 
 def clear_room(room_name: str):
@@ -241,11 +240,9 @@ def clear_room(room_name: str):
 
 def on_paddle_move(sid: str, data: dict[str, Any]):
     logger.info(f"paddle_move event received! sid={sid}, data={data}")
-    # paddle_id = get_str(data, "paddleId")
 
     with sio_session(sid) as sess:
         user_id = sess["user_id"]
-
     logger.info(f"sid={sid}, user_id={user_id}")
 
     room = match_dict.get_room_by_userid(user_id)

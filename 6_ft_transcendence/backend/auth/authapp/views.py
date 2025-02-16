@@ -11,6 +11,7 @@ from rest_framework.request import Request
 from typing import Any, Dict
 
 
+from authapp.requests import delete, get, post
 from authapp.decorators import (
     api_delete,
     api_get,
@@ -41,7 +42,7 @@ def get_42_code(req: Request):
     code = get_str(req.query_params, "code")
 
     # ensure state is state
-    res = requests.post(
+    res = post(
         OAUTH_TOKEN_URL,
         data={
             "grant_type": "authorization_code",
@@ -72,7 +73,7 @@ def get_42_code(req: Request):
 def refresh_token(req: Request, data: Dict[str, Any]):
     refresh_token = get_str(data, "refreshToken")
 
-    res = requests.post(f"{JWT_URL}/jwt/refresh", json={"refresh_token": refresh_token})
+    res = post(f"{JWT_URL}/jwt/refresh", json={"refresh_token": refresh_token})
     if not res.ok:
         if res.content == "jwt.expired":
             return HttpResponse("jwt.invalid", status=res.status_code)
@@ -90,7 +91,7 @@ def refresh_token(req: Request, data: Dict[str, Any]):
 @api_get
 def get_2fa(req: Request, user_id: int):
     # Safety: user_id is authenticated with jwt token, so it is safe to call GET
-    res = requests.get(f"{TWOFA_URL}/twofa/info", params={"user_id": user_id})
+    res = get(f"{TWOFA_URL}/twofa/info", params={"user_id": user_id})
 
     if not res.ok:
         return HttpResponse(res.content, status=res.status_code)
@@ -105,7 +106,7 @@ def post_2fa_new(req: Request, user_id: int, data: Dict[str, Any]):
     name = get_str(data, "name")
 
     # Safety: user is authenticated with JWT token, so it is safe to call POST
-    res = requests.post(
+    res = post(
         f"{TWOFA_URL}/twofa/info", json={"user_id": user_id, "name": name}
     )
 
@@ -120,7 +121,7 @@ def post_2fa_new(req: Request, user_id: int, data: Dict[str, Any]):
 @api_post
 def post_2fa(req: Request, user_id: int, data: Dict[str, Any]):
     code = get_str(data, "code")
-    res = requests.post(
+    res = post(
         f"{TWOFA_URL}/twofa/code", json={"user_id": user_id, "code": code}
     )
 
@@ -141,7 +142,7 @@ def handle_2fa(req: HttpRequest):
 @authenticated()
 @api_delete
 def logout(req: Request, user_id: int):
-    res = requests.delete(f"{JWT_URL}/jwt/token", params={"user_id": user_id})
+    res = delete(f"{JWT_URL}/jwt/token", params={"user_id": user_id})
     if not res.ok:
         raise InternalException()
     return JsonResponse({})
@@ -161,7 +162,7 @@ def get_42_code_mock(req: Request):
 @authenticated(skip_2fa=True)
 @api_post
 def mock_2fa(req: Request, user_id: int, data: Dict[str, Any]):
-    res = requests.post(
+    res = post(
         f"{TWOFA_URL}/twofa/code",
         json={"user_id": user_id, "code": "1234", "skip": True},
     )

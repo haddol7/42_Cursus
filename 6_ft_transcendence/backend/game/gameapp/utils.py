@@ -99,7 +99,7 @@ def fetch_username(user_id: int) -> str:
         raise InternalException()
 
     resp_json = resp.json()
-    return resp_json["user_name"]
+    return resp_json
 
 
 def get_match_user_or_none(user_id: int):

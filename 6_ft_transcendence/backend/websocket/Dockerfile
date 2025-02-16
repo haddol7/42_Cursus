@@ -1,18 +1,13 @@
 FROM python:3.13.0-alpine
 
-RUN apk add --no-cache curl
-
 # Install packages
 RUN python -m pip install --upgrade pip
 RUN python -m pip install \
     Django \
     "psycopg[binary]" \
-    django-debug-toolbar \
     python-dotenv \
     requests \
-    pyjwt \
     logging \
-    pyotp \
     python-socketio \
     gunicorn
 

@@ -6,6 +6,7 @@ from rest_framework.decorators import parser_classes, api_view
 from rest_framework.parsers import JSONParser
 from rest_framework.request import Request
 
+from ai.requests import post
 from game_ai.envs import JWT_URL
 from exceptions.CustomException import BadRequestException, UnauthenticatedException
 
@@ -54,9 +55,7 @@ def authenticated(skip_2fa=False):
                 raise UnauthenticatedException()
 
             jwt = authorization_header[7:]
-            res = requests.post(
-                f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": skip_2fa}
-            )
+            res = post(f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": skip_2fa})
             if not res.ok:
                 return HttpResponse(res.content, status=res.status_code)
 

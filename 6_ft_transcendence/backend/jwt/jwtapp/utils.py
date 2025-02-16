@@ -16,6 +16,7 @@ from exceptions.CustomException import (
     JwtInvalidException,
     TwoFARegisterException,
 )
+from jwtapp.requests import delete, get
 from jwtapp.envs import (
     AI_USERID,
     JWT_AI_EXPIRE_SECONDS,
@@ -172,7 +173,7 @@ def set_user_secret(
     if created:
         return created
 
-    res = requests.delete(TWOFA_URL, params={"user_id": user_id})
+    res = delete(TWOFA_URL, params={"user_id": user_id})
     if not res.ok and res.text == TwoFARegisterException().__str__():
         created = True
 
@@ -217,7 +218,7 @@ def check_jwt(encoded_jwt: str, skip_2fa: bool) -> JwtPayload:
         return payload
 
     # Safety: JWT signature has verified, so we know this is safe to GET
-    resp = requests.get(
+    resp = get(
         f"{TWOFA_URL}/twofa/check", params={"user_id": payload["user_id"]}
     )
     if not resp.ok:

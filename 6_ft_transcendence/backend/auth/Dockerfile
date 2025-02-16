@@ -1,24 +1,14 @@
 FROM python:3.13.0-alpine
 
-RUN apk add --no-cache \
-    curl \
-    postgresql
-
 # Install packages
 RUN python -m pip install --upgrade pip
 RUN python -m pip install \
     Django \
     "psycopg[binary]" \
-    django-debug-toolbar \
     python-dotenv \
     requests \
-    pyjwt \
     logging \
-    pyotp \
     djangorestframework \
-    markdown \
-    django-filter \
-    drf-spectacular \
     requests \
     gunicorn
 

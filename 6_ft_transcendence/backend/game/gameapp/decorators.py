@@ -1,10 +1,11 @@
 from typing import List
 from django.http import HttpRequest, HttpResponse
-import requests
 from rest_framework.decorators import parser_classes, api_view
 
 from rest_framework.parsers import JSONParser
 from rest_framework.request import Request
+
+from gameapp.requests import post
 
 from .envs import JWT_URL
 from exceptions.CustomException import BadRequestException, UnauthenticatedException
@@ -54,7 +55,7 @@ def authenticated(skip_2fa=False):
                 raise UnauthenticatedException()
 
             jwt = authorization_header[7:]
-            res = requests.post(
+            res = post(
                 f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": skip_2fa}
             )
             if not res.ok:

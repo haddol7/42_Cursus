@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     "testapp",
     "gameapp",
     "rest_framework",
-    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
