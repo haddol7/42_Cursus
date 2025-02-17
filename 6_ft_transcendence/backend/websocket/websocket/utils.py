@@ -4,7 +4,7 @@ import string
 
 from django.http import QueryDict
 from typing import Any, Dict, List
-from logging import Logger
+import logging
 
 
 from exceptions.CustomException import BadRequestFieldException, InternalException
@@ -14,7 +14,7 @@ from websocket.requests import get
 from websocket.sio import sio, ROOM_LISTENERS
 
 
-logger = Logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def now() -> datetime.datetime:

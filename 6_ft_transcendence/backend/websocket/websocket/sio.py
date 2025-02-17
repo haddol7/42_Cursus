@@ -1,5 +1,5 @@
 import json
-from logging import Logger
+import logging
 from typing import Any
 import socketio
 from websocket.envs import FRONTEND_URL
@@ -8,7 +8,7 @@ sio = socketio.Server(
     cors_allowed_origins=["https://localhost", f"https://{FRONTEND_URL}"]
 )
 
-logger = Logger(__name__)
+logger = logging.getLogger(__name__)
 
 ROOM_LISTENERS = "room_listeners"
 ROOM_LIST_EVENT = "room_list"

@@ -1,4 +1,4 @@
-from logging import Logger
+import logging
 from typing import List, Tuple, Any
 from django.db import transaction
 from django.db.models import Min
@@ -25,7 +25,7 @@ from gameapp.utils import (
 )
 
 
-logger = Logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def make_rooms(room_name: str, user_id: List[int]):

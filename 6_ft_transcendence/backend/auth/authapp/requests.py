@@ -1,5 +1,5 @@
 import json as j
-from logging import Logger
+import logging
 from typing import Any
 
 import requests
@@ -7,7 +7,7 @@ import requests
 from exceptions.CustomException import InternalException
 
 
-logger = Logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def post(

@@ -1,6 +1,6 @@
 import random
 import threading
-from logging import Logger
+import logging
 from typing import TYPE_CHECKING
 
 from exceptions.CustomException import InternalException
@@ -34,7 +34,7 @@ GAME_RIGHTEND = GAME_BOUNDS["x"] - PADDLE_WIDTH / 2
 
 
 class MatchProcess(threading.Thread):
-    logger = Logger(__name__)
+    logger = logging.getLogger(__name__)
 
     def __init__(
         self,

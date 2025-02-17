@@ -1,7 +1,7 @@
 import datetime
 from datetime import timedelta
 from http.client import INTERNAL_SERVER_ERROR
-from logging import Logger
+import logging
 from django.http import JsonResponse
 import socketio
 import socketio.exceptions
@@ -9,7 +9,7 @@ from exceptions.CustomException import CustomException
 from .sio import sio
 
 
-logger = Logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def event_on(event: str, *args, **kwargs):

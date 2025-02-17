@@ -1,6 +1,6 @@
 import enum
 import json
-from logging import Logger
+import logging
 from re import L
 import threading
 import requests
@@ -42,7 +42,7 @@ class MatchStage(enum.Enum):
 
 
 class Match:
-    logger = Logger(__name__)
+    logger = logging.getLogger(__name__)
 
     def __init__(self, match: TempMatch, is_with_ai: bool = False) -> None:
         self.stage = MatchStage.NOT_STARTED

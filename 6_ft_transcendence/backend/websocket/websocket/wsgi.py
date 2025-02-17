@@ -11,7 +11,7 @@ import json
 import os
 import socketio
 
-from logging import Logger
+import logging
 from typing import Any, List, TypedDict
 
 from django.core.wsgi import get_wsgi_application
@@ -59,7 +59,7 @@ application = get_wsgi_application()
 application = socketio.WSGIApp(sio, application)
 
 
-logger = Logger(__name__)
+logger = logging.getLogger(__name__)
 
 sid_list = []
 
