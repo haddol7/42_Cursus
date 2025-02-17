@@ -74,18 +74,18 @@ export class EditProfilePage {
     const newNick = document.getElementById("newNick");
     const newMemo = document.getElementById("newMemo");
 
-    const imgData = new FormData();
+    const newUserInfo = new FormData();
     console.log(newAvartar.files[0]);
-    imgData.append("image_url", newAvartar.files[0]);
-    imgData.append("user_name", replaceAllScriptChar(newNick.value));
-    imgData.append("memo", replaceAllScriptChar(newMemo.value));
+    newUserInfo.append("image_url", newAvartar.files[0]);
+    newUserInfo.append("user_name", replaceAllScriptChar(newNick.value));
+    newUserInfo.append("memo", replaceAllScriptChar(newMemo.value));
 
     const response = await fetch(`${USER_URL}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${JWT.getJWTTokenFromCookie().accessToken}`,
       },
-      body: imgData,
+      body: newUserInfo,
     });
 
     if (!response.ok) {

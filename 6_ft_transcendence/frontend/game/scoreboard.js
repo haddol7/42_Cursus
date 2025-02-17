@@ -16,7 +16,6 @@ export function updateScore(scene, player1Score, player2Score, paddleId) {
   // 기존 점수판 제거
   const oldText = scene.getObjectByName(SCORE_TEXT_NAME);
   if (oldText) {
-    console.log("remove occured");
     scene.remove(oldText);
   }
 
@@ -27,9 +26,6 @@ export function updateScore(scene, player1Score, player2Score, paddleId) {
       ? `${player1Score} : ${player2Score}`
       : `${player2Score} : ${player1Score}`;
 
-  console.log(`paddleId : ${paddleId}`);
-  console.log(`player1Score : ${player1Score}`);
-  console.log(`player2Score : ${player2Score}`);
   const textGeometry = new TextGeometry(textString, {
     font: fontCache,
     size: FONT_SIZE,

@@ -1,7 +1,6 @@
 import { AUTH_URL } from "./globalConstants.mjs";
 import { JWT } from "./jwt.mjs";
 import { logout } from "./logout.mjs";
-// import { safe_fetch } from "../utility.mjs";
 
 export class TwoFA {
   static isNewUser = true;

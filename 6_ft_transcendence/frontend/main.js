@@ -3,6 +3,7 @@ import { PageManager } from "./modules/page/manager.mjs";
 import { TwoFAPage } from "./modules/page/twoFA.mjs";
 import { FTOauth } from "./modules/authentication/ftOauth.mjs";
 import { JWT } from "./modules/authentication/jwt.mjs";
+import { ErrorPage } from "./modules/page/error.mjs";
 
 const whenResize = () => {
   if (
@@ -26,12 +27,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (FTOauth.isAlreadyOauth()) {
     try {
       await FTOauth.sendFTOauthCodeToServer();
+      const url = FTOauth.removeCodeFromUrl();
+      TwoFAPage.render(url);
     } catch (e) {
-      alert(e);
+      ErrorPage.render(e);
     }
-
-    const url = FTOauth.removeCodeFromUrl();
-    TwoFAPage.render(url);
   } else {
     LoginPage.renderAndReplaceHistory();
   }

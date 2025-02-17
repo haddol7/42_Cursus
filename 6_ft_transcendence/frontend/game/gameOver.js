@@ -1,9 +1,7 @@
 export function showGameOver(winner, paddle1, paddle2, nextOpponent) {
-  document.body.style = "overflow: visible;"
-  
   const gameOverPopup = document.getElementById("gameOverPopup");
   const gameResult = document.getElementById("gameResult");
-  // const restartButton = document.getElementById("restartButton");
+  const restartButton = document.getElementById("restartButton");
 
   // nextOpponent에 따라 UI 동적 변경
   gameResult.innerHTML = `
@@ -42,6 +40,7 @@ export function showGameOver(winner, paddle1, paddle2, nextOpponent) {
   } else {
     setButtonText("다음 게임");
   }
+
   // 버튼 스타일 동적 적용 (초기 설정)
   restartButton.style.padding = "20px 40px";
   restartButton.style.fontSize = "24px";
@@ -51,13 +50,12 @@ export function showGameOver(winner, paddle1, paddle2, nextOpponent) {
   restartButton.style.color = "#fff";
   restartButton.style.border = "none";
   restartButton.style.boxShadow = "0 6px 10px rgba(0, 0, 0, 0.3)";
-  
+
   // 버튼 텍스트 변경 함수
   function setButtonText(newText) {
-    restartButton.textContent = newText;
+    document.getElementById("restartButton").textContent = newText;
   }
-  
+
   // 초기 설정
   setButtonText("나가기");
 }
-
