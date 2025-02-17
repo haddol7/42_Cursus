@@ -1,7 +1,17 @@
 from typing import TypedDict
 
+AI_ID = -1
+
 
 class MatchUser(TypedDict):
-    id: int
-    name: str
+    is_ai: bool
     sid: str
+    id: int
+
+
+class RealUser(MatchUser):
+    name: str
+
+
+class AiUser(MatchUser):
+    pass

@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "jwtapp",
     "rest_framework",
-    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -135,18 +134,28 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-REST_FRAMEWORK = {
-    # YOUR SETTINGS
-    "DEFAULT_PARSER_CLASSES": [
-        "rest_framework.parsers.JSONParser",
-    ],
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-}
 
-SPECTACULAR_SETTINGS = {
-    "TITLE": "Your Project API",
-    "DESCRIPTION": "Your project description",
-    "VERSION": "1.0.0",
-    "SERVE_INCLUDE_SCHEMA": False,
-    # OTHER SETTINGS
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": "general.log",
+            "formatter": "verbose",
+        },
+        "stdout": {"class": "logging.StreamHandler", "formatter": "simple"},
+    },
+    "formatters": {
+        "verbose": {
+            "format": "{name} {levelname} {asctime} {module}:{lineno:d} {process:d} {thread:d}  |  {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "[{asctime}] {levelname:5s}  |  {message}",
+            "datefmt": "%d/%b/%Y %H:%M:%S",
+            "style": "{",
+        },
+    },
+    "loggers": {"": {"level": "DEBUG", "handlers": ["file", "stdout"]}},
 }

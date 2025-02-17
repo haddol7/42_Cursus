@@ -15,6 +15,8 @@ from pathlib import Path
 import dotenv
 import os
 
+from websocket.envs import FRONTEND_URL
+
 
 dotenv.load_dotenv()
 
@@ -31,7 +33,6 @@ SECRET_KEY = "django-insecure-^#q++_b99ot3u0o0*iz@a29gur@1^ko@ze$-3w^u%l_zj#2lhv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-FRONTEND_URL = os.environ["FRONTEND_URL"]
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "websocket", FRONTEND_URL]
 
 
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "websocket.middleware.ExceptionMiddleware",
 ]
 
 ROOT_URLCONF = "websocket.urls"
@@ -134,3 +136,28 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STATIC_ROOT = BASE_DIR / "static"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": "general.log",
+            "formatter": "verbose",
+        },
+        "stdout": {"class": "logging.StreamHandler", "formatter": "simple"},
+    },
+    "formatters": {
+        "verbose": {
+            "format": "{name} {levelname} {asctime} {module}:{lineno:d} {process:d} {thread:d}  |  {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "[{asctime}] {levelname:5s}  |  {message}",
+            "datefmt": "%d/%b/%Y %H:%M:%S",
+            "style": "{",
+        },
+    },
+    "loggers": {"": {"level": "DEBUG", "handlers": ["file", "stdout"]}},
+}

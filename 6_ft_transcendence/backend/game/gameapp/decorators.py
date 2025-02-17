@@ -1,10 +1,11 @@
 from typing import List
 from django.http import HttpRequest, HttpResponse
-import requests
 from rest_framework.decorators import parser_classes, api_view
 
 from rest_framework.parsers import JSONParser
 from rest_framework.request import Request
+
+from gameapp.requests import post
 
 from .envs import JWT_URL
 from exceptions.CustomException import BadRequestException, UnauthenticatedException
@@ -36,13 +37,11 @@ def api_post(func):
 
 
 def api_delete(func):
-    _func = api_endpoint(["DELETE"])
-    return _func(func)
+    return api_endpoint(["DELETE"])(func)
 
 
 def api_get(func):
-    _func = api_endpoint(["GET"])
-    return _func(func)
+    return api_endpoint(["GET"])(func)
 
 
 def authenticated(skip_2fa=False):
@@ -56,9 +55,7 @@ def authenticated(skip_2fa=False):
                 raise UnauthenticatedException()
 
             jwt = authorization_header[7:]
-            res = requests.post(
-                f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": skip_2fa}
-            )
+            res = post(f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": skip_2fa})
             if not res.ok:
                 return HttpResponse(res.content, status=res.status_code)
 

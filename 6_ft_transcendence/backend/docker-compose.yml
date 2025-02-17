@@ -47,6 +47,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      auth:
+        condition: service_started
     tty: true
     init: true
     restart: always
@@ -62,6 +64,7 @@ services:
       - JWT_URL=${JWT_URL}
       - FRONTEND_URL=${FRONTEND_URL}
       - GAME_URL=${GAME_URL}
+      - USER_URL=${USER_URL}
   game:
     image: game
     container_name: game

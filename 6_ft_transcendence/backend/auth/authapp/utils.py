@@ -1,8 +1,8 @@
 import datetime
 from typing import Any, Dict, Tuple
 
-from django.http import HttpResponse, QueryDict
-import requests
+from django.http import QueryDict
+from authapp.requests import get, post
 from authapp.envs import FORTY_TWO_API_URL, JWT_URL, USER_URL
 from authapp.models import User
 from exceptions.CustomException import CustomException
@@ -58,7 +58,7 @@ def get_bool(dict: Dict[str, Any] | QueryDict, key: str) -> bool:
 
 
 def get_username_from_42(access_token) -> Tuple[int, str]:
-    res = requests.get(
+    res = get(
         f"{FORTY_TWO_API_URL}/v2/me",
         headers={"Authorization": f"Bearer {access_token}"},
     )
@@ -77,14 +77,14 @@ def create_user(id_42: int, username: str) -> Tuple[str, str, bool]:
 
     if created:
         try:
-            requests.post(
+            post(
                 f"{USER_URL}/_internal/user",
                 json={"user_id": user.id, "user_name": username},
             )
         except:
             pass
 
-    resp = requests.post(f"{JWT_URL}/jwt/token", json={"user_id": user.id})
+    resp = post(f"{JWT_URL}/jwt/token", json={"user_id": user.id})
     if not resp.ok:
         raise CustomException(resp.text, resp.status_code)
 

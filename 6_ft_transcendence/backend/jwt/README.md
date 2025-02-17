@@ -10,14 +10,18 @@
 
 ### POST /jwt/check
 
+- Request
+
 ```json
-Request:
 {
     "jwt": "string",
     "skip_2fa": "boolean"
 }
+```
 
-Response:
+- Response
+
+```json
 {
     "user_id": "int"
 }
@@ -36,13 +40,17 @@ jwt가 유효한 경우 200대 응답 코드와 `user_id`를 반환합니다.
 
 ### POST /jwt/refresh
 
+- Request
+
 ```json
-Request:
 {
     "refresh_token": "string"
 }
+```
 
-Response:
+- Response
+
+```json
 {
     "access_token": "string",
     "refresh_token": "string"
@@ -61,14 +69,17 @@ Response:
 
 ### POST /jwt/token
 
+- Request
+
 ```json
-Request:
 {
     "user_id": "int",
-    
 }
+```
 
-Response:
+- Response
+
+```json
 {
     "access_token": "string",
     "refresh_token": "string",
@@ -114,7 +125,7 @@ Response:
 
 `user_id`를 가진 사용자가 현재 온라인인지를 반환합니다.
 
-내부적으로, JWT 만료시간을 가지고 있어 그 만료시간을 지났는지를 체크하는 것으로 합니다.
+내부적으로, JWT 만료시간을 가지고 있어 그 만료시간이 지났는지를 체크하는 것으로 합니다.
 
 사용자가 존재하지 않더라도 offline인 것으로 하고 에러를 반환하지 않습니다.
 
@@ -123,13 +134,17 @@ Response:
 
 ### POST /jwt/token/ai
 
+- Request
+
 ```json
-Request:
 {
     "match_id": "int",
 }
+```
 
-Response:
+- Response
+
+```json
 {
     "access_token": "string"
 }
@@ -144,13 +159,17 @@ Response:
 
 ### POST /jwt/check/ai
 
+- Request
+
 ```json
-Request:
 {
     "jwt": "string"
 }
+```
 
-Response:
+- Response
+
+```json
 {
     "match_id": "int"
 }

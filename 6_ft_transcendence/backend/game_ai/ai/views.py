@@ -1,5 +1,5 @@
 from typing import Any
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
 import requests
@@ -8,6 +8,7 @@ from rest_framework.request import Request
 from ai.decorators import api_post
 import socketio
 
+from ai.requests import post
 from ai.utils import get_int
 from game_ai.envs import GAME_URL, JWT_URL
 
@@ -127,7 +128,10 @@ client_list: list[AiClient] = []
 @api_post
 def post_ai(request: Request, data: dict[str, Any]):
     match_id = get_int(data, "match_id")
-    resp = requests.post(f"{JWT_URL}/jwt/token/ai", json={"match_id": match_id})
+    resp = post(f"{JWT_URL}/jwt/token/ai", json={"match_id": match_id})
+    if not resp.ok:
+        return HttpResponse(resp.content, status=resp.status_code)
+
     jwt: str = resp.json()["access_token"]
 
     ai_client = AiClient(jwt)
