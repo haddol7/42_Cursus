@@ -313,7 +313,7 @@ class DashboardView(APIView, JWTAuthenticationMixin):
         except PermissionError as e:
             return Response({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            return Response({'error': 'Internal Server Error.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': f'Internal Server Error : {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def _get_user_profile(self, user_id: int) -> Profile:
         user_profile = Profile.objects.filter(user_id=user_id).first()
@@ -324,7 +324,13 @@ class DashboardView(APIView, JWTAuthenticationMixin):
     def _get_user_stats(self, user_profile: Profile) -> UserStats:
         user_stats = UserStats.objects.filter(user=user_profile).first()
         if not user_stats:
-            raise Exception("User statistics not found.")
+            user_stats = UserStats(
+                user=user_profile,
+                total_games=0,
+                win_cnt=0,
+                lose_cnt=0,
+                total_play_time=0
+			)
         return user_stats
 
     def _compute_win_rate_trend(self, user: Profile) -> list:
@@ -335,7 +341,7 @@ class DashboardView(APIView, JWTAuthenticationMixin):
         matches = MatchHistory.objects.filter(
             Q(player1_id=user) | Q(player2_id=user)
         ).order_by('match_date')
-        
+
         cumulative_wins = 0 #누적된 이긴 횟수
         trend = []
         for idx, match in enumerate(matches, start=1):
@@ -372,6 +378,7 @@ class DashboardView(APIView, JWTAuthenticationMixin):
         qs = MatchHistory.objects.filter(
             Q(player1_id=user) | Q(player2_id=user)
         ).order_by('-match_date')[:10]
+        
         matches = []
         for match in qs:
             if match.player1_id == user:
@@ -391,13 +398,32 @@ class DashboardView(APIView, JWTAuthenticationMixin):
                 "opponent_score": opponent_score,
                 "game_time": match.play_time,
             })
+        if not matches:
+            default_match = {
+                "user_name": user.user_name,
+                "opponent_name": "Nan",
+                "win": False,
+                "user_score": 0,
+                "opponent_score": 0,
+                "game_time": 0
+			}
+            return [default_match]
         return matches
 
     def _get_top_5_winners(self) -> list:
         """
         상위 5명의 유저네임과 승리 횟수 반환
         """
-        qs = UserStats.objects.order_by('-win_cnt')[:5]
+        qs = UserStats.objects.filter(total_games__gt=0).order_by('-win_cnt')[:5]
+        if not qs.exists():
+            return [
+                {"user_name": "Nan", "win_count": 0},
+                {"user_name": "Nan", "win_count": 0},
+                {"user_name": "Nan", "win_count": 0},
+                {"user_name": "Nan", "win_count": 0},
+                {"user_name": "Nan", "win_count": 0}
+			]
+            
         return [{
             "user_name": stat.user.user_name,
             "win_count": stat.win_cnt
@@ -408,6 +434,14 @@ class DashboardView(APIView, JWTAuthenticationMixin):
         상위 5명의 유저네임과 총 게임 이용 시간 반환 
         """
         qs = UserStats.objects.filter(total_games__gt=0).order_by('-win_cnt')[:5]
+        if not qs.exists():
+            return [
+                {"user_name": "Nan", "game_time": 0},
+                {"user_name": "Nan", "game_time": 0},
+                {"user_name": "Nan", "game_time": 0},
+                {"user_name": "Nan", "game_time": 0},
+                {"user_name": "Nan", "game_time": 0}
+			]
         return [{
             "user_name": stat.user.user_name,
             "game_time": stat.total_play_time
@@ -418,6 +452,7 @@ class DashboardView(APIView, JWTAuthenticationMixin):
         전체 경기 중 최근 10경기의 정보를 반환
         """
         qs = MatchHistory.objects.all().order_by('-match_date')[:10]
+        
         matches = []
         for match in qs:
             if match.winner_id == match.player1_id:
@@ -436,4 +471,13 @@ class DashboardView(APIView, JWTAuthenticationMixin):
                 "loser_score": loser_score,
                 "match_playtime": match.play_time,
             })
+        if not matches:
+            default_match = {
+                "winner_name": "Nan",
+                "loser_name": "Nan",
+                "winner_score": 0,
+                "loser_score": 0,
+                "match_playtime": 0
+			}
+            return [default_match]
         return matches
