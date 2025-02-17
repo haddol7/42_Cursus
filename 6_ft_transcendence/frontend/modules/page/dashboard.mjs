@@ -315,12 +315,12 @@ export class DashBoardPage {
 		data: {
 			labels: ["n-4 match", "n-3 match", "n-2 match", "n-1 match", "n match"],
 			datasets: [{
-				data: [testJson.user_session.win_rate_trend.current_user[0], testJson.user_session.win_rate_trend.current_user[1], testJson.user_session.win_rate_trend.current_user[2], testJson.user_session.win_rate_trend.current_user[3], testJson.user_session.win_rate_trend.current_user[4]],
+				data: testJson.user_session.win_rate_trend.current_user,
 				label: testJson.user_session.user_stats.user_name,
 				borderColor: "#3e95cd",
 				fill: false
 			}, {
-				data: [testJson.user_session.win_rate_trend.top_user[0], testJson.user_session.win_rate_trend.top_user[1], testJson.user_session.win_rate_trend.top_user[2], testJson.user_session.win_rate_trend.top_user[3], testJson.user_session.win_rate_trend.top_user[4]],
+				data: testJson.user_session.win_rate_trend.top_user,
 				label: "top ranker",
 				borderColor: "#8e5ea2",
 				fill: false
