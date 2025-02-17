@@ -106,9 +106,7 @@ def post_2fa_new(req: Request, user_id: int, data: Dict[str, Any]):
     name = get_str(data, "name")
 
     # Safety: user is authenticated with JWT token, so it is safe to call POST
-    res = post(
-        f"{TWOFA_URL}/twofa/info", json={"user_id": user_id, "name": name}
-    )
+    res = post(f"{TWOFA_URL}/twofa/info", json={"user_id": user_id, "name": name})
 
     if not res.ok:
         return HttpResponse(res.content, status=res.status_code)
@@ -121,9 +119,7 @@ def post_2fa_new(req: Request, user_id: int, data: Dict[str, Any]):
 @api_post
 def post_2fa(req: Request, user_id: int, data: Dict[str, Any]):
     code = get_str(data, "code")
-    res = post(
-        f"{TWOFA_URL}/twofa/code", json={"user_id": user_id, "code": code}
-    )
+    res = post(f"{TWOFA_URL}/twofa/code", json={"user_id": user_id, "code": code})
 
     if not res.ok:
         return HttpResponse(res.content, status=res.status_code)

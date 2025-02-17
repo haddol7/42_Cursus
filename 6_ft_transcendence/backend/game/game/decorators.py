@@ -1,10 +1,10 @@
-import datetime
-from datetime import timedelta
+from datetime import datetime, timezone, timedelta
 from http.client import INTERNAL_SERVER_ERROR
+
 from logging import Logger
-from django.http import JsonResponse
-import socketio
-import socketio.exceptions
+from socketio.exceptions import ConnectionRefusedError
+
+
 from exceptions.CustomException import CustomException
 from gameapp.sio import sio
 
@@ -15,14 +15,14 @@ logger = Logger(__name__)
 def event_on(event: str, *args, **kwargs):
     def handle_exception(func):
         def _wrapper(*args, **kwargs):
-            start = datetime.datetime.now(datetime.timezone.utc)
+            start = datetime.now(timezone.utc)
             try:
                 logger.debug(f"This websocket is for event={event}")
                 ret = func(*args, **kwargs)
                 if ret is None:
                     return {}
                 return ret
-            except socketio.exceptions.ConnectionRefusedError as e:
+            except ConnectionRefusedError as e:
                 logger.error("connection refused error")
                 logger.exception(e)
                 raise e
@@ -35,7 +35,7 @@ def event_on(event: str, *args, **kwargs):
                 logger.exception(e)
                 return {"error": "internal_error", "code": INTERNAL_SERVER_ERROR}
             finally:
-                elapsed = datetime.datetime.now(datetime.timezone.utc) - start
+                elapsed = datetime.now(timezone.utc) - start
                 logger.debug(f"Elapsed = {elapsed / timedelta(milliseconds=1)}ms")
 
         _outer = sio.on(event, *args, **kwargs)(_wrapper)  # type: ignore

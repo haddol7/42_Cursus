@@ -1,3 +1,4 @@
+import logging
 from typing import Any, Dict, List, TypedDict
 from django.http import HttpRequest, HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import render
@@ -13,6 +14,9 @@ from gameapp.utils import get_int, get_list, get_str
 # Create your views here.
 
 
+logger = logging.Logger(__name__)
+
+
 class UserNameDto(TypedDict):
     user_id: int
     user_name: str
@@ -24,7 +28,8 @@ class UserNameDto(TypedDict):
 def make_game(req: Request, data: Dict[str, Any]):
     room_name = get_str(data, "room_name")
     users = get_list(data, "users")
-    print(users)
+    logger.info(users)
+
     users_list: List[UserNameDto] = []
     for u in users:
         if not isinstance(u, dict):

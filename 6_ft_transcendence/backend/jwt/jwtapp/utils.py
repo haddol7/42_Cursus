@@ -218,9 +218,7 @@ def check_jwt(encoded_jwt: str, skip_2fa: bool) -> JwtPayload:
         return payload
 
     # Safety: JWT signature has verified, so we know this is safe to GET
-    resp = get(
-        f"{TWOFA_URL}/twofa/check", params={"user_id": payload["user_id"]}
-    )
+    resp = get(f"{TWOFA_URL}/twofa/check", params={"user_id": payload["user_id"]})
     if not resp.ok:
         raise CustomException(resp.text, resp.status_code)
 

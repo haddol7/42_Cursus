@@ -1,5 +1,4 @@
-import datetime
-from datetime import timedelta
+from datetime import timedelta, datetime, timezone
 from typing import Any
 from logging import Logger
 
@@ -15,10 +14,10 @@ class ExceptionMiddleware:
         self.get_response = get_response
 
     def __call__(self, request) -> Any:
-        start = datetime.datetime.now(datetime.timezone.utc)
+        start = datetime.now(timezone.utc)
         self.logger.info(f"middleware start {request.method} {request.path}")
         response = self.get_response(request)
-        elapsed = datetime.datetime.now(datetime.timezone.utc) - start
+        elapsed = datetime.now(timezone.utc) - start
         self.logger.info(
             f"middleware end, elapsed={elapsed / timedelta(milliseconds=1)}ms"
         )

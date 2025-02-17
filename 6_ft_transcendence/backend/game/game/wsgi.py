@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 
 from logging import Logger
 import os
+from typing import Any
 from django.core.wsgi import get_wsgi_application
 import socketio
 import socketio.exceptions
@@ -36,7 +37,7 @@ logger = Logger(__name__)
 
 
 @event_on("connect", namespace=NAMESPACE)
-def connect(sid, environ, auth):
+def connect(sid: str, environ, auth: dict[str, Any]):
     try:
         on_connect(sid, auth)
     except socketio.exceptions.ConnectionRefusedError as e:
@@ -52,17 +53,17 @@ def connect(sid, environ, auth):
 
 
 @event_on("paddleMove", namespace=NAMESPACE)
-def paddle_move(sid, data):
+def paddle_move(sid: str, data: dict[str, Any]):
     on_paddle_move(sid, data)
 
 
 @event_on("nextGame", namespace=NAMESPACE)
-def next_game(sid):
+def next_game(sid: str, data: dict[str, Any]):
     on_next_game(sid)
 
 
 @event_on("disconnect", namespace=NAMESPACE)
-def disconnect(sid, reason):
+def disconnect(sid: str, reason):
     try:
         on_disconnect(sid, reason)
     except Exception as e:

@@ -54,9 +54,7 @@ def authenticated(skip_2fa=False):
                 raise UnauthenticatedException()
 
             jwt = authorization_header[7:]
-            res = post(
-                f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": skip_2fa}
-            )
+            res = post(f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": skip_2fa})
             if not res.ok:
                 return HttpResponse(res.content, status=res.status_code)
 

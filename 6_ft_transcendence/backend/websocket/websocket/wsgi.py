@@ -183,7 +183,7 @@ def _connect(sid: str, environ, auth: dict[str, Any]):
 
 
 @event_on("connect")
-def connect(sid, environ, auth):
+def connect(sid: str, environ, auth: dict[str, Any]):
     try:
         return _connect(sid, environ, auth)
     except CustomException as e:
@@ -197,7 +197,7 @@ def connect(sid, environ, auth):
 
 
 @event_on("disconnect")
-def disconnect(sid, reason):
+def disconnect(sid: str, reason):
     logger.info(f"sid={sid} Disconnecting")
     user_id = get_session_info(sid)
 
@@ -246,7 +246,7 @@ def sio_make_room(sid: str, data: dict[str, Any]):
 
 
 @event_on("enter_room")
-def sio_enter_room(sid, data):
+def sio_enter_room(sid: str, data: dict[str, Any]):
     user_id = get_session_info(sid)
 
     room_id = get_str(data, "room_id")
@@ -264,7 +264,7 @@ def sio_enter_room(sid, data):
 
 
 @event_on("leave_room")
-def sio_leave_room(sid):
+def sio_leave_room(sid: str, data: dict[str, Any]):
     user_id = get_session_info(sid)
 
     room_id = get_joined_room(sid)
@@ -281,7 +281,7 @@ def sio_leave_room(sid):
 
 
 @event_on("start_game")
-def sio_start_game(sid):
+def sio_start_game(sid: str, data: dict[str, Any]):
     user_id = get_session_info(sid)
 
     room_id = get_joined_room(sid)
@@ -312,5 +312,5 @@ def sio_start_game(sid):
 
 
 @event_on("debug")
-def sio_debug(sid):
+def sio_debug(sid: str, data: dict[str, Any]):
     return {"rooms": sio.rooms(sid)}
