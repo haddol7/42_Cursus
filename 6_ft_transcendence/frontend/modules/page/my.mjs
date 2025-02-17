@@ -161,15 +161,21 @@ export class MyPage {
     }
 
     fl.forEach((value) => {
-      const friendInfo = document.createElement("p");
-      friendInfo.classList.add("paragraph");
+      const friendInfo = document.createElement("div");
+      friendInfo.classList.add("oneToOneRatioWrapher");
       friendList.appendChild(friendInfo);
 
       const friendLink = document.createElement("a");
       friendLink.classList.add("link");
+      friendLink.textContent = String(value.user_name);
       friendInfo.appendChild(friendLink);
 
-      friendLink.textContent = String(value.user_name);
+      const friendOnlineStatus = document.createElement("p");
+      friendOnlineStatus.classList.add("paragraph");
+      console.log(value.online_status);
+      if (value.online_status) friendOnlineStatus.textContent = "online";
+      else friendOnlineStatus.textContent = "offline";
+      friendInfo.appendChild(friendOnlineStatus);
 
       friendLink.addEventListener("click", (event) => {
         event.preventDefault();

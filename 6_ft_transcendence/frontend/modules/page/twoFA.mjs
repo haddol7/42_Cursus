@@ -98,6 +98,8 @@ export class TwoFAPage {
         document.getElementById("otpCodeInput").value = "";
         alert("wrong code. please input again");
       }
+      else
+        alert(e);
     }
   };
 

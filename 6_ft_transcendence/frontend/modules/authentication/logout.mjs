@@ -23,10 +23,9 @@ export const logout = async () => {
       try {
         await JWT.getNewToken();
         await logout();
+        return;
       } catch (e) {
         alert(e);
-      } finally {
-        return;
       }
     }
   }

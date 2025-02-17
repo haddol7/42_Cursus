@@ -24,17 +24,9 @@ export class PageManager {
     gameQueue: { page: "gameQueue" },
     pong: { page: "pong" },
     aiMatch: { page: "aiMatch" },
-    error: { page: "error" },
   };
 
   static popStateEvent(event) {
-    if (
-      PageManager.currentpageStatus?.page === PageManager.pageStatus.error.page
-    ) {
-      history.forward();
-      return;
-    }
-
     clearBody();
     removeBodyProperty();
 
