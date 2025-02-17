@@ -1,9 +1,6 @@
 import enum
-import json
 import logging
-from re import L
 import threading
-import requests
 from typing import TYPE_CHECKING
 
 from gameapp.envs import USER_URL
@@ -20,7 +17,6 @@ from gameapp.models import (
     TempMatchRoom,
     TempMatchRoomUser,
     TempMatchUser,
-    User,
 )
 from gameapp.utils import get_match_name, now
 
@@ -225,7 +221,7 @@ class Match:
         return True
 
     def user_connected(self, user: RealUser) -> bool:
-        print(f"user={user} is connected to {self.room_name}")
+        self.logger.info(f"user={user} is connected to {self.room_name}")
         with self.lock:
             idx = self.__get_user_idx(user)
             if idx == -1:
@@ -345,6 +341,7 @@ class Match:
                 )
                 return
 
+            self.logger.info("self.stage is not FINISHED, setting FINISHED and set win and lose")
             self.stage = MatchStage.FINISHED
             self.__set_win_and_lose(winner_idx)
 
