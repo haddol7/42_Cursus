@@ -188,16 +188,18 @@ class MatchProcess(threading.Thread):
         elif ball["y"] <= -GAME_BOUNDS["y"] + BALL_SIZE["y"] / 2:
             scorer = 1
 
-        if scorer != -1:
-            score[scorer] += 1
-            self.logger.info(f"match process emit event={UPDATE_SCORE_EVENT}")
-            sio_emit(
-                UPDATE_SCORE_EVENT,
-                {"paddle1": score[0], "paddle2": score[1]},
-                self.room_name,
-            )
+        if scorer == -1:
+            return
 
-            self.reset_game(scorer)
+        score[scorer] += 1
+        self.logger.info(f"match process emit event={UPDATE_SCORE_EVENT}")
+        sio_emit(
+            UPDATE_SCORE_EVENT,
+            {"paddle1": score[0], "paddle2": score[1]},
+            self.room_name,
+        )
+
+        self.reset_game(scorer)
 
     def __is_winner(self) -> bool:
         if self.is_with_ai:
@@ -213,7 +215,7 @@ class MatchProcess(threading.Thread):
 
         score = self.score
         winner_idx = 0 if score[0] == WINNING_SCORE else 1
-        winner = self.users[winner_idx]["name"]  # type: ignore
+        winner: str = self.users[winner_idx]["name"]  # type: ignore
 
         sio_emit(
             GAME_OVER_EVENT,
@@ -226,7 +228,7 @@ class MatchProcess(threading.Thread):
         )
         set_score(self.users[0]["id"], self.match.id, self.score[0])
         set_score(self.users[1]["id"], self.match.id, self.score[1])
-        self.match_manager.alert_winner(winner)
+        self.match_manager.alert_winner(winner_idx)
 
     def is_event_set(self):
         with self.lock:

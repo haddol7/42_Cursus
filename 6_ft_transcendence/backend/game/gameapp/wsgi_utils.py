@@ -102,6 +102,8 @@ def make_airoom(user_id: int):
             user_id=user_id, temp_match_id=temp_match.id
         )
 
+        init_matches([temp_match_user])
+
 
 def _get_from_sess(sid: str) -> Tuple[int, str]:
     with sio_session(sid) as sess:
@@ -219,7 +221,7 @@ def join_match(sid: str, match_user: TempMatchUser, username: str):
     user = RealUser(is_ai=False, id=match_user.user.id, name=username, sid=sid)
     match_dict[room_id].user_connected(user)
 
-    if created and is_with_ai:
+    if is_with_ai:
         resp = post(f"{GAMEAI_URL}/ai/", json={"match_id": room_id})
         logger.info(f"request to ai has returned! OK={resp.ok}")
 
@@ -253,9 +255,8 @@ def on_paddle_move(sid: str, data: dict[str, Any]):
     paddle_direction = get_int(data, "paddleDirection")
     logger.info(f"sid={sid}, paddle_direction={paddle_direction}")
 
-    assert room.match_process is not None
-
-    room.match_process.set_paddle(user_id, paddle_direction)
+    if room.match_process is not None:
+        room.match_process.set_paddle(user_id, paddle_direction)
 
 
 def on_next_game(sid: str):

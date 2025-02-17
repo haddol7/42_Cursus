@@ -2,6 +2,8 @@ from typing import Any
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
+import logging
+import json
 import requests
 from rest_framework.request import Request
 
@@ -20,6 +22,9 @@ import numpy as np
 # Create your views here.
 
 
+logger = logging.getLogger(__name__)
+
+
 class AiClient:
     def ai_decide(self, network, paddle_x, ball_x, ball_y):
         output = network.activate((paddle_x, ball_x, ball_y))
@@ -27,6 +32,7 @@ class AiClient:
         return [-1, 0, 1][decision]
 
     def __init__(self, jwt: str) -> None:
+        logger.info(f"AI client is created, jwt={jwt}")
         with open("ai/data/data.pkl", "rb") as f:
             best_genome = pickle.load(f)
 
@@ -51,12 +57,12 @@ class AiClient:
 
         @sio.event(namespace="/game")  # type: ignore
         def init(data):
-            print("ai got init")
+            logger.info("ai got init")
             self.paddle_id = data["paddleId"]
 
         @sio.event(namespace="/game")  # type: ignore
         def updateBall(ball_data):
-            print("ai got updateBall")
+            logger.info(f"ai got updateBall, data={json.dumps(ball_data)}")
             if not sio.connected or self.paddle_id is None:
                 return
 
@@ -137,6 +143,6 @@ def post_ai(request: Request, data: dict[str, Any]):
     ai_client = AiClient(jwt)
     client_list.append(ai_client)
 
-    print(f"client list len = {len(client_list)}")
+    logger.info(f"client list len = {len(client_list)}")
 
     return JsonResponse({})
