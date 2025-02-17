@@ -92,29 +92,40 @@ export class RoomSocketManager {
 
   static emitMakeRoom = (roomName, roomLimit) => {
     RoomSocketManager.isOperator = true;
-    RoomSocketManager.socket.emit("make_room", {
-      room_name: roomName,
-      room_limit: roomLimit,
-    });
+    RoomSocketManager.socket.emit(
+      "make_room",
+      {
+        room_name: roomName,
+        room_limit: roomLimit,
+      },
+      RoomSocketManager.#alertWhenError
+    );
   };
 
   static emitEnterRoom = (roomId) => {
-    RoomSocketManager.socket.emit("enter_room", { room_id: roomId });
+    RoomSocketManager.socket.emit(
+      "enter_room",
+      { room_id: roomId },
+      RoomSocketManager.#alertWhenError
+    );
   };
 
   static emitLeaveRoom = () => {
-    RoomSocketManager.socket.emit("leave_room");
+    RoomSocketManager.socket.emit(
+      "leave_room",
+      null,
+      RoomSocketManager.#alertWhenError
+    );
     RoomSocketManager.participantList = null;
     RoomSocketManager.maxNumOfParticipant = null;
   };
 
   static emitStartGame = () => {
-    console.log("emit start game");
-    RoomSocketManager.socket.emit("start_game", (data) => {
-      if (data) {
-        console.error(data);
-      }
-    });
+    RoomSocketManager.socket.emit(
+      "start_game",
+      null,
+      RoomSocketManager.#alertWhenError
+    );
   };
 
   static #whenDisconnect = () => {
@@ -128,5 +139,12 @@ export class RoomSocketManager {
     if (RoomSocketManager.participantList === null)
       throw new Error("you should enter the room before request");
     else return RoomSocketManager.participantList.people.length;
+  };
+
+  static #alertWhenError = (response) => {
+    if ("error" in response)
+      console.log(
+        `Error occured.\nCode: ${response.code}\nText: ${response.text}`
+      );
   };
 }
