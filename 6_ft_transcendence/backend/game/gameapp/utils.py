@@ -1,4 +1,4 @@
-from logging import Logger
+import logging
 import random
 import string
 
@@ -12,7 +12,7 @@ from gameapp.models import TempMatch, TempMatchUser
 from gameapp.requests import get
 
 
-logger = Logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def now() -> datetime.datetime:

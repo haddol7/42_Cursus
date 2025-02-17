@@ -14,7 +14,7 @@ from gameapp.utils import get_int, get_list, get_str
 # Create your views here.
 
 
-logger = logging.Logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class UserNameDto(TypedDict):

@@ -1,7 +1,7 @@
 import datetime
 from datetime import timedelta
 from typing import Any
-from logging import Logger
+import logging
 
 from django.http import HttpResponse
 
@@ -9,7 +9,7 @@ from exceptions.CustomException import CustomException, InternalException
 
 
 class ExceptionMiddleware:
-    logger = Logger(__name__)
+    logger = logging.getLogger(__name__)
 
     def __init__(self, get_response) -> None:
         self.get_response = get_response

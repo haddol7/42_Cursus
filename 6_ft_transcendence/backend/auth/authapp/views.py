@@ -1,12 +1,11 @@
 import random
-import requests
 from django.http import (
     HttpRequest,
     HttpResponse,
     HttpResponseNotAllowed,
     JsonResponse,
 )
-from logging import Logger
+import logging
 from rest_framework.request import Request
 from typing import Any, Dict
 
@@ -34,7 +33,7 @@ from exceptions.CustomException import (
 
 # Create your views here.
 
-logger = Logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 @api_get

@@ -1,4 +1,4 @@
-from logging import Logger
+import logging
 import threading
 from typing import Dict
 
@@ -7,7 +7,7 @@ from websocket.roomuser import RoomUser
 
 
 class UserDict:
-    logger = Logger(__name__)
+    logger = logging.getLogger(__name__)
 
     def __init__(self) -> None:
         self.lock = threading.Lock()

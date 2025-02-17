@@ -7,7 +7,7 @@ For more information on this file, see
 https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 """
 
-from logging import Logger
+import logging
 import os
 from typing import Any
 from django.core.wsgi import get_wsgi_application
@@ -33,7 +33,7 @@ application = get_wsgi_application()
 application = socketio.WSGIApp(sio, application)
 
 
-logger = Logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 @event_on("connect", namespace=NAMESPACE)

@@ -1,7 +1,7 @@
 import pyotp
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponseNotAllowed, JsonResponse
-from logging import Logger
+import logging
 from rest_framework.request import Request
 from typing import Any, Dict
 
@@ -18,7 +18,7 @@ from twofaapp.utils import get_int, get_str, get_userinfo_or_none, set_totp_secr
 
 # Create your views here.
 
-logger = Logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 @api_get

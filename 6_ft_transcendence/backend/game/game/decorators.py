@@ -1,7 +1,7 @@
 from datetime import datetime, timezone, timedelta
 from http.client import INTERNAL_SERVER_ERROR
 
-from logging import Logger
+import logging
 from socketio.exceptions import ConnectionRefusedError
 
 
@@ -9,7 +9,7 @@ from exceptions.CustomException import CustomException
 from gameapp.sio import sio
 
 
-logger = Logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def event_on(event: str, *args, **kwargs):
