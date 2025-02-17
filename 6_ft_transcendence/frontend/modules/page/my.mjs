@@ -8,6 +8,8 @@ import { EditProfilePage } from "./editProfile.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { USER_URL, WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 import { replaceAllScriptChar } from "../security.mjs";
+import { FriendPage } from "./friend.mjs";
+import { logout } from "../authentication/logout.mjs";
 
 export class MyPage {
   static render() {
@@ -102,23 +104,18 @@ export class MyPage {
           await MyPage.#requestProfileToServer();
         } catch (e) {
           alert(e);
+          logout();
         }
       } else alert(json.error);
     }
   };
 
   static #updateProfile(image_url, user_name, memo, win_cnt, lose_cnt) {
-    const myAvartar = document.getElementById("myAvartar");
-    const myNick = document.getElementById("myNick");
-    const myMemo = document.getElementById("myMemo");
-    const winCnt = document.getElementById("winCnt");
-    const loseCnt = document.getElementById("loseCnt");
-
-    myAvartar.src = image_url;
-    myNick.textContent = user_name;
-    myMemo.textContent = memo;
-    winCnt.textContent = win_cnt;
-    loseCnt.textContent = lose_cnt;
+    document.getElementById("myAvartar").src = image_url;
+    document.getElementById("myNick").textContent = user_name;
+    document.getElementById("myMemo").textContent = memo;
+    document.getElementById("winCnt").textContent = win_cnt;
+    document.getElementById("loseCnt").textContent = lose_cnt;
   }
 
   static #requestFriendListToServer = async () => {
@@ -138,6 +135,7 @@ export class MyPage {
           await MyPage.#requestFriendListToServer();
         } catch (e) {
           alert(e);
+          logout();
         }
       } else alert(json.error);
     }
@@ -164,45 +162,22 @@ export class MyPage {
 
     fl.forEach((value) => {
       const friendInfo = document.createElement("p");
+      friendInfo.classList.add("paragraph");
       friendList.appendChild(friendInfo);
 
       const friendLink = document.createElement("a");
+      friendLink.classList.add("link");
       friendInfo.appendChild(friendLink);
 
       friendLink.textContent = String(value.user_name);
 
-      friendLink.addEventListener("click", MyPage.#bindEventToFriendList);
+      friendLink.addEventListener("click", (event) => {
+        event.preventDefault();
+        clearBody();
+        FriendPage.renderAndPushHistory(value.user_name);
+      });
     });
   }
-
-  static #bindEventToFriendList = async (event) => {
-    event.preventDefault();
-    // 나중에 아예 새로운 friend page로 넘어가도록 변경
-    const response = await fetch(
-      `${USER_URL}?user_name=${value.user_name}`,
-      JWT.getOptionWithAccessToken("GET")
-    );
-    const json = await response.json();
-
-    if (response.ok) {
-      MyPage.#updateProfile(
-        json.image_url,
-        json.user_name,
-        json.memo,
-        json.win_cnt,
-        json.lose_cnt
-      );
-    } else {
-      if (response.status === 401 && json.error === WHEN_EXPIRED) {
-        try {
-          await JWT.getNewToken();
-          await MyPage.#bindEventToFriendList(event);
-        } catch (e) {
-          alert(e);
-        }
-      } else alert(json.error);
-    }
-  };
 
   static #addFriend = async (name) => {
     const response = await fetch(
@@ -223,6 +198,7 @@ export class MyPage {
           await MyPage.#addFriend(name);
         } catch (e) {
           alert(e);
+          logout();
         }
       } else alert(json.error);
     }

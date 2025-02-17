@@ -1,15 +1,6 @@
 #!/bin/bash
-apt-get update -y &&  \
-apt-get install vim -y && \
-apt-get install postgresql -y && \
-apt-get install curl -y
 
-if [ -d "/server" ]; then 
-    echo "/server already present, skipping creation"
-else
-    echo "/server not found, creating..."
-    mkdir -p /server && chmod -R 755 /server
-fi
+apt-get update -y
 
 python -m pip install --upgrade pip && \
 python -m pip install -r /home/requirements.txt

@@ -8,12 +8,11 @@ ARG DEV=false
 
 COPY requirements.txt /home/requirements.txt
 COPY ./script.sh /home/script.sh
-COPY ./default.png /server/media/default.png
 
 RUN chmod 755 /home/script.sh
 
 EXPOSE 11111
 
-WORKDIR /rest
+WORKDIR /server
 
 CMD [ "bash", "/home/script.sh" ]

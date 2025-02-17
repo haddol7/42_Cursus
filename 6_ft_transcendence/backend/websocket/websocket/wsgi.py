@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 
 import os
 from typing import Dict, List, TypedDict
+from psycopg import InternalError
 import requests
 import socketio
 import socketio.exceptions
@@ -29,8 +30,11 @@ from exceptions.CustomException import (
     WebSocketRoomNotJoinedException,
 )
 
+import json
 import random
 import string
+
+from .envs import GAME_URL
 
 from websocket.decorators import event_on
 from websocket.utils import get_str
@@ -213,7 +217,7 @@ def _get_user_id_from_jwt(jwt: str) -> int:
     res = requests.post(f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": False})
 
     if not res.ok:
-        raise ConnectionRefusedError(res.content)
+        raise socketio.exceptions.ConnectionRefusedError(res.content)
 
     json = res.json()
     return json["user_id"]
@@ -226,6 +230,7 @@ def connect(sid, environ, auth):
     if "jwt" in auth:
         jwt = get_str(auth, "jwt")
         user_id = _get_user_id_from_jwt(jwt)
+        print(f"from _get_user_id_from_Jwt: user_id={user_id}")
 
         # TODO: Fix user_name
         user_name = str(user_id)
@@ -234,18 +239,19 @@ def connect(sid, environ, auth):
         user_name = auth["user_name"]
 
     if user_id is None:
-        raise BadRequestFieldException("user_id")
+        raise socketio.exceptions.ConnectionRefusedError("bad_request:user_id")
     user_id = int(user_id)
     if user_name is None or not isinstance(user_name, str):
-        raise BadRequestFieldException("user_name")
+        raise socketio.exceptions.ConnectionRefusedError("bad_request:user_name")
 
     if user_id in USER_DICT:
-        print("userid is in dict")
+        print("userid is in dict -> user.found")
         raise socketio.exceptions.ConnectionRefusedError("user.found")
     with sio.session(sid) as sess:
         sess["user_id"] = user_id
 
     USER_DICT[user_id] = RoomUser(sid, user_id, user_name)
+    print(f"sid is entered to {ROOM_LISTENERS}")
     sio.enter_room(sid, ROOM_LISTENERS)
     sio.emit(ROOM_LIST_EVENT, ROOM_MANAGER.room_list_to_json(), to=sid)
 
@@ -366,6 +372,17 @@ def sio_start_game(sid):
         raise WebSocketRoomNotFullException()
     elif not room.is_admin(user_id):
         raise WebSocketRoomNotAdminException()
+
+    request_json = {"room_name": room.room_name, "users": room.people_list_to_json()}
+    print(f"post to _internal/game: {json.dumps(request_json)}")
+    resp = requests.post(
+        f"{GAME_URL}/_internal/game",
+        json={"room_name": room.room_name, "users": room.people_list_to_json()},
+    )
+
+    if not resp.ok:
+        print(f"resp error! {resp.content}")
+        raise InternalError()
 
     sio.emit(START_GAME_EVENT, to=room_id)
 

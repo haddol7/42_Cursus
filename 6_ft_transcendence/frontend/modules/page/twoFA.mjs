@@ -16,9 +16,9 @@ export class TwoFAPage {
     console.log(TwoFA.isNewUser);
     if (TwoFA.isNewUser === true) {
       centralBox.innerHTML += `
-        <form id="twoFAUserNameForm" action="" method="">
-          <input id="otpUserNameInput" type="password" class="form-control" placeholder="please input OTP user name" />
-          <input id="otpUserNameSubmit" type="submit" class="btn btn-info mb-3" value="submit" />
+        <form id="twoFAUserNameForm" class="smallRowAlignedForm" action="" method="">
+          <input id="otpUserNameInput" class="textInput" type="text" placeholder="otp name" />
+          <input id="otpUserNameSubmit" class="smallSubmitInput" type="submit" value="submit" />
         </form>
       `;
 
@@ -36,9 +36,9 @@ export class TwoFAPage {
         twoFAForm.parentNode.removeChild(twoFAForm);
 
         centralBox.innerHTML += `
-          <form id="twoFAOTPCodeForm" action="" method="">
-            <input id="otpCodeInput" type="password" class="form-control" placeholder="please input otp code" />
-            <input id="otpCodeSubmit" type="submit" class="btn btn-info mb-3" value="submit" />
+          <form id="twoFAOTPCodeForm" class="smallRowAlignedForm" action="" method="">
+            <input id="otpCodeInput" class="textInput" type="text" placeholder="please input otp code" />
+            <input id="otpCodeSubmit" class="smallSubmitInput" type="submit" value="submit" />
           </form>
         `;
 
@@ -64,9 +64,9 @@ export class TwoFAPage {
     } else {
       centralBox.innerHTML += `
           <p id="otpName"></p>
-          <form id="twoFAOTPCodeForm" action="" method="">
-            <input id="otpCodeInput" type="text" class="form-control" placeholder="please input otp code" />
-            <input id="otpCodeSubmit" type="submit" class="btn btn-info mb-3" value="submit" />
+          <form id="twoFAOTPCodeForm" class="smallRowAlignedForm" action="" method="">
+            <input id="otpCodeInput" class="textInput" type="text" placeholder="otp code" />
+            <input id="otpCodeSubmit" class="smallSubmitInput" type="submit" value="submit" />
           </form>
         `;
 

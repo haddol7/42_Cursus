@@ -10,9 +10,11 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 import os
 from django.core.wsgi import get_wsgi_application
 import socketio
+import socketio.exceptions
 
+from exceptions.CustomException import CustomException, InternalException
 from game.decorators import event_on
-from gameapp.sio import sio
+from gameapp.sio import NAMESPACE, sio
 import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "game.settings")
@@ -29,21 +31,34 @@ application = get_wsgi_application()
 application = socketio.WSGIApp(sio, application)
 
 
-@sio.event(namespace="/game")
+@sio.event(namespace=NAMESPACE)
 def connect(sid, environ, auth):
-    on_connect(sid, auth)
+    try:
+        on_connect(sid, auth)
+    except socketio.exceptions.ConnectionRefusedError as e:
+        raise e
+    except CustomException as e:
+        print("Custom Exception = ", e)
+        raise socketio.exceptions.ConnectionRefusedError(e.__str__())
+    except Exception as e:
+        print("Other exception: ", e)
+        raise socketio.exceptions.ConnectionRefusedError(InternalException().__str__())
 
 
-@event_on("paddleMove", namespace="/game")
+@event_on("paddleMove", namespace=NAMESPACE)
 def paddle_move(sid, data):
     on_paddle_move(sid, data)
 
 
-@event_on("nextGame", namespace="/game")
+@event_on("nextGame", namespace=NAMESPACE)
 def next_game(sid):
     on_next_game(sid)
 
 
-@sio.event(namespace="/game")
+@sio.event(namespace=NAMESPACE)
 def disconnect(sid, reason):
-    on_disconnect(sid, reason)
+    try:
+        on_disconnect(sid, reason)
+    except Exception as e:
+        print("on disconnect, error=", e)
+        raise e

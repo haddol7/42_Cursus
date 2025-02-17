@@ -62,7 +62,6 @@ export class JWT {
     } else {
       const text = await response.text();
       if (text === "jwt.expired" || text === "jwt.invalid") {
-        await logout();
         throw new Error(text);
       }
     }

@@ -4,37 +4,36 @@ import { USER_URL } from "../authentication/globalConstants.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 import { replaceAllScriptChar } from "../security.mjs";
+import { logout } from "../authentication/logout.mjs";
 
 export class EditProfilePage {
   static render() {
     renderNavBar();
 
     document.body.innerHTML += `
-      <div id="editProfileSection" style="border: 1px solid gray; margin: 4px;">
-        <div id="currentProfileInfo" class="box" style="display: grid; grid-template-columns: 1fr 1fr;">
-          <div>
-            <h5 class="centerAlignedTitle">Current Avartar</h5>
-            <img id="currentAvartar" src="default.png" class="image" width="200px"/>
+      <div id="currentProfileInfo" class="box" style="display: grid; grid-template-columns: 1fr 1fr;">
+        <div>
+          <h5 class="centerAlignedTitle">Current Avartar</h5>
+          <img id="currentAvartar" src="default.png" class="image" width="200px"/>
+        </div>
+        <div>
+          <div class="blockWrapher">
+            <h6 class="leftAlignedTitle">current nickname : </h6>
+            <p id="currentNick" class="paragraph"></p>
           </div>
-          <div>
-            <div class="blockWrapher">
-              <h6 class="leftAlignedTitle">current nickname : </h6>
-              <p id="currentNick" class="paragraph"></p>
-            </div>
-            <div class="blockWrapher">
-              <h6 class="leftAlignedTitle">current memo : </h6>
-              <p id="currentMemo" class="paragraph"></p>
-            </div>
+          <div class="blockWrapher">
+            <h6 class="leftAlignedTitle">current memo : </h6>
+            <p id="currentMemo" class="paragraph"></p>
           </div>
         </div>
-        <div class="box">
-          <form id="editProfileForm" class="columnAlignedForm" action="" method="">
-            <input id="newAvartar" class="fileInput" type="file" placeholder="new avartar image" style="width: 70%"/>
-            <input id="newNick" class="textInput" type="text" placeholder="new nickname" style="width: 70%"/>
-            <input id="newMemo" class="textInput" type="text" placeholder="new memo" style="width: 70%"/>
-            <input type="submit" class="submitInput" value="edit"/>
-          </form>
-        </div>
+      </div>
+      <div class="box">
+        <form id="editProfileForm" class="columnAlignedForm" action="" method="">
+          <input id="newAvartar" class="fileInput" type="file" placeholder="new avartar image" style="width: 70%"/>
+          <input id="newNick" class="textInput" type="text" placeholder="new nickname" style="width: 70%"/>
+          <input id="newMemo" class="textInput" type="text" placeholder="new memo" style="width: 70%"/>
+          <input type="submit" class="submitInput" value="edit"/>
+        </form>
       </div>
     `;
 
@@ -61,7 +60,8 @@ export class EditProfilePage {
           await JWT.getNewToken();
           await EditProfilePage.#showCurrentProfile();
         } catch (e) {
-          alert(e.message);
+          alert(e);
+          logout();
         }
       } else alert(json.error);
     }
@@ -92,8 +92,13 @@ export class EditProfilePage {
       const json = await response.json();
 
       if (response.status === 401 && json.error === WHEN_EXPIRED) {
-        await JWT.getNewToken();
-        await EditProfilePage.#submitEditedProfile(event);
+        try {
+          await JWT.getNewToken();
+          await EditProfilePage.#submitEditedProfile(event);
+        } catch (e) {
+          alert(e);
+          logout();
+        }
       } else alert(json.error);
     }
   };

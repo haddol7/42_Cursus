@@ -22,6 +22,6 @@ from user import views
 urlpatterns = [
     path('user/', include('user.urls')),
     path('_internal/user', views.InternalUserView.as_view()),
-    path('_internal/dashboard', views.InternalDashBoardView.as_view()),
+    path('_internal/dashboard', views.InternalDashboardView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
