@@ -1,21 +1,22 @@
 import logging
 from typing import List, Tuple, Any
+
 from django.db import transaction
 from django.db.models import Min
 from socketio.exceptions import ConnectionRefusedError
 
 from exceptions.CustomException import InternalException
 from gameapp.envs import GAMEAI_URL, JWT_URL
+from gameapp.match_objects import Match, match_dict
 from gameapp.match_objects.matchuser import AI_ID, RealUser, get_dto
-from gameapp.requests import post
-from gameapp.sio import sio_enter_room, sio_session
 from gameapp.models import (
     TempMatch,
     TempMatchRoom,
     TempMatchRoomUser,
     TempMatchUser,
 )
-from gameapp.match_objects import Match, match_dict
+from gameapp.requests import post
+from gameapp.sio import sio_enter_room, sio_session
 from gameapp.utils import (
     fetch_username,
     get_int,
@@ -23,7 +24,6 @@ from gameapp.utils import (
     get_str,
     generate_secret,
 )
-
 
 logger = logging.getLogger(__name__)
 

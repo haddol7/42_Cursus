@@ -1,16 +1,15 @@
+import logging
 import random
+from typing import Any, Dict
+
 from django.http import (
     HttpRequest,
     HttpResponse,
     HttpResponseNotAllowed,
     JsonResponse,
 )
-import logging
 from rest_framework.request import Request
-from typing import Any, Dict
 
-
-from authapp.requests import delete, get, post
 from authapp.decorators import (
     api_delete,
     api_get,
@@ -25,6 +24,7 @@ from authapp.envs import (
     OAUTH_TOKEN_URL,
     TWOFA_URL,
 )
+from authapp.requests import delete, get, post
 from authapp.utils import create_user, get_str, get_username_from_42
 from exceptions.CustomException import (
     InternalException,

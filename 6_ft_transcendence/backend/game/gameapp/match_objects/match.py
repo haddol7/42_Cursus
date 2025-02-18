@@ -5,6 +5,12 @@ from typing import TYPE_CHECKING
 
 from exceptions.CustomException import InternalException
 from gameapp.envs import USER_URL
+from gameapp.models import (
+    TempMatch,
+    TempMatchRoom,
+    TempMatchRoomUser,
+    TempMatchUser,
+)
 from gameapp.requests import post
 from gameapp.sio import (
     GAME_OVER_EVENT,
@@ -14,19 +20,11 @@ from gameapp.sio import (
     sio_emit,
     sio_enter_room,
 )
-from gameapp.models import (
-    TempMatch,
-    TempMatchRoom,
-    TempMatchRoomUser,
-    TempMatchUser,
-)
 from gameapp.utils import get_match_name, now
-
-
+from .matchdict import match_dict
+from .matchuser import AI_ID, AiUser, MatchUser, RealUser
 from .process import MatchProcess
 from .timeout import WaitingProcess
-from .matchuser import AI_ID, AiUser, MatchUser, RealUser
-from .matchdict import match_dict
 
 if TYPE_CHECKING:
     from .matchdict import MatchDict

@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 
 from gameapp.match_objects.matchuser import MatchUser
 
-
 if TYPE_CHECKING:
     from .match import Match
 

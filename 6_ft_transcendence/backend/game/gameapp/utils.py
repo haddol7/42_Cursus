@@ -1,16 +1,15 @@
+import datetime
 import logging
 import random
 import string
-
-import datetime
 from typing import Any, Dict, List
+
 from django.http import QueryDict
 
 from exceptions.CustomException import BadRequestFieldException, InternalException
 from gameapp.envs import USER_URL
 from gameapp.models import TempMatch, TempMatchUser
 from gameapp.requests import get
-
 
 logger = logging.getLogger(__name__)
 

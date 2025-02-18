@@ -1,10 +1,11 @@
+import logging
 import random
 import threading
-import logging
 from typing import TYPE_CHECKING
 
 from exceptions.CustomException import InternalException
 from gameapp.envs import WINNING_SCORE
+from gameapp.models import TempMatch, TempMatchUser
 from gameapp.sio import (
     GAME_OVER_EVENT,
     RESET_POSITIONS_EVENT,
@@ -13,14 +14,11 @@ from gameapp.sio import (
     UPDATE_SCORE_EVENT,
     sio_emit,
 )
-from gameapp.models import TempMatch, TempMatchUser
 from gameapp.utils import get_match_name, now
-
 from .matchuser import MatchUser
 
 if TYPE_CHECKING:
     from .match import Match
-
 
 GAME_BOUNDS = {"x": 5, "y": 7}
 PADDLE_WIDTH = 1

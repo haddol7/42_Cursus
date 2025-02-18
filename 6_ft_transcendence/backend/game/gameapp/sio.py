@@ -1,11 +1,10 @@
-from typing import Any
-import socketio
 import json
 import logging
+from typing import Any
 
+import socketio
 
 from gameapp.envs import FRONTEND_URL, GAME_URL
-
 
 NAMESPACE = "/game"
 
@@ -25,7 +24,6 @@ sio = socketio.Server(
         GAME_URL,
     ]
 )
-
 
 logger = logging.getLogger(__name__)
 

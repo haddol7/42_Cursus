@@ -1,13 +1,13 @@
 import datetime
-from datetime import timedelta
-from http.client import INTERNAL_SERVER_ERROR
 import logging
-from django.http import JsonResponse
 import socketio
 import socketio.exceptions
+from datetime import timedelta
+from django.http import JsonResponse
+from http.client import INTERNAL_SERVER_ERROR
+
 from exceptions.CustomException import CustomException
 from .sio import sio
-
 
 logger = logging.getLogger(__name__)
 

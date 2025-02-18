@@ -1,7 +1,8 @@
 import json
 import logging
-from typing import Any
 import socketio
+from typing import Any
+
 from websocket.envs import FRONTEND_URL
 
 sio = socketio.Server(

@@ -1,6 +1,6 @@
 from typing import List
-from rest_framework.decorators import parser_classes, api_view
 
+from rest_framework.decorators import parser_classes, api_view
 from rest_framework.parsers import JSONParser
 from rest_framework.request import Request
 

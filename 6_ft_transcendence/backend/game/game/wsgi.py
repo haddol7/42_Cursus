@@ -10,14 +10,15 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 import logging
 import os
 from typing import Any
-from django.core.wsgi import get_wsgi_application
+
+import django
 import socketio
 import socketio.exceptions
+from django.core.wsgi import get_wsgi_application
 
 from exceptions.CustomException import CustomException, InternalException
 from game.decorators import event_on
 from gameapp.sio import NAMESPACE, sio
-import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "game.settings")
 django.setup()
@@ -31,7 +32,6 @@ from gameapp.wsgi_utils import (
 
 application = get_wsgi_application()
 application = socketio.WSGIApp(sio, application)
-
 
 logger = logging.getLogger(__name__)
 

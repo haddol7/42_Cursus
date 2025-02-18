@@ -1,14 +1,13 @@
 from typing import List
+
 from django.http import HttpRequest, HttpResponse
 from rest_framework.decorators import parser_classes, api_view
-
 from rest_framework.parsers import JSONParser
 from rest_framework.request import Request
 
-from gameapp.requests import post
-
-from .envs import JWT_URL
 from exceptions.CustomException import BadRequestException, UnauthenticatedException
+from gameapp.requests import post
+from .envs import JWT_URL
 
 
 def api_endpoint(http_method_names: List[str]):

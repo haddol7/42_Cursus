@@ -1,27 +1,24 @@
-from typing import Any
-from django.http import HttpResponse, JsonResponse
-
-import logging
 import json
+import logging
+import pickle
+import time
+from typing import Any
+
+import neat
+import numpy as np
+import socketio
+from django.http import HttpResponse, JsonResponse
 from rest_framework.request import Request
 
 from ai.decorators import api_post
-import socketio
-
 from ai.requests import post
 from ai.utils import get_int
 from game_ai.envs import GAME_URL, JWT_URL
-
-import neat
-import pickle
-import time
-import numpy as np
 
 # Create your views here.
 
 
 NAMESPACE = "/game"
-
 
 logger = logging.getLogger(__name__)
 

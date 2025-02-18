@@ -10,10 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 import dotenv
-import os
 
 from jwtapp.envs import FRONTEND_URL
 
@@ -21,7 +21,6 @@ dotenv.load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -33,7 +32,6 @@ SECRET_KEY = "django-insecure-@-gp@tz8yabst&83-r2f1vxd4m=lw0%5d&x$eo^nnwx(ix2#6!
 DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "jwt", FRONTEND_URL]
-
 
 # Application definition
 
@@ -79,7 +77,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "myjwt.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -92,7 +89,6 @@ DATABASES = {
         "PASSWORD": os.environ["POSTGRES_PASSWORD"],
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -112,7 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -124,7 +119,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
@@ -134,7 +128,6 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 
 LOGGING = {
     "version": 1,

@@ -1,15 +1,13 @@
 import logging
 from typing import Any, Dict, List, TypedDict
-from django.http import HttpRequest, HttpResponseNotAllowed, JsonResponse
-from django.shortcuts import render
 
+from django.http import HttpRequest, HttpResponseNotAllowed, JsonResponse
 from rest_framework.request import Request
 
 from exceptions.CustomException import BadRequestFieldException
-from gameapp.wsgi_utils import clear_match_dict, clear_room, make_airoom, make_rooms
 from gameapp.decorators import api_delete, api_post, authenticated
 from gameapp.utils import get_int, get_list, get_str
-
+from gameapp.wsgi_utils import clear_match_dict, clear_room, make_airoom, make_rooms
 
 # Create your views here.
 

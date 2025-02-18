@@ -6,7 +6,6 @@ import requests
 
 from exceptions.CustomException import InternalException
 
-
 logger = logging.getLogger(__name__)
 
 

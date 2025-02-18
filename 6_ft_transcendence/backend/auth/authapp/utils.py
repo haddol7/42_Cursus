@@ -2,13 +2,12 @@ import datetime
 from typing import Any, Dict, Tuple
 
 from django.http import QueryDict
-from authapp.requests import get, post
+
 from authapp.envs import FORTY_TWO_API_URL, JWT_URL, USER_URL
 from authapp.models import User
-from exceptions.CustomException import CustomException
+from authapp.requests import get, post
 from exceptions.CustomException import BadRequestFieldException, InternalException
-
-from django.db import transaction
+from exceptions.CustomException import CustomException
 
 
 def now() -> datetime.datetime:
