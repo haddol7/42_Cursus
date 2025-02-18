@@ -23,7 +23,9 @@ class UserDict:
     def remove(self, user_id: int):
         with self.lock:
             if user_id not in self.dict:
+                self.logger.info(f"user_id={user_id} is not in dict! not deleting")
                 return False
+            self.logger.info(f"user_id{user_id} is in dict! deleting the user")
             del self.dict[user_id]
             return True
 
@@ -31,5 +33,5 @@ class UserDict:
         with self.lock:
             if user_id not in self.dict:
                 self.logger.error(f"Trying to find user_id={user_id} failed!")
-                raise InternalException
+                raise InternalException()
             return self.dict[user_id]
