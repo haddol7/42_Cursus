@@ -1,34 +1,38 @@
-import { renderNavBar } from "./lowRankElements.mjs";
+import { clearExceptNavBar, renderNavBar } from "./lowRankElements.mjs";
 import { PageManager } from "./manager.mjs";
 import { RoomSocketManager } from "../socketManager.mjs";
 import { clearBody } from "./lowRankElements.mjs";
 import { GameLobbyPage } from "./gamelobby.mjs";
 import { PongPage } from "./pong.mjs";
+import { activateScrollBar } from "./utility.mjs";
 
 export class GameQueuePage {
   static render() {
     renderNavBar();
 
     document.body.innerHTML += `
-    <div id="gameQueueSection" class = "box">
+    <div id="gameQueueSection">
+      <div id="gameQueueInfo" class = "box">
+      </div>
+      <a id="quitQueueLink" class="nav justify-content-center link">Quit queue link</a>
     </div>
-    <a id="quitQueueLink" class="nav justify-content-center link">Quit queue link</a>
       `;
 
     const quitQueueLink = document.getElementById("quitQueueLink");
     quitQueueLink.addEventListener("click", (event) => {
       event.preventDefault();
-      clearBody();
+      clearExceptNavBar();
       RoomSocketManager.disconnect();
       GameLobbyPage.renderAndPushHistory();
     });
 
+    activateScrollBar();
     PageManager.currentpageStatus = PageManager.pageStatus.gameQueue;
   }
 
-  static updateQueueMemberSection = () => {
-    const gameQueueSection = document.getElementById("gameQueueSection");
-    gameQueueSection.innerHTML = "";
+  static updateQueueInfo = () => {
+    const gameQueueInfo = document.getElementById("gameQueueInfo");
+    gameQueueInfo.innerHTML = "";
 
     const queueStatus = document.createElement("div");
     queueStatus.innerHTML = `
@@ -41,10 +45,9 @@ export class GameQueuePage {
         <p class="paragraph">${RoomSocketManager.maxNumOfParticipant}</p>
       </div>
     `;
-    gameQueueSection.appendChild(queueStatus);
+    gameQueueInfo.appendChild(queueStatus);
 
     RoomSocketManager.participantList.people.forEach((value) => {
-      console.log(`us id : ${value.user_id} us name : ${value.user_name}`);
       const participant = document.createElement("div");
       participant.classList.add("box");
       participant.innerHTML = `
@@ -57,16 +60,14 @@ export class GameQueuePage {
           <p class="paragraph">${value.user_name}</p>
         </div>
       `;
-      gameQueueSection.appendChild(participant);
+      gameQueueInfo.appendChild(participant);
     });
 
     if (
       RoomSocketManager.getNumOfParticipants() ===
       RoomSocketManager.maxNumOfParticipant
     ) {
-      console.log("congraturation!!!");
       clearBody();
-
       PongPage.play();
     }
   };

@@ -3,11 +3,12 @@ import { JWT } from "../authentication/jwt.mjs";
 import { logout } from "../authentication/logout.mjs";
 import {
   bindEventToNavBar,
-  clearBody,
+  clearExceptNavBar,
   renderNavBar,
 } from "./lowRankElements.mjs";
 import { PageManager } from "./manager.mjs";
 import { MyPage } from "./my.mjs";
+import { activateScrollBar } from "./utility.mjs";
 
 export class FriendPage {
   static lastfriendName = "Dumm";
@@ -19,6 +20,7 @@ export class FriendPage {
     renderNavBar();
 
     document.body.innerHTML += `
+      <div id="friendSection">
         <h6 class="centerAlignedTitle">Friend Info</h6>
         <div id="friendProfileInfo" class="box oneToOneRatioWrapher">
             <div>
@@ -46,6 +48,7 @@ export class FriendPage {
             </div>
         </div>
         <a id="backToPageLink" class="nav justify-content-center link">Back to My Page</a>
+      </div>
     `;
 
     bindEventToNavBar();
@@ -57,11 +60,11 @@ export class FriendPage {
       .getElementById("backToPageLink")
       .addEventListener("click", (event) => {
         event.preventDefault();
-        console.log("check event!");
-        clearBody();
+        clearExceptNavBar();
         MyPage.renderAndPushHistory();
       });
 
+    activateScrollBar();
     PageManager.currentpageStatus = PageManager.pageStatus.friend;
   }
 
@@ -94,5 +97,11 @@ export class FriendPage {
   static renderAndPushHistory(friend) {
     FriendPage.render(friend);
     history.pushState(PageManager.pageStatus.friend, "");
+  }
+
+  static destroy() {
+    const friendSection = document.getElementById("friendSection");
+    friendSection.innerHTML = "";
+    friendSection.parentNode.removeChild(friendSection);
   }
 }

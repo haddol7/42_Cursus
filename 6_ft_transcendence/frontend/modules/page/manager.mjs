@@ -1,4 +1,8 @@
-import { clearBody, removeBodyProperty } from "./lowRankElements.mjs";
+import {
+  clearBody,
+  clearExceptNavBar,
+  removeBodyProperty,
+} from "./lowRankElements.mjs";
 import { RoomSocketManager } from "../socketManager.mjs";
 import { LoginPage } from "./login.mjs";
 import { MainPage } from "./main.mjs";
@@ -7,6 +11,7 @@ import { EditProfilePage } from "./editProfile.mjs";
 import { DashBoardPage } from "./dashboard.mjs";
 import { GameLobbyPage } from "./gamelobby.mjs";
 import { FriendPage } from "./friend.mjs";
+import { gameSocketDisconnect } from "../../game/client.js";
 
 export class PageManager {
   static currentpageStatus = null;
@@ -27,8 +32,18 @@ export class PageManager {
   };
 
   static popStateEvent(event) {
-    clearBody();
-    removeBodyProperty();
+    switch (event.state.page) {
+      case PageManager.pageStatus.login.page:
+        clearBody();
+        removeBodyProperty();
+      case PageManager.pageStatus.main.page:
+      case PageManager.pageStatus.my.page:
+      case PageManager.pageStatus.friend.page:
+      case PageManager.pageStatus.editProfile.page:
+      case PageManager.pageStatus.dashBoard.page:
+      case PageManager.pageStatus.gameLobby.page:
+        clearExceptNavBar();
+    }
 
     if (
       PageManager.currentpageStatus?.page ===
@@ -39,17 +54,12 @@ export class PageManager {
       return;
     }
     if (
-      PageManager.currentpageStatus?.page === PageManager.pageStatus.pong.page
-    ) {
-      // 추후 게임 소켓 연결을 해제하는 코드가 들어가야 함
-      GameLobbyPage.renderAndPushHistory();
-      return;
-    }
-    if (
       PageManager.currentpageStatus?.page ===
-      PageManager.pageStatus.aiMatch.page
+        PageManager.pageStatus.pong.page ||
+      PageManager.currentpageStatus?.page ===
+        PageManager.pageStatus.aiMatch.page
     ) {
-      // 추후 ai 게임 소켓 연결을 해제하는 코드가 들어가야 함
+      gameSocketDisconnect();
       GameLobbyPage.renderAndPushHistory();
       return;
     }

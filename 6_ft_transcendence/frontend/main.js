@@ -4,23 +4,17 @@ import { TwoFAPage } from "./modules/page/twoFA.mjs";
 import { FTOauth } from "./modules/authentication/ftOauth.mjs";
 import { JWT } from "./modules/authentication/jwt.mjs";
 import { ErrorPage } from "./modules/page/error.mjs";
-
-const whenResize = () => {
-  if (
-    window.innerWidth < document.body.scrollWidth ||
-    window.innerHeight < document.body.scrollHeight
-  ) {
-    document.body.style.overflow = "auto";
-  } else {
-    document.body.style.overflow = "hidden";
-  }
-};
+import { RoomSocketManager } from "./modules/socketManager.mjs";
+import { gameSocketDisconnect } from "./game/client.js";
+import { activateScrollBar } from "./modules/page/utility.mjs";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  window.addEventListener("resize", whenResize);
+  window.addEventListener("resize", activateScrollBar);
 
   window.addEventListener("popstate", PageManager.popStateEvent);
   window.addEventListener("unload", function () {
+    gameSocketDisconnect();
+    RoomSocketManager.disconnect();
     JWT.clearCookie();
   });
 

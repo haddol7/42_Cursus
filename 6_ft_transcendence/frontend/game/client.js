@@ -9,12 +9,51 @@ import {
 import { updateScore } from "./scoreboard.js";
 import { showGameOver, updateGamePopup } from "./gameOver.js";
 import { JWT } from "../modules/authentication/jwt.mjs";
+import { clearBody } from "../modules/page/lowRankElements.mjs";
+
+export let socket = null;
+export const gameSocketDisconnect = () => {
+  if (socket != null) {
+    socket.disconnect();
+    socket = null;
+  }
+};
+export const gameSocketConnect = () => {
+  socket = io("/game", {
+    auth: {
+      jwt: JWT.getJWTTokenFromCookie().accessToken,
+    },
+    path: "/game-sio/",
+  });
+
+  socket.on("connect", () => {
+    alert("game socket connection established");
+  });
+
+  socket.on("connect_error", async (error) => {
+    alert("game socket connection error");
+    if (error.message === "jwt.expired") {
+      try {
+        await JWT.getNewToken();
+        alert("try game socket reconnection");
+        gameSocketConnect();
+      } catch (e) {
+        alert(e);
+        logout();
+      }
+    } else {
+      alert(error);
+      socket = null;
+      clearBody();
+      MainPage.renderAndPushHistory();
+    }
+  });
+};
 
 export const runPongGame = () => {
   const restartButton = document.getElementById("restartButton");
   const gameOverPopup = document.getElementById("gameOverPopup");
 
-  let socket;
   let paddleId;
   let player1Score = 0;
   let player2Score = 0;
@@ -24,12 +63,7 @@ export const runPongGame = () => {
 
   let scene, camera, renderer, composer;
 
-  socket = io("/game", {
-    auth: {
-      jwt: JWT.getJWTTokenFromCookie().accessToken,
-    },
-    path: "/game-sio/",
-  });
+  gameSocketConnect();
   ({ scene, camera, renderer, composer } = initScene());
   createGeometry(scene);
 

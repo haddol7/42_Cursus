@@ -2,22 +2,26 @@ import {
   renderNavBar,
   bindEventToNavBar,
   clearBody,
+  clearExceptNavBar,
 } from "./lowRankElements.mjs";
 import { GameQueueCreationPage } from "./gameQueueCreation.mjs";
 import { GameQueuePage } from "./gameQueue.mjs";
 import { PageManager } from "./manager.mjs";
 import { RoomSocketManager } from "../socketManager.mjs";
 import { AIMatchPage } from "./aiMatch.mjs";
+import { activateScrollBar } from "./utility.mjs";
 
 export class GameLobbyPage {
   static render() {
     renderNavBar();
 
     document.body.innerHTML += `
-      <div id="gameLobbySection" class="box">
+    <div id="gameLobbySection">
+      <div id="gameRoomList" class="box">
       </div>
       <a id="gameQueueCreationLink" class="nav justify-content-center link">Make New Game Room</a>
       <a id="aiMatchLink" class="nav justify-content-center link">Match With AI</a>
+    </div>
     `;
 
     bindEventToNavBar();
@@ -26,16 +30,19 @@ export class GameLobbyPage {
       .getElementById("gameQueueCreationLink")
       .addEventListener("click", (event) => {
         event.preventDefault();
-        clearBody();
+        clearExceptNavBar();
         GameQueueCreationPage.render();
       });
-    
-    document.getElementById("aiMatchLink").addEventListener("click", (event) => {
-      event.preventDefault();
-      clearBody();
-      AIMatchPage.play();
-    });
 
+    document
+      .getElementById("aiMatchLink")
+      .addEventListener("click", (event) => {
+        event.preventDefault();
+        clearBody();
+        AIMatchPage.play();
+      });
+
+    activateScrollBar();
     PageManager.currentpageStatus = PageManager.pageStatus.gameLobby;
 
     RoomSocketManager.connect();
@@ -52,19 +59,15 @@ export class GameLobbyPage {
     gameLobbySection.parentNode.removeChild(gameLobbySection);
   }
 
-  static updateGameLobbySection = (roomList) => {
+  static updateGameRoomList = (roomList) => {
     if (roomList === null) {
       return;
     }
 
-    let gameLobbySection = document.getElementById("gameLobbySection");
-    gameLobbySection.innerHTML = "";
+    let gameRoomList = document.getElementById("gameRoomList");
+    gameRoomList.innerHTML = "";
 
     roomList.room.forEach((value) => {
-      console.log(
-        `id : ${value.room_id} name : ${value.room_name} limit : ${value.room_limit} cur : ${value.room_cur_people}`
-      );
-
       const gameQueue = document.createElement("div");
       gameQueue.classList.add("box");
       gameQueue.innerHTML = `
@@ -85,7 +88,7 @@ export class GameLobbyPage {
           <p class="paragraph">${value.room_cur_people}</p>
         </div>
       `;
-      gameLobbySection.appendChild(gameQueue);
+      gameRoomList.appendChild(gameQueue);
 
       const enterQueue = document.createElement("a");
       enterQueue.classList.add(..."link".split(" "));
@@ -93,10 +96,7 @@ export class GameLobbyPage {
       gameQueue.appendChild(enterQueue);
 
       enterQueue.addEventListener("click", () => {
-        clearBody();
-        console.log(
-          `room id : ${value.room_id} room name : ${value.room_name}, room limit : ${value.room_limit}`
-        );
+        clearExceptNavBar();
         RoomSocketManager.maxNumOfParticipant = Number(value.room_limit);
         GameQueuePage.render();
         RoomSocketManager.emitEnterRoom(value.room_id);

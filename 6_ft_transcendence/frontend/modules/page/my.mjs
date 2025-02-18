@@ -2,6 +2,7 @@ import {
   renderNavBar,
   bindEventToNavBar,
   clearBody,
+  clearExceptNavBar,
 } from "./lowRankElements.mjs";
 import { PageManager } from "./manager.mjs";
 import { EditProfilePage } from "./editProfile.mjs";
@@ -10,6 +11,7 @@ import { USER_URL, WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 import { replaceAllScriptChar } from "../security.mjs";
 import { FriendPage } from "./friend.mjs";
 import { logout } from "../authentication/logout.mjs";
+import { activateScrollBar } from "./utility.mjs";
 
 export class MyPage {
   static render() {
@@ -46,8 +48,9 @@ export class MyPage {
             </form>
             <h5 class="centerAlignedTitle" style="margin-top: 20px;">Friend List</h5>
           </div>
+          <a id="editProfileLink" class="nav justify-content-center link">edit profile</a>
         </div>
-        <a id="editProfileLink" class="nav justify-content-center link">edit profile</a>`;
+        `;
 
     bindEventToNavBar();
 
@@ -55,7 +58,7 @@ export class MyPage {
       .getElementById("editProfileLink")
       .addEventListener("click", (event) => {
         event.preventDefault();
-        clearBody();
+        clearExceptNavBar();
         EditProfilePage.renderAndPushHistory();
       });
 
@@ -66,10 +69,13 @@ export class MyPage {
         MyPage.#addFriend(document.getElementById("newFriendName").value);
       });
 
-    MyPage.#requestProfileToServer().then(() => {
-      MyPage.#requestFriendListToServer();
-    });
+    MyPage.#requestProfileToServer()
+      .then(() => {
+        MyPage.#requestFriendListToServer();
+      })
+      .catch(() => {});
 
+    activateScrollBar();
     PageManager.currentpageStatus = PageManager.pageStatus.my;
   }
 
@@ -105,8 +111,12 @@ export class MyPage {
         } catch (e) {
           alert(e);
           logout();
+          throw new Error(json.error);
         }
-      } else alert(json.error);
+      } else {
+        alert(json.error);
+        throw new Error(json.error);
+      }
     }
   };
 
@@ -172,14 +182,13 @@ export class MyPage {
 
       const friendOnlineStatus = document.createElement("p");
       friendOnlineStatus.classList.add("paragraph");
-      console.log(value.online_status);
       if (value.online_status) friendOnlineStatus.textContent = "online";
       else friendOnlineStatus.textContent = "offline";
       friendInfo.appendChild(friendOnlineStatus);
 
       friendLink.addEventListener("click", (event) => {
         event.preventDefault();
-        clearBody();
+        clearExceptNavBar();
         FriendPage.renderAndPushHistory(value.user_name);
       });
     });
