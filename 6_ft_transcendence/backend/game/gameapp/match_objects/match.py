@@ -62,7 +62,18 @@ class Match:
         self.emit_opponent()
 
     def emit_opponent(self):
-        sio_emit(OPPONENT_EVENT, {"opponent": self.opponent}, self.room_name)
+        sio_emit(
+            OPPONENT_EVENT,
+            {"opponent": self.opponent, "lastGame": False},
+            self.room_name,
+        )
+
+    def emit_final_opponent(self):
+        sio_emit(
+            OPPONENT_EVENT,
+            {"opponent": self.opponent, "lastGame": True},
+            self.room_name,
+        )
 
     def add_listener(self, sibling: "Match"):
         self.logger.debug(
@@ -216,6 +227,8 @@ class Match:
             TempMatchRoom.objects.filter(
                 room_name=self.match.match_room.room_name
             ).delete()
+
+            self.emit_final_opponent()
 
             self.logger.info(f"winner={winner} is disconnected")
             sio_disconnect(winner["sid"])
