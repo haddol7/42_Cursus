@@ -24,15 +24,15 @@ services:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - JWT_PORT=${JWT_PORT}
+      - TWOFA_URL=${TWOFA_URL}
+      - AI_USERID=${AI_USERID}
       - JWT_EXPIRE_SECONDS=${JWT_EXPIRE_SECONDS}
       - JWT_REFRESH_EXPIRE_SECONDS=${JWT_REFRESH_EXPIRE_SECONDS}
       - JWT_SECRET=${JWT_SECRET}
       - JWT_ALGORITHM=${JWT_ALGORITHM}
-      - TWOFA_URL=${TWOFA_URL}
-      - JWT_PORT=${JWT_PORT}
-      - FRONTEND_URL=${FRONTEND_URL}
-      - AI_USERID=${AI_USERID}
       - JWT_AI_EXPIRE_SECONDS=${JWT_AI_EXPIRE_SECONDS}
+      - FRONTEND_URL=${FRONTEND_URL}
   websocket:
     image: websocket
     container_name: websocket
@@ -92,12 +92,13 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - WEBSOCKET_WORKER=${WEBSOCKET_WORKER}
       - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
+      - GAME_PORT=${GAME_PORT}
       - USER_URL=${USER_URL}
       - JWT_URL=${JWT_URL}
-      - GAME_PORT=${GAME_PORT}
-      - FRONTEND_URL=${FRONTEND_URL}
       - GAME_URL=${GAME_URL}
       - GAMEAI_URL=${GAMEAI_URL}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - WINNING_SCORE=${WINNING_SCORE}
   game-ai:
     image: game-ai
     container_name: game-ai
@@ -127,12 +128,10 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - WEBSOCKET_WORKER=${WEBSOCKET_WORKER}
       - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
-      - USER_URL=${USER_URL}
-      - JWT_URL=${JWT_URL}
-      - GAME_PORT=${GAME_PORT}
-      - FRONTEND_URL=${FRONTEND_URL}
-      - GAME_URL=${GAME_URL}
       - GAMEAI_PORT=${GAMEAI_PORT}
+      - JWT_URL=${JWT_URL}
+      - GAME_URL=${GAME_URL}
+      - FRONTEND_URL=${FRONTEND_URL}
   auth:
     image: auth
     container_name: auth
@@ -158,6 +157,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - WEBSOCKET_WORKER=${WEBSOCKET_WORKER}
       - WEBSOCKET_THREAD=${WEBSOCKET_THREAD}
+      - AUTH_PORT=${AUTH_PORT}
       - FORTY_TWO_API_URL=${FORTY_TWO_API_URL}
       - OAUTH_42_URL=${OAUTH_42_URL}
       - OAUTH_TOKEN_URL=${OAUTH_TOKEN_URL}
@@ -167,7 +167,6 @@ services:
       - JWT_URL=${JWT_URL}
       - TWOFA_URL=${TWOFA_URL}
       - USER_URL=${USER_URL}
-      - AUTH_PORT=${AUTH_PORT}
       - FRONTEND_URL=${FRONTEND_URL}
   twofa:
     image: twofa
@@ -194,13 +193,9 @@ services:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - OAUTH_TOKEN_URL=${OAUTH_TOKEN_URL}
-      - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
-      - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
-      - JWT_URL=${JWT_URL}
+      - TWOFA_PORT=${TWOFA_PORT}
       - OTP_SECRET=${OTP_SECRET}
       - OTP_ISSUER=${OTP_ISSUER}
-      - TWOFA_PORT=${TWOFA_PORT}
       - FRONTEND_URL=${FRONTEND_URL}
   user:
     init: true
@@ -241,7 +236,6 @@ services:
       - postgresdb_network
     volumes:
       - postgresql-data:/var/lib/postgresql/data
-      - ./db/initsql:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER}'"]
       interval: 30s

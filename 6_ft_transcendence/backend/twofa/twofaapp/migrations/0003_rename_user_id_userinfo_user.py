@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("twofaapp", "0002_userinfo_twofa_passed"),
     ]

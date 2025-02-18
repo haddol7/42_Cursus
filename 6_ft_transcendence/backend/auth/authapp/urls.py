@@ -2,7 +2,6 @@ from django.urls import path
 
 from authapp import views
 
-
 urlpatterns = [
     # path("42/auth", views.get_42_oauth),
     path("42/code", views.get_42_code),

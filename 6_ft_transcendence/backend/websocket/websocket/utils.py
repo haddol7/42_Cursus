@@ -1,18 +1,14 @@
 import datetime
+import logging
 import random
 import string
-
 from django.http import QueryDict
 from typing import Any, Dict, List
-import logging
-
 
 from exceptions.CustomException import BadRequestFieldException, InternalException
-
 from websocket.envs import USER_URL
 from websocket.requests import get
 from websocket.sio import sio, ROOM_LISTENERS
-
 
 logger = logging.getLogger(__name__)
 

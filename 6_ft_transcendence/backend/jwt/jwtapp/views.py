@@ -1,5 +1,7 @@
 from typing import Any, Dict
+
 from django.http import HttpRequest, HttpResponseNotAllowed, JsonResponse
+from rest_framework.request import Request
 
 from jwtapp.decorators import api_delete, api_get, api_post
 from jwtapp.utils import (
@@ -15,7 +17,6 @@ from jwtapp.utils import (
     make_token_pair,
 )
 
-from rest_framework.request import Request
 
 # Create your views here.
 

@@ -1,13 +1,11 @@
+import logging
 from datetime import datetime, timezone, timedelta
 from http.client import INTERNAL_SERVER_ERROR
 
-import logging
 from socketio.exceptions import ConnectionRefusedError
-
 
 from exceptions.CustomException import CustomException
 from gameapp.sio import sio
-
 
 logger = logging.getLogger(__name__)
 

@@ -1,6 +1,6 @@
+import logging
 from datetime import timedelta, datetime, timezone
 from typing import Any
-import logging
 
 from django.http import HttpResponse
 

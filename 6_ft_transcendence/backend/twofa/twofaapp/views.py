@@ -1,17 +1,15 @@
-import pyotp
-from django.shortcuts import render
-from django.http import HttpRequest, HttpResponseNotAllowed, JsonResponse
 import logging
-from rest_framework.request import Request
 from typing import Any, Dict
 
+import pyotp
+from django.http import HttpRequest, HttpResponseNotAllowed, JsonResponse
+from rest_framework.request import Request
 
 from exceptions.CustomException import (
     BadRequestFieldException,
     TwoFARegisterException,
     TwoFARequiredException,
 )
-
 from twofaapp.decorators import api_delete, api_get, api_post
 from twofaapp.envs import OTP_ISSUER
 from twofaapp.utils import get_int, get_str, get_userinfo_or_none, set_totp_secret

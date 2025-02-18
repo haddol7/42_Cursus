@@ -8,15 +8,12 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 """
 
 import json
+import logging
 import os
 import socketio
-
-import logging
-from typing import Any, List, TypedDict
-
 from django.core.wsgi import get_wsgi_application
 from socketio.exceptions import ConnectionRefusedError
-
+from typing import Any, List, TypedDict
 
 from exceptions.CustomException import (
     CustomException,
@@ -29,7 +26,7 @@ from exceptions.CustomException import (
     WebSocketRoomNotFullException,
     WebSocketRoomNotJoinedException,
 )
-
+from websocket.decorators import event_on
 from websocket.envs import JWT_URL, GAME_URL
 from websocket.requests import post
 from websocket.room import Room
@@ -43,7 +40,6 @@ from websocket.sio import (
     sio,
     sio_emit,
 )
-from websocket.decorators import event_on
 from websocket.userdict import UserDict
 from websocket.utils import (
     fetch_username,
@@ -52,12 +48,10 @@ from websocket.utils import (
     get_str,
 )
 
-
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "websocket.settings")
 
 application = get_wsgi_application()
 application = socketio.WSGIApp(sio, application)
-
 
 logger = logging.getLogger(__name__)
 
@@ -146,7 +140,6 @@ def _get_user_id_from_jwt(jwt: str) -> int:
 
 
 def _connect(sid: str, environ, auth: dict[str, Any]):
-
     logger.info(f"auth={json.dumps(auth)}")
 
     if "jwt" in auth:

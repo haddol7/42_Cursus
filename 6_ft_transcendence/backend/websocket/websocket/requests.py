@@ -3,9 +3,7 @@ import logging
 from typing import Any
 
 import requests
-
 from exceptions.CustomException import InternalException
-
 
 logger = logging.getLogger(__name__)
 

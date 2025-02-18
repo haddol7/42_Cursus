@@ -1,6 +1,5 @@
 from typing import List, TypedDict, TYPE_CHECKING
 
-
 from exceptions.CustomException import (
     WebSocketAlreadyRoomJoinedException,
     WebSocketRoomFullException,

@@ -3,28 +3,28 @@ import logging
 import threading
 from typing import TYPE_CHECKING
 
+from exceptions.CustomException import InternalException
 from gameapp.envs import USER_URL
-from gameapp.requests import post
-from gameapp.sio import (
-    GAME_OVER_EVENT,
-    INIT_EVENT,
-    sio_disconnect,
-    sio_emit,
-    sio_enter_room,
-)
 from gameapp.models import (
     TempMatch,
     TempMatchRoom,
     TempMatchRoomUser,
     TempMatchUser,
 )
+from gameapp.requests import post
+from gameapp.sio import (
+    GAME_OVER_EVENT,
+    INIT_EVENT,
+    OPPONENT_EVENT,
+    sio_disconnect,
+    sio_emit,
+    sio_enter_room,
+)
 from gameapp.utils import get_match_name, now
-
-
+from .matchdict import match_dict
+from .matchuser import AI_ID, AiUser, MatchUser, RealUser
 from .process import MatchProcess
 from .timeout import WaitingProcess
-from .matchuser import AI_ID, AiUser, MatchUser, RealUser
-from .matchdict import match_dict
 
 if TYPE_CHECKING:
     from .matchdict import MatchDict
@@ -52,7 +52,23 @@ class Match:
         self.match_process: MatchProcess | None = None
         self.waiting_process = WaitingProcess(self)
 
+        self.listeners: list[Match] = []
+        self.opponent = "unknown vs. unknown"
+
         self.lock = threading.Lock()
+
+    def emit_opponent_on_listen(self, opponent_name: str):
+        self.opponent = opponent_name
+        self.emit_opponent()
+
+    def emit_opponent(self):
+        sio_emit(OPPONENT_EVENT, {"opponent": self.opponent}, self.room_name)
+
+    def add_listener(self, sibling: "Match"):
+        self.logger.debug(
+            f"listener len = {len(self.listeners)}, listener = {[mat.room_name for mat in self.listeners]}"
+        )
+        self.listeners.append(sibling)
 
     def __set_stage_waiting(self):
         self.stage = MatchStage.WAITING
@@ -118,7 +134,7 @@ class Match:
         ).delete()
         self.stage = MatchStage.FINISHED
 
-    def __set_win(self, winner_idx):
+    def __set_win(self, winner_idx: int):
         """
         If the stage is `FINISHED`, but the `winner` is not received event certainly, it is okay to call this method, but only one time.
 
@@ -201,8 +217,40 @@ class Match:
                 room_name=self.match.match_room.room_name
             ).delete()
 
+            self.logger.info(f"winner={winner} is disconnected")
+            sio_disconnect(winner["sid"])
+
+        self.emit_opponent()
+
+        for listener in self.listeners:
+            if "name" in winner:
+                listener.emit_opponent_on_listen(winner["name"])
+
         match_dict.delete_match_id(self.match.id)
         self.stage = MatchStage.FINISHED
+
+    def get_match_name(self):
+        with self.lock:
+            if len(self.users) == 0:
+                return "unknown vs. unknown"
+            elif len(self.users) == 1:
+                if "name" in self.users[0]:
+                    return f"{self.users[0]['name']} vs. unknown"
+                else:
+                    raise InternalException()
+            else:
+                if len(self.users) != 2:
+                    self.logger.error(
+                        f"users len expected 2, but got {len(self.users)}"
+                    )
+                    raise InternalException()
+
+                if self.is_with_ai:
+                    assert "name" in self.users[0]
+                    return f"{self.users[0]['name']} vs. AI"
+                else:
+                    assert "name" in self.users[0] and "name" in self.users[1]
+                    return f"{self.users[0]['name']} vs. {self.users[1]['name']}"
 
     def user_decided(self, user: RealUser) -> bool:
         with self.lock:
@@ -218,6 +266,8 @@ class Match:
 
             if len(self.users) == 2 and self.online[0]:
                 self.__set_stage_waiting()
+        for listener in self.listeners:
+            listener.emit_opponent_on_listen(self.get_match_name())
         return True
 
     def user_connected(self, user: RealUser) -> bool:
@@ -266,6 +316,13 @@ class Match:
                     return True
         return False
 
+    def is_user_dto_connected(self, user_dto: "MatchUser") -> bool:
+        with self.lock:
+            for idx, user in enumerate(self.users):
+                if user["id"] == user_dto["id"] and user["sid"] == user_dto["sid"]:
+                    return True
+        return False
+
     def ai_connected(self, sid: str):
         self.logger.info(f"ai is connected! self.room_name={self.room_name}")
         self.logger.info(f"When AI is connected, users len={len(self.users)}")
@@ -302,15 +359,29 @@ class Match:
             winner_idx = 0 if self.online[0] else 1
             self.__set_win_and_lose(winner_idx)
 
-    def user_disconnected(self, user: MatchUser):
+    def __disconnect_with_ai(self, user: RealUser):
+        self.logger.info(f"user={user} is disconnected, but match is with ai")
+
+        if self.match_process is not None:
+            self.match_process.stop()
+
+        ai_sid = self.users[1]["sid"]
+        sio_disconnect(ai_sid)
+
+        TempMatchRoomUser.objects.filter(user_id=user["id"]).delete()
+        TempMatchUser.objects.filter(user_id=user["id"]).delete()
+
+    def user_disconnected(self, user: RealUser):
         with self.lock:
+            if self.is_with_ai:
+                return self.__disconnect_with_ai(user)
             self.logger.info(f"user={user} is disconnected, current stage={self.stage}")
 
             if (
                 self.stage == MatchStage.NOT_STARTED
                 or self.stage == MatchStage.FINISHED
             ):
-                self.logger.info(f"self.stage={self.stage}, but user is disconnected!")
+                self.logger.error(f"self.stage={self.stage}, but user is disconnected!")
                 return
             elif self.stage == MatchStage.WAITING:
                 idx = self.__get_user_idx(user)
@@ -341,7 +412,9 @@ class Match:
                 )
                 return
 
-            self.logger.info("self.stage is not FINISHED, setting FINISHED and set win and lose")
+            self.logger.info(
+                "self.stage is not FINISHED, setting FINISHED and set win and lose"
+            )
             self.stage = MatchStage.FINISHED
             self.__set_win_and_lose(winner_idx)
 

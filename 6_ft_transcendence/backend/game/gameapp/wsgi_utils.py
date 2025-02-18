@@ -1,21 +1,22 @@
 import logging
 from typing import List, Tuple, Any
+
 from django.db import transaction
 from django.db.models import Min
 from socketio.exceptions import ConnectionRefusedError
 
 from exceptions.CustomException import InternalException
 from gameapp.envs import GAMEAI_URL, JWT_URL
-from gameapp.match_objects.matchuser import RealUser
-from gameapp.requests import post
-from gameapp.sio import sio_enter_room, sio_session
+from gameapp.match_objects import Match, match_dict
+from gameapp.match_objects.matchuser import AI_ID, RealUser, get_dto
 from gameapp.models import (
     TempMatch,
     TempMatchRoom,
     TempMatchRoomUser,
     TempMatchUser,
 )
-from gameapp.match_objects import Match, match_dict
+from gameapp.requests import post
+from gameapp.sio import sio_enter_room, sio_session
 from gameapp.utils import (
     fetch_username,
     get_int,
@@ -23,7 +24,6 @@ from gameapp.utils import (
     get_str,
     generate_secret,
 )
-
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +47,8 @@ def make_rooms(room_name: str, user_id: List[int]):
             )
         ]
 
+        match_tuples: list[Tuple[TempMatch, TempMatch]] = []
+
         for round in [4, 8, 16]:
             if round > user_len:
                 break
@@ -62,6 +64,8 @@ def make_rooms(room_name: str, user_id: List[int]):
                         winner_match_id=prev_match[m // 2].id,
                     )
                 )
+                if len(cur_match) % 2 == 0:
+                    match_tuples.append((cur_match[-1], cur_match[-2]))
 
             prev_match = cur_match
 
@@ -80,7 +84,7 @@ def make_rooms(room_name: str, user_id: List[int]):
                 )
             )
 
-        init_matches(temp_match_users)
+        init_matches(temp_match_users, match_tuples)
 
 
 def make_airoom(user_id: int):
@@ -102,7 +106,7 @@ def make_airoom(user_id: int):
             user_id=user_id, temp_match_id=temp_match.id
         )
 
-        init_matches([temp_match_user])
+        init_matches([temp_match_user], [], is_with_ai=True)
 
 
 def _get_from_sess(sid: str) -> Tuple[int, str]:
@@ -143,8 +147,13 @@ def on_connect(sid, auth):
     if "ai" in auth:
         jwt = get_str(auth, "jwt")
         match_id = _get_match_id_from_jwt(jwt)
-        print(f"AI joined with match_id={match_id}")
+        logger.info(f"AI joined with match_id={match_id}")
         join_match_ai(sid, match_id)
+
+        with sio_session(sid) as sess:
+            sess["is_ai"] = True
+            sess["user_id"] = AI_ID
+            sess["user_name"] = None
         return
     elif "jwt" in auth:
         jwt = get_str(auth, "jwt")
@@ -156,6 +165,7 @@ def on_connect(sid, auth):
         user_name = auth["user_name"]
 
     with sio_session(sid) as sess:
+        sess["is_ai"] = False
         sess["user_id"] = user_id
         sess["user_name"] = user_name
 
@@ -181,6 +191,10 @@ def on_disconnect(sid, reason):
     # TODO: If reason is CLIENT_DISCONNECT, wait to be reconnected
 
     with sio_session(sid) as sess:
+        is_ai: bool = sess["is_ai"]
+        if is_ai:
+            return
+
         user_id: int = sess["user_id"]
         username: str = sess["user_name"]
 
@@ -191,11 +205,11 @@ def on_disconnect(sid, reason):
         if match is not None:
             user = RealUser(is_ai=False, id=match_user.user.id, name=username, sid=sid)
             match.user_disconnected(user)
-            print(f"setting lose for user_id={user_id}")
+            logger.info(f"user_id={user_id} user disconnected")
         else:
-            print("disconnecting... but match_user not found")
+            logger.info("disconnecting... but match_user not found")
     else:
-        print("disconnecting... but match_user not found")
+        logger.info("disconnecting... but match_user not found")
 
 
 def get_room_user_or_none(user_id: int):
@@ -241,19 +255,22 @@ def clear_room(room_name: str):
 
 
 def on_paddle_move(sid: str, data: dict[str, Any]):
-    logger.info(f"paddle_move event received! sid={sid}, data={data}")
+    logger.debug(f"paddle_move event received! sid={sid}, data={data}")
 
     with sio_session(sid) as sess:
-        user_id = sess["user_id"]
-    logger.info(f"sid={sid}, user_id={user_id}")
+        is_ai: bool = sess["is_ai"]
+        user_id: int = sess["user_id"]
+        user_name: str | None = sess["user_name"]
+    logger.debug(f"sid={sid}, user_id={user_id}, user_name={user_name}, is_ai={is_ai}")
 
-    room = match_dict.get_room_by_userid(user_id)
+    user_dto = get_dto(is_ai, sid, user_id, user_name)
+    room = match_dict.get_room_by_user_dto(user_dto)
     if room is None:
-        logger.info(f"user_id={user_id} room not found")
+        logger.debug(f"sid={sid}, user_id={user_id} room not found")
         raise InternalException()
 
     paddle_direction = get_int(data, "paddleDirection")
-    logger.info(f"sid={sid}, paddle_direction={paddle_direction}")
+    logger.debug(f"sid={sid}, paddle_direction={paddle_direction}")
 
     if room.match_process is not None:
         room.match_process.set_paddle(user_id, paddle_direction)
@@ -277,12 +294,28 @@ def on_next_game(sid: str):
     join_match(sid, match_user, username)
 
 
-def init_matches(users: List[TempMatchUser]):
+def init_matches(
+    users: List[TempMatchUser],
+    matches: List[Tuple[TempMatch, TempMatch]],
+    is_with_ai: bool = False,
+):
     for u in users:
         match_id = u.temp_match.id
         if match_id not in match_dict.get_dict():
-            match_dict[match_id] = Match(u.temp_match)
+            match_dict[match_id] = Match(u.temp_match, is_with_ai=is_with_ai)
 
         user = RealUser(is_ai=False, id=u.user.id, name="", sid="")
         logger.info(user)
         match_dict[match_id].user_decided(user)
+
+    for m1, m2 in matches:
+        match_id1 = m1.id
+        if match_id1 not in match_dict.get_dict():
+            match_dict[match_id1] = Match(m1, is_with_ai=is_with_ai)
+
+        match_id2 = m2.id
+        if match_id2 not in match_dict.get_dict():
+            match_dict[match_id2] = Match(m2, is_with_ai=is_with_ai)
+
+        match_dict[match_id1].add_listener(match_dict[match_id2])
+        match_dict[match_id2].add_listener(match_dict[match_id1])

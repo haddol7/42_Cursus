@@ -4,10 +4,8 @@ import random
 import string
 from typing import Any, Dict, Tuple, TypedDict
 
-from django.http import QueryDict
 import jwt
-import requests
-
+from django.http import QueryDict
 
 from exceptions.CustomException import (
     BadRequestFieldException,
@@ -16,7 +14,6 @@ from exceptions.CustomException import (
     JwtInvalidException,
     TwoFARegisterException,
 )
-from jwtapp.requests import delete, get
 from jwtapp.envs import (
     AI_USERID,
     JWT_AI_EXPIRE_SECONDS,
@@ -27,7 +24,7 @@ from jwtapp.envs import (
     TWOFA_URL,
 )
 from jwtapp.models import UserStatus
-
+from jwtapp.requests import delete, get
 
 logger = logging.getLogger(__name__)
 
