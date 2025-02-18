@@ -2,6 +2,7 @@ import { renderNavBar, bindEventToNavBar } from "./lowRankElements.mjs";
 import { PageManager } from "./manager.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
+import { activateScrollBar } from "./utility.mjs";
 
 /////////////////////////
 // 예시 데이터: 최근 5경기 점수 정보
@@ -125,88 +126,89 @@ import { WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 ///////////////////////////
 
 export class DashBoardPage {
-	static async fetchData() {
-		const response = await fetch("/api/user/dashboard", JWT.getOptionWithAccessToken("GET")); // Replace with actual API URL
-		const data = await response.json();
-		
-		// console.log(data);
-		if (response.ok)
-			return data;
-		else {
-			if (response.status === 401 && json.error === WHEN_EXPIRED) {
-				try {
-					await JWT.getNewToken();
-					await this.fetchData();
-				} catch (e) {
-					alert(e);
-				}
-			} else alert(json.error);
-		}
-	}
+  static async fetchData() {
+    const response = await fetch(
+      "/api/user/dashboard",
+      JWT.getOptionWithAccessToken("GET")
+    ); // Replace with actual API URL
+    const data = await response.json();
 
+    // console.log(data);
+    if (response.ok) return data;
+    else {
+      if (response.status === 401 && json.error === WHEN_EXPIRED) {
+        try {
+          await JWT.getNewToken();
+          await this.fetchData();
+        } catch (e) {
+          alert(e);
+        }
+      } else alert(json.error);
+    }
+  }
 
-	// 2. JSON 배열을 바탕으로 부트스트랩 아코디언을 동적으로 생성하는 메서드
-	static renderAccordion(accordionItems, containerId) {
-	// 아코디언 컨테이너 생성
-	const accordionContainer = document.createElement("div");
-	accordionContainer.className = "accordion";
-	accordionContainer.id = containerId;
+  // 2. JSON 배열을 바탕으로 부트스트랩 아코디언을 동적으로 생성하는 메서드
+  static renderAccordion(accordionItems, containerId) {
+    // 아코디언 컨테이너 생성
+    const accordionContainer = document.createElement("div");
+    accordionContainer.className = "accordion";
+    accordionContainer.id = containerId;
 
-	// 각 항목별로 아코디언 아이템 생성
-	accordionItems.forEach((item, index) => {
-		// 유니크한 id 생성
-		const itemId = `${containerId}-item-${index}`;
+    // 각 항목별로 아코디언 아이템 생성
+    accordionItems.forEach((item, index) => {
+      // 유니크한 id 생성
+      const itemId = `${containerId}-item-${index}`;
 
-		// 아코디언 아이템 div
-		const accordionItem = document.createElement("div");
-		accordionItem.className = "accordion-item";
+      // 아코디언 아이템 div
+      const accordionItem = document.createElement("div");
+      accordionItem.className = "accordion-item";
 
-		// 아코디언 헤더
-		const header = document.createElement("h2");
-		header.className = "accordion-header";
-		header.id = `heading-${itemId}`;
+      // 아코디언 헤더
+      const header = document.createElement("h2");
+      header.className = "accordion-header";
+      header.id = `heading-${itemId}`;
 
-		const button = document.createElement("button");
-		// 첫번째 아이템은 기본으로 펼치고, 나머지는 collapsed 클래스 추가
-		button.className = "accordion-button" + (index !== 0 ? " collapsed" : "");
-		button.type = "button";
-		button.setAttribute("data-bs-toggle", "collapse");
-		button.setAttribute("data-bs-target", `#collapse-${itemId}`);
-		button.setAttribute("aria-expanded", index === 0 ? "true" : "false");
-		button.setAttribute("aria-controls", `collapse-${itemId}`);
-		button.textContent = item.title;
+      const button = document.createElement("button");
+      // 첫번째 아이템은 기본으로 펼치고, 나머지는 collapsed 클래스 추가
+      button.className = "accordion-button" + (index !== 0 ? " collapsed" : "");
+      button.type = "button";
+      button.setAttribute("data-bs-toggle", "collapse");
+      button.setAttribute("data-bs-target", `#collapse-${itemId}`);
+      button.setAttribute("aria-expanded", index === 0 ? "true" : "false");
+      button.setAttribute("aria-controls", `collapse-${itemId}`);
+      button.textContent = item.title;
 
-		header.appendChild(button);
-		accordionItem.appendChild(header);
+      header.appendChild(button);
+      accordionItem.appendChild(header);
 
-		// 아코디언 Collapse 영역
-		const collapseDiv = document.createElement("div");
-		collapseDiv.id = `collapse-${itemId}`;
-		// 첫번째 항목은 기본으로 열려있도록 "show" 클래스 추가
-		collapseDiv.className =
-			"accordion-collapse collapse" + (index === 0 ? " show" : "");
-		collapseDiv.setAttribute("aria-labelledby", `heading-${itemId}`);
-		collapseDiv.setAttribute("data-bs-parent", "#accordionExample");
+      // 아코디언 Collapse 영역
+      const collapseDiv = document.createElement("div");
+      collapseDiv.id = `collapse-${itemId}`;
+      // 첫번째 항목은 기본으로 열려있도록 "show" 클래스 추가
+      collapseDiv.className =
+        "accordion-collapse collapse" + (index === 0 ? " show" : "");
+      collapseDiv.setAttribute("aria-labelledby", `heading-${itemId}`);
+      collapseDiv.setAttribute("data-bs-parent", "#accordionExample");
 
-		const bodyDiv = document.createElement("div");
-		bodyDiv.className = "accordion-body";
-		// item.content에 HTML이 포함될 수 있으므로 innerHTML 사용
-		bodyDiv.innerHTML = item.content;
+      const bodyDiv = document.createElement("div");
+      bodyDiv.className = "accordion-body";
+      // item.content에 HTML이 포함될 수 있으므로 innerHTML 사용
+      bodyDiv.innerHTML = item.content;
 
-		collapseDiv.appendChild(bodyDiv);
-		accordionItem.appendChild(collapseDiv);
+      collapseDiv.appendChild(bodyDiv);
+      accordionItem.appendChild(collapseDiv);
 
-		// 컨테이너에 아코디언 아이템 추가
-		accordionContainer.appendChild(accordionItem);
-	});
+      // 컨테이너에 아코디언 아이템 추가
+      accordionContainer.appendChild(accordionItem);
+    });
 
-	return accordionContainer;
-}
+    return accordionContainer;
+  }
 
-	static async render() {
-	renderNavBar();
+  static async render() {
+    renderNavBar();
 
-	document.body.innerHTML += `
+    document.body.innerHTML += `
 			<div id="dashBoardSection" style="border: 1px solid gray; margin: 4px; padding: 16px; background: #f4f4f4;">
 				<h2>Dashboard</h2>
 				<div class="dashboard-container" style="display: flex; gap: 16px;">
@@ -244,184 +246,262 @@ export class DashBoardPage {
 			</div>
 		`;
 
-	bindEventToNavBar();
-	PageManager.currentpageStatus = PageManager.pageStatus.dashBoard;
+    bindEventToNavBar();
+    PageManager.currentpageStatus = PageManager.pageStatus.dashBoard;
 
-	// Fetch and update stats
-	const testJson = await DashBoardPage.fetchData();
-	if (testJson) {
-		document.getElementById("totalGames").textContent = `Total Games Played: ${testJson.user_session.user_stats.total_games}`;
-		document.getElementById("winLossRatio").textContent = `Win/Loss Ratio: ${(testJson.user_session.user_win_rate.wins / testJson.user_session.user_stats.total_games) * 100}%`;
-	}
+    // Fetch and update stats
+    const testJson = await DashBoardPage.fetchData();
+    if (testJson) {
+      document.getElementById(
+        "totalGames"
+      ).textContent = `Total Games Played: ${testJson.user_session.user_stats.total_games}`;
+      document.getElementById("winLossRatio").textContent = `Win/Loss Ratio: ${
+        (testJson.user_session.user_win_rate.wins /
+          testJson.user_session.user_stats.total_games) *
+        100
+      }%`;
+    }
 
-	// recent_user_matches 배열을 아코디언 데이터로 변환
-	const userAccordionData = testJson.user_session.recent_user_matches.map(match => {
-		return {
-			title: `${match.user_name} vs ${match.opponent_name} (${match.win ? 'Won' : 'Lost'})`,
-			content: `
+    // recent_user_matches 배열을 아코디언 데이터로 변환
+    const userAccordionData = testJson.user_session.recent_user_matches.map(
+      (match) => {
+        return {
+          title: `${match.user_name} vs ${match.opponent_name} (${
+            match.win ? "Won" : "Lost"
+          })`,
+          content: `
 				<p><strong>User Score:</strong> ${match.user_score}</p>
 				<p><strong>Opponent Score:</strong> ${match.opponent_score}</p>
 				<p><strong>Game Time:</strong> ${match.game_time} seconds</p>
-	  			`
-		};
-	});
+	  			`,
+        };
+      }
+    );
 
-	// game_matchs 배열을 아코디언 데이터로 변환
-	const gameAccordionData = testJson.game_session.recent_matches.map(match => {
-		return {
-			title: `Winner ${match.winner_name} vs ${match.loser_name}`,
-			content: `
+    // game_matchs 배열을 아코디언 데이터로 변환
+    const gameAccordionData = testJson.game_session.recent_matches.map(
+      (match) => {
+        return {
+          title: `Winner ${match.winner_name} vs ${match.loser_name}`,
+          content: `
 				<p><strong>Winner Score:</strong> ${match.winner_score}</p>
 				<p><strong>Loser Score:</strong> ${match.loser_score}</p>
 				<p><strong>Game Time:</strong> ${match.match_playtime} seconds</p>
-	  			`
-		};
-	});
+	  			`,
+        };
+      }
+    );
 
-	// user 아코디언 생성
-	const userAccordionElement = DashBoardPage.renderAccordion(userAccordionData, "accordionUser");
-	const userLogDiv = document.getElementById("userLogs");
-	userLogDiv.innerHTML = ""; // 기존의 static 내용 제거
-	userLogDiv.appendChild(userAccordionElement);
+    // user 아코디언 생성
+    const userAccordionElement = DashBoardPage.renderAccordion(
+      userAccordionData,
+      "accordionUser"
+    );
+    const userLogDiv = document.getElementById("userLogs");
+    userLogDiv.innerHTML = ""; // 기존의 static 내용 제거
+    userLogDiv.appendChild(userAccordionElement);
 
-	// game 아코디언 생성
-	const gameAccordionElement = DashBoardPage.renderAccordion(gameAccordionData, "accordionGame");
-	const gameLogDiv = document.getElementById("gameLogs");
-	gameLogDiv.innerHTML = ""; // 기존의 static 내용 제거
-	gameLogDiv.appendChild(gameAccordionElement);
+    // game 아코디언 생성
+    const gameAccordionElement = DashBoardPage.renderAccordion(
+      gameAccordionData,
+      "accordionGame"
+    );
+    const gameLogDiv = document.getElementById("gameLogs");
+    gameLogDiv.innerHTML = ""; // 기존의 static 내용 제거
+    gameLogDiv.appendChild(gameAccordionElement);
 
-	new Chart(document.getElementById("doughnut-chart"), {
-		type: 'doughnut',
-		data: {
-			labels: ["win", "loss"],
-			datasets: [
-				{
-					label: "Population (millions)",
-					backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-					data: [testJson.user_session.user_win_rate.wins, testJson.user_session.user_win_rate.losses]
-				}
-			]
-		},
-		options: {
-			title: {
-				display: true,
-				text: 'win rate'
-			}
-		}
-	});
+    new Chart(document.getElementById("doughnut-chart"), {
+      type: "doughnut",
+      data: {
+        labels: ["win", "loss"],
+        datasets: [
+          {
+            label: "Population (millions)",
+            backgroundColor: [
+              "#3e95cd",
+              "#8e5ea2",
+              "#3cba9f",
+              "#e8c3b9",
+              "#c45850",
+            ],
+            data: [
+              testJson.user_session.user_win_rate.wins,
+              testJson.user_session.user_win_rate.losses,
+            ],
+          },
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: "win rate",
+        },
+      },
+    });
 
-	new Chart(document.getElementById("line-chart"), {
-		type: 'line',
-		data: {
-			labels: ["n-4 match", "n-3 match", "n-2 match", "n-1 match", "n match"],
-			datasets: [{
-				data: testJson.user_session.win_rate_trend.current_user,
-				label: testJson.user_session.user_stats.user_name,
-				borderColor: "#3e95cd",
-				fill: false
-			}, {
-				data: testJson.user_session.win_rate_trend.top_user,
-				label: "top ranker",
-				borderColor: "#8e5ea2",
-				fill: false
-			}
-			]
-		},
-		options: {
-			title: {
-				display: true,
-				text: 'winRateChange'
-			}
-		}
-	});
+    new Chart(document.getElementById("line-chart"), {
+      type: "line",
+      data: {
+        labels: ["n-4 match", "n-3 match", "n-2 match", "n-1 match", "n match"],
+        datasets: [
+          {
+            data: testJson.user_session.win_rate_trend.current_user,
+            label: testJson.user_session.user_stats.user_name,
+            borderColor: "#3e95cd",
+            fill: false,
+          },
+          {
+            data: testJson.user_session.win_rate_trend.top_user,
+            label: "top ranker",
+            borderColor: "#8e5ea2",
+            fill: false,
+          },
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: "winRateChange",
+        },
+      },
+    });
 
-	new Chart(document.getElementById("bar-chart-horizontal"), {
-		type: 'horizontalBar',
-		data: {
-			labels: [testJson.user_session.user_stats.user_name, "top ranker"],
-			datasets: [
-				{
-					label: "play time",
-					backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-					data: [testJson.user_session.total_game_time.user_total_time, testJson.user_session.total_game_time.avg_total_time]
-				}
-			]
-		},
-		options: {
-			legend: { display: false },
-			title: {
-				display: true,
-				text: 'play time'
-			},
-			scales: {
-				xAxes: [{
-					ticks: {
-						beginAtZero: true,
-					}
-				}]
-			}
-		}
-	});
+    new Chart(document.getElementById("bar-chart-horizontal"), {
+      type: "horizontalBar",
+      data: {
+        labels: [testJson.user_session.user_stats.user_name, "top ranker"],
+        datasets: [
+          {
+            label: "play time",
+            backgroundColor: [
+              "#3e95cd",
+              "#8e5ea2",
+              "#3cba9f",
+              "#e8c3b9",
+              "#c45850",
+            ],
+            data: [
+              testJson.user_session.total_game_time.user_total_time,
+              testJson.user_session.total_game_time.avg_total_time,
+            ],
+          },
+        ],
+      },
+      options: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: "play time",
+        },
+        scales: {
+          xAxes: [
+            {
+              ticks: {
+                beginAtZero: true,
+              },
+            },
+          ],
+        },
+      },
+    });
 
-	new Chart(document.getElementById("polar-chart"), {
-		type: 'polarArea',
-		data: {
-			labels: [testJson.game_session.top_5_winners[0].user_name, testJson.game_session.top_5_winners[1].user_name, testJson.game_session.top_5_winners[2].user_name, testJson.game_session.top_5_winners[3].user_name, testJson.game_session.top_5_winners[4].user_name],
-			datasets: [
-				{
-					label: "win ranking",
-					backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-					data: [testJson.game_session.top_5_winners[0].win_count, testJson.game_session.top_5_winners[1].win_count, testJson.game_session.top_5_winners[2].win_count, testJson.game_session.top_5_winners[3].win_count, testJson.game_session.top_5_winners[4].win_count]
-				}
-			]
-		},
-		options: {
-			title: {
-				display: true,
-				text: 'five top winner'
-			}
-		}
-	});
-	new Chart(document.getElementById("bar-chart"), {
-		type: 'bar',
-		data: {
-			labels: [testJson.game_session.top_5_winners[0].user_name, testJson.game_session.top_5_winners[1].user_name, testJson.game_session.top_5_winners[2].user_name, testJson.game_session.top_5_winners[3].user_name, testJson.game_session.top_5_winners[4].user_name],
-			datasets: [
-				{
-					label: "game time",
-					backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-					data: [testJson.game_session.top_5_game_time[0].game_time, testJson.game_session.top_5_game_time[1].game_time, testJson.game_session.top_5_game_time[2].game_time, testJson.game_session.top_5_game_time[3].game_time, testJson.game_session.top_5_game_time[4].game_time]
-				}
-			]
-		},
-		options: {
-			legend: { display: false },
-			title: {
-				display: true,
-				text: 'game time'
-			},
-			scales: {
-				yAxes: [{
-					ticks: {
-						// beginAtZero: true
-						suggestedMin: testJson.game_session.top_5_game_time[4].game_time / 2,
-					}
-				}]
-			}
-		}
-	});
+    new Chart(document.getElementById("polar-chart"), {
+      type: "polarArea",
+      data: {
+        labels: [
+          testJson.game_session.top_5_winners[0].user_name,
+          testJson.game_session.top_5_winners[1].user_name,
+          testJson.game_session.top_5_winners[2].user_name,
+          testJson.game_session.top_5_winners[3].user_name,
+          testJson.game_session.top_5_winners[4].user_name,
+        ],
+        datasets: [
+          {
+            label: "win ranking",
+            backgroundColor: [
+              "#3e95cd",
+              "#8e5ea2",
+              "#3cba9f",
+              "#e8c3b9",
+              "#c45850",
+            ],
+            data: [
+              testJson.game_session.top_5_winners[0].win_count,
+              testJson.game_session.top_5_winners[1].win_count,
+              testJson.game_session.top_5_winners[2].win_count,
+              testJson.game_session.top_5_winners[3].win_count,
+              testJson.game_session.top_5_winners[4].win_count,
+            ],
+          },
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: "five top winner",
+        },
+      },
+    });
+    new Chart(document.getElementById("bar-chart"), {
+      type: "bar",
+      data: {
+        labels: [
+          testJson.game_session.top_5_winners[0].user_name,
+          testJson.game_session.top_5_winners[1].user_name,
+          testJson.game_session.top_5_winners[2].user_name,
+          testJson.game_session.top_5_winners[3].user_name,
+          testJson.game_session.top_5_winners[4].user_name,
+        ],
+        datasets: [
+          {
+            label: "game time",
+            backgroundColor: [
+              "#3e95cd",
+              "#8e5ea2",
+              "#3cba9f",
+              "#e8c3b9",
+              "#c45850",
+            ],
+            data: [
+              testJson.game_session.top_5_game_time[0].game_time,
+              testJson.game_session.top_5_game_time[1].game_time,
+              testJson.game_session.top_5_game_time[2].game_time,
+              testJson.game_session.top_5_game_time[3].game_time,
+              testJson.game_session.top_5_game_time[4].game_time,
+            ],
+          },
+        ],
+      },
+      options: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: "game time",
+        },
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                // beginAtZero: true
+                suggestedMin:
+                  testJson.game_session.top_5_game_time[4].game_time / 2,
+              },
+            },
+          ],
+        },
+      },
+    });
+    activateScrollBar();
+  }
+
+  static renderAndPushHistory() {
+    DashBoardPage.render();
+    history.pushState(PageManager.pageStatus.dashBoard, "");
+  }
+
+  static destroy() {
+    const dashBoardSection = document.getElementById("dashBoardSection");
+    dashBoardSection.innerHTML = "";
+    dashBoardSection.parentNode.removeChild(dashBoardSection);
+  }
 }
-
-	static renderAndPushHistory() {
-	DashBoardPage.render();
-	history.pushState(PageManager.pageStatus.dashBoard, "");
-}
-
-	static destroy() {
-	const dashBoardSection = document.getElementById("dashBoardSection");
-	dashBoardSection.innerHTML = "";
-	dashBoardSection.parentNode.removeChild(dashBoardSection);
-}
-}
-
-

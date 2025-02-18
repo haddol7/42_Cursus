@@ -5,35 +5,38 @@ import { JWT } from "../authentication/jwt.mjs";
 import { WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 import { replaceAllScriptChar } from "../security.mjs";
 import { logout } from "../authentication/logout.mjs";
+import { activateScrollBar } from "./utility.mjs";
 
 export class EditProfilePage {
   static render() {
     renderNavBar();
 
     document.body.innerHTML += `
-      <div id="currentProfileInfo" class="box" style="display: grid; grid-template-columns: 1fr 1fr;">
-        <div>
-          <h5 class="centerAlignedTitle">Current Avartar</h5>
-          <img id="currentAvartar" src="default.png" class="image" width="200px"/>
-        </div>
-        <div>
-          <div class="blockWrapher">
-            <h6 class="leftAlignedTitle">current nickname : </h6>
-            <p id="currentNick" class="paragraph"></p>
+      <div id="editProfileSection">
+        <div id="currentProfileInfo" class="box" style="display: grid; grid-template-columns: 1fr 1fr;">
+          <div>
+            <h5 class="centerAlignedTitle">Current Avartar</h5>
+            <img id="currentAvartar" src="default.png" class="image" width="200px"/>
           </div>
-          <div class="blockWrapher">
-            <h6 class="leftAlignedTitle">current memo : </h6>
-            <p id="currentMemo" class="paragraph"></p>
+          <div>
+            <div class="blockWrapher">
+              <h6 class="leftAlignedTitle">current nickname : </h6>
+              <p id="currentNick" class="paragraph"></p>
+            </div>
+            <div class="blockWrapher">
+              <h6 class="leftAlignedTitle">current memo : </h6>
+              <p id="currentMemo" class="paragraph"></p>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="box">
-        <form id="editProfileForm" class="columnAlignedForm" action="" method="">
-          <input id="newAvartar" class="fileInput" type="file" placeholder="new avartar image" style="width: 70%"/>
-          <input id="newNick" class="textInput" type="text" placeholder="new nickname" style="width: 70%"/>
-          <input id="newMemo" class="textInput" type="text" placeholder="new memo" style="width: 70%"/>
-          <input type="submit" class="submitInput" value="edit"/>
-        </form>
+        <div class="box">
+          <form id="editProfileForm" class="columnAlignedForm" action="" method="">
+            <input id="newAvartar" class="fileInput" type="file" placeholder="new avartar image" style="width: 70%"/>
+            <input id="newNick" class="textInput" type="text" placeholder="new nickname" style="width: 70%"/>
+            <input id="newMemo" class="textInput" type="text" placeholder="new memo" style="width: 70%"/>
+            <input type="submit" class="submitInput" value="edit"/>
+          </form>
+        </div>
       </div>
     `;
 
@@ -43,6 +46,7 @@ export class EditProfilePage {
       .getElementById("editProfileForm")
       .addEventListener("submit", EditProfilePage.#submitEditedProfile);
 
+    activateScrollBar();
     PageManager.currentpageStatus = PageManager.pageStatus.editProfile;
   }
 
@@ -75,7 +79,6 @@ export class EditProfilePage {
     const newMemo = document.getElementById("newMemo");
 
     const newUserInfo = new FormData();
-    console.log(newAvartar.files[0]);
     newUserInfo.append("image_url", newAvartar.files[0]);
     newUserInfo.append("user_name", replaceAllScriptChar(newNick.value));
     newUserInfo.append("memo", replaceAllScriptChar(newMemo.value));

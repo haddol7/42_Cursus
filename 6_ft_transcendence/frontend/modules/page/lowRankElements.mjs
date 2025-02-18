@@ -5,9 +5,14 @@ import { GameLobbyPage } from "./gamelobby.mjs";
 import { logout } from "../authentication/logout.mjs";
 import { RoomSocketManager } from "../socketManager.mjs";
 import { PageManager } from "./manager.mjs";
+import { FriendPage } from "./friend.mjs";
+import { EditProfilePage } from "./editProfile.mjs";
+import { GameQueueCreationPage } from "./gameQueueCreation.mjs";
+import { GameQueuePage } from "./gameQueue.mjs";
 
 // body의 모든 자식 요소들을 제거
 export const clearBody = () => {
+  isNavBarExist = false;
   document.body.innerHTML = "";
 };
 
@@ -39,7 +44,12 @@ export const renderCentralBox = () => {
   return cardBody;
 };
 
+export let isNavBarExist = false;
+
 export const renderNavBar = () => {
+  if (isNavBarExist) return;
+  else isNavBarExist = true;
+
   document.body.innerHTML = `
     <a id="title" class="nav justify-content-center home"><h1>Mighty Pong Contest</h1></a>
     <a id="logoutLink" class="nav justify-content-center sublink">logout</a>
@@ -70,8 +80,7 @@ export const bindEventToNavBar = () => {
       PageManager.currentpageStatus.page !== PageManager.pageStatus.main.page
     ) {
       event.preventDefault();
-      console.log("go to main page!!!");
-      clearBody();
+      clearExceptNavBar();
 
       if (
         PageManager.currentpageStatus.page ===
@@ -99,7 +108,7 @@ export const bindEventToNavBar = () => {
   myPageLink.addEventListener("click", (event) => {
     if (PageManager.currentpageStatus.page !== PageManager.pageStatus.my.page) {
       event.preventDefault();
-      clearBody();
+      clearExceptNavBar();
 
       if (
         PageManager.currentpageStatus.page ===
@@ -117,7 +126,7 @@ export const bindEventToNavBar = () => {
       PageManager.pageStatus.dashBoard.page
     ) {
       event.preventDefault();
-      clearBody();
+      clearExceptNavBar();
 
       if (
         PageManager.currentpageStatus.page ===
@@ -135,8 +144,45 @@ export const bindEventToNavBar = () => {
       PageManager.pageStatus.gameLobby.page
     ) {
       event.preventDefault();
-      clearBody();
+      clearExceptNavBar();
       GameLobbyPage.renderAndPushHistory();
     }
   });
 };
+
+export const clearExceptNavBar = () => {
+  switch (PageManager.currentpageStatus.page) {
+    case PageManager.pageStatus.main.page:
+      break;
+    case PageManager.pageStatus.my.page:
+      MyPage.destroy();
+      break;
+    case PageManager.pageStatus.friend.page:
+      FriendPage.destroy();
+      break;
+    case PageManager.pageStatus.editProfile.page:
+      EditProfilePage.destroy();
+      break;
+    case PageManager.pageStatus.dashBoard.page:
+      DashBoardPage.destroy();
+      break;
+    case PageManager.pageStatus.gameLobby.page:
+      GameLobbyPage.destroy();
+      break;
+    case PageManager.pageStatus.gameQueueCreation.page:
+      GameQueueCreationPage.destroy();
+      break;
+    case PageManager.pageStatus.gameQueue.page:
+      GameQueuePage.destroy();
+      break;
+    case PageManager.pageStatus.login.page:
+    case PageManager.pageStatus.twoFA.page:
+    case PageManager.pageStatus.pong.page:
+    case PageManager.pageStatus.aiMatch.page:
+      console.error(
+        "You should not call clearExceptNavBar method on this case."
+      );
+      break;
+  }
+};
+

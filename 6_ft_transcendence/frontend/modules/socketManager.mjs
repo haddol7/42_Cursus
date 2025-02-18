@@ -3,6 +3,9 @@ import { GameLobbyPage } from "./page/gamelobby.mjs";
 import { GameQueuePage } from "./page/gameQueue.mjs";
 import { runPongGame } from "../game/client.js";
 import { JWT } from "./authentication/jwt.mjs";
+import { logout } from "./authentication/logout.mjs";
+import { MainPage } from "./page/main.mjs";
+import { clearExceptNavBar } from "./page/lowRankElements.mjs";
 
 export class RoomSocketManager {
   static socket = null;
@@ -19,14 +22,29 @@ export class RoomSocketManager {
       path: "/room-sio/",
     });
     RoomSocketManager.socket.on("connect", () => {
-      console.log("successfully connected!!!");
+      alert("socket connection established");
     });
     RoomSocketManager.#onDisconnect();
     RoomSocketManager.#onRoomListEvent();
     RoomSocketManager.#onRoomChangedEvent();
     RoomSocketManager.#onStartGame();
-    RoomSocketManager.socket.on("error", (error) => {
-      console.error(error.toString());
+    RoomSocketManager.socket.on("connect_error", async (error) => {
+      alert("socket connection error");
+      if (error.message === "jwt.expired") {
+        try {
+          await JWT.getNewToken();
+          alert("try socket reconnection");
+          RoomSocketManager.connect();
+        } catch (e) {
+          alert(e);
+          logout();
+        }
+      } else {
+        alert(error);
+        RoomSocketManager.#whenDisconnect();
+        clearExceptNavBar();
+        MainPage.renderAndPushHistory();
+      }
     });
   };
 
@@ -46,30 +64,26 @@ export class RoomSocketManager {
 
   static #onRoomListEvent = () => {
     RoomSocketManager.socket.on("room_list", (list) => {
-      console.log(list);
       RoomSocketManager.roomList = list;
 
       if (
         PageManager.currentpageStatus.page ===
         PageManager.pageStatus.gameLobby.page
       ) {
-        console.log(RoomSocketManager.roomList);
-        GameLobbyPage.updateGameLobbySection(RoomSocketManager.roomList);
+        GameLobbyPage.updateGameRoomList(RoomSocketManager.roomList);
       }
     });
   };
 
   static #onRoomChangedEvent = () => {
     RoomSocketManager.socket.on("room_changed", (list) => {
-      console.log(list);
       RoomSocketManager.participantList = list;
 
       if (
         PageManager.currentpageStatus.page ===
         PageManager.pageStatus.gameQueue.page
       ) {
-        console.log(RoomSocketManager.participantList);
-        GameQueuePage.updateQueueMemberSection();
+        GameQueuePage.updateQueueInfo();
       }
     });
   };
@@ -143,8 +157,6 @@ export class RoomSocketManager {
 
   static #alertWhenError = (response) => {
     if ("error" in response)
-      console.log(
-        `Error occured.\nCode: ${response.code}\nText: ${response.text}`
-      );
+      alert(`Error occured.\nCode: ${response.code}\nText: ${response.text}`);
   };
 }

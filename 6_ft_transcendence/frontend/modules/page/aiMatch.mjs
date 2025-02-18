@@ -1,5 +1,6 @@
 import { runPongGame } from "../../game/client.js";
 import { JWT } from "../authentication/jwt.mjs";
+import { PageManager } from "./manager.mjs";
 
 export class AIMatchPage {
   static play = async () => {
@@ -31,5 +32,7 @@ export class AIMatchPage {
         }
       } else alert(text);
     }
+
+    PageManager.currentpageStatus = PageManager.pageStatus.aiMatch;
   };
 }
