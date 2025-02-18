@@ -43,7 +43,13 @@ export class PageManager {
       case PageManager.pageStatus.editProfile.page:
       case PageManager.pageStatus.dashBoard.page:
       case PageManager.pageStatus.gameLobby.page:
-        clearExceptNavBar();
+        if (
+          PageManager.currentpageStatus.page ===
+          PageManager.pageStatus.login.page
+        ) {
+          clearBody();
+          removeBodyProperty();
+        } else clearExceptNavBar();
         break;
     }
 

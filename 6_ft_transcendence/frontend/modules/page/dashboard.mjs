@@ -3,6 +3,7 @@ import { PageManager } from "./manager.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 import { activateScrollBar } from "./utility.mjs";
+import { logout } from "../authentication/logout.mjs";
 
 /////////////////////////
 // 예시 데이터: 최근 5경기 점수 정보
@@ -136,14 +137,15 @@ export class DashBoardPage {
     // console.log(data);
     if (response.ok) return data;
     else {
-      if (response.status === 401 && json.error === WHEN_EXPIRED) {
+      if (response.status === 401 && data.error === WHEN_EXPIRED) {
         try {
           await JWT.getNewToken();
-          await this.fetchData();
+          await DashBoardPage.fetchData();
         } catch (e) {
           alert(e);
+          logout();
         }
-      } else alert(json.error);
+      } else alert(data.error);
     }
   }
 
@@ -251,16 +253,16 @@ export class DashBoardPage {
 
     // Fetch and update stats
     const testJson = await DashBoardPage.fetchData();
-    if (testJson) {
-      document.getElementById(
-        "totalGames"
-      ).textContent = `Total Games Played: ${testJson.user_session.user_stats.total_games}`;
-      document.getElementById("winLossRatio").textContent = `Win/Loss Ratio: ${
-        (testJson.user_session.user_win_rate.wins /
-          testJson.user_session.user_stats.total_games) *
-        100
-      }%`;
-    }
+    if (testJson === null) return;
+
+    document.getElementById(
+      "totalGames"
+    ).textContent = `Total Games Played: ${testJson.user_session.user_stats.total_games}`;
+    document.getElementById("winLossRatio").textContent = `Win/Loss Ratio: ${
+      (testJson.user_session.user_win_rate.wins /
+        testJson.user_session.user_stats.total_games) *
+      100
+    }%`;
 
     // recent_user_matches 배열을 아코디언 데이터로 변환
     const userAccordionData = testJson.user_session.recent_user_matches.map(

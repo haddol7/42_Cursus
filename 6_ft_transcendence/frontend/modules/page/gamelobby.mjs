@@ -39,6 +39,7 @@ export class GameLobbyPage {
       .addEventListener("click", (event) => {
         event.preventDefault();
         clearBody();
+        RoomSocketManager.disconnect();
         AIMatchPage.play();
       });
 
