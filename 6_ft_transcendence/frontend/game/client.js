@@ -7,7 +7,7 @@ import {
   handleKeyUp,
 } from "./animation.js";
 import { updateScore } from "./scoreboard.js";
-import { showGameOver } from "./gameOver.js";
+import { showGameOver, updateGamePopup } from "./gameOver.js";
 import { JWT } from "../modules/authentication/jwt.mjs";
 
 export const runPongGame = () => {
@@ -88,8 +88,12 @@ export const runPongGame = () => {
         data.winner === paddleId,
         data.paddle1,
         data.paddle2,
-        "data.opponents" // TODO : 해당 부분 백엔드 쪽에서 미구현
+        "unknown vs. unknown" // 기본값
       );
+    });
+
+    socket.on("opponent", (nextOpponent) => {
+      updateGamePopup(nextOpponent);
     });
 
     socket.on("disconnect", (reason) => {

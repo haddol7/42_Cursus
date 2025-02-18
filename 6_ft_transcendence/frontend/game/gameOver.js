@@ -1,9 +1,20 @@
+let g_winner;
+let g_paddle1;
+let g_paddle2;
+
+export function updateGamePopup(opponent) {
+  showGameOver(g_winner, g_paddle1, g_paddle2, opponent);
+}
+
 export function showGameOver(winner, paddle1, paddle2, nextOpponent) {
   const gameOverPopup = document.getElementById("gameOverPopup");
   const gameResult = document.getElementById("gameResult");
   const restartButton = document.getElementById("restartButton");
 
-  // nextOpponent에 따라 UI 동적 변경
+  g_winner = winner;
+  g_paddle1 = paddle1;
+  g_paddle2 = paddle2;
+
   gameResult.innerHTML = `
   <div style="font-size: 48px; font-weight: 700; margin-bottom: 20px; color: ${
     winner ? "rgb(0, 255, 50)" : "rgb(255, 0, 50)"
