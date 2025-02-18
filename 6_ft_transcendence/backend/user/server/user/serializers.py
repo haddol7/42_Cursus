@@ -46,7 +46,7 @@ class FriendSerializer(serializers.ModelSerializer):
     def get_online_status(self, value: Friend) -> bool:
         user_id = value.friend.user_id
         try:
-            response = requests.get(f"{JWT_URL}/jwt/online", params={"user_id": user_id}, timeout=2)
+            response = requests.get(f"{JWT_URL}/jwt/online", params={"user_id": user_id} ,timeout=2)
             if response.ok:
                 res = response.json()
                 return res["isonline"]

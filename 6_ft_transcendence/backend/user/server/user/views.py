@@ -59,7 +59,7 @@ class ProfileDetail(APIView, JWTAuthenticationMixin):
         except PermissionError as e:
             return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            return Response({"error": "Internal Server Error."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': f'Internal Server Error. : {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, req: Request):
         try:
@@ -88,7 +88,7 @@ class ProfileDetail(APIView, JWTAuthenticationMixin):
         except PermissionError as e:
             return Response({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            return Response({'error': 'Internal Server Error.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': f'Internal Server Error. : {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     def validated_image(self, image : UploadedFile) -> bool:
         try:
@@ -126,7 +126,7 @@ class FriendView(APIView, JWTAuthenticationMixin):
         except PermissionError as e:
             return Response({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            return Response({'error': 'Internal Server Error.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': f'Internal Server Error. : {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 
     def post(self, req: Request):
@@ -155,107 +155,8 @@ class FriendView(APIView, JWTAuthenticationMixin):
         except PermissionError as e:
             return Response({'error': str(e)}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
-            return Response({'error': 'Internal Server Error.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-#/_internal/user
-class InternalUserView(APIView):
-    parser_classes = [JSONParser]
-
-    def get(self, req: Request):
-        try:
-            user_id : int = req.query_params.get('user_id')
-            if not user_id:
-                return Response({'error':'user_id is required.'}, status=status.HTTP_400_BAD_REQUEST)
-
-            profile = Profile.objects.filter(user_id=user_id).first()
-            if not profile:
-                return Response({'error':'user_id is not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-            user_name : str = profile.user_name
-            return Response(user_name, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'error': 'Internal Server Error.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    def post(self, req: Request):
-        try:
-            user_id = req.data.get('user_id')
-            if not user_id:
-                return Response({'error':'user_id is required.'}, status=status.HTTP_400_BAD_REQUEST)
-            user_name = req.data.get('user_name')
-            if not user_name:
-                return Response({'error':'user_name is required.'}, status=status.HTTP_400_BAD_REQUEST)
-
-            profile = Profile.objects.create(user_id=user_id, user_name=user_name)
-            profile.save()
-            serializer = ProfileSerializer(profile)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except Exception as e:
             return Response({'error': f'Internal Server Error. : {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
-
-#/_internal/dashboard
-class InternalDashboardView(APIView):
-    parser_classes = [JSONParser]
-
-    def post(self, req :Request):
-        try:
-            data = req.data
-            player1_id = int(data.get("player1_id"))
-            player2_id = int(data.get("player2_id"))
-            player1_score = int(data.get("player1_score"))
-            player2_score = int(data.get("player2_score"))
-            winner_id = int(data.get("winner_id"))
-            match_date = parse_datetime(data.get("match_date"))
-            play_time = int(data.get("play_time"))
-
-            if any(field is None for field in [player1_id, player2_id, player1_score, player2_score, winner_id, match_date, play_time]):
-                return Response({"error": "All fields are required."}, status=status.HTTP_400_BAD_REQUEST)
-
-            player1 = Profile.objects.get(pk=player1_id)
-            player2 = Profile.objects.get(pk=player2_id)
-            winner = Profile.objects.get(pk=winner_id)
-            
-            match = MatchHistory.objects.create(
-                player1_id=player1,
-                player2_id=player2,
-                player1_score=player1_score,
-                player2_score=player2_score,
-                winner_id=winner,
-                match_date=match_date,
-                play_time=play_time
-            )
-            match.save()
-            self.update_user_info(player1_id, winner_id, play_time)
-            self.update_user_info(player2_id, winner_id, play_time)
-            return Response({"message": "Match recorded successfully."}, status=status.HTTP_201_CREATED)
-
-        except Exception as e:
-            return Response({'error': f'Internal Server Error -> {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    def update_user_info(self, user_id, winner_id, play_time):
-        # user profile
-        user_profile = Profile.objects.filter(user_id=user_id).first()
-        if not user_profile:
-            return
-
-        user_profile.total_cnt += 1
-        if user_id == winner_id:
-            user_profile.win_cnt += 1
-        else:
-            user_profile.lose_cnt += 1
-        user_profile.save()
-
-        # user stat
-        user_stats, created = UserStats.objects.get_or_create(user=user_profile)
-        user_stats.total_games += 1
-        if user_id == winner_id:
-            user_stats.win_cnt += 1
-        else:
-            user_stats.lose_cnt += 1
-        user_stats.total_play_time += play_time
-        user_stats.save()
 
 
 # /user/dashboard
@@ -415,37 +316,30 @@ class DashboardView(APIView, JWTAuthenticationMixin):
         상위 5명의 유저네임과 승리 횟수 반환
         """
         qs = UserStats.objects.filter(total_games__gt=0).order_by('-win_cnt')[:5]
-        if not qs.exists():
-            return [
-                {"user_name": "Nan", "win_count": 0},
-                {"user_name": "Nan", "win_count": 0},
-                {"user_name": "Nan", "win_count": 0},
-                {"user_name": "Nan", "win_count": 0},
-                {"user_name": "Nan", "win_count": 0}
-			]
-            
-        return [{
+        top_winners = [{
             "user_name": stat.user.user_name,
             "win_count": stat.win_cnt
         } for stat in qs]
+
+        while len(top_winners) < 5:
+            top_winners.append({"user_name": "Nan", "win_count": 0})
+
+        return top_winners
 
     def _get_top_5_game_time(self) -> list:
         """
         상위 5명의 유저네임과 총 게임 이용 시간 반환 
         """
         qs = UserStats.objects.filter(total_games__gt=0).order_by('-win_cnt')[:5]
-        if not qs.exists():
-            return [
-                {"user_name": "Nan", "game_time": 0},
-                {"user_name": "Nan", "game_time": 0},
-                {"user_name": "Nan", "game_time": 0},
-                {"user_name": "Nan", "game_time": 0},
-                {"user_name": "Nan", "game_time": 0}
-			]
-        return [{
+        top_game_time = [{
             "user_name": stat.user.user_name,
             "game_time": stat.total_play_time
         } for stat in qs]
+
+        while len(top_game_time) < 5:
+            top_game_time.append({"user_name": "Nan", "game_time": 0})
+
+        return top_game_time
 
     def _get_recent_matches(self) -> list:
         """
@@ -481,3 +375,103 @@ class DashboardView(APIView, JWTAuthenticationMixin):
 			}
             return [default_match]
         return matches
+
+
+#/_internal/user
+class InternalUserView(APIView):
+    parser_classes = [JSONParser]
+
+    def get(self, req: Request):
+        try:
+            user_id : int = req.query_params.get('user_id')
+            if not user_id:
+                return Response({'error':'user_id is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            profile = Profile.objects.filter(user_id=user_id).first()
+            if not profile:
+                return Response({'error':'user_id is not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+            user_name : str = profile.user_name
+            return Response(user_name, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': f'Internal Server Error. : {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def post(self, req: Request):
+        try:
+            user_id = req.data.get('user_id')
+            if not user_id:
+                return Response({'error':'user_id is required.'}, status=status.HTTP_400_BAD_REQUEST)
+            user_name = req.data.get('user_name')
+            if not user_name:
+                return Response({'error':'user_name is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            profile = Profile.objects.create(user_id=user_id, user_name=user_name)
+            profile.save()
+            serializer = ProfileSerializer(profile)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({'error': f'Internal Server Error. : {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+#/_internal/dashboard
+class InternalDashboardView(APIView):
+    parser_classes = [JSONParser]
+
+    def post(self, req :Request):
+        try:
+            data = req.data
+            player1_id = int(data.get("player1_id"))
+            player2_id = int(data.get("player2_id"))
+            player1_score = int(data.get("player1_score"))
+            player2_score = int(data.get("player2_score"))
+            winner_id = int(data.get("winner_id"))
+            match_date = parse_datetime(data.get("match_date"))
+            play_time = int(data.get("play_time"))
+
+            if any(field is None for field in [player1_id, player2_id, player1_score, player2_score, winner_id, match_date, play_time]):
+                return Response({"error": "All fields are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+            player1 = Profile.objects.get(pk=player1_id)
+            player2 = Profile.objects.get(pk=player2_id)
+            winner = Profile.objects.get(pk=winner_id)
+            
+            match = MatchHistory.objects.create(
+                player1_id=player1,
+                player2_id=player2,
+                player1_score=player1_score,
+                player2_score=player2_score,
+                winner_id=winner,
+                match_date=match_date,
+                play_time=play_time
+            )
+            match.save()
+            self.update_user_info(player1_id, winner_id, play_time)
+            self.update_user_info(player2_id, winner_id, play_time)
+            return Response({"message": "Match recorded successfully."}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({'error': f'Internal Server Error -> {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def update_user_info(self, user_id, winner_id, play_time):
+        # user profile
+        user_profile = Profile.objects.filter(user_id=user_id).first()
+        if not user_profile:
+            return
+
+        user_profile.total_cnt += 1
+        if user_id == winner_id:
+            user_profile.win_cnt += 1
+        else:
+            user_profile.lose_cnt += 1
+        user_profile.save()
+
+        # user stat
+        user_stats, created = UserStats.objects.get_or_create(user=user_profile)
+        user_stats.total_games += 1
+        if user_id == winner_id:
+            user_stats.win_cnt += 1
+        else:
+            user_stats.lose_cnt += 1
+        user_stats.total_play_time += play_time
+        user_stats.save()
