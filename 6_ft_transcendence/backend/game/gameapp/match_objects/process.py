@@ -197,7 +197,7 @@ class MatchProcess(threading.Thread):
         self.reset_game(scorer)
 
     def __is_winner(self) -> bool:
-        self.logger.info(f"[__is_winner] self.is_with_ai={self.is_with_ai}")
+        self.logger.debug(f"[__is_winner] self.is_with_ai={self.is_with_ai}")
         if self.is_with_ai:
             return False
         return self.score[0] == WINNING_SCORE or self.score[1] == WINNING_SCORE

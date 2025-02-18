@@ -134,7 +134,7 @@ class Match:
         ).delete()
         self.stage = MatchStage.FINISHED
 
-    def __set_win(self, winner_idx):
+    def __set_win(self, winner_idx: int):
         """
         If the stage is `FINISHED`, but the `winner` is not received event certainly, it is okay to call this method, but only one time.
 
@@ -221,6 +221,10 @@ class Match:
             sio_disconnect(winner["sid"])
 
         self.emit_opponent()
+
+        for listener in self.listeners:
+            if "name" in winner:
+                listener.emit_opponent_on_listen(winner["name"])
 
         match_dict.delete_match_id(self.match.id)
         self.stage = MatchStage.FINISHED
