@@ -2,11 +2,11 @@ let g_winner;
 let g_paddle1;
 let g_paddle2;
 
-export function updateGamePopup(opponent) {
-  showGameOver(g_winner, g_paddle1, g_paddle2, opponent);
+export function updateGamePopup(opponent, lastGame) {
+  showGameOver(g_winner, g_paddle1, g_paddle2, opponent, lastGame);
 }
 
-export function showGameOver(winner, paddle1, paddle2, nextOpponent) {
+export function showGameOver(winner, paddle1, paddle2, nextOpponent, lastGame) {
   const gameOverPopup = document.getElementById("gameOverPopup");
   const gameResult = document.getElementById("gameResult");
   const restartButton = document.getElementById("restartButton");
@@ -29,7 +29,7 @@ export function showGameOver(winner, paddle1, paddle2, nextOpponent) {
   </div>
 
   ${
-    nextOpponent !== "END"
+    lastGame === false
       ? `
       <div style="margin-top: 30px; text-align: center;">
         <div style="font-size: 20px; font-weight: 600; margin-bottom: 10px; color: #333;">
@@ -46,7 +46,7 @@ export function showGameOver(winner, paddle1, paddle2, nextOpponent) {
 
   gameOverPopup.style.display = "flex";
 
-  if (nextOpponent === "END") {
+  if (lastGame === true) {
     setButtonText("나가기");
   } else {
     setButtonText("다음 게임");
