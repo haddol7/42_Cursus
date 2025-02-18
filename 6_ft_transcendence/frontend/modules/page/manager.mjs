@@ -36,6 +36,7 @@ export class PageManager {
       case PageManager.pageStatus.login.page:
         clearBody();
         removeBodyProperty();
+        break;
       case PageManager.pageStatus.main.page:
       case PageManager.pageStatus.my.page:
       case PageManager.pageStatus.friend.page:
@@ -43,6 +44,7 @@ export class PageManager {
       case PageManager.pageStatus.dashBoard.page:
       case PageManager.pageStatus.gameLobby.page:
         clearExceptNavBar();
+        break;
     }
 
     if (
