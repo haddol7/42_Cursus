@@ -122,12 +122,15 @@ export const runPongGame = () => {
         data.winner === paddleId,
         data.paddle1,
         data.paddle2,
-        "unknown vs. unknown" // 기본값
+        "unknown vs. unknown", // 기본값
+        false // 기본값
       );
     });
 
-    socket.on("opponent", (nextOpponent) => {
-      updateGamePopup(nextOpponent);
+    socket.on("opponent", (data) => {
+      const nextOpponent = data.opponent;
+      const lastGame = data.lastGame;
+      updateGamePopup(nextOpponent, lastGame);
     });
 
     socket.on("disconnect", (reason) => {
