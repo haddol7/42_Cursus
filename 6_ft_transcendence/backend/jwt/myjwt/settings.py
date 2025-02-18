@@ -15,6 +15,8 @@ from pathlib import Path
 import dotenv
 import os
 
+from jwtapp.envs import FRONTEND_URL
+
 dotenv.load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,7 +32,6 @@ SECRET_KEY = "django-insecure-@-gp@tz8yabst&83-r2f1vxd4m=lw0%5d&x$eo^nnwx(ix2#6!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-FRONTEND_URL = os.environ["FRONTEND_URL"]
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "jwt", FRONTEND_URL]
 
 

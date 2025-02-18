@@ -148,8 +148,13 @@ LOGGING = {
             "class": "logging.FileHandler",
             "filename": "general.log",
             "formatter": "verbose",
+            "level": "DEBUG",
         },
-        "stdout": {"class": "logging.StreamHandler", "formatter": "simple"},
+        "stdout": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+            "level": "INFO",
+        },
     },
     "formatters": {
         "verbose": {
@@ -162,5 +167,5 @@ LOGGING = {
             "style": "{",
         },
     },
-    "loggers": {"": {"level": "DEBUG", "handlers": ["file", "stdout"]}},
+    "loggers": {"": {"level": "INFO", "handlers": ["file", "stdout"]}},
 }

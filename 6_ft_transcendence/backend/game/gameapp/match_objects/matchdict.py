@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING
 
+from gameapp.match_objects.matchuser import MatchUser
+
 
 if TYPE_CHECKING:
     from .match import Match
@@ -23,6 +25,12 @@ class MatchDict:
     def get(self, match_id: int) -> "Match | None":
         if match_id in self.match_dict_2:
             return self.match_dict_2[match_id]
+        return None
+
+    def get_room_by_user_dto(self, user_dto: "MatchUser"):
+        for match in self.match_dict_2.values():
+            if match.is_user_dto_connected(user_dto):
+                return match
         return None
 
     def get_room_by_userid(self, user_id: int) -> "Match | None":

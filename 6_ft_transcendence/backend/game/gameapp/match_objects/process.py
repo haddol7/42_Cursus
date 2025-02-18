@@ -4,6 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from exceptions.CustomException import InternalException
+from gameapp.envs import WINNING_SCORE
 from gameapp.sio import (
     GAME_OVER_EVENT,
     RESET_POSITIONS_EVENT,
@@ -25,7 +26,6 @@ GAME_BOUNDS = {"x": 5, "y": 7}
 PADDLE_WIDTH = 1
 PADDLE_HEIGHT = 0.2
 BALL_RADIUS = 0.2
-WINNING_SCORE = 2
 PADDLE_MOVE = 0.075
 INITIAL_SPEED = 0.05
 BALL_SIZE = {"x": 0.4, "y": 0.4, "z": 0.4}
@@ -79,7 +79,7 @@ class MatchProcess(threading.Thread):
             )
             idx = self.__get_idx(user_id)
 
-        self.logger.info(
+        self.logger.debug(
             f"user_id={user_id}, idx={idx}, paddle_direction={paddle_direction}"
         )
         if paddle_direction == 0:
@@ -90,18 +90,17 @@ class MatchProcess(threading.Thread):
             paddle_pos = self.paddle[idx]
 
         normalized_direction = PADDLE_MOVE if paddle_direction > 0 else -PADDLE_MOVE
-        self.logger.info(
+        self.logger.debug(
             f"user_id={user_id} paddle_pos was={paddle_pos} normalized_direction={normalized_direction}"
         )
         x = paddle_pos + normalized_direction
         x = max(-GAME_RIGHTEND, min(GAME_RIGHTEND, x))
-        self.logger.info(f"user_id={user_id}, prev val={paddle_pos}, become x={x}")
+        self.logger.debug(f"user_id={user_id}, prev val={paddle_pos}, become x={x}")
 
         with self.lock:
             self.paddle[idx] = x
 
         emit_json = {"paddleId": "paddle1" if idx == 0 else "paddle2", "position": x}
-        self.logger.info(f"user_id={user_id}, emitting event={UPDATE_PADDLE_EVENT}")
         sio_emit(
             UPDATE_PADDLE_EVENT,
             emit_json,
@@ -125,7 +124,6 @@ class MatchProcess(threading.Thread):
                 self.ball["vy"] = initial_speed if scorer_idx == 0 else -initial_speed
             else:
                 self.ball["vy"] = -initial_speed
-            self.logger.info(f"reset_game send event {UPDATE_BALL_EVENT}")
             sio_emit(UPDATE_BALL_EVENT, self.ball, self.room_name)
 
         t = threading.Timer(3.0, start_game_func)
@@ -192,7 +190,6 @@ class MatchProcess(threading.Thread):
             return
 
         score[scorer] += 1
-        self.logger.info(f"match process emit event={UPDATE_SCORE_EVENT}")
         sio_emit(
             UPDATE_SCORE_EVENT,
             {"paddle1": score[0], "paddle2": score[1]},
@@ -202,6 +199,7 @@ class MatchProcess(threading.Thread):
         self.reset_game(scorer)
 
     def __is_winner(self) -> bool:
+        self.logger.info(f"[__is_winner] self.is_with_ai={self.is_with_ai}")
         if self.is_with_ai:
             return False
         return self.score[0] == WINNING_SCORE or self.score[1] == WINNING_SCORE
@@ -265,6 +263,7 @@ class MatchProcess(threading.Thread):
             self.event.wait(0.016)
 
     def stop(self):
+        self.logger.info(f"Process stopped! name={self.room_name}")
         with self.lock:
             self.event.set()
 

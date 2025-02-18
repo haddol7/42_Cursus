@@ -1,10 +1,8 @@
 from typing import Any
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
 
 import logging
 import json
-import requests
 from rest_framework.request import Request
 
 from ai.decorators import api_post
@@ -22,10 +20,24 @@ import numpy as np
 # Create your views here.
 
 
+NAMESPACE = "/game"
+
+
 logger = logging.getLogger(__name__)
 
 
 class AiClient:
+
+    def sio_event(self, event_name: str):
+        def _event(func):
+            event_func = self.sio.on(event_name, namespace=NAMESPACE)
+            return event_func(func)  # type: ignore
+
+        return _event
+
+    def sio_emit(self, event: str, data: dict[str, Any]):
+        self.sio.emit(event, data, namespace=NAMESPACE)
+
     def ai_decide(self, network, paddle_x, ball_x, ball_y):
         output = network.activate((paddle_x, ball_x, ball_y))
         decision = np.argmax(output)
@@ -47,7 +59,7 @@ class AiClient:
 
         self.net = neat.nn.FeedForwardNetwork.create(best_genome, config)
 
-        sio = socketio.Client(logger=True, engineio_logger=True)
+        self.sio = socketio.Client(logger=True, engineio_logger=True)
 
         self.g_paddle_x = 0
 
@@ -55,52 +67,54 @@ class AiClient:
         self.last_update_time = 0
         self.last_ball_data = None
 
-        @sio.event(namespace="/game")  # type: ignore
+        self.sio.connect(
+            f"{GAME_URL}", namespaces=[NAMESPACE], auth={"ai": True, "jwt": jwt}
+        )
+
+        @self.sio_event("init")
         def init(data):
             logger.info("ai got init")
             self.paddle_id = data["paddleId"]
 
-        @sio.event(namespace="/game")  # type: ignore
+        @self.sio_event("updateBall")
         def updateBall(ball_data):
             logger.info(f"ai got updateBall, data={json.dumps(ball_data)}")
-            if not sio.connected or self.paddle_id is None:
+            if not self.sio.connected or self.paddle_id is None:
                 return
 
             # 받아오는 데이터가 없을 때, 예측
             current_time = time.time()
             if current_time - self.last_update_time < 1.0:
-                last_ball_data = self.predict_ball_position(self.last_ball_data)
+                self.last_ball_data = self.predict_ball_position(self.last_ball_data)
             else:
-                last_ball_data = ball_data
+                self.last_ball_data = ball_data
                 self.last_update_time = current_time
 
             try:
-                norm_x = last_ball_data["x"] / 2.5
-                norm_y = last_ball_data["y"] / 3.5
-                paddle_x = last_ball_data["AI_pos"]
+                norm_x = self.last_ball_data["x"] / 2.5
+                norm_y = self.last_ball_data["y"] / 3.5
+                paddle_x = self.last_ball_data["AI_pos"]
                 norm_paddle_x = paddle_x / 2.5
 
                 move = self.ai_decide(self.net, norm_paddle_x, norm_x, norm_y)
                 self.g_paddle_x = paddle_x + move * 0.075
 
-                sio.emit(
-                    "paddleMove", {"paddleId": self.paddle_id, "paddleDirection": move}
+                self.sio_emit(
+                    "paddleMove",
+                    {"paddleId": self.paddle_id, "paddleDirection": move},
                 )
 
             except Exception as e:
                 print(f"⚠️ AI 오류: {e}")
 
-        @sio.event(namespace="/game")  # type: ignore
+        @self.sio_event("hitPaddle")
         def hitPaddle(data):
             pass
 
-        @sio.event(namespace="/game")  # type: ignore
+        @self.sio_event("gameOver")
         def gameOver(data):
-            print("ai got gameover")
-            sio.disconnect()
-
-        sio.connect(f"{GAME_URL}", namespaces=["/game"], auth={"ai": True, "jwt": jwt})
-        self.sio = sio
+            logger.info("ai got gameover")
+            self.sio.disconnect()
 
     def predict_ball_position(self, ball_data):
         ball_x = ball_data["x"]
