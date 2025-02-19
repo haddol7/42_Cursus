@@ -10,6 +10,7 @@ import { updateScore } from "./scoreboard.js";
 import { showGameOver, updateGamePopup } from "./gameOver.js";
 import { JWT } from "../modules/authentication/jwt.mjs";
 import { clearBody } from "../modules/page/lowRankElements.mjs";
+import { LOGIN_EXPIRED_MSG } from "../modules/authentication/globalConstants.mjs";
 
 export let socket = null;
 export const gameSocketDisconnect = () => {

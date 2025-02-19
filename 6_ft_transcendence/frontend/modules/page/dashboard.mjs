@@ -3,6 +3,7 @@ import { PageManager } from "./manager.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 import { logout } from "../authentication/logout.mjs";
+import { LOGIN_EXPIRED_MSG } from "../authentication/globalConstants.mjs";
 
 /////////////////////////
 // 예시 데이터: 최근 5경기 점수 정보

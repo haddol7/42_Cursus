@@ -1,7 +1,6 @@
 import {
   renderNavBar,
   bindEventToNavBar,
-  clearBody,
   clearExceptNavBar,
 } from "./lowRankElements.mjs";
 import { PageManager } from "./manager.mjs";
@@ -11,6 +10,7 @@ import { USER_URL, WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 import { replaceAllScriptChar } from "../security.mjs";
 import { FriendPage } from "./friend.mjs";
 import { logout } from "../authentication/logout.mjs";
+import { LOGIN_EXPIRED_MSG } from "../authentication/globalConstants.mjs";
 
 export class MyPage {
   static render() {

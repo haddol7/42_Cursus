@@ -1,6 +1,7 @@
 import { runPongGame } from "../../game/client.js";
 import { JWT } from "../authentication/jwt.mjs";
 import { PageManager } from "./manager.mjs";
+import { LOGIN_EXPIRED_MSG } from "../authentication/globalConstants.mjs";
 
 export class AIMatchPage {
   static play = async () => {

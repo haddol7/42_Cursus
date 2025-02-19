@@ -5,6 +5,7 @@ import { JWT } from "../authentication/jwt.mjs";
 import { WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 import { replaceAllScriptChar } from "../security.mjs";
 import { logout } from "../authentication/logout.mjs";
+import { LOGIN_EXPIRED_MSG } from "../authentication/globalConstants.mjs";
 
 export class EditProfilePage {
   static render() {

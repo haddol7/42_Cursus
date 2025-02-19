@@ -1,4 +1,4 @@
-import { USER_URL, WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
+import { USER_URL, WHEN_EXPIRED,LOGIN_EXPIRED_MSG } from "../authentication/globalConstants.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { logout } from "../authentication/logout.mjs";
 import {
