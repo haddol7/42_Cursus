@@ -74,6 +74,7 @@ jwt가 유효한 경우 200대 응답 코드와 `user_id`를 반환합니다.
 ```json
 {
     "user_id": "int",
+    "twofa_delete": "boolean"
 }
 ```
 
@@ -90,6 +91,11 @@ jwt가 유효한 경우 200대 응답 코드와 `user_id`를 반환합니다.
 !!! 올바른 사용자가 요청하는지 체크하지 않습니다 !!!
 
 아예 새로운 JWT를 생성해 반환합니다.
+
+- `twofa_delete`가 True이면 twofa 정보를 지우고 새로운 토큰을 반환합니다. 사용자는 twofa 인증을 통과해야 토큰을 사용할 수 있습니다.
+- `twofa_delete`가 False 이면 twofa 정보를 지우지 않고 새로운 토큰을 반환합니다. 사용자는 새로운 토큰을 그대로 사용할 수 있습니다.
+
+에러 목록은 다음과 같습니다.
 
 - `{field}`가 올바르지 않은 경우, `bad_request:{field}` (400)
 - 기타 내부 서버 에러, `internal_error` (500)

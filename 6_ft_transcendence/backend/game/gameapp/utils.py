@@ -8,7 +8,7 @@ from django.http import QueryDict
 
 from exceptions.CustomException import BadRequestFieldException, InternalException
 from gameapp.envs import USER_URL
-from gameapp.models import TempMatch, TempMatchUser
+from gameapp.models import TempMatch, TempMatchRoomUser, TempMatchUser
 from gameapp.requests import get
 
 logger = logging.getLogger(__name__)
@@ -107,3 +107,11 @@ def get_match_user_or_none(user_id: int):
     except:
         temp_user = None
     return temp_user
+
+
+def get_match_room_user_or_none(user_id: int):
+    try:
+        temp_room_user = TempMatchRoomUser.objects.get(user_id=user_id)
+    except:
+        temp_room_user = None
+    return temp_room_user

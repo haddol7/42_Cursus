@@ -6,6 +6,8 @@ from django.db.models import Min
 from socketio.exceptions import ConnectionRefusedError
 
 from exceptions.CustomException import InternalException
+from gameapp.connect_utils import join_match
+from gameapp.db_utils import get_room_user_or_none
 from gameapp.envs import GAMEAI_URL, JWT_URL
 from gameapp.match_objects import Match, match_dict
 from gameapp.match_objects.matchuser import AI_ID, RealUser, get_dto
@@ -20,10 +22,12 @@ from gameapp.sio import sio_enter_room, sio_session
 from gameapp.utils import (
     fetch_username,
     get_int,
+    get_match_room_user_or_none,
     get_match_user_or_none,
     get_str,
     generate_secret,
 )
+from gameapp.match_objects.waiting import Waiting, WaitingUsersJoin, waiting_dict
 
 logger = logging.getLogger(__name__)
 
@@ -84,14 +88,14 @@ def make_rooms(room_name: str, user_id: List[int]):
                 )
             )
 
-        init_matches(temp_match_users, match_tuples)
+        init_matches(room_name, temp_match_users, match_tuples)
 
 
 def make_airoom(user_id: int):
     room_name = generate_secret()
     with transaction.atomic():
         temp_match_room = TempMatchRoom.objects.create(room_name=room_name)
-        temp_match_room_user = TempMatchRoomUser.objects.create(
+        TempMatchRoomUser.objects.create(
             user_id=user_id, temp_match_room_id=temp_match_room.id
         )
 
@@ -106,15 +110,16 @@ def make_airoom(user_id: int):
             user_id=user_id, temp_match_id=temp_match.id
         )
 
-        init_matches([temp_match_user], [], is_with_ai=True)
+        init_matches(room_name, [temp_match_user], [], is_with_ai=True)
 
 
-def _get_from_sess(sid: str) -> Tuple[int, str]:
+def _get_from_sess(sid: str) -> Tuple[bool, int, str]:
     with sio_session(sid) as sess:
+        is_ai: bool = sess["is_ai"]
         user_id: int = sess["user_id"]
         user_name: str = sess["user_name"]
 
-    return user_id, user_name
+    return is_ai, user_id, user_name
 
 
 def clear_match_dict():
@@ -122,7 +127,11 @@ def clear_match_dict():
 
 
 def _get_match_id_from_jwt(jwt) -> int:
-    res = post(f"{JWT_URL}/jwt/check/ai", json={"jwt": jwt})
+    try:
+        res = post(f"{JWT_URL}/jwt/check/ai", json={"jwt": jwt})
+    except InternalException as e:
+        raise ConnectionRefusedError(e.msg)
+
     if not res.ok:
         raise ConnectionRefusedError(res.content)
 
@@ -131,7 +140,10 @@ def _get_match_id_from_jwt(jwt) -> int:
 
 
 def _get_user_id_from_jwt(jwt) -> int:
-    res = post(f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": False})
+    try:
+        res = post(f"{JWT_URL}/jwt/check", json={"jwt": jwt, "skip_2fa": False})
+    except InternalException as e:
+        raise ConnectionRefusedError(e.msg)
 
     if not res.ok:
         raise ConnectionRefusedError(res.content)
@@ -143,10 +155,10 @@ def _get_user_id_from_jwt(jwt) -> int:
 def on_connect(sid, auth):
     logger.info(f"connected sid={sid}")
 
-    # TODO: auth with JWT
     if "ai" in auth:
         jwt = get_str(auth, "jwt")
         match_id = _get_match_id_from_jwt(jwt)
+
         logger.info(f"AI joined with match_id={match_id}")
         join_match_ai(sid, match_id)
 
@@ -155,15 +167,11 @@ def on_connect(sid, auth):
             sess["user_id"] = AI_ID
             sess["user_name"] = None
         return
-    elif "jwt" in auth:
-        jwt = get_str(auth, "jwt")
-        user_id = _get_user_id_from_jwt(jwt)
-        # TODO: Fix username
-        user_name = fetch_username(user_id)
-    else:
-        user_id = int(auth["user_id"])
-        user_name = auth["user_name"]
 
+    jwt = get_str(auth, "jwt")
+    user_id = _get_user_id_from_jwt(jwt)
+    user_name = fetch_username(user_id)
+    user_dto: RealUser = get_dto(False, sid, user_id, user_name)  # type: ignore
     with sio_session(sid) as sess:
         sess["is_ai"] = False
         sess["user_id"] = user_id
@@ -172,8 +180,7 @@ def on_connect(sid, auth):
     room_user = get_room_user_or_none(user_id)
     if room_user is None or room_user.is_online:
         raise ConnectionRefusedError("temp match room user none or online")
-    room_user.is_online = True
-    room_user.save()
+
     logger.info(f"room_user, is_online is now True, {room_user}")
 
     room_name = room_user.temp_match_room.room_name
@@ -181,77 +188,59 @@ def on_connect(sid, auth):
 
     match_user = get_match_user_or_none(user_id)
     if match_user is None:
+        logger.error(f"user_id={user_id} has room_user but has no match_user")
         raise ConnectionRefusedError("temp match user none")
     logger.info(f"match_user={match_user}")
 
-    join_match(sid, match_user, username=user_name)
+    waiting_room = waiting_dict.get(room_name)
+    if waiting_room is None:
+        logger.error("cannot find waiting room! this is internal error")
+        raise InternalException()
+    waiting_room.user_join(user_dto)
+    # join_match(sid, match_user, username=user_name)
+
+    room_user.is_online = True
+    room_user.save()
 
 
 def on_disconnect(sid, reason):
     # TODO: If reason is CLIENT_DISCONNECT, wait to be reconnected
 
-    with sio_session(sid) as sess:
-        is_ai: bool = sess["is_ai"]
-        if is_ai:
-            return
+    is_ai, user_id, user_name = _get_from_sess(sid)
+    if is_ai:
+        return
 
-        user_id: int = sess["user_id"]
-        username: str = sess["user_name"]
+    user_dto = RealUser(is_ai=False, id=user_id, name=user_name, sid=sid)
+
+    match_room_user = get_match_room_user_or_none(user_id)
+    if match_room_user is None:
+        return
+    room_name = match_room_user.temp_match_room.room_name
+    waiting_room = waiting_dict.get(room_name)
+    if waiting_room:
+        ret = waiting_room.user_disconnect(user_dto)
+        if ret:
+            return
 
     match_user = get_match_user_or_none(user_id)
     if match_user:
         match_id = match_user.temp_match.id
         match = match_dict.get(match_id)
         if match is not None:
-            user = RealUser(is_ai=False, id=match_user.user.id, name=username, sid=sid)
-            match.user_disconnected(user)
+            match.user_disconnected(user_dto)
             logger.info(f"user_id={user_id} user disconnected")
         else:
-            logger.info("disconnecting... but match_user not found")
+            match_user.delete()
+            match_room_user.delete()
+            logger.info("disconnecting... but match not found")
+            logger.error("Match Room User Not found could not be happening!!!")
     else:
+        match_room_user.delete()
         logger.info("disconnecting... but match_user not found")
-
-
-def get_room_user_or_none(user_id: int):
-    try:
-        temp_match_room_user = TempMatchRoomUser.objects.get(user_id=user_id)
-    except:
-        temp_match_room_user = None
-    return temp_match_room_user
 
 
 def join_match_ai(sid: str, match_id: int):
     match_dict[match_id].ai_connected(sid)
-
-
-def join_match(sid: str, match_user: TempMatchUser, username: str):
-    room_id = match_user.temp_match.id
-    created = False
-    is_with_ai = match_user.temp_match.is_with_ai
-    if room_id not in match_dict.get_dict():
-        match_dict[room_id] = Match(match_user.temp_match, is_with_ai)
-        created = True
-
-    user = RealUser(is_ai=False, id=match_user.user.id, name=username, sid=sid)
-    match_dict[room_id].user_connected(user)
-
-    if is_with_ai:
-        resp = post(f"{GAMEAI_URL}/ai/", json={"match_id": room_id})
-        logger.info(f"request to ai has returned! OK={resp.ok}")
-
-
-def clear_room(room_name: str):
-    temp_room = TempMatchRoom.objects.get(room_name=room_name)
-    room_user = TempMatchRoomUser.objects.filter(temp_match_room_id=temp_room.id)
-    room_user.delete()
-
-    temp_match = TempMatch.objects.filter(match_room_id=temp_room.id)
-    temp_match_user = TempMatchUser.objects.filter(temp_match__in=temp_match)
-
-    temp_match_user.delete()
-    temp_match.delete()
-
-    temp_room.delete()
 
 
 def on_paddle_move(sid: str, data: dict[str, Any]):
@@ -277,7 +266,7 @@ def on_paddle_move(sid: str, data: dict[str, Any]):
 
 
 def on_next_game(sid: str):
-    user_id, username = _get_from_sess(sid)
+    _, user_id, username = _get_from_sess(sid)
     logger.info(f"next_game event: sid={sid}, user_id={user_id}")
 
     user_min_match = TempMatch.objects.filter(tempmatchuser__user_id=user_id).aggregate(
@@ -295,16 +284,20 @@ def on_next_game(sid: str):
 
 
 def init_matches(
+    room_name: str,
     users: List[TempMatchUser],
     matches: List[Tuple[TempMatch, TempMatch]],
     is_with_ai: bool = False,
 ):
+    real_users = []
     for u in users:
         match_id = u.temp_match.id
         if match_id not in match_dict.get_dict():
             match_dict[match_id] = Match(u.temp_match, is_with_ai=is_with_ai)
 
         user = RealUser(is_ai=False, id=u.user.id, name="", sid="")
+        real_users.append(user)
+
         logger.info(user)
         match_dict[match_id].user_decided(user)
 
@@ -319,3 +312,5 @@ def init_matches(
 
         match_dict[match_id1].add_listener(match_dict[match_id2])
         match_dict[match_id2].add_listener(match_dict[match_id1])
+
+    waiting_dict.add(room_name, Waiting(real_users, room_name))

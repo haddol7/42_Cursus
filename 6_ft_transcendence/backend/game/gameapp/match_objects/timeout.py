@@ -8,15 +8,16 @@ TIMEOUT_SEC = 10
 
 
 class WaitingProcess(threading.Thread):
-    def __init__(self, match: "Match"):
+    def __init__(self, match: "Match", timeout_sec: int = TIMEOUT_SEC):
         super().__init__()
         self.event = threading.Event()
         self.time_out = False
         self.match = match
+        self.timeout_sec = timeout_sec
 
     def run(self):
         print("WatingProcess - Run start")
-        self.event.wait(TIMEOUT_SEC)
+        self.event.wait(self.timeout_sec)
         if self.event.is_set():
             return
         self.time_out = True

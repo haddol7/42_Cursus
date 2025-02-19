@@ -257,6 +257,7 @@ services:
     depends_on:
       - auth
       - game
+      - game-ai
       - websocket
       - jwt
       - twofa

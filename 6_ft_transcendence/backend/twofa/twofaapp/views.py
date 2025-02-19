@@ -72,6 +72,7 @@ def post_code(req: Request, data: Dict[str, Any]):
             raise BadRequestFieldException("code")
 
     user_info.twofa_passed = True
+    user_info.twofa_stored = True
     user_info.save()
 
     return JsonResponse({})
@@ -82,7 +83,7 @@ def get_check(req: Request):
     user_id = get_int(req.query_params, "user_id")
 
     user_info = get_userinfo_or_none(user_id)
-    if user_info is None:
+    if user_info is None or not user_info.twofa_stored:
         raise TwoFARegisterException()
 
     if not user_info.twofa_passed:
@@ -96,11 +97,12 @@ def delete_check(req: Request):
     user_id = get_int(req.query_params, "user_id")
 
     user_info = get_userinfo_or_none(user_id)
-    if user_info is None:
+    if user_info is None or not user_info.twofa_stored:
         raise TwoFARegisterException()
 
     user_info.twofa_passed = False
     user_info.save()
+    logger.info(f"user_id={user_id} twofa_passed set to false")
 
     return JsonResponse({})
 

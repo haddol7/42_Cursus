@@ -211,7 +211,6 @@ class MatchProcess(threading.Thread):
 
         score = self.score
         winner_idx = 0 if score[0] == WINNING_SCORE else 1
-        winner: str = self.users[winner_idx]["name"]  # type: ignore
 
         sio_emit(
             GAME_OVER_EVENT,
@@ -239,6 +238,8 @@ class MatchProcess(threading.Thread):
             if self.__is_not_decided():
                 return
         self.__start_hook()
+
+        self.event.wait(3)
 
         while not self.is_event_set():
             with self.lock:
