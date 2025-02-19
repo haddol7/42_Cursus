@@ -1,19 +1,25 @@
-import { USER_URL, WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
+import { USER_URL, WHEN_EXPIRED,LOGIN_EXPIRED_MSG } from "../authentication/globalConstants.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { logout } from "../authentication/logout.mjs";
 import {
   bindEventToNavBar,
-  clearBody,
+  clearExceptNavBar,
   renderNavBar,
 } from "./lowRankElements.mjs";
 import { PageManager } from "./manager.mjs";
 import { MyPage } from "./my.mjs";
 
 export class FriendPage {
+  static lastfriendName = "Dumm";
   static render(friendName) {
+    if (friendName === null || friendName === undefined)
+      friendName = FriendPage.lastfriendName;
+    else FriendPage.lastfriendName = friendName;
+
     renderNavBar();
 
     document.body.innerHTML += `
+      <div id="friendSection">
         <h6 class="centerAlignedTitle">Friend Info</h6>
         <div id="friendProfileInfo" class="box oneToOneRatioWrapher">
             <div>
@@ -41,6 +47,7 @@ export class FriendPage {
             </div>
         </div>
         <a id="backToPageLink" class="nav justify-content-center link">Back to My Page</a>
+      </div>
     `;
 
     bindEventToNavBar();
@@ -52,8 +59,7 @@ export class FriendPage {
       .getElementById("backToPageLink")
       .addEventListener("click", (event) => {
         event.preventDefault();
-        console.log("check event!");
-        clearBody();
+        clearExceptNavBar();
         MyPage.renderAndPushHistory();
       });
 
@@ -79,7 +85,7 @@ export class FriendPage {
           await JWT.getNewToken();
           await FriendPage.#showFriendProfile(friendName);
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       } else alert(json.error);
@@ -89,5 +95,11 @@ export class FriendPage {
   static renderAndPushHistory(friend) {
     FriendPage.render(friend);
     history.pushState(PageManager.pageStatus.friend, "");
+  }
+
+  static destroy() {
+    const friendSection = document.getElementById("friendSection");
+    friendSection.innerHTML = "";
+    friendSection.parentNode.removeChild(friendSection);
   }
 }

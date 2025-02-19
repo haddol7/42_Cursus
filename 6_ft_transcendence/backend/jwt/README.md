@@ -10,14 +10,18 @@
 
 ### POST /jwt/check
 
+- Request
+
 ```json
-Request:
 {
     "jwt": "string",
     "skip_2fa": "boolean"
 }
+```
 
-Response:
+- Response
+
+```json
 {
     "user_id": "int"
 }
@@ -36,13 +40,17 @@ jwt가 유효한 경우 200대 응답 코드와 `user_id`를 반환합니다.
 
 ### POST /jwt/refresh
 
+- Request
+
 ```json
-Request:
 {
     "refresh_token": "string"
 }
+```
 
-Response:
+- Response
+
+```json
 {
     "access_token": "string",
     "refresh_token": "string"
@@ -61,14 +69,18 @@ Response:
 
 ### POST /jwt/token
 
+- Request
+
 ```json
-Request:
 {
     "user_id": "int",
-    
+    "twofa_delete": "boolean"
 }
+```
 
-Response:
+- Response
+
+```json
 {
     "access_token": "string",
     "refresh_token": "string",
@@ -79,6 +91,11 @@ Response:
 !!! 올바른 사용자가 요청하는지 체크하지 않습니다 !!!
 
 아예 새로운 JWT를 생성해 반환합니다.
+
+- `twofa_delete`가 True이면 twofa 정보를 지우고 새로운 토큰을 반환합니다. 사용자는 twofa 인증을 통과해야 토큰을 사용할 수 있습니다.
+- `twofa_delete`가 False 이면 twofa 정보를 지우지 않고 새로운 토큰을 반환합니다. 사용자는 새로운 토큰을 그대로 사용할 수 있습니다.
+
+에러 목록은 다음과 같습니다.
 
 - `{field}`가 올바르지 않은 경우, `bad_request:{field}` (400)
 - 기타 내부 서버 에러, `internal_error` (500)
@@ -114,7 +131,7 @@ Response:
 
 `user_id`를 가진 사용자가 현재 온라인인지를 반환합니다.
 
-내부적으로, JWT 만료시간을 가지고 있어 그 만료시간을 지났는지를 체크하는 것으로 합니다.
+내부적으로, JWT 만료시간을 가지고 있어 그 만료시간이 지났는지를 체크하는 것으로 합니다.
 
 사용자가 존재하지 않더라도 offline인 것으로 하고 에러를 반환하지 않습니다.
 
@@ -123,13 +140,17 @@ Response:
 
 ### POST /jwt/token/ai
 
+- Request
+
 ```json
-Request:
 {
     "match_id": "int",
 }
+```
 
-Response:
+- Response
+
+```json
 {
     "access_token": "string"
 }
@@ -144,13 +165,17 @@ Response:
 
 ### POST /jwt/check/ai
 
+- Request
+
 ```json
-Request:
 {
     "jwt": "string"
 }
+```
 
-Response:
+- Response
+
+```json
 {
     "match_id": "int"
 }

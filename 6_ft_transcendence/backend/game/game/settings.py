@@ -10,17 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 import dotenv
-import os
-
 
 dotenv.load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -33,7 +31,6 @@ DEBUG = True
 
 FRONTEND_URL = os.environ["FRONTEND_URL"]
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "game", FRONTEND_URL]
-
 
 # Application definition
 
@@ -48,7 +45,6 @@ INSTALLED_APPS = [
     "testapp",
     "gameapp",
     "rest_framework",
-    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -82,7 +78,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "game.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -95,7 +90,6 @@ DATABASES = {
         "PASSWORD": os.environ["POSTGRES_PASSWORD"],
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -115,7 +109,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -126,7 +119,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -139,3 +131,33 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STATIC_ROOT = BASE_DIR / "static"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": "general.log",
+            "formatter": "verbose",
+            "level": "DEBUG",
+        },
+        "stdout": {
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+            "level": "INFO",
+        },
+    },
+    "formatters": {
+        "verbose": {
+            "format": "{name} {levelname} {asctime} {module}:{lineno:d} {process:d} {thread:d}  |  {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "[{asctime}] {levelname:5s}  |  {message}",
+            "datefmt": "%d/%b/%Y %H:%M:%S",
+            "style": "{",
+        },
+    },
+    "loggers": {"": {"level": "INFO", "handlers": ["file", "stdout"]}},
+}

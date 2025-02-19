@@ -1,32 +1,44 @@
-from xmlrpc.client import INTERNAL_ERROR
-
+import datetime
+import logging
 import socketio
 import socketio.exceptions
+from datetime import timedelta
+from django.http import JsonResponse
+from http.client import INTERNAL_SERVER_ERROR
+
 from exceptions.CustomException import CustomException
-from websocket.sio import sio
+from .sio import sio
+
+logger = logging.getLogger(__name__)
 
 
-def event_on(event: str):
+def event_on(event: str, *args, **kwargs):
     def handle_exception(func):
         def _wrapper(*args, **kwargs):
+            start = datetime.datetime.now(datetime.timezone.utc)
             try:
+                logger.debug(f"This websocket is for event={event}")
                 ret = func(*args, **kwargs)
-                print(f"ret = {ret}")
                 if ret is None:
                     return {}
-                else:
-                    return ret
+                return ret
             except socketio.exceptions.ConnectionRefusedError as e:
-                print(f"error1={e}")
+                logger.error("connection refused error")
+                logger.exception(e)
                 raise e
             except CustomException as e:
-                print(f"error2={e}")
+                logger.error(f"custom exception type={type(e)}")
+                logger.exception(e)
                 return {"error": e.__str__(), "code": e.get_status_code()}
             except Exception as e:
-                print("ERROR: ", e)
-                return {"error": e, "code": INTERNAL_ERROR}
+                logger.error(f"Unknown exception, type={type(e)}")
+                logger.exception(e)
+                return {"error": "internal_error", "code": INTERNAL_SERVER_ERROR}
+            finally:
+                elapsed = datetime.datetime.now(datetime.timezone.utc) - start
+                logger.debug(f"Elapsed = {elapsed / timedelta(milliseconds=1)}ms")
 
-        _outer = sio.on(event)(_wrapper)  # type: ignore
+        _outer = sio.on(event, *args, **kwargs)(_wrapper)  # type: ignore
         return _outer
 
     return handle_exception

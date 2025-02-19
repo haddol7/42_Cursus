@@ -1,8 +1,7 @@
-import { renderNavBar } from "./lowRankElements.mjs";
+import { clearExceptNavBar, renderNavBar } from "./lowRankElements.mjs";
 import { GameQueuePage } from "./gameQueue.mjs";
 import { PageManager } from "./manager.mjs";
 import { RoomSocketManager } from "../socketManager.mjs";
-import { clearBody } from "./lowRankElements.mjs";
 
 export class GameQueueCreationPage {
   static render() {
@@ -13,20 +12,12 @@ export class GameQueueCreationPage {
         <p style="color: #2e8b57; font-size: 16px; text-align: center; margin-bottom: 0px;">Please select the number of members of PageManager Pong Tournament.</p><br/>
         <form id="createQueueForm" class="columnAlignedForm" action="" method="">
           <div>
-          <input type="radio" class="choice" name="numOfMembers" value="2" />
-          <label class="green">2</label><br />
+            <input type="radio" class="choice" name="numOfMembers" value="2" />
+            <label class="green">2</label><br />
           </div>
           <div>
-          <input type="radio" class="choice" name="numOfMembers" value="4" />
-          <label class="green">4</label><br />
-          </div>
-          <div>
-          <input type="radio" class="choice" name="numOfMembers" value="8" />
-          <label class="green">8</label><br />
-          </div>
-          <div>
-          <input type="radio" class="choice" name="numOfMembers" value="16" />
-          <label class="green">16</label><br />
+            <input type="radio" class="choice" name="numOfMembers" value="4" />
+            <label class="green">4</label><br />
           </div>
           <input id="createQueueButton" class="submitInput" type="submit" value="create queue" />
         </form>
@@ -50,7 +41,7 @@ export class GameQueueCreationPage {
       Array.from(document.getElementsByClassName("choice")).forEach(
         (choice) => {
           if (choice.checked) {
-            clearBody();
+            clearExceptNavBar();
             GameQueuePage.render();
             RoomSocketManager.maxNumOfParticipant = Number(choice.value);
             RoomSocketManager.emitMakeRoom(

@@ -1,11 +1,10 @@
-import { AUTH_URL } from "./globalConstants.mjs";
-import { safe_fetch } from "../utility.mjs";
+import { AUTH_URL, SERVER_ADDRESS } from "./globalConstants.mjs";
 import { JWT } from "./jwt.mjs";
 import { TwoFA } from "./twoFA.mjs";
 
 export class FTOauth {
   static isAlreadyOauth() {
-    if (window.location.href === "https://localhost/") return false;
+    if (window.location.href === SERVER_ADDRESS) return false;
     return true;
   }
 
@@ -23,9 +22,6 @@ export class FTOauth {
 
   static sendFTOauthCodeToServer = async () => {
     const code = FTOauth.getFtOauthCodeFromUrl();
-    // 테스트를 위해 일시적으로 code query 문을 변경
-    // const code = `?code=temp&user_name=${Math.trunc(Math.random() * 10000).toString()}`;
-    // 테스트를 위해 일시적으로 요청을 변경 42/code -> 42/code/mock
     const response = await fetch(`${AUTH_URL}42/code` + code);
 
     const json = await response.json();
@@ -33,6 +29,6 @@ export class FTOauth {
     if (response.ok) {
       JWT.setNewJWTTokenOnCookie(json.accessToken, json.refreshToken);
       TwoFA.isNewUser = json.isnew;
-    } else throw new Error("Wrong Code");
+    } else throw new Error(await response.text());
   };
 }

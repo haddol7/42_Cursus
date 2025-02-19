@@ -1,18 +1,72 @@
-export function showGameOver(winner, paddle1, paddle2) {
-  document.body.style = "overflow: visible;";
-  const gameOverPopup = document.getElementById("gameOverPopup");
-  const gameResult = document.getElementById("gameResult");
-  //const restartButton = document.getElementById("restartButton");
+let g_winner;
+let g_paddle1;
+let g_paddle2;
 
-  gameResult.innerHTML =
-    winner === true
-      ? `You Win!<br><div style="display: inline-block; padding: 10px; background-color:rgb(0, 255, 0); border-radius: 5px; font-size: 20px;">${paddle1} : ${paddle2}</div>`
-      : `You Lose!<br><div style="display: inline-block; padding: 10px; background-color:rgb(255, 0, 0); border-radius: 5px; font-size: 20px;">${paddle1} : ${paddle2}</div>`;
-  gameOverPopup.style.display = "flex";
+export function updateGamePopup(opponent, lastGame) {
+  showGameOver(g_winner, g_paddle1, g_paddle2, opponent, lastGame);
 }
 
-// 나가는 기능은 미구현임
-// console.log(restartButton);
-// restartButton.addEventListener("click", function () {
-//   gameOverPopup.style.display = "none";
-// });
+export function showGameOver(winner, paddle1, paddle2, nextOpponent, lastGame) {
+  const gameOverPopup = document.getElementById("gameOverPopup");
+  const gameResult = document.getElementById("gameResult");
+  const restartButton = document.getElementById("restartButton");
+
+  g_winner = winner;
+  g_paddle1 = paddle1;
+  g_paddle2 = paddle2;
+
+  gameResult.innerHTML = `
+  <div style="font-size: 48px; font-weight: 700; margin-bottom: 20px; color: ${
+    winner ? "rgb(0, 255, 50)" : "rgb(255, 0, 50)"
+  };">
+    ${winner ? "YOU WIN!" : "YOU LOSE"}
+  </div>
+
+  <div style="display: inline-block; padding: 10px 20px; background-color: ${
+    winner ? "rgb(0, 255, 50)" : "rgb(255, 0, 50)"
+  }; border-radius: 10px; font-size: 24px; color: #fff; margin-bottom: 30px;">
+    ${paddle1} : ${paddle2}
+  </div>
+
+  ${
+    lastGame === false
+      ? `
+      <div style="margin-top: 30px; text-align: center;">
+        <div style="font-size: 20px; font-weight: 600; margin-bottom: 10px; color: #333;">
+          🎯 다음 상대 🎯
+        </div>
+        <div style="font-size: 28px; font-weight: 700; color: rgb(173, 216, 230);">
+          ${nextOpponent}
+        </div>
+      </div>
+    `
+      : ""
+  }
+`;
+
+  gameOverPopup.style.display = "flex";
+
+  if (lastGame === true) {
+    setButtonText("나가기");
+  } else {
+    setButtonText("다음 게임");
+  }
+
+  // 버튼 스타일 동적 적용 (초기 설정)
+  restartButton.style.padding = "20px 40px";
+  restartButton.style.fontSize = "24px";
+  restartButton.style.borderRadius = "15px";
+  restartButton.style.cursor = "pointer";
+  restartButton.style.backgroundColor = "rgb(153, 204, 255)";
+  restartButton.style.color = "#fff";
+  restartButton.style.border = "none";
+  restartButton.style.boxShadow = "0 6px 10px rgba(0, 0, 0, 0.3)";
+
+  // 버튼 텍스트 변경 함수
+  function setButtonText(newText) {
+    document.getElementById("restartButton").textContent = newText;
+  }
+
+  // 초기 설정
+  setButtonText("나가기");
+}

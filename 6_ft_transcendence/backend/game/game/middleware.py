@@ -1,29 +1,33 @@
-from typing import Any
 import logging
+from datetime import timedelta, datetime, timezone
+from typing import Any
 
 from django.http import HttpResponse
 
 from exceptions.CustomException import CustomException, InternalException
 
 
-logger = logging.getLogger(__name__)
-
-
 class ExceptionMiddleware:
+    logger = logging.getLogger(__name__)
+
     def __init__(self, get_response) -> None:
         self.get_response = get_response
 
     def __call__(self, request) -> Any:
-        print(f"middleware start {request.method} {request.path}")
+        start = datetime.now(timezone.utc)
+        self.logger.info(f"middleware start {request.method} {request.path}")
         response = self.get_response(request)
-        print("middleware end")
+        elapsed = datetime.now(timezone.utc) - start
+        self.logger.info(
+            f"middleware end, elapsed={elapsed / timedelta(milliseconds=1)}ms"
+        )
         return response
 
     def process_exception(self, request, exception: Exception):
         if isinstance(exception, CustomException):
-            print("custom exception", exception)
-            logger.exception(exception)
+            self.logger.error(f"custom exception {type(exception)}")
+            self.logger.exception(exception)
             return HttpResponse(exception.__str__(), status=exception.get_status_code())
-        print("not custom exception", exception, "type=", type(exception))
-        logger.exception(exception)
+        self.logger.error(f"not custom exception type= {type(exception)}")
+        self.logger.exception(exception)
         return HttpResponse(InternalException().__str__(), status=500)

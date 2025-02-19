@@ -22,8 +22,6 @@ export class JWT {
   }
 
   static setNewJWTTokenOnCookie(access_token, refresh_token) {
-    console.log(`access : ${access_token}`);
-    console.log(`refresh : ${refresh_token}`);
     document.cookie = `${ACCESS_TOKEN_STRING}${access_token};`;
     document.cookie = `${REFRESH_TOKEN_STRING}${refresh_token};`;
   }

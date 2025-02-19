@@ -1,12 +1,11 @@
 import datetime
+import logging
 import random
 import string
 from typing import Any, Dict, Tuple, TypedDict
 
-from django.http import QueryDict
 import jwt
-import requests
-
+from django.http import QueryDict
 
 from exceptions.CustomException import (
     BadRequestFieldException,
@@ -25,6 +24,9 @@ from jwtapp.envs import (
     TWOFA_URL,
 )
 from jwtapp.models import UserStatus
+from jwtapp.requests import delete, get
+
+logger = logging.getLogger(__name__)
 
 
 class JwtPayload(TypedDict):
@@ -128,19 +130,25 @@ def _decode_payload(encoded_jwt: str) -> Dict[str, Any]:
             options={"require": ["exp"], "verify_exp": True},
         )
     except (jwt.exceptions.InvalidSignatureError, jwt.exceptions.DecodeError) as e:
-        print("Jwt Invalid Signature", type(e))
+        logger.error(f"Jwt Invalid Signature {type(e)}")
+        logger.exception(e)
         raise JwtInvalidException()
     except jwt.exceptions.ExpiredSignatureError as e:
-        print("Jwt Expired Signature", type(e))
+        logger.error(f"Jwt Expired Signature {type(e)}")
+        logger.exception(e)
         raise JwtExpiredException()
     except Exception as e:
+        logger.error(
+            f"while decode payload, unknown exception occurred, type={type(e)}"
+        )
+        logger.exception(e)
         raise e
     return decoded_jwt
 
 
-def set_user_secret(
+def set_user_secret_only(
     user_id: int, jwt_secret: str, refresh_secret: str, access_exp: datetime.datetime
-) -> bool:
+):
     user_obj, created = UserStatus.objects.update_or_create(
         user_id=user_id,
         defaults={
@@ -154,13 +162,22 @@ def set_user_secret(
             "expired_at": access_exp,
         },
     )
-    print(f"created={created}")
-    print(f"set_user_secret = {user_id}, {jwt_secret}, {refresh_secret}, {access_exp}")
+    return user_obj, created
+
+
+def set_user_secret(
+    user_id: int, jwt_secret: str, refresh_secret: str, access_exp: datetime.datetime
+) -> bool:
+    _, created = set_user_secret_only(user_id, jwt_secret, refresh_secret, access_exp)
+    logger.info(f"created={created}")
+    logger.info(
+        f"set_user_secret = {user_id}, {jwt_secret}, {refresh_secret}, {access_exp}"
+    )
 
     if created:
         return created
 
-    res = requests.delete(TWOFA_URL, params={"user_id": user_id})
+    res = delete(f"{TWOFA_URL}/twofa/check", params={"user_id": user_id})
     if not res.ok and res.text == TwoFARegisterException().__str__():
         created = True
 
@@ -175,14 +192,17 @@ def _get_user_status_or_none(user_id: int) -> UserStatus | None:
     return user_status
 
 
-def make_token_pair(user_id: int) -> Tuple[str, str, bool]:
+def make_token_pair(user_id: int, twofa_delete: bool) -> Tuple[str, str, bool]:
     now_datetime = _now()
     access_exp = now_datetime + datetime.timedelta(seconds=JWT_EXPIRE_SECONDS)
     refresh_exp = now_datetime + datetime.timedelta(seconds=JWT_REFRESH_EXPIRE_SECONDS)
 
     jwt_secret = generate_secret()
     refresh_secret = generate_secret()
-    isnew = set_user_secret(user_id, jwt_secret, refresh_secret, access_exp)
+    if twofa_delete:
+        isnew = set_user_secret(user_id, jwt_secret, refresh_secret, access_exp)
+    else:
+        _, isnew = set_user_secret_only(user_id, jwt_secret, refresh_secret, access_exp)
 
     access_token = _make_jwt(user_id, jwt_secret, access_exp)
     refresh_token = _make_jwt(user_id, refresh_secret, refresh_exp)
@@ -198,16 +218,16 @@ def check_jwt(encoded_jwt: str, skip_2fa: bool) -> JwtPayload:
     if user_status is None:
         raise JwtInvalidException()
     if user_status.jwt_secret != payload["user_secret"]:
-        print("secret not match")
+        logger.info("secret not match, returning JwtInvalidException")
         raise JwtInvalidException()
 
     if skip_2fa:
+        logger.info("skip_2fa is True, returning payload")
         return payload
 
+    logger.info("skip 2fa is False, twofa check")
     # Safety: JWT signature has verified, so we know this is safe to GET
-    resp = requests.get(
-        f"{TWOFA_URL}/twofa/check", params={"user_id": payload["user_id"]}
-    )
+    resp = get(f"{TWOFA_URL}/twofa/check", params={"user_id": payload["user_id"]})
     if not resp.ok:
         raise CustomException(resp.text, resp.status_code)
 
@@ -265,6 +285,8 @@ def check_ai_token(encoded_jwt: str) -> int:
     except (JwtInvalidException, JwtExpiredException):
         raise JwtInvalidException()
     except Exception as e:
+        logger.error("check ai token, decoded failed")
+        logger.exception(e)
         raise e
 
     if "user_id" not in decoded_dict or decoded_dict["user_id"] != AI_USERID:

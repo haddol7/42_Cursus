@@ -1,24 +1,22 @@
+import logging
 from typing import Any, Dict
-from django.http import HttpRequest, HttpResponseNotAllowed, JsonResponse
-from django.shortcuts import render
+
 import pyotp
+from django.http import HttpRequest, HttpResponseNotAllowed, JsonResponse
+from rest_framework.request import Request
 
 from exceptions.CustomException import (
     BadRequestFieldException,
-    InternalException,
-    NotFoundSthException,
     TwoFARegisterException,
     TwoFARequiredException,
-    UnauthenticatedException,
 )
 from twofaapp.decorators import api_delete, api_get, api_post
-from rest_framework.request import Request
-
 from twofaapp.envs import OTP_ISSUER
-from twofaapp.models import UserInfo
 from twofaapp.utils import get_int, get_str, get_userinfo_or_none, set_totp_secret
 
 # Create your views here.
+
+logger = logging.getLogger(__name__)
 
 
 @api_get
@@ -35,7 +33,7 @@ def get_info(req: Request):
 @api_post
 def post_info(req: Request, data: Dict[str, Any]):
     user_id = get_int(data, "user_id")
-    print("userid = ", user_id)
+    logger.info(f"userid = {user_id}")
 
     name = get_str(data, "name")
 
@@ -74,6 +72,7 @@ def post_code(req: Request, data: Dict[str, Any]):
             raise BadRequestFieldException("code")
 
     user_info.twofa_passed = True
+    user_info.twofa_stored = True
     user_info.save()
 
     return JsonResponse({})
@@ -84,7 +83,7 @@ def get_check(req: Request):
     user_id = get_int(req.query_params, "user_id")
 
     user_info = get_userinfo_or_none(user_id)
-    if user_info is None:
+    if user_info is None or not user_info.twofa_stored:
         raise TwoFARegisterException()
 
     if not user_info.twofa_passed:
@@ -98,11 +97,12 @@ def delete_check(req: Request):
     user_id = get_int(req.query_params, "user_id")
 
     user_info = get_userinfo_or_none(user_id)
-    if user_info is None:
+    if user_info is None or not user_info.twofa_stored:
         raise TwoFARegisterException()
 
     user_info.twofa_passed = False
     user_info.save()
+    logger.info(f"user_id={user_id} twofa_passed set to false")
 
     return JsonResponse({})
 

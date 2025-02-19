@@ -1,14 +1,18 @@
 import datetime
+import logging
 from typing import Any, Dict, Tuple
 
-from django.http import HttpResponse, QueryDict
-import requests
+from django.http import QueryDict
+from requests import delete
+
 from authapp.envs import FORTY_TWO_API_URL, JWT_URL, USER_URL
 from authapp.models import User
-from exceptions.CustomException import CustomException
+from authapp.requests import get, post
 from exceptions.CustomException import BadRequestFieldException, InternalException
+from exceptions.CustomException import CustomException
 
-from django.db import transaction
+
+logger = logging.getLogger(__name__)
 
 
 def now() -> datetime.datetime:
@@ -58,7 +62,7 @@ def get_bool(dict: Dict[str, Any] | QueryDict, key: str) -> bool:
 
 
 def get_username_from_42(access_token) -> Tuple[int, str]:
-    res = requests.get(
+    res = get(
         f"{FORTY_TWO_API_URL}/v2/me",
         headers={"Authorization": f"Bearer {access_token}"},
     )
@@ -77,14 +81,19 @@ def create_user(id_42: int, username: str) -> Tuple[str, str, bool]:
 
     if created:
         try:
-            requests.post(
+            resp = post(
                 f"{USER_URL}/_internal/user",
                 json={"user_id": user.id, "user_name": username},
             )
+            if not resp.ok:
+                logger.error(f"post Failed, resp={resp.text}")
+                raise InternalException()
         except:
-            pass
+            user.delete()
+            raise InternalException()
 
-    resp = requests.post(f"{JWT_URL}/jwt/token", json={"user_id": user.id})
+    resp = post(f"{JWT_URL}/jwt/token", json={"user_id": user.id, "twofa_delete": True})
+
     if not resp.ok:
         raise CustomException(resp.text, resp.status_code)
 

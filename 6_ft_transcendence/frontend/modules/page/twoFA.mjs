@@ -9,11 +9,9 @@ import { PageManager } from "./manager.mjs";
 import { MainPage } from "./main.mjs";
 
 export class TwoFAPage {
-  // static renderAndReplaceHistroy(url) {
   static render(url) {
     const centralBox = renderCentralBox();
 
-    console.log(TwoFA.isNewUser);
     if (TwoFA.isNewUser === true) {
       centralBox.innerHTML += `
         <form id="twoFAUserNameForm" class="smallRowAlignedForm" action="" method="">
@@ -84,7 +82,6 @@ export class TwoFAPage {
       };
     }
 
-    // PageManager.currentpageStatus = PageManager.pageStatus.twoFA;
     history.replaceState(PageManager.pageStatus.login, "", url);
   }
 
@@ -97,7 +94,7 @@ export class TwoFAPage {
       if (e.message === "bad_request:code") {
         document.getElementById("otpCodeInput").value = "";
         alert("wrong code. please input again");
-      }
+      } else alert(e);
     }
   };
 

@@ -15,6 +15,8 @@ from pathlib import Path
 import dotenv
 import os
 
+from authapp.envs import FRONTEND_URL
+
 
 dotenv.load_dotenv()
 
@@ -31,7 +33,6 @@ SECRET_KEY = "django-insecure-6w1fo66$%ilef$f-=^cf(@7oonkies69%n)iaebpy#fei3mp4q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-FRONTEND_URL = os.environ["FRONTEND_URL"]
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "auth", FRONTEND_URL]
 
 
@@ -46,7 +47,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "authapp",
     "rest_framework",
-    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -135,3 +135,29 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "class": "logging.FileHandler",
+            "filename": "general.log",
+            "formatter": "verbose",
+        },
+        "stdout": {"class": "logging.StreamHandler", "formatter": "simple"},
+    },
+    "formatters": {
+        "verbose": {
+            "format": "{name} {levelname} {asctime} {module}:{lineno:d} {process:d} {thread:d}  |  {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "[{asctime}] {levelname:5s}  |  {message}",
+            "datefmt": "%d/%b/%Y %H:%M:%S",
+            "style": "{",
+        },
+    },
+    "loggers": {"": {"level": "DEBUG", "handlers": ["file", "stdout"]}},
+}

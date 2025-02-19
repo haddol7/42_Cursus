@@ -1,7 +1,4 @@
 #!/bin/bash
-apt-get update -y &&  \
-apt-get install postgresql -y && \
-apt-get install curl -y
 
 python -m pip install --upgrade pip && \
 python -m pip install -r /home/requirements.txt

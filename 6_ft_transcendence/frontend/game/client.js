@@ -1,124 +1,171 @@
 import { initScene, onWindowResize } from "./sceneSetup.js";
 import { createGeometry } from "./geometrySetup.js";
-import { animate } from "./animation.js";
+import {
+  animate,
+  stopAnimation,
+  handleKeyDown,
+  handleKeyUp,
+} from "./animation.js";
 import { updateScore } from "./scoreboard.js";
-import { showGameOver } from "./gameOver.js";
+import { showGameOver, updateGamePopup } from "./gameOver.js";
+import { JWT } from "../modules/authentication/jwt.mjs";
+import { clearBody } from "../modules/page/lowRankElements.mjs";
+import { LOGIN_EXPIRED_MSG } from "../modules/authentication/globalConstants.mjs";
 
-export const runPongGame = (jwtToken) => {
-  console.log(jwtToken);
-
-  const socket = io("/game", {
+export let socket = null;
+export const gameSocketDisconnect = () => {
+  if (socket != null) {
+    socket.disconnect();
+    socket = null;
+  }
+};
+export const gameSocketConnect = () => {
+  socket = io("/game", {
     auth: {
-      jwt: jwtToken,
+      jwt: JWT.getJWTTokenFromCookie().accessToken,
     },
     path: "/game-sio/",
   });
 
-  socket.on("connect_error", (error) => {
-    console.error("Connection failed:", error); // 에러 메시지를 콘솔에 출력
+  socket.on("connect", () => {
+    alert("게임에 연결되었습니다.");
   });
+
+  socket.on("connect_error", async (error) => {
+    alert("게임 연결 중 문제가 발생하였습니다.");
+    alert("재연결을 시도합니다.");
+    if (error.message === "jwt.expired") {
+      try {
+        await JWT.getNewToken();
+        gameSocketConnect();
+      } catch (e) {
+        alert(`${LOGIN_EXPIRED_MSG}(${e})`);
+        logout();
+      }
+    } else {
+      alert(`재연결에 실패하였습니다. 메인 페이지로 이동합니다(${error})`);
+      socket = null;
+      clearBody();
+      MainPage.renderAndPushHistory();
+    }
+  });
+};
+
+export const runPongGame = () => {
+  const restartButton = document.getElementById("restartButton");
+  const gameOverPopup = document.getElementById("gameOverPopup");
 
   let paddleId;
   let player1Score = 0;
   let player2Score = 0;
 
-  // 여기서 디버깅용으로 roomId를 설정할 수 있습니다.
-  const DEBUG_ROOMCODE = "4242";
-  const DEBUG_AI = true;
-  // 미사용
-  const DEBUG_PLAYERNAME = "daeha";
+  let keyDownHandler;
+  let keyUpHandler;
 
-  // 서버로부터 roomId를 요청받았을 때 roomId를 전송
-  socket.on("requestRoomId", () => {
-    socket.emit("roomId", { roomId: DEBUG_ROOMCODE, isAIMode: DEBUG_AI });
+  let scene, camera, renderer, composer;
+
+  gameSocketConnect();
+  ({ scene, camera, renderer, composer } = initScene());
+  createGeometry(scene);
+
+  window.addEventListener("resize", () => {
+    onWindowResize(camera, renderer, composer);
   });
 
-  // 서버에게 paddleId를 할당 받은 뒤, three.js 및 게임 초기화
-  socket.on("init", (data) => {
-    paddleId = data.paddleId;
-
-    // three.js 오브젝트, 점수판 초기화
-    const { scene, camera, renderer, composer } = initScene(paddleId);
-    createGeometry(scene);
-    updateScore(scene, player1Score, player2Score);
-
-    // socket.io 이벤트 처리
-    handleSocketEvents(socket, scene);
-
-    // 화면 크기 조절
-    window.addEventListener("resize", () => {
-      onWindowResize(camera, renderer, composer);
-    });
-
-    // paddle 이동 처리 및 애니메이션
-    animate(scene, camera, composer, socket, paddleId);
+  // 버튼 클릭 시 게임 재시작
+  restartButton.addEventListener("click", () => {
+    if (restartButton.textContent === "나가기") {
+      window.history.back(); // 뒤로가기
+    } else if (restartButton.textContent === "다음 게임") {
+      socket.emit("nextGame"); // 다음 게임 시작
+      gameOverPopup.style.display = "none";
+    }
   });
 
-  // 연결 종료 이벤트 감지
-  socket.on("disconnect", (reason, details) => {
-    console.log("서버와의 연결이 종료되었습니다.", reason);
-    alert(reason);
-
-    // the reason of the disconnection, for example "transport error"
-    console.log(reason);
-    // the low-level reason of the disconnection, for example "xhr post error"
-    console.log(details.message);
-    // some additional description, for example the status code of the HTTP response
-    console.log(details.description);
-    // some additional context, for example the XMLHttpRequest object
-    console.log(details.context);
-  });
+  handleSocketEvents(socket, scene);
 
   function handleSocketEvents(socket, scene) {
-    // 상대편 paddle 이동
+    socket.on("init", (data) => {
+      paddleId = data.paddleId;
+      stopAnimation();
+      if (keyDownHandler) window.removeEventListener("keydown", keyDownHandler);
+      if (keyUpHandler) window.removeEventListener("keyup", keyUpHandler);
+      keyDownHandler = (event) => handleKeyDown(event, paddleId);
+      keyUpHandler = (event) => handleKeyUp(event, paddleId);
+      window.addEventListener("keydown", keyDownHandler);
+      window.addEventListener("keyup", keyUpHandler);
+      resetGameObjects();
+      animate(scene, camera, composer, socket, paddleId);
+    });
+
     socket.on("updatePaddle", (data) => {
       const paddle = scene.getObjectByName(data.paddleId);
       if (paddle) paddle.position.x = data.position;
     });
 
-    // 디버그  : AI 시점 공 이동 (1초 마다 리프레쉬)
-    //   let lastUpdateTime = 0;
-
-    //   socket.on("updateBall", (ballData) => {
-    //     const currentTime = Date.now();
-    //     if (paddleId !== "spectator" && currentTime - lastUpdateTime < 1000) {
-    //       return;
-    //     }
-    //     lastUpdateTime = currentTime;
-
-    //     const ball = scene.getObjectByName("ball");
-    //     if (ball) {
-    //       ball.position.set(ballData.x, ballData.y, 0.2);
-    //     }
-    //   });
-    //
-
     socket.on("updateBall", (ballData) => {
       const ball = scene.getObjectByName("ball");
-      ball.position.set(ballData.x, ballData.y, 0.2);
+      if (ball) {
+        ball.position.set(ballData.x, ballData.y, 0.2);
+      }
     });
 
-    // 점수 변경
     socket.on("updateScore", (scores) => {
       player1Score = scores.paddle1;
       player2Score = scores.paddle2;
-      updateScore(scene, player1Score, player2Score);
+      updateScore(scene, player1Score, player2Score, paddleId);
     });
 
-    // 위치 초기화
-    socket.on("resetPositions", () => {
-      const paddle1 = scene.getObjectByName("paddle1");
-      const paddle2 = scene.getObjectByName("paddle2");
-      const ball = scene.getObjectByName("ball");
+    socket.on("resetPositions", resetPositions);
 
-      paddle1.position.set(0, -6.5, 0.2);
-      paddle2.position.set(0, 6.5, 0.2);
-      ball.position.set(0, 0, 0.2);
-    });
-
-    // 게임 종료
     socket.on("gameOver", (data) => {
-      showGameOver(data.winner === paddleId, data.paddle1, data.paddle2);
+      showGameOver(
+        data.winner === paddleId,
+        data.paddle1,
+        data.paddle2,
+        "unknown vs. unknown", // 기본값
+        false // 기본값
+      );
     });
+
+    socket.on("opponent", (data) => {
+      const nextOpponent = data.opponent;
+      const lastGame = data.lastGame;
+      updateGamePopup(nextOpponent, lastGame);
+    });
+
+    socket.on("disconnect", (reason) => {
+      console.log("서버와의 연결이 종료되었습니다.", reason);
+      alert(reason);
+    });
+  }
+
+  // 오브젝트(카메라, 점수판, 공과 패들) 초기화 함수 : 게임 시작할 때만 호출
+  function resetGameObjects() {
+    resetPositions();
+    updateScore(scene, 0, 0, paddleId);
+
+    if (paddleId === "paddle1") {
+      camera.position.set(0, -10.5, 3);
+      camera.lookAt(0, 0, 1);
+    } else if (paddleId === "paddle2") {
+      camera.position.set(0, 10.5, 3);
+      camera.lookAt(0, 0, 1);
+      camera.rotation.z = Math.PI;
+    }
+  }
+
+  // 패들, 공 위치 초기화 함수 : 점수판 업데이트 시 호출
+  function resetPositions() {
+    const paddle1 = scene.getObjectByName("paddle1");
+    const paddle2 = scene.getObjectByName("paddle2");
+    const ball = scene.getObjectByName("ball");
+
+    if (paddle1) paddle1.position.set(0, -6.5, 0.2);
+    if (paddle2) paddle2.position.set(0, 6.5, 0.2);
+    if (ball) {
+      ball.position.set(0, 0, 0.2);
+      ball.vel = 0;
+    }
   }
 };

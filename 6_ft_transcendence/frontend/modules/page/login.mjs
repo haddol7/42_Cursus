@@ -39,8 +39,7 @@ export class LoginPage {
 
       linkToMainPage.onclick = (event) => {
         event.preventDefault();
-        removeBodyProperty();
-        clearBody();
+        LoginPage.destroy();
         MainPage.renderAndPushHistory();
       };
       const logoutButton = document.createElement("a");
