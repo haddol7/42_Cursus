@@ -9,7 +9,6 @@ import { GameQueuePage } from "./gameQueue.mjs";
 import { PageManager } from "./manager.mjs";
 import { RoomSocketManager } from "../socketManager.mjs";
 import { AIMatchPage } from "./aiMatch.mjs";
-import { activateScrollBar } from "./utility.mjs";
 
 export class GameLobbyPage {
   static render() {
@@ -43,7 +42,6 @@ export class GameLobbyPage {
         AIMatchPage.play();
       });
 
-    activateScrollBar();
     PageManager.currentpageStatus = PageManager.pageStatus.gameLobby;
 
     RoomSocketManager.connect();

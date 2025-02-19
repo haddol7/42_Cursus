@@ -6,11 +6,8 @@ import { JWT } from "./modules/authentication/jwt.mjs";
 import { ErrorPage } from "./modules/page/error.mjs";
 import { RoomSocketManager } from "./modules/socketManager.mjs";
 import { gameSocketDisconnect } from "./game/client.js";
-import { activateScrollBar } from "./modules/page/utility.mjs";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  window.addEventListener("resize", activateScrollBar);
-
   window.addEventListener("popstate", PageManager.popStateEvent);
   window.addEventListener("unload", function () {
     gameSocketDisconnect();

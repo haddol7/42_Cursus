@@ -2,7 +2,6 @@ import { renderNavBar, bindEventToNavBar } from "./lowRankElements.mjs";
 import { PageManager } from "./manager.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
-import { activateScrollBar } from "./utility.mjs";
 import { logout } from "../authentication/logout.mjs";
 
 /////////////////////////
@@ -493,7 +492,6 @@ export class DashBoardPage {
         },
       },
     });
-    activateScrollBar();
   }
 
   static renderAndPushHistory() {

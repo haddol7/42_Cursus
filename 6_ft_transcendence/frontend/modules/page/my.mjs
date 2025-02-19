@@ -11,7 +11,6 @@ import { USER_URL, WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 import { replaceAllScriptChar } from "../security.mjs";
 import { FriendPage } from "./friend.mjs";
 import { logout } from "../authentication/logout.mjs";
-import { activateScrollBar } from "./utility.mjs";
 
 export class MyPage {
   static render() {
@@ -75,7 +74,6 @@ export class MyPage {
       })
       .catch(() => {});
 
-    activateScrollBar();
     PageManager.currentpageStatus = PageManager.pageStatus.my;
   }
 

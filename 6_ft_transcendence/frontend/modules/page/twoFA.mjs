@@ -7,10 +7,8 @@ import { TwoFA } from "../authentication/twoFA.mjs";
 import { replaceAllScriptChar } from "../security.mjs";
 import { PageManager } from "./manager.mjs";
 import { MainPage } from "./main.mjs";
-import { activateScrollBar } from "./utility.mjs";
 
 export class TwoFAPage {
-  // static renderAndReplaceHistroy(url) {
   static render(url) {
     const centralBox = renderCentralBox();
 
@@ -84,7 +82,6 @@ export class TwoFAPage {
       };
     }
 
-    activateScrollBar();
     history.replaceState(PageManager.pageStatus.login, "", url);
   }
 

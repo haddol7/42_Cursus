@@ -8,7 +8,6 @@ import {
 } from "./lowRankElements.mjs";
 import { PageManager } from "./manager.mjs";
 import { MyPage } from "./my.mjs";
-import { activateScrollBar } from "./utility.mjs";
 
 export class FriendPage {
   static lastfriendName = "Dumm";
@@ -64,7 +63,6 @@ export class FriendPage {
         MyPage.renderAndPushHistory();
       });
 
-    activateScrollBar();
     PageManager.currentpageStatus = PageManager.pageStatus.friend;
   }
 
