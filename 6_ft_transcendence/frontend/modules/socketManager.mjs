@@ -90,8 +90,9 @@ export class RoomSocketManager {
   };
 
   static #onStartGame = () => {
-    RoomSocketManager.socket.on("start_game", () => {
+    RoomSocketManager.socket.on("start_game", (new_token) => {
       RoomSocketManager.disconnect();
+      JWT.setNewJWTTokenOnCookie(new_token.accessToken, new_token.refreshToken);
       document.body.innerHTML = `
         <div id="gameOverPopup">
           <div id="popupContent">

@@ -22,13 +22,13 @@ export const logout = async () => {
 
   if (!response.ok) {
     const text = await response.text();
-    if (text === "jwt.expired") {
+    if (response.status === 401 && text === "jwt.expired") {
       try {
         await JWT.getNewToken();
         await logout();
         return;
       } catch (e) {
-        alert(e);
+        alert(`로그인 만료로 강제 로그아웃합니다(${e})`);
       }
     }
   }
