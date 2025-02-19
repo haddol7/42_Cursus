@@ -5,7 +5,7 @@ import { JWT } from "../authentication/jwt.mjs";
 import { WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
 import { replaceAllScriptChar } from "../security.mjs";
 import { logout } from "../authentication/logout.mjs";
-import { activateScrollBar } from "./utility.mjs";
+import { LOGIN_EXPIRED_MSG } from "../authentication/globalConstants.mjs";
 
 export class EditProfilePage {
   static render() {
@@ -46,7 +46,6 @@ export class EditProfilePage {
       .getElementById("editProfileForm")
       .addEventListener("submit", EditProfilePage.#submitEditedProfile);
 
-    activateScrollBar();
     PageManager.currentpageStatus = PageManager.pageStatus.editProfile;
   }
 
@@ -64,7 +63,7 @@ export class EditProfilePage {
           await JWT.getNewToken();
           await EditProfilePage.#showCurrentProfile();
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       } else alert(json.error);
@@ -92,14 +91,19 @@ export class EditProfilePage {
     });
 
     if (!response.ok) {
-      const json = await response.json();
+      if (response.status === 413)
+      {
+        alert("이미지의 용량이 너무 큽니다. 더 작은 용량의 이미지를 보내주세요");
+        return;
+      }
 
+      const json = await response.json();
       if (response.status === 401 && json.error === WHEN_EXPIRED) {
         try {
           await JWT.getNewToken();
           await EditProfilePage.#submitEditedProfile(event);
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       } else alert(json.error);

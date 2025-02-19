@@ -2,8 +2,8 @@ import { renderNavBar, bindEventToNavBar } from "./lowRankElements.mjs";
 import { PageManager } from "./manager.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
-import { activateScrollBar } from "./utility.mjs";
 import { logout } from "../authentication/logout.mjs";
+import { LOGIN_EXPIRED_MSG } from "../authentication/globalConstants.mjs";
 
 /////////////////////////
 // 예시 데이터: 최근 5경기 점수 정보
@@ -142,7 +142,7 @@ export class DashBoardPage {
           await JWT.getNewToken();
           await DashBoardPage.fetchData();
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       } else alert(data.error);
@@ -493,7 +493,6 @@ export class DashBoardPage {
         },
       },
     });
-    activateScrollBar();
   }
 
   static renderAndPushHistory() {

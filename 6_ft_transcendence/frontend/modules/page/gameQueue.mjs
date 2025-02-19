@@ -4,7 +4,6 @@ import { RoomSocketManager } from "../socketManager.mjs";
 import { clearBody } from "./lowRankElements.mjs";
 import { GameLobbyPage } from "./gamelobby.mjs";
 import { PongPage } from "./pong.mjs";
-import { activateScrollBar } from "./utility.mjs";
 
 export class GameQueuePage {
   static render() {
@@ -26,7 +25,6 @@ export class GameQueuePage {
       GameLobbyPage.renderAndPushHistory();
     });
 
-    activateScrollBar();
     PageManager.currentpageStatus = PageManager.pageStatus.gameQueue;
   }
 

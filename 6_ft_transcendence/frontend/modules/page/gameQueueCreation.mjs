@@ -2,7 +2,6 @@ import { clearExceptNavBar, renderNavBar } from "./lowRankElements.mjs";
 import { GameQueuePage } from "./gameQueue.mjs";
 import { PageManager } from "./manager.mjs";
 import { RoomSocketManager } from "../socketManager.mjs";
-import { activateScrollBar } from "./utility.mjs";
 
 export class GameQueueCreationPage {
   static render() {
@@ -54,7 +53,6 @@ export class GameQueueCreationPage {
       );
     });
 
-    activateScrollBar();
     PageManager.currentpageStatus = PageManager.pageStatus.gameQueueCreation;
   }
 

@@ -1,3 +1,7 @@
+html, body {
+  overflow: auto;
+}
+
 /* box - div 태그 */
 .box {
   background-color: #eaf8e0; /* 연한 초록색 배경 */

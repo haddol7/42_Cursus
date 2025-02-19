@@ -1,4 +1,4 @@
-import { USER_URL, WHEN_EXPIRED } from "../authentication/globalConstants.mjs";
+import { USER_URL, WHEN_EXPIRED,LOGIN_EXPIRED_MSG } from "../authentication/globalConstants.mjs";
 import { JWT } from "../authentication/jwt.mjs";
 import { logout } from "../authentication/logout.mjs";
 import {
@@ -8,7 +8,6 @@ import {
 } from "./lowRankElements.mjs";
 import { PageManager } from "./manager.mjs";
 import { MyPage } from "./my.mjs";
-import { activateScrollBar } from "./utility.mjs";
 
 export class FriendPage {
   static lastfriendName = "Dumm";
@@ -64,7 +63,6 @@ export class FriendPage {
         MyPage.renderAndPushHistory();
       });
 
-    activateScrollBar();
     PageManager.currentpageStatus = PageManager.pageStatus.friend;
   }
 
@@ -87,7 +85,7 @@ export class FriendPage {
           await JWT.getNewToken();
           await FriendPage.#showFriendProfile(friendName);
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       } else alert(json.error);
