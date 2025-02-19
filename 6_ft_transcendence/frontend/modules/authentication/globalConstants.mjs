@@ -5,3 +5,4 @@ export const USER_URL = "/api/user/";
 export const WHEN_EXPIRED = "JWT_Error: jwt.expired (Status Code: 401)";
 export const LOGIN_EXPIRED_MSG =
   "로그인이 만료되었습니다. 다시 로그인해주세요.";
+export const SERVER_ADDRESS = "https://localhost/";

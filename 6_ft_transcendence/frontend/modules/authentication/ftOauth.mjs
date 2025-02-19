@@ -1,10 +1,10 @@
-import { AUTH_URL } from "./globalConstants.mjs";
+import { AUTH_URL, SERVER_ADDRESS } from "./globalConstants.mjs";
 import { JWT } from "./jwt.mjs";
 import { TwoFA } from "./twoFA.mjs";
 
 export class FTOauth {
   static isAlreadyOauth() {
-    if (window.location.href === "https://localhost/") return false;
+    if (window.location.href === SERVER_ADDRESS) return false;
     return true;
   }
 
