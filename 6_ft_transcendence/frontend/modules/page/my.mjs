@@ -107,7 +107,7 @@ export class MyPage {
           await JWT.getNewToken();
           await MyPage.#requestProfileToServer();
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
           throw new Error(json.error);
         }
@@ -142,7 +142,7 @@ export class MyPage {
           await JWT.getNewToken();
           await MyPage.#requestFriendListToServer();
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       } else alert(json.error);
@@ -210,7 +210,7 @@ export class MyPage {
           await JWT.getNewToken();
           await MyPage.#addFriend(name);
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       } else alert(json.error);

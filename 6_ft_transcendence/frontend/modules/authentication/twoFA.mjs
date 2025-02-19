@@ -1,6 +1,7 @@
 import { AUTH_URL } from "./globalConstants.mjs";
 import { JWT } from "./jwt.mjs";
 import { logout } from "./logout.mjs";
+import { LOGIN_EXPIRED_MSG } from "./globalConstants.mjs";
 
 export class TwoFA {
   static isNewUser = true;
@@ -19,7 +20,7 @@ export class TwoFA {
           await JWT.getNewToken();
           return TwoFA.sendOTPUserNameToServer(otpUserName);
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       }
@@ -40,7 +41,7 @@ export class TwoFA {
           await JWT.getNewToken();
           return TwoFA.getOTPUserNameFromServer();
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       }

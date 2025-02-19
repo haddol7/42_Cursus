@@ -27,7 +27,7 @@ export class AIMatchPage {
           await JWT.getNewToken();
           await AIMatchPage.play();
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       } else alert(text);

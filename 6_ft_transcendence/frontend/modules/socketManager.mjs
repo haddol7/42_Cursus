@@ -6,6 +6,7 @@ import { JWT } from "./authentication/jwt.mjs";
 import { logout } from "./authentication/logout.mjs";
 import { MainPage } from "./page/main.mjs";
 import { clearExceptNavBar } from "./page/lowRankElements.mjs";
+import { LOGIN_EXPIRED_MSG } from "./authentication/globalConstants.mjs";
 
 export class RoomSocketManager {
   static socket = null;
@@ -22,25 +23,25 @@ export class RoomSocketManager {
       path: "/room-sio/",
     });
     RoomSocketManager.socket.on("connect", () => {
-      alert("socket connection established");
+      alert("게임 로비에 연결되었습니다.");
     });
     RoomSocketManager.#onDisconnect();
     RoomSocketManager.#onRoomListEvent();
     RoomSocketManager.#onRoomChangedEvent();
     RoomSocketManager.#onStartGame();
     RoomSocketManager.socket.on("connect_error", async (error) => {
-      alert("socket connection error");
+      alert("게임 로비에 연결 중 문제가 발생하였습니다.");
+      alert("재연결을 시도합니다.");
       if (error.message === "jwt.expired") {
         try {
           await JWT.getNewToken();
-          alert("try socket reconnection");
           RoomSocketManager.connect();
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       } else {
-        alert(error);
+        alert(`재연결에 실패하였습니다. 메인 페이지로 이동합니다(${error})`);
         RoomSocketManager.#whenDisconnect();
         clearExceptNavBar();
         MainPage.renderAndPushHistory();

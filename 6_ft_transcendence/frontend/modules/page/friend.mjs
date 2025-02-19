@@ -85,7 +85,7 @@ export class FriendPage {
           await JWT.getNewToken();
           await FriendPage.#showFriendProfile(friendName);
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       } else alert(json.error);

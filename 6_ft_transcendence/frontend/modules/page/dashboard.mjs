@@ -141,7 +141,7 @@ export class DashBoardPage {
           await JWT.getNewToken();
           await DashBoardPage.fetchData();
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       } else alert(data.error);

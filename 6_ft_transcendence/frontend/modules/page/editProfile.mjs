@@ -62,7 +62,7 @@ export class EditProfilePage {
           await JWT.getNewToken();
           await EditProfilePage.#showCurrentProfile();
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       } else alert(json.error);
@@ -102,7 +102,7 @@ export class EditProfilePage {
           await JWT.getNewToken();
           await EditProfilePage.#submitEditedProfile(event);
         } catch (e) {
-          alert(e);
+          alert(`${LOGIN_EXPIRED_MSG}(${e})`);
           logout();
         }
       } else alert(json.error);
