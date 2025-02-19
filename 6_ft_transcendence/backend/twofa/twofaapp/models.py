@@ -17,6 +17,7 @@ class UserInfo(models.Model):
     twofa_secret = models.CharField(max_length=32)
     twofa_name = models.CharField(max_length=32)
     twofa_passed = models.BooleanField(default=False)
+    twofa_stored = models.BooleanField(default=False)
 
     class Meta:
         db_table = "userinfo"

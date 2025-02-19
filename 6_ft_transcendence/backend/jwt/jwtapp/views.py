@@ -35,7 +35,9 @@ def refresh_jwt(req: Request, data: Dict[str, Any]):
     old_refresh = get_str(data, "refresh_token")
 
     payload = check_refresh_token(old_refresh)
-    access_token, refresh_token, _ = make_token_pair(payload["user_id"])
+    access_token, refresh_token, _ = make_token_pair(
+        payload["user_id"], twofa_delete=False
+    )
 
     return JsonResponse({"access_token": access_token, "refresh_token": refresh_token})
 
@@ -43,8 +45,11 @@ def refresh_jwt(req: Request, data: Dict[str, Any]):
 @api_post
 def post_token(req: Request, data: Dict[str, Any]):
     user_id = get_int(data, "user_id")
+    twofa_delete = get_bool(data, "twofa_delete")
 
-    access_token, refresh_token, isnew = make_token_pair(user_id)
+    access_token, refresh_token, isnew = make_token_pair(
+        user_id, twofa_delete=twofa_delete
+    )
     return JsonResponse(
         {"access_token": access_token, "refresh_token": refresh_token, "isnew": isnew}
     )

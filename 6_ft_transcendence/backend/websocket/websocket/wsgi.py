@@ -58,6 +58,11 @@ logger = logging.getLogger(__name__)
 sid_list = []
 
 
+class TokenDto(TypedDict):
+    access_token: str
+    refresh_token: str
+
+
 class PeopleListJson(TypedDict):
     people: List[RoomUserJson]
 
@@ -110,7 +115,7 @@ class RoomManager:
     def people_list_to_json(self, room_id: str) -> PeopleListJson:
         room = self._get_room(room_id)
         if room is None:
-            raise WebSocketRoomNotFoundException()
+            return {"people": []}
         return {"people": room.people_list_to_json(user_dict)}
 
 
@@ -142,25 +147,10 @@ def _get_user_id_from_jwt(jwt: str) -> int:
 def _connect(sid: str, environ, auth: dict[str, Any]):
     logger.info(f"auth={json.dumps(auth)}")
 
-    if "jwt" in auth:
-        jwt = get_str(auth, "jwt")
-        user_id = _get_user_id_from_jwt(jwt)
-        user_name = fetch_username(user_id)
-        logger.info(
-            f"from _get_user_id_from_Jwt: user_id={user_id}, user_name={user_name}"
-        )
-    else:
-        logger.info("using deprecated method, user_id and user_name")
-        user_id = auth["user_id"]
-        if user_id is None:
-            raise ConnectionRefusedError("bad_request:user_id")
-        try:
-            user_id = int(user_id)
-        except:
-            raise ConnectionRefusedError("bad_request:user_id")
-        user_name = auth["user_name"]
-        if user_name is None or not isinstance(user_name, str):
-            raise ConnectionRefusedError("bad_request:user_name")
+    jwt = get_str(auth, "jwt")
+    user_id = _get_user_id_from_jwt(jwt)
+    user_name = fetch_username(user_id)
+    logger.info(f"from _get_user_id_from_Jwt: user_id={user_id}, user_name={user_name}")
 
     with sio.session(sid) as sess:
         sess["user_id"] = user_id
@@ -192,7 +182,9 @@ def connect(sid: str, environ, auth: dict[str, Any]):
 @event_on("disconnect")
 def disconnect(sid: str, reason):
     logger.info(f"sid={sid} Disconnecting")
+
     user_id = get_session_info(sid)
+    user_dict.remove(user_id)
 
     room_changed = False
     for r in sio.rooms(sid):
@@ -204,8 +196,6 @@ def disconnect(sid: str, reason):
 
     if room_changed:
         sio_emit(ROOM_LIST_EVENT, ROOM_MANAGER.room_list_to_json(), to=ROOM_LISTENERS)
-
-    user_dict.remove(user_id)
 
 
 @event_on("make_room")
@@ -301,7 +291,32 @@ def sio_start_game(sid: str, data: dict[str, Any]):
         logger.error(f"resp error! {resp.text}")
         raise InternalException()
 
-    sio_emit(START_GAME_EVENT, {}, to=room_id)
+    user_emit_datas: list[tuple[str, TokenDto]] = []
+
+    for user_id in room.user_list:
+        resp = post(f"{JWT_URL}/jwt/token", {"user_id": user_id, "twofa_delete": False})
+        if not resp.ok:
+            raise CustomException(resp.text, resp.status_code)
+        resp_json = resp.json()
+        user_emit_datas.append(
+            (
+                user_dict.get(user_id).sid,
+                TokenDto(
+                    access_token=resp_json["access_token"],
+                    refresh_token=resp_json["refresh_token"],
+                ),
+            )
+        )
+
+    for sid, token_dto in user_emit_datas:
+        sio_emit(
+            START_GAME_EVENT,
+            {
+                "accessToken": token_dto["access_token"],
+                "refreshToken": token_dto["refresh_token"],
+            },
+            to=sid,
+        )
 
 
 @event_on("debug")

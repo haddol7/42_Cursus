@@ -1,4 +1,5 @@
 import logging
+import random
 from typing import Any, Dict, List, TypedDict
 
 from django.http import HttpRequest, HttpResponseNotAllowed, JsonResponse
@@ -35,6 +36,8 @@ def make_game(req: Request, data: Dict[str, Any]):
         user_id = get_int(u, "user_id")
         user_name = get_str(u, "user_name")
         users_list.append(UserNameDto(user_id=user_id, user_name=user_name))
+
+    random.shuffle(users_list)
 
     user_list: List[int] = [u["user_id"] for u in users_list]
 

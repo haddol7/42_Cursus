@@ -13,7 +13,7 @@ from typing import Any
 
 import django
 import socketio
-import socketio.exceptions
+from socketio.exceptions import ConnectionRefusedError
 from django.core.wsgi import get_wsgi_application
 
 from exceptions.CustomException import CustomException, InternalException
@@ -40,16 +40,17 @@ logger = logging.getLogger(__name__)
 def connect(sid: str, environ, auth: dict[str, Any]):
     try:
         on_connect(sid, auth)
-    except socketio.exceptions.ConnectionRefusedError as e:
+    except ConnectionRefusedError as e:
+        logger.error("While connecting, ConnectionRefusedError occurred")
         raise e
     except CustomException as e:
-        logger.error(f"Custom Exception type={type(e)}")
+        logger.error(f"While connecting: Custom Exception type={type(e)}")
         logger.exception(e)
-        raise socketio.exceptions.ConnectionRefusedError(e.__str__())
+        raise ConnectionRefusedError(e.__str__())
     except Exception as e:
-        logger.error(f"Other exception type={type(e)}")
+        logger.error(f"While Connecting: Other exception type={type(e)}")
         logger.exception(e)
-        raise socketio.exceptions.ConnectionRefusedError(InternalException().__str__())
+        raise ConnectionRefusedError(InternalException().__str__())
 
 
 @event_on("paddleMove", namespace=NAMESPACE)
