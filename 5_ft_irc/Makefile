@@ -1,0 +1,72 @@
+NAME := ircserv
+CC := c++
+CFLAGS := -Werror -Wall -Wextra -std=c++98 -Iinc/ -Iinc/message/
+
+SRC_DIR := src/
+OBJ_DIR := obj/
+
+#============== 소스 파일 ==============#
+SRC_SERVER	=	$(SRC_DIR)server/Server.cpp
+
+SRC_CLIENT	=	$(SRC_DIR)client/Client.cpp
+
+SRC_MESSAGE =	$(SRC_DIR)message/AMessage.cpp \
+				$(SRC_DIR)message/Nick.cpp \
+				$(SRC_DIR)message/User.cpp \
+				$(SRC_DIR)message/Pass.cpp \
+				$(SRC_DIR)message/Privmsg.cpp \
+				$(SRC_DIR)message/Join.cpp \
+				$(SRC_DIR)message/Mode.cpp \
+				$(SRC_DIR)message/Quit.cpp \
+				$(SRC_DIR)message/Invite.cpp \
+				$(SRC_DIR)message/Topic.cpp \
+				$(SRC_DIR)message/Part.cpp \
+				$(SRC_DIR)message/Kick.cpp \
+				$(SRC_DIR)message/Ping.cpp
+
+SRC_CHANNEL = 	$(SRC_DIR)channel/Channel.cpp
+
+SRCS =			$(SRC_SERVER) \
+				$(SRC_CLIENT) \
+				$(SRC_MESSAGE) \
+				$(SRC_CHANNEL) \
+				$(SRC_DIR)main.cpp
+
+OBJS = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRCS))
+DEPS = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.d, $(SRCS))
+#============== 소스 파일 ==============#
+
+GREEN = \033[0;92m
+BLUE = \033[0;94m
+WHITE = \033[0;97m
+PURPLE = \033[1;35m
+
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $^ -o $@
+	@echo "$(GREEN)💬 ft_irc : make done! 💬$(WHITE)"
+
+$(OBJ_DIR)%.o : $(SRC_DIR)%.cpp
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -MMD -c $< -o $@
+
+bonus: $(SRC_DIR)Bot/Bot.cpp
+	$(CC) $(CFLAGS) $^ -o bot
+
+-include $(DEPS)
+
+clean:
+	rm -rf $(OBJ_DIR)
+	@echo "$(BLUE)💬 ft_irc : clean done! 💬$(WHITE)"
+
+fclean:
+	rm -rf $(OBJ_DIR)
+	rm -f $(NAME) bot
+	@echo "$(BLUE)💬 ft_irc : fclean done! 💬$(WHITE)"
+
+re: fclean all
+
+-include $(DEP)
+
+.PHONY: all clean fclean re bonus
