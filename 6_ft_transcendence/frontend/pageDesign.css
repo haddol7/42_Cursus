@@ -1,0 +1,178 @@
+html, body {
+  overflow: auto;
+}
+
+/* box - div 태그 */
+.box {
+  background-color: #eaf8e0; /* 연한 초록색 배경 */
+  padding: 20px; /* 내부 여백 */
+  margin: 20px; /* 외부 여백 */
+  border-radius: 10px; /* 둥근 모서리 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+}
+
+.centerAlignedTitle {
+  font-size: 20px; /* 크고 두드러진 제목 */
+  font-weight: bold; /* 두꺼운 글씨 */
+  color: #2e8b57; /* 초록색 글씨 */
+  text-align: center; /* 가운데 정렬 */
+  margin-bottom: 20px;
+}
+
+/* title - h6 태그 */
+.leftAlignedTitle {
+  font-size: 16px; /* 크고 두드러진 제목 */
+  font-weight: bold; /* 두꺼운 글씨 */
+  color: #2e8b57; /* 초록색 글씨 */
+  text-align: left; /* 가운데 정렬 */
+  margin-bottom: 0px;
+  display: inline;
+}
+
+/* paragraph - p 태그 */
+.paragraph {
+  font-size: 16px; /* 텍스트 크기 */
+  line-height: 1.6; /* 줄 간격 */
+  color: #2e8b57; /* 초록색 글씨 */
+  margin-bottom: 0px;
+  display: inline;
+  overflow: auto;
+}
+
+.blockWrapher {
+  margin-bottom: 20px; /* 아래 여백 */
+}
+
+.oneToOneRatioWrapher {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 20px; /* 아래 여백 */
+}
+
+/* form - form 태그 */
+.rowAlignedForm {
+  display: grid;
+  grid-template-columns: 5fr 1fr;
+  gap: 5px;
+  align-items: center; /* 가운데 정렬 */
+}
+
+.smallRowAlignedForm {
+  display: grid;
+  grid-template-columns: 2 fr 1fr;
+  gap: 5px;
+  align-items: center; /* 가운데 정렬 */
+}
+
+.columnAlignedForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center; /* 가운데 정렬 */
+}
+
+/* textInput - input(type: text) */
+.textInput {
+  padding: 10px; /* 내부 여백 */
+  border: 2px solid #2e8b57; /* 초록색 테두리 */
+  border-radius: 5px; /* 둥근 모서리 */
+  font-size: 16px; /* 글씨 크기 */
+  color: #2e8b57; /* 초록색 글씨 */
+  background-color: #f1fdf3; /* 연한 초록색 배경 */
+}
+
+.textInput:focus {
+  outline: none; /* 포커스 시 윤곽선 제거 */
+  border-color: #4caf50; /* 포커스 시 진한 초록색 테두리 */
+  background-color: #e8f7e1; /* 포커스 시 배경색 변경 */
+}
+
+/* fileInput - input(type: file) */
+.fileInput {
+  padding: 10px;
+  border: 2px solid #2e8b57;
+  border-radius: 5px;
+  background-color: #f1fdf3;
+  color: #2e8b57;
+}
+
+.fileInput:hover {
+  cursor: pointer;
+  background-color: #e8f7e1; /* 마우스를 올렸을 때 배경색 변화 */
+}
+
+/* submitInput - input(type: submit) */
+.submitInput {
+  background-color: #4caf50; /* 초록색 버튼 */
+  color: white; /* 흰색 글씨 */
+  padding: 10px 30px; /* 내부 여백 */
+  border: none; /* 테두리 없음 */
+  border-radius: 5px; /* 둥근 모서리 */
+  font-size: 18px; /* 글씨 크기 */
+  cursor: pointer; /* 마우스 커서 모양 */
+  transition: background-color 0.3s ease; /* 부드러운 배경색 변화 */
+}
+
+.smallSubmitInput {
+  background-color: #4caf50; /* 초록색 버튼 */
+  color: white; /* 흰색 글씨 */
+  padding: 10px 10px; /* 내부 여백 */
+  border: none; /* 테두리 없음 */
+  border-radius: 5px; /* 둥근 모서리 */
+  font-size: 18px; /* 글씨 크기 */
+  cursor: pointer; /* 마우스 커서 모양 */
+  transition: background-color 0.3s ease; /* 부드러운 배경색 변화 */
+}
+
+.submitInput:hover {
+  background-color: #45a049; /* 마우스를 올렸을 때 색상 변화 */
+}
+
+.submitInput:active {
+  background-color: #397d3b; /* 클릭 시 색상 변화 */
+}
+
+.link {
+  color: #2ecc71; /* 초록색 */
+  text-decoration: none; /* 밑줄 제거 */
+  font-weight: bold; /* 굵은 글씨 */
+}
+
+.link:hover {
+  color: #27ae60; /* 마우스 올릴 때 좀 더 어두운 초록색 */
+  cursor: pointer;
+  text-decoration: underline; /* 마우스 올리면 밑줄 */
+}
+
+.home {
+  color: green; /* 초록색 */
+  text-decoration: none; /* 밑줄 제거 */
+  font-weight: bold; /* 굵은 글씨 */
+}
+
+.home:hover {
+  color: #27ae60; /* 마우스 올릴 때 좀 더 어두운 초록색 */
+  cursor: pointer;
+  text-decoration: underline; /* 마우스 올리면 밑줄 */
+}
+
+.sublink {
+  color: skyblue; /* 초록색 */
+  text-decoration: none; /* 밑줄 제거 */
+  font-weight: bold; /* 굵은 글씨 */
+}
+
+.sublink:hover {
+  color: #00bfff; /* 마우스 올릴 때 좀 더 어두운 초록색 */
+  cursor: pointer;
+  text-decoration: underline; /* 마우스 올리면 밑줄 */
+}
+
+.image {
+  display: block;
+  margin: 20px auto;
+}
+
+.green {
+  color: #2e8b57;
+}

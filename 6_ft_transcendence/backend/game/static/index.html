@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+        <script src="index.js" type="text/javascript"></script>
+    </head>
+    <body>
+    <h1>Hello!</h1>
+    <form onsubmit="return onSubmit()">
+    <input type="number" name="user_id" id="user_id" />
+    <input type="submit" value="Submit" />
+    </form>
+
+    <button onclick="return emitNextGame()">emit NextGame</button>
+</body>
+</html>
