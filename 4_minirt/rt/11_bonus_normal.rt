@@ -1,0 +1,6 @@
+A 0.2 255,255,255
+C 0,0,100 0,0,1 90
+L 0,20,50 0.3 255,255,255
+
+sp -100,0,-100 100 255,255,255 rt/texture/brick_diffuse.xpm
+sp 100,0,-100 100 255,255,255 rt/texture/brick_diffuse.xpm rt/texture/brick_normal.xpm
